@@ -32,7 +32,7 @@ public class DataHandler {
     //createRecords(new List<string> { "FirstColumn", "SecondColumn" }, "MainTable", new List<string> { "string#FirstValue;int#SecondValue", "string#ThirdValue;int#FourthValue" });
     //---Information:
     //You can insert multiple records, but only in one table, with this command.
-    public static void createRecords(LinkedList<String> columns, String table, LinkedList<String> itemsToStore){
+    public static void createRecords(List<String> columns, String table, List<String> itemsToStore){
         try
         {
             Connection con = DriverManager.getConnection(connectionString);
@@ -43,8 +43,8 @@ public class DataHandler {
             {
                 baseQuery += columns.get(i) + "], [";
             }
-            baseQuery += columns.getLast() + "]) VALUES(";
-            if (columns.size() == itemsToStore.getFirst().split(";").length)
+            baseQuery += columns.get(columns.size()-1) + "]) VALUES(";
+            if (columns.size() == itemsToStore.get(0).split(";").length)
             {
                 canExecute = true;
             }
@@ -98,20 +98,18 @@ public class DataHandler {
     //SELECT * FROM MainTable
     //---Command to call:
     //readRecords(new List<string>{"*"}, new List<Classes.DataTablesCollection>{new Classes.DataTablesCollection("MainTable")}, new List<string>());
-    public static ResultSet readRecords(LinkedList<String> columns, LinkedList<DataTablesCollection> tables, LinkedList<String> conditions)
-    {
+    public static ResultSet readRecords(List<String> columns, List<DataTablesCollection> tables, List<String> conditions) {
         ResultSet returnData = null;
         try
         {
             Connection con = DriverManager.getConnection(connectionString);
-            Statement statement = con.createStatement();
             String query = "SELECT [";
             
             for (int i = 0; i < columns.size() - 1; i++)
             {
                 query += columns.get(i) + "], [";
             }
-            query += columns.getLast() + "] FROM [" + tables.getFirst().getMainTable() + "] ";
+            query += columns.get(columns.size()-1) + "] FROM [" + tables.get(0).getMainTable() + "] ";
             for (int i = 1; i < tables.size(); i++)
             {
                 query += tables.get(i).getJoinType() + " [" + tables.get(i).getMainTable() + "] ON [" + tables.get(i).getMainTable() + "].[" + tables.get(i).getMainTableColumn() + "]=[" + tables.get(i).getJoiningTable() + "].[" + tables.get(i).getJoiningTableColumn() + "] ";
@@ -123,9 +121,10 @@ public class DataHandler {
                 {
                     query += conditions.get(i) + " AND ";
                 }
-                query += conditions.getLast();
+                query += conditions.get(conditions.size()-1);
             }
             
+            Statement statement = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
             returnData = statement.executeQuery(query);
             con.close();
         }
@@ -142,8 +141,7 @@ public class DataHandler {
     //UPDATE MainTable SET FirstColumn='FirstValue', SecondColumn=SecondValue WHERE ThirdColumn=5
     //---Command to call:
     //updateRecords("MainTable", new List<string> { "FirstColumn", "SecondColumn" }, new List<string> { "string;FirstValue", "int;SecondValue" }, new List<string> { "ThirdColumn=5" });
-    public static void updateRecords(String table, LinkedList<String> columnsToUpdate, LinkedList<String> dataToUpdate, LinkedList<String> conditions)
-    {
+    public static void updateRecords(String table, List<String> columnsToUpdate, List<String> dataToUpdate, List<String> conditions) {
         try {
             Connection con = DriverManager.getConnection(connectionString);
             boolean canExecute = false;
@@ -181,7 +179,7 @@ public class DataHandler {
                     {
                         baseQuery += conditions.get(i) + " AND ";
                     }
-                    baseQuery += conditions.getLast();
+                    baseQuery += conditions.get(conditions.size()-1);
                 }
                 canExecute = true;
             }
@@ -203,8 +201,7 @@ public class DataHandler {
     //DELETE FROM MainTable WHERE FirstColumn=5 AND SecondColumn='Yes'
     //---Command to call:
     //deleteRecords("MainTable", new List<string> { "FirstColumn=5", "SecondColumn='Yes'" });
-    public static void deleteRecords(String table, LinkedList<String> conditions)
-    {
+    public static void deleteRecords(String table, List<String> conditions) {
         try {
             Connection con = DriverManager.getConnection(connectionString);
             boolean canExecute = false;
@@ -217,7 +214,7 @@ public class DataHandler {
                 {
                     baseQuery += conditions.get(i) + " AND ";
                 }
-                baseQuery += conditions.getLast();
+                baseQuery += conditions.get(conditions.size()-1);
                 canExecute = true;
             }
             
