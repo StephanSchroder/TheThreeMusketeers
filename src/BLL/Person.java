@@ -5,7 +5,12 @@
  */
 package BLL;
 
+import DAL.DataHandler;
 import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  *
@@ -28,9 +33,8 @@ public abstract class Person {
     private String cellNumber;
     private String telNumber;
     private Date dateAdded;
-    private Date lastUpdated;
 
-    public Person(String idNumber, String firstName, String lastName, String title, Date dateOfBirth, String gender, String country, String province, String city, String street, String postalCode, String addressLine, String email, String cellNumber, String telNumber, Date dateAdded, Date lastUpdated) {
+    public Person(String idNumber, String firstName, String lastName, String title, Date dateOfBirth, String gender, String country, String province, String city, String street, String postalCode, String addressLine, String email, String cellNumber, String telNumber, Date dateAdded) {
         this.idNumber = idNumber;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -47,10 +51,9 @@ public abstract class Person {
         this.cellNumber = cellNumber;
         this.telNumber = telNumber;
         this.dateAdded = dateAdded;
-        this.lastUpdated = lastUpdated;
     }
 
-    public Person(String idNumber, String firstName, String lastName, String title, Date dateOfBirth, String gender, String country, Date dateAdded, Date lastUpdated) {
+    public Person(String idNumber, String firstName, String lastName, String title, Date dateOfBirth, String gender, String country, Date dateAdded) {
         this.idNumber = idNumber;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -59,7 +62,6 @@ public abstract class Person {
         this.gender = gender;
         this.country = country;
         this.dateAdded = dateAdded;
-        this.lastUpdated = lastUpdated;
     }
 
     public String getIdNumber() {
@@ -189,12 +191,244 @@ public abstract class Person {
     public void setDateAdded(Date dateAdded) {
         this.dateAdded = dateAdded;
     }
-
-    public Date getLastUpdated() {
-        return lastUpdated;
+    
+    public void registerPerson() {
+        //Person
+        //Columns
+        ArrayList<String> columns = new ArrayList<>();
+        columns.add("IDNumber");
+        columns.add("FirstName");
+        columns.add("LastName");
+        columns.add("Title");
+        columns.add("DateOfBirth");
+        columns.add("Gender");
+        columns.add("Country");
+        if (!this.getProvince().isEmpty()) { columns.add("Province"); }
+        if (!this.getCity().isEmpty()) { columns.add("City"); }
+        if (!this.getStreet().isEmpty()) { columns.add("Street"); }
+        if (!this.getPostalCode().isEmpty()) { columns.add("PostalCode"); }
+        if (!this.getAddressLine().isEmpty()) { columns.add("AddressLine"); }
+        if (!this.getEmail().isEmpty()) { columns.add("Email"); }
+        if (!this.getCellNumber().isEmpty()) { columns.add("CellNumber"); }
+        if (!this.getTelNumber().isEmpty()) { columns.add("TelNumber"); }
+        
+        //Values
+        String values = "";
+        values += "string#" + this.getIdNumber();
+        values += ";string#" + this.getFirstName();
+        values += ";string#" + this.getLastName();
+        values += ";string#" + this.getTitle();
+        values += ";string#" + this.getDateOfBirth();
+        values += ";string#" + this.getGender();
+        values += ";string#" + this.getCountry();
+        if (!this.getProvince().isEmpty()) { values += ";string#" + this.getProvince(); }
+        if (!this.getCity().isEmpty()) { values += ";string#" + this.getCity(); }
+        if (!this.getStreet().isEmpty()) { values += ";string#" + this.getStreet(); }
+        if (!this.getPostalCode().isEmpty()) { values += ";string#" + this.getPostalCode(); }
+        if (!this.getAddressLine().isEmpty()) { values += ";string#" + this.getAddressLine(); }
+        if (!this.getEmail().isEmpty()) { values += ";string#" + this.getEmail(); }
+        if (!this.getCellNumber().isEmpty()) { values += ";string#" + this.getCellNumber(); }
+        if (!this.getTelNumber().isEmpty()) { values += ";string#" + this.getTelNumber(); }
+        
+        //Execute
+        DataHandler.createRecords(columns, "Person", Arrays.asList(values));
     }
-
-    public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
+    
+    public static void registerPerson(Person person) {
+        //Person
+        //Columns
+        ArrayList<String> columns = new ArrayList<>();
+        columns.add("IDNumber");
+        columns.add("FirstName");
+        columns.add("LastName");
+        columns.add("Title");
+        columns.add("DateOfBirth");
+        columns.add("Gender");
+        columns.add("Country");
+        if (!person.getProvince().isEmpty()) { columns.add("Province"); }
+        if (!person.getCity().isEmpty()) { columns.add("City"); }
+        if (!person.getStreet().isEmpty()) { columns.add("Street"); }
+        if (!person.getPostalCode().isEmpty()) { columns.add("PostalCode"); }
+        if (!person.getAddressLine().isEmpty()) { columns.add("AddressLine"); }
+        if (!person.getEmail().isEmpty()) { columns.add("Email"); }
+        if (!person.getCellNumber().isEmpty()) { columns.add("CellNumber"); }
+        if (!person.getTelNumber().isEmpty()) { columns.add("TelNumber"); }
+        
+        //Values
+        String values = "";
+        values += "string#" + person.getIdNumber();
+        values += ";string#" + person.getFirstName();
+        values += ";string#" + person.getLastName();
+        values += ";string#" + person.getTitle();
+        values += ";string#" + person.getDateOfBirth();
+        values += ";string#" + person.getGender();
+        values += ";string#" + person.getCountry();
+        if (!person.getProvince().isEmpty()) { values += ";string#" + person.getProvince(); }
+        if (!person.getCity().isEmpty()) { values += ";string#" + person.getCity(); }
+        if (!person.getStreet().isEmpty()) { values += ";string#" + person.getStreet(); }
+        if (!person.getPostalCode().isEmpty()) { values += ";string#" + person.getPostalCode(); }
+        if (!person.getAddressLine().isEmpty()) { values += ";string#" + person.getAddressLine(); }
+        if (!person.getEmail().isEmpty()) { values += ";string#" + person.getEmail(); }
+        if (!person.getCellNumber().isEmpty()) { values += ";string#" + person.getCellNumber(); }
+        if (!person.getTelNumber().isEmpty()) { values += ";string#" + person.getTelNumber(); }
+        
+        //Execute
+        DataHandler.createRecords(columns, "Person", Arrays.asList(values));
+    }
+    
+    public void updatePerson() {
+        //Person
+        //Columns
+        ArrayList<String> columns = new ArrayList<>();
+        columns.add("FirstName");
+        columns.add("LastName");
+        columns.add("Title");
+        columns.add("Country");
+        if (!this.getProvince().isEmpty()) { columns.add("Province"); }
+        if (!this.getCity().isEmpty()) { columns.add("City"); }
+        if (!this.getStreet().isEmpty()) { columns.add("Street"); }
+        if (!this.getPostalCode().isEmpty()) { columns.add("PostalCode"); }
+        if (!this.getAddressLine().isEmpty()) { columns.add("AddressLine"); }
+        if (!this.getEmail().isEmpty()) { columns.add("Email"); }
+        if (!this.getCellNumber().isEmpty()) { columns.add("CellNumber"); }
+        if (!this.getTelNumber().isEmpty()) { columns.add("TelNumber"); }
+        
+        //Values
+        ArrayList<String> values = new ArrayList<>();
+        values.add("string;" + this.getFirstName());
+        values.add("string;" + this.getLastName());
+        values.add("string;" + this.getTitle());
+        values.add("string;" + this.getCountry());
+        if (!this.getProvince().isEmpty()) { values.add("string;" + this.getProvince()); }
+        if (!this.getCity().isEmpty()) { values.add("string;" + this.getCity()); }
+        if (!this.getStreet().isEmpty()) { values.add("string;" + this.getStreet()); }
+        if (!this.getPostalCode().isEmpty()) { values.add("string;" + this.getPostalCode()); }
+        if (!this.getAddressLine().isEmpty()) { values.add("string;" + this.getAddressLine()); }
+        if (!this.getEmail().isEmpty()) { values.add("string;" + this.getEmail()); }
+        if (!this.getCellNumber().isEmpty()) { values.add("string;" + this.getCellNumber()); }
+        if (!this.getTelNumber().isEmpty()) { values.add("string;" + this.getTelNumber()); }
+        
+        //Conditions
+        ArrayList<String> conditions = new ArrayList<>();
+        conditions.add("IDNumber='" + this.getIdNumber() + "'");
+        conditions.add("FirstName='" + this.getFirstName()+ "'");
+        conditions.add("LastName='" + this.getLastName()+ "'");
+        conditions.add("Title='" + this.getTitle()+ "'");
+        conditions.add("DateOfBirth='" + this.getDateOfBirth()+ "'");
+        conditions.add("Gender='" + this.getGender()+ "'");
+        conditions.add("Country='" + this.getCountry()+ "'");
+        if (!this.getProvince().isEmpty()) { conditions.add("Province='" + this.getProvince()+ "'"); }
+        if (!this.getCity().isEmpty()) { conditions.add("City='" + this.getCity()+ "'"); }
+        if (!this.getStreet().isEmpty()) { conditions.add("Street='" + this.getStreet()+ "'"); }
+        if (!this.getPostalCode().isEmpty()) { conditions.add("PostalCode='" + this.getPostalCode()+ "'"); }
+        if (!this.getAddressLine().isEmpty()) { conditions.add("AddressLine='" + this.getAddressLine()+ "'"); }
+        if (!this.getEmail().isEmpty()) { conditions.add("Email='" + this.getEmail()+ "'"); }
+        if (!this.getCellNumber().isEmpty()) { conditions.add("CellNumber='" + this.getCellNumber()+ "'"); }
+        if (!this.getTelNumber().isEmpty()) { conditions.add("TelNumber='" + this.getTelNumber() + "'"); }
+        
+        //Execute
+        DataHandler.updateRecords("Person", columns, values, conditions);
+    }
+    
+    public static void updatePerson(Person person) {
+        //Person
+        //Columns
+        ArrayList<String> columns = new ArrayList<>();
+        columns.add("FirstName");
+        columns.add("LastName");
+        columns.add("Title");
+        columns.add("Country");
+        if (!person.getProvince().isEmpty()) { columns.add("Province"); }
+        if (!person.getCity().isEmpty()) { columns.add("City"); }
+        if (!person.getStreet().isEmpty()) { columns.add("Street"); }
+        if (!person.getPostalCode().isEmpty()) { columns.add("PostalCode"); }
+        if (!person.getAddressLine().isEmpty()) { columns.add("AddressLine"); }
+        if (!person.getEmail().isEmpty()) { columns.add("Email"); }
+        if (!person.getCellNumber().isEmpty()) { columns.add("CellNumber"); }
+        if (!person.getTelNumber().isEmpty()) { columns.add("TelNumber"); }
+        
+        //Values
+        ArrayList<String> values = new ArrayList<>();
+        values.add("string;" + person.getFirstName());
+        values.add("string;" + person.getLastName());
+        values.add("string;" + person.getTitle());
+        values.add("string;" + person.getCountry());
+        if (!person.getProvince().isEmpty()) { values.add("string;" + person.getProvince()); }
+        if (!person.getCity().isEmpty()) { values.add("string;" + person.getCity()); }
+        if (!person.getStreet().isEmpty()) { values.add("string;" + person.getStreet()); }
+        if (!person.getPostalCode().isEmpty()) { values.add("string;" + person.getPostalCode()); }
+        if (!person.getAddressLine().isEmpty()) { values.add("string;" + person.getAddressLine()); }
+        if (!person.getEmail().isEmpty()) { values.add("string;" + person.getEmail()); }
+        if (!person.getCellNumber().isEmpty()) { values.add("string;" + person.getCellNumber()); }
+        if (!person.getTelNumber().isEmpty()) { values.add("string;" + person.getTelNumber()); }
+        
+        //Conditions
+        ArrayList<String> conditions = new ArrayList<>();
+        conditions.add("IDNumber='" + person.getIdNumber() + "'");
+        conditions.add("FirstName='" + person.getFirstName()+ "'");
+        conditions.add("LastName='" + person.getLastName()+ "'");
+        conditions.add("Title='" + person.getTitle()+ "'");
+        conditions.add("DateOfBirth='" + person.getDateOfBirth()+ "'");
+        conditions.add("Gender='" + person.getGender()+ "'");
+        conditions.add("Country='" + person.getCountry()+ "'");
+        if (!person.getProvince().isEmpty()) { conditions.add("Province='" + person.getProvince()+ "'"); }
+        if (!person.getCity().isEmpty()) { conditions.add("City='" + person.getCity()+ "'"); }
+        if (!person.getStreet().isEmpty()) { conditions.add("Street='" + person.getStreet()+ "'"); }
+        if (!person.getPostalCode().isEmpty()) { conditions.add("PostalCode='" + person.getPostalCode()+ "'"); }
+        if (!person.getAddressLine().isEmpty()) { conditions.add("AddressLine='" + person.getAddressLine()+ "'"); }
+        if (!person.getEmail().isEmpty()) { conditions.add("Email='" + person.getEmail()+ "'"); }
+        if (!person.getCellNumber().isEmpty()) { conditions.add("CellNumber='" + person.getCellNumber()+ "'"); }
+        if (!person.getTelNumber().isEmpty()) { conditions.add("TelNumber='" + person.getTelNumber() + "'"); }
+        
+        //Execute
+        DataHandler.updateRecords("Person", columns, values, conditions);
+    }
+    
+    public void deletePerson() {
+        //Person
+        //Conditions
+        ArrayList<String> conditions = new ArrayList<>();
+        conditions.add("IDNumber='" + this.getIdNumber() + "'");
+        conditions.add("FirstName='" + this.getFirstName()+ "'");
+        conditions.add("LastName='" + this.getLastName()+ "'");
+        conditions.add("Title='" + this.getTitle()+ "'");
+        conditions.add("DateOfBirth='" + this.getDateOfBirth()+ "'");
+        conditions.add("Gender='" + this.getGender()+ "'");
+        conditions.add("Country='" + this.getCountry()+ "'");
+        if (!this.getProvince().isEmpty()) { conditions.add("Province='" + this.getProvince()+ "'"); }
+        if (!this.getCity().isEmpty()) { conditions.add("City='" + this.getCity()+ "'"); }
+        if (!this.getStreet().isEmpty()) { conditions.add("Street='" + this.getStreet()+ "'"); }
+        if (!this.getPostalCode().isEmpty()) { conditions.add("PostalCode='" + this.getPostalCode()+ "'"); }
+        if (!this.getAddressLine().isEmpty()) { conditions.add("AddressLine='" + this.getAddressLine()+ "'"); }
+        if (!this.getEmail().isEmpty()) { conditions.add("Email='" + this.getEmail()+ "'"); }
+        if (!this.getCellNumber().isEmpty()) { conditions.add("CellNumber='" + this.getCellNumber()+ "'"); }
+        if (!this.getTelNumber().isEmpty()) { conditions.add("TelNumber='" + this.getTelNumber() + "'"); }
+        
+        //Execute
+        DataHandler.deleteRecords("Person", conditions);
+    }
+    
+    public static void deletePerson(Person person) {
+        //Person       
+        //Conditions
+        ArrayList<String> conditions = new ArrayList<>();
+        conditions.add("IDNumber='" + person.getIdNumber() + "'");
+        conditions.add("FirstName='" + person.getFirstName()+ "'");
+        conditions.add("LastName='" + person.getLastName()+ "'");
+        conditions.add("Title='" + person.getTitle()+ "'");
+        conditions.add("DateOfBirth='" + person.getDateOfBirth()+ "'");
+        conditions.add("Gender='" + person.getGender()+ "'");
+        conditions.add("Country='" + person.getCountry()+ "'");
+        if (!person.getProvince().isEmpty()) { conditions.add("Province='" + person.getProvince()+ "'"); }
+        if (!person.getCity().isEmpty()) { conditions.add("City='" + person.getCity()+ "'"); }
+        if (!person.getStreet().isEmpty()) { conditions.add("Street='" + person.getStreet()+ "'"); }
+        if (!person.getPostalCode().isEmpty()) { conditions.add("PostalCode='" + person.getPostalCode()+ "'"); }
+        if (!person.getAddressLine().isEmpty()) { conditions.add("AddressLine='" + person.getAddressLine()+ "'"); }
+        if (!person.getEmail().isEmpty()) { conditions.add("Email='" + person.getEmail()+ "'"); }
+        if (!person.getCellNumber().isEmpty()) { conditions.add("CellNumber='" + person.getCellNumber()+ "'"); }
+        if (!person.getTelNumber().isEmpty()) { conditions.add("TelNumber='" + person.getTelNumber() + "'"); }
+        
+        //Execute
+        DataHandler.deleteRecords("Person", conditions);
     }
 }

@@ -116,12 +116,12 @@ public class DataHandler {
             }
             if (conditions.size() > 0)
             {
-                query += "WHERE ";
+                query += "WHERE (";
                 for (int i = 0; i < conditions.size() - 1; i++)
                 {
-                    query += conditions.get(i) + " AND ";
+                    query += conditions.get(i) + ") AND (";
                 }
-                query += conditions.get(conditions.size()-1);
+                query += conditions.get(conditions.size()-1) + ")";
             }
             
             Statement statement = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -174,12 +174,12 @@ public class DataHandler {
                 }
                 if (conditions.size() > 0)
                 {
-                    baseQuery += " WHERE ";
+                    baseQuery += " WHERE (";
                     for (int i = 0; i < conditions.size() - 1; i++)
                     {
-                        baseQuery += conditions.get(i) + " AND ";
+                        baseQuery += conditions.get(i) + ") AND (";
                     }
-                    baseQuery += conditions.get(conditions.size()-1);
+                    baseQuery += conditions.get(conditions.size()-1) + ")";
                 }
                 canExecute = true;
             }
@@ -205,16 +205,16 @@ public class DataHandler {
         try {
             Connection con = DriverManager.getConnection(connectionString);
             boolean canExecute = false;
-            String baseQuery = "DELETE FROM [" + table + "] WHERE ";
+            String baseQuery = "DELETE FROM [" + table + "] WHERE (";
             Statement statement = con.createStatement();
             
             if (conditions.size() > 0)
             {
                 for (int i = 0; i < conditions.size() - 1; i++)
                 {
-                    baseQuery += conditions.get(i) + " AND ";
+                    baseQuery += conditions.get(i) + ") AND (";
                 }
-                baseQuery += conditions.get(conditions.size()-1);
+                baseQuery += conditions.get(conditions.size()-1) + ")";
                 canExecute = true;
             }
             

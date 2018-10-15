@@ -18,25 +18,25 @@ public class Order {
     private Date orderDate;
     private Date receiveDate;
     private String status;
-    private User isssuedByEmployee;
+    private User placedByEmployee;
     private User approvedByEmployee;
     private LinkedList<StockOrder> stock;
 
-    public Order(int orderID, Date orderDate, Date receiveDate, String status, User isssuedByEmployee, User approvedByEmployee, LinkedList<StockOrder> stock) {
+    public Order(int orderID, Date orderDate, Date receiveDate, String status, User placedByEmployee, User approvedByEmployee, LinkedList<StockOrder> stock) {
         this.orderID = orderID;
         this.orderDate = orderDate;
         this.receiveDate = receiveDate;
         this.status = status;
-        this.isssuedByEmployee = isssuedByEmployee;
+        this.placedByEmployee = placedByEmployee;
         this.approvedByEmployee = approvedByEmployee;
         this.stock = stock;
     }
 
-    public Order(int orderID, Date orderDate, String status, User isssuedByEmployee) {
+    public Order(int orderID, Date orderDate, String status, User placedByEmployee) {
         this.orderID = orderID;
         this.orderDate = orderDate;
         this.status = status;
-        this.isssuedByEmployee = isssuedByEmployee;
+        this.placedByEmployee = placedByEmployee;
     }
 
     public int getOrderID() {
@@ -71,12 +71,12 @@ public class Order {
         this.status = status;
     }
 
-    public User getIssuedByEmployee() {
-        return isssuedByEmployee;
+    public User getPlacedByEmployee() {
+        return placedByEmployee;
     }
 
-    public void setIssuedByEmployee(User isssuedByEmployee) {
-        this.isssuedByEmployee = isssuedByEmployee;
+    public void setPlacedByEmployee(User placedByEmployee) {
+        this.placedByEmployee = placedByEmployee;
     }
 
     public User getApprovedByEmployee() {
@@ -95,47 +95,119 @@ public class Order {
         this.stock = stock;
     }
     
-        public void createOrder() {
-                DataHandler handler = new DataHandler();
-         String[] inputData = new String[] {"String#"+this.getOrderDate()+";String#"+this.getStatus()+";int#"+this.getIssuedByEmployee()+";int#"+this.getApprovedByEmployee()+";" };
-        String[] columnsData = new String[]{"OrderDate","Status","IssuedByEmployee","ApprovedByEmployee"};
-        handler.createRecords(Arrays.asList(columnsData), "Order", Arrays.asList(inputData));
+    public void registerOrder() {
+        //Order
+        //Columns
+        ArrayList<String> columns = new ArrayList<>();
+        columns.add("PlacedByEmployee");
+        if (!this.getStatus().isEmpty()) { columns.add("Status"); }
+        
+        //Values
+        String values = "";
+        values += "int#" + this.getPlacedByEmployee().getUserID();
+        if (!this.getStatus().isEmpty()) { values += ";string#" + this.getStatus(); }
+        
+        //Execute
+        DataHandler.createRecords(columns, "Order", Arrays.asList(values));
     }
-   
-    public static void createOrder(Order order) {
-        DataHandler handler = new DataHandler();
-         String[] inputData = new String[] {"String#"+order.getOrderDate()+";String#"+order.getStatus()+";int#"+order.getIssuedByEmployee()+";int#"+order.getApprovedByEmployee()+";" };
-        String[] columnsData = new String[]{"OrderDate","Status","IssuedByEmployee","ApprovedByEmployee"};
-        handler.createRecords(Arrays.asList(columnsData), "Order", Arrays.asList(inputData));
+    
+    public static void registerOrder(Order order) {
+        //Order
+        //Columns
+        ArrayList<String> columns = new ArrayList<>();
+        columns.add("PlacedByEmployee");
+        if (!order.getStatus().isEmpty()) { columns.add("Status"); }
+        
+        //Values
+        String values = "";
+        values += "int#" + order.getPlacedByEmployee().getUserID();
+        if (!order.getStatus().isEmpty()) { values += ";string#" + order.getStatus(); }
+        
+        //Execute
+        DataHandler.createRecords(columns, "Order", Arrays.asList(values));
     }
     
     public void updateOrder() {
-          DataHandler handler = new DataHandler();
-         String[] inputData = new String[] {"String;"+this.getOrderDate(),"String;"+this.getStatus(),"int;"+this.getIssuedByEmployee(),"int;"+this.getApprovedByEmployee() };
-        String[] columnsData = new String[]{"OrderDate","Status","IssuedByEmployee","ApprovedByEmployee"};
-        String[] whereClause = new String[]{"OrderID="+this.getOrderID()};
-        handler.updateRecords("Order", Arrays.asList(columnsData),Arrays.asList(inputData),Arrays.asList(whereClause));
+        //Order
+        //Columns
+        ArrayList<String> columns = new ArrayList<>();
+        if (this.getReceiveDate() != null) { columns.add("ReceiveDate"); }
+        if (!this.getStatus().isEmpty()) { columns.add("Status"); }
+        if (this.getApprovedByEmployee() != null) { columns.add("ApprovedByEmployee"); }
+        
+        //Values
+        ArrayList<String> values = new ArrayList<>();
+        if (this.getReceiveDate() != null) { values.add("string;" + this.getReceiveDate()); }
+        if (!this.getStatus().isEmpty()) { values.add("string;" + this.getStatus()); }
+        if (this.getApprovedByEmployee() != null) { values.add("string;" + this.getApprovedByEmployee().getUserID()); }
+        
+        //Conditions
+        ArrayList<String> conditions = new ArrayList<>();
+        conditions.add("OrderID=" + this.getOrderID());
+        conditions.add("OrderDate='" + this.getOrderDate()+ "'");
+        if (this.getReceiveDate() != null) { conditions.add("ReceiveDate='" + this.getReceiveDate()+ "'"); }
+        if (!this.getStatus().isEmpty()) { conditions.add("Status='" + this.getStatus()+ "'"); }
+        if (this.getPlacedByEmployee() != null) { conditions.add("PlacedByEmployee=" + this.getPlacedByEmployee().getUserID()); }
+        if (this.getApprovedByEmployee() != null) { conditions.add("ApprovedByEmployee=" + this.getApprovedByEmployee().getUserID()); }
+        
+        //Execute
+        DataHandler.updateRecords("Order", columns, values, conditions);
     }
     
     public static void updateOrder(Order order) {
-           DataHandler handler = new DataHandler();
-         String[] inputData = new String[] {"String;"+order.getOrderDate(),"String;"+order.getStatus(),"int;"+order.getIssuedByEmployee(),"int;"+order.getApprovedByEmployee() };
-        String[] columnsData = new String[]{"OrderDate","Status","IssuedByEmployee","ApprovedByEmployee"};
-        String[] whereClause = new String[]{"OrderID="+order.getOrderID()};
-        handler.updateRecords("Order", Arrays.asList(columnsData),Arrays.asList(inputData),Arrays.asList(whereClause));
+        //Order
+        //Columns
+        ArrayList<String> columns = new ArrayList<>();
+        if (order.getReceiveDate() != null) { columns.add("ReceiveDate"); }
+        if (!order.getStatus().isEmpty()) { columns.add("Status"); }
+        if (order.getApprovedByEmployee() != null) { columns.add("ApprovedByEmployee"); }
+        
+        //Values
+        ArrayList<String> values = new ArrayList<>();
+        if (order.getReceiveDate() != null) { values.add("string;" + order.getReceiveDate()); }
+        if (!order.getStatus().isEmpty()) { values.add("string;" + order.getStatus()); }
+        if (order.getApprovedByEmployee() != null) { values.add("string;" + order.getApprovedByEmployee().getUserID()); }
+        
+        //Conditions
+        ArrayList<String> conditions = new ArrayList<>();
+        conditions.add("OrderID=" + order.getOrderID());
+        conditions.add("OrderDate='" + order.getOrderDate()+ "'");
+        if (order.getReceiveDate() != null) { conditions.add("ReceiveDate='" + order.getReceiveDate()+ "'"); }
+        if (!order.getStatus().isEmpty()) { conditions.add("Status='" + order.getStatus()+ "'"); }
+        if (order.getPlacedByEmployee() != null) { conditions.add("PlacedByEmployee=" + order.getPlacedByEmployee().getUserID()); }
+        if (order.getApprovedByEmployee() != null) { conditions.add("ApprovedByEmployee=" + order.getApprovedByEmployee().getUserID()); }
+        
+        //Execute
+        DataHandler.updateRecords("Order", columns, values, conditions);
     }
-   
+    
     public void deleteOrder() {
-        DataHandler handler = new DataHandler();
-        String[] whereClause = new String[]{"OrderID="+this.getOrderID()};
-        handler.deleteRecords("Order", Arrays.asList(whereClause));
+        //Order
+        //Conditions
+        ArrayList<String> conditions = new ArrayList<>();
+        conditions.add("OrderID=" + this.getOrderID());
+        conditions.add("OrderDate='" + this.getOrderDate()+ "'");
+        if (this.getReceiveDate() != null) { conditions.add("ReceiveDate='" + this.getReceiveDate()+ "'"); }
+        if (!this.getStatus().isEmpty()) { conditions.add("Status='" + this.getStatus()+ "'"); }
+        if (this.getPlacedByEmployee() != null) { conditions.add("PlacedByEmployee=" + this.getPlacedByEmployee().getUserID()); }
+        if (this.getApprovedByEmployee() != null) { conditions.add("ApprovedByEmployee=" + this.getApprovedByEmployee().getUserID()); }
+        
+        //Execute
+        DataHandler.deleteRecords("Order", conditions);
     }
     
     public static void deleteOrder(Order order) {
-         DataHandler handler = new DataHandler();
-        String[] whereClause = new String[]{"OrderID="+order.getOrderID()};
-        handler.deleteRecords("Order", Arrays.asList(whereClause));
+        //Order
+        //Conditions
+        ArrayList<String> conditions = new ArrayList<>();
+        conditions.add("OrderID=" + order.getOrderID());
+        conditions.add("OrderDate='" + order.getOrderDate()+ "'");
+        if (order.getReceiveDate() != null) { conditions.add("ReceiveDate='" + order.getReceiveDate()+ "'"); }
+        if (!order.getStatus().isEmpty()) { conditions.add("Status='" + order.getStatus()+ "'"); }
+        if (order.getPlacedByEmployee() != null) { conditions.add("PlacedByEmployee=" + order.getPlacedByEmployee().getUserID()); }
+        if (order.getApprovedByEmployee() != null) { conditions.add("ApprovedByEmployee=" + order.getApprovedByEmployee().getUserID()); }
+        
+        //Execute
+        DataHandler.deleteRecords("Order", conditions);
     }
-    
-    
 }

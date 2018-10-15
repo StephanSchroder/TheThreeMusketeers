@@ -20,26 +20,23 @@ public class User extends Person {
     private int userID;
     private String username;
     private String password;
-    private Date lastLoggedIn;
     private String accountType;
 
     public User(String firstName, String lastName, String title, Date dateOfBirth, String gender, String country, String province, String city, String street, 
-            String postalCode, String addressLine, String email, String cellNumber, String telNumber, Date dateAdded, Date lastUpdated, int userID, 
-            String username, String password, Date lastLoggedIn, String accountType, String idNumber) {
-        super(idNumber, firstName, lastName, title, dateOfBirth, gender, country, province, city, street, postalCode, addressLine, email, cellNumber, telNumber, dateAdded, lastUpdated);
+            String postalCode, String addressLine, String email, String cellNumber, String telNumber, Date dateAdded, int userID, 
+            String username, String password, String accountType, String idNumber) {
+        super(idNumber, firstName, lastName, title, dateOfBirth, gender, country, province, city, street, postalCode, addressLine, email, cellNumber, telNumber, dateAdded);
         this.userID = userID;
         this.username = username;
         this.password = password;
-        this.lastLoggedIn = lastLoggedIn;
         this.accountType = accountType;
     }
 
-    public User(int userID, String username, String password, Date lastLoggedIn, String accountType, String idNumber, String firstName, String lastName, String title, Date dateOfBirth, String gender, String country, Date dateAdded, Date lastUpdated) {
-        super(idNumber, firstName, lastName, title, dateOfBirth, gender, country, dateAdded, lastUpdated);
+    public User(int userID, String username, String password, String accountType, String idNumber, String firstName, String lastName, String title, Date dateOfBirth, String gender, String country, Date dateAdded) {
+        super(idNumber, firstName, lastName, title, dateOfBirth, gender, country, dateAdded);
         this.userID = userID;
         this.username = username;
         this.password = password;
-        this.lastLoggedIn = lastLoggedIn;
         this.accountType = accountType;
     }
     
@@ -65,14 +62,6 @@ public class User extends Person {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Date getLastLoggedIn() {
-        return lastLoggedIn;
-    }
-
-    public void setLastLoggedIn(Date lastLoggedIn) {
-        this.lastLoggedIn = lastLoggedIn;
     }
 
     public String getAccountType() {
@@ -141,7 +130,7 @@ public class User extends Person {
         int usernameInputCode = Common.CheckInput(username);
         if ((usernameInputCode == 1) || (usernameInputCode == 4))
         {
-            ResultSet dbData = DataHandler.readRecords(Arrays.asList("PersonID", "FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "ProvinceState", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "LastUpdated", "UserID", "Username", "Password", "LastLoggedIn", "AccountType"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("Username='" + username + "'"));
+            ResultSet dbData = DataHandler.readRecords(Arrays.asList("PersonID", "FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "ProvinceState", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("Username='" + username + "'"));
             int count = -1;
             try {
                 boolean b = dbData.last();
@@ -153,7 +142,7 @@ public class User extends Person {
             if (count == 1)
             {
                 try {
-                    user = new User(dbData.getString("FirstName"), dbData.getString("LastName"), dbData.getString("Title"), dbData.getDate("DateOfBirth"), dbData.getString("Gender"), dbData.getString("Country"), dbData.getString("Province"), dbData.getString("City"), dbData.getString("Street"), dbData.getString("PostalCode"), dbData.getString("AddressLine"), dbData.getString("Email"), dbData.getString("CellNumber"), dbData.getString("TelNumber"), dbData.getDate("DateAdded"), dbData.getDate("LastUpdated"), dbData.getInt("UserID"), dbData.getString("Username"), dbData.getString("Password"), dbData.getDate("LastLoggedIn"), dbData.getString("AccountType"), dbData.getString("IDNumber"));
+                    user = new User(dbData.getString("FirstName"), dbData.getString("LastName"), dbData.getString("Title"), dbData.getDate("DateOfBirth"), dbData.getString("Gender"), dbData.getString("Country"), dbData.getString("Province"), dbData.getString("City"), dbData.getString("Street"), dbData.getString("PostalCode"), dbData.getString("AddressLine"), dbData.getString("Email"), dbData.getString("CellNumber"), dbData.getString("TelNumber"), dbData.getDate("DateAdded"), dbData.getInt("UserID"), dbData.getString("Username"), dbData.getString("Password"), dbData.getString("AccountType"), dbData.getString("IDNumber"));
                 } catch (SQLException sqle) {
                     System.out.println("SQL Exception was thrown and caught");
                 }
@@ -168,7 +157,7 @@ public class User extends Person {
         int usernameInputCode = Common.CheckInput(idNumber);
         if (usernameInputCode == 2)
         {
-            ResultSet dbData = DataHandler.readRecords(Arrays.asList("PersonID", "FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "ProvinceState", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "LastUpdated", "UserID", "Username", "Password", "LastLoggedIn", "AccountType"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("IDNumber='" + idNumber + "'"));
+            ResultSet dbData = DataHandler.readRecords(Arrays.asList("IDNumber", "FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("IDNumber='" + idNumber + "'"));
             int count = -1;
             try {
                 boolean b = dbData.last();
@@ -180,7 +169,7 @@ public class User extends Person {
             if (count == 1)
             {
                 try {
-                    user = new User(dbData.getString("FirstName"), dbData.getString("LastName"), dbData.getString("Title"), dbData.getDate("DateOfBirth"), dbData.getString("Gender"), dbData.getString("Country"), dbData.getString("Province"), dbData.getString("City"), dbData.getString("Street"), dbData.getString("PostalCode"), dbData.getString("AddressLine"), dbData.getString("Email"), dbData.getString("CellNumber"), dbData.getString("TelNumber"), dbData.getDate("DateAdded"), dbData.getDate("LastUpdated"), dbData.getInt("UserID"), dbData.getString("Username"), dbData.getString("Password"), dbData.getDate("LastLoggedIn"), dbData.getString("AccountType"), dbData.getString("IDNumber"));
+                    user = new User(dbData.getString("FirstName"), dbData.getString("LastName"), dbData.getString("Title"), dbData.getDate("DateOfBirth"), dbData.getString("Gender"), dbData.getString("Country"), dbData.getString("Province"), dbData.getString("City"), dbData.getString("Street"), dbData.getString("PostalCode"), dbData.getString("AddressLine"), dbData.getString("Email"), dbData.getString("CellNumber"), dbData.getString("TelNumber"), dbData.getDate("DateAdded"), dbData.getInt("UserID"), dbData.getString("Username"), dbData.getString("Password"), dbData.getString("AccountType"), dbData.getString("IDNumber"));
                 } catch (SQLException sqle) {
                     System.out.println("SQL Exception was thrown and caught");
                 }
@@ -201,26 +190,140 @@ public class User extends Person {
     }
     
     public void registerUser() {
+        //Person
+        this.registerPerson();
         
+        //User
+        //Columns
+        ArrayList<String> columns = new ArrayList<>();
+        columns.add("PersonID");
+        columns.add("Username");
+        columns.add("Password");
+        if (!this.getAccountType().isEmpty()) { columns.add("AccountType"); }
+        
+        //Values
+        String values = "";
+        values += "string#" + this.getIdNumber();
+        values += ";string#" + this.getUsername();
+        values += ";string#" + this.getPassword();
+        if (!this.getAccountType().isEmpty()) { values += ";string#" + this.getAccountType(); }
+        
+        //Execute
+        DataHandler.createRecords(columns, "User", Arrays.asList(values));
     }
     
     public static void registerUser(User user) {
+        //Person
+        user.registerPerson();
         
+        //User
+        //Columns
+        ArrayList<String> columns = new ArrayList<>();
+        columns.add("PersonID");
+        columns.add("Username");
+        columns.add("Password");
+        if (!user.getAccountType().isEmpty()) { columns.add("AccountType"); }
+        
+        //Values
+        String values = "";
+        values += "string#" + user.getIdNumber();
+        values += ";string#" + user.getUsername();
+        values += ";string#" + user.getPassword();
+        if (!user.getAccountType().isEmpty()) { values += ";string#" + user.getAccountType(); }
+        
+        //Execute
+        DataHandler.createRecords(columns, "User", Arrays.asList(values));
     }
     
     public void updateUser() {
+        //Person
+        this.updatePerson();
         
+        //User
+        //Columns
+        ArrayList<String> columns = new ArrayList<>();
+        columns.add("Username");
+        columns.add("Password");
+        columns.add("AccountType");
+        
+        //Values
+        ArrayList<String> values = new ArrayList<>();
+        values.add("string;" + this.getUsername());
+        values.add("string;" + this.getPassword());
+        values.add("string;" + this.getAccountType());
+        
+        //Conditions
+        ArrayList<String> conditions = new ArrayList<>();
+        conditions.add("UserID=" + this.getUserID());
+        conditions.add("PersonID='" + this.getIdNumber()+ "'");
+        conditions.add("Username='" + this.getUsername()+ "'");
+        conditions.add("Password='" + this.getPassword()+ "'");
+        conditions.add("AccountType='" + this.getAccountType()+ "'");
+        
+        //Execute
+        DataHandler.updateRecords("User", columns, values, conditions);
     }
     
     public static void updateUser(User user) {
+        //Person
+        user.updatePerson();
         
+        //User
+        //Columns
+        ArrayList<String> columns = new ArrayList<>();
+        columns.add("Username");
+        columns.add("Password");
+        columns.add("AccountType");
+        
+        //Values
+        ArrayList<String> values = new ArrayList<>();
+        values.add("string;" + user.getUsername());
+        values.add("string;" + user.getPassword());
+        values.add("string;" + user.getAccountType());
+        
+        //Conditions
+        ArrayList<String> conditions = new ArrayList<>();
+        conditions.add("UserID=" + user.getUserID());
+        conditions.add("PersonID='" + user.getIdNumber()+ "'");
+        conditions.add("Username='" + user.getUsername()+ "'");
+        conditions.add("Password='" + user.getPassword()+ "'");
+        conditions.add("AccountType='" + user.getAccountType()+ "'");
+        
+        //Execute
+        DataHandler.updateRecords("User", columns, values, conditions);
     }
     
     public void deleteUser() {
+        //Person
+        this.deletePerson();
         
+        //User        
+        //Conditions
+        ArrayList<String> conditions = new ArrayList<>();
+        conditions.add("UserID=" + this.getUserID());
+        conditions.add("PersonID='" + this.getIdNumber()+ "'");
+        conditions.add("Username='" + this.getUsername()+ "'");
+        conditions.add("Password='" + this.getPassword()+ "'");
+        conditions.add("AccountType='" + this.getAccountType()+ "'");
+        
+        //Execute
+        DataHandler.deleteRecords("User", conditions);
     }
     
     public static void deleteUser(User user) {
+        //Person
+        user.deletePerson();
         
+        //User        
+        //Conditions
+        ArrayList<String> conditions = new ArrayList<>();
+        conditions.add("UserID=" + user.getUserID());
+        conditions.add("PersonID='" + user.getIdNumber()+ "'");
+        conditions.add("Username='" + user.getUsername()+ "'");
+        conditions.add("Password='" + user.getPassword()+ "'");
+        conditions.add("AccountType='" + user.getAccountType()+ "'");
+        
+        //Execute
+        DataHandler.deleteRecords("User", conditions);
     }
 }

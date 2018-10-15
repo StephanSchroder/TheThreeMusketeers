@@ -5,7 +5,10 @@
  */
 package BLL;
 
+import DAL.DataHandler;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  *
@@ -74,5 +77,129 @@ public class Stock {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+    
+    public void registerStock() {
+        //Stock
+        //Columns
+        ArrayList<String> columns = new ArrayList<>();
+        columns.add("CategoryID");
+        columns.add("ItemName");
+        columns.add("StockCount");
+        if (!this.getStatus().isEmpty()) { columns.add("Status"); }
+        
+        //Values
+        String values = "";
+        values += "int#" + this.getCategory().getCategoryID();
+        values += ";string#" + this.getItemName();
+        values += ";int#" + this.getStockCount();
+        if (!this.getStatus().isEmpty()) { values += ";string#" + this.getStatus(); }
+        
+        //Execute
+        DataHandler.createRecords(columns, "Stock", Arrays.asList(values));
+    }
+    
+    public static void registerStock(Stock stock) {
+        //Stock
+        //Columns
+        ArrayList<String> columns = new ArrayList<>();
+        columns.add("CategoryID");
+        columns.add("ItemName");
+        columns.add("StockCount");
+        if (!stock.getStatus().isEmpty()) { columns.add("Status"); }
+        
+        //Values
+        String values = "";
+        values += "int#" + stock.getCategory().getCategoryID();
+        values += ";string#" + stock.getItemName();
+        values += ";int#" + stock.getStockCount();
+        if (!stock.getStatus().isEmpty()) { values += ";string#" + stock.getStatus(); }
+        
+        //Execute
+        DataHandler.createRecords(columns, "Stock", Arrays.asList(values));
+    }
+    
+    public void updateStock() {
+        //Stock
+        //Columns
+        ArrayList<String> columns = new ArrayList<>();
+        columns.add("CategoryID");
+        columns.add("ItemName");
+        columns.add("StockCount");
+        columns.add("Status");
+        
+        //Values
+        ArrayList<String> values = new ArrayList<>();
+        values.add("int;" + this.getCategory().getCategoryID());
+        values.add("string;" + this.getItemName());
+        values.add("int;" + this.getStockCount());
+        values.add("string;" + this.getStatus());
+        
+        //Conditions
+        ArrayList<String> conditions = new ArrayList<>();
+        conditions.add("StockID=" + this.getStockID());
+        conditions.add("CategoryID=" + this.getCategory().getCategoryID());
+        conditions.add("ItemName='" + this.getItemName()+ "'");
+        conditions.add("StockCount=" + this.getStockCount());
+        conditions.add("Status='" + this.getStatus()+ "'");
+        
+        //Execute
+        DataHandler.updateRecords("Stock", columns, values, conditions);
+    }
+    
+    public static void updateStock(Stock stock) {
+        //Stock
+        //Columns
+        ArrayList<String> columns = new ArrayList<>();
+        columns.add("CategoryID");
+        columns.add("ItemName");
+        columns.add("StockCount");
+        columns.add("Status");
+        
+        //Values
+        ArrayList<String> values = new ArrayList<>();
+        values.add("int;" + stock.getCategory().getCategoryID());
+        values.add("string;" + stock.getItemName());
+        values.add("int;" + stock.getStockCount());
+        values.add("string;" + stock.getStatus());
+        
+        //Conditions
+        ArrayList<String> conditions = new ArrayList<>();
+        conditions.add("StockID=" + stock.getStockID());
+        conditions.add("CategoryID=" + stock.getCategory().getCategoryID());
+        conditions.add("ItemName='" + stock.getItemName()+ "'");
+        conditions.add("StockCount=" + stock.getStockCount());
+        conditions.add("Status='" + stock.getStatus()+ "'");
+        
+        //Execute
+        DataHandler.updateRecords("Stock", columns, values, conditions);
+    }
+    
+    public void deleteStock() {
+        //Stock
+        //Conditions
+        ArrayList<String> conditions = new ArrayList<>();
+        conditions.add("StockID=" + this.getStockID());
+        conditions.add("CategoryID=" + this.getCategory().getCategoryID());
+        conditions.add("ItemName='" + this.getItemName()+ "'");
+        conditions.add("StockCount=" + this.getStockCount());
+        conditions.add("Status='" + this.getStatus()+ "'");
+        
+        //Execute
+        DataHandler.deleteRecords("Stock", conditions);
+    }
+    
+    public static void deleteStock(Stock stock) {
+        //Stock
+        //Conditions
+        ArrayList<String> conditions = new ArrayList<>();
+        conditions.add("StockID=" + stock.getStockID());
+        conditions.add("CategoryID=" + stock.getCategory().getCategoryID());
+        conditions.add("ItemName='" + stock.getItemName()+ "'");
+        conditions.add("StockCount=" + stock.getStockCount());
+        conditions.add("Status='" + stock.getStatus()+ "'");
+        
+        //Execute
+        DataHandler.deleteRecords("Stock", conditions);
     }
 }
