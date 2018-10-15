@@ -12,29 +12,31 @@ import java.sql.Date;
  * @author Stephan
  */
 public class User extends Person {
-   
     private int userID;
     private String username;
     private String password;
-    private Date lastLogIn;
+    private Date lastLoggedIn;
     private String accountType;
 
-
-    public User(int userID, String username, String password, Date lastLogIn, String accountType, String idNumber,
-            String firstName, String lastName, String title, Date dob, String gender, String country, String province, String city,
-            String street, String postalCode, String addressLine, String email, String cellNumber, String telNumber, Date dateAdded, Date lastUpdated) {
-                super(idNumber, firstName, lastName, title, dob, gender, country, province, city, street, postalCode, addressLine, email, cellNumber,
-                telNumber, dateAdded, lastUpdated);
-        
+    public User(String firstName, String lastName, String title, Date dateOfBirth, String gender, String country, String province, String city, String street, 
+            String postalCode, String addressLine, String email, String cellNumber, String telNumber, Date dateAdded, Date lastUpdated, int userID, 
+            String username, String password, Date lastLoggedIn, String accountType, String idNumber) {
+        super(idNumber, firstName, lastName, title, dateOfBirth, gender, country, province, city, street, postalCode, addressLine, email, cellNumber, telNumber, dateAdded, lastUpdated);
         this.userID = userID;
         this.username = username;
         this.password = password;
-        this.lastLogIn = lastLogIn;
+        this.lastLoggedIn = lastLoggedIn;
         this.accountType = accountType;
     }
 
-    
-    
+    public User(int userID, String username, String password, Date lastLoggedIn, String accountType, String idNumber, String firstName, String lastName, String title, Date dateOfBirth, String gender, String country, Date dateAdded, Date lastUpdated) {
+        super(idNumber, firstName, lastName, title, dateOfBirth, gender, country, dateAdded, lastUpdated);
+        this.userID = userID;
+        this.username = username;
+        this.password = password;
+        this.lastLoggedIn = lastLoggedIn;
+        this.accountType = accountType;
+    }
     
     public int getUserID() {
         return userID;
@@ -60,12 +62,12 @@ public class User extends Person {
         this.password = password;
     }
 
-    public Date getLastLogIn() {
-        return lastLogIn;
+    public Date getLastLoggedIn() {
+        return lastLoggedIn;
     }
 
-    public void setLastLogIn(Date lastLogIn) {
-        this.lastLogIn = lastLogIn;
+    public void setLastLoggedIn(Date lastLoggedIn) {
+        this.lastLoggedIn = lastLoggedIn;
     }
 
     public String getAccountType() {
@@ -75,7 +77,4 @@ public class User extends Person {
     public void setAccountType(String accountType) {
         this.accountType = accountType;
     }
-    
-    
-    
 }

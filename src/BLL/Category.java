@@ -20,6 +20,11 @@ public class Category {
         this.description = description;
     }
 
+    public Category(int categoryID, String name) {
+        this.categoryID = categoryID;
+        this.name = name;
+    }
+
     public int getCategoryID() {
         return categoryID;
     }
@@ -43,6 +48,4 @@ public class Category {
     public void setDescription(String description) {
         this.description = description;
     }
-    
-    
 }

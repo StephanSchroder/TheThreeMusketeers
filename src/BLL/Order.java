@@ -13,21 +13,29 @@ import java.util.*;
  * @author Stephan
  */
 public class Order {
-    
     private int orderID;
     private Date orderDate;
     private Date receiveDate;
     private String status;
-    private User user;
-    
+    private User isssuedByEmployee;
+    private User approvedByEmployee;
+    private LinkedList<StockOrder> stock;
 
-    public Order(int orderID, Date orderDate, Date receiveDate, String status, User user, ArrayList<Stock> stockList) {
+    public Order(int orderID, Date orderDate, Date receiveDate, String status, User isssuedByEmployee, User approvedByEmployee, LinkedList<StockOrder> stock) {
         this.orderID = orderID;
         this.orderDate = orderDate;
         this.receiveDate = receiveDate;
         this.status = status;
-        this.user = user;
-       
+        this.isssuedByEmployee = isssuedByEmployee;
+        this.approvedByEmployee = approvedByEmployee;
+        this.stock = stock;
+    }
+
+    public Order(int orderID, Date orderDate, String status, User isssuedByEmployee) {
+        this.orderID = orderID;
+        this.orderDate = orderDate;
+        this.status = status;
+        this.isssuedByEmployee = isssuedByEmployee;
     }
 
     public int getOrderID() {
@@ -62,16 +70,27 @@ public class Order {
         this.status = status;
     }
 
-    public User getUser() {
-        return user;
+    public User getIssuedByEmployee() {
+        return isssuedByEmployee;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setIssuedByEmployee(User isssuedByEmployee) {
+        this.isssuedByEmployee = isssuedByEmployee;
     }
 
-  
-    
-    
-    
+    public User getApprovedByEmployee() {
+        return approvedByEmployee;
+    }
+
+    public void setApprovedByEmployee(User approvedByEmployee) {
+        this.approvedByEmployee = approvedByEmployee;
+    }
+
+    public LinkedList<StockOrder> getStock() {
+        return stock;
+    }
+
+    public void setStock(LinkedList<StockOrder> stock) {
+        this.stock = stock;
+    }
 }

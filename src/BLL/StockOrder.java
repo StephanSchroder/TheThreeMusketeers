@@ -10,22 +10,12 @@ package BLL;
  * @author Stephan
  */
 public class StockOrder {
-    private Order order;
     private Stock stock;
     private int quantity;
 
-    public StockOrder(Order order, Stock stock, int quantity) {
-        this.order = order;
+    public StockOrder(Stock stock, int quantity) {
         this.stock = stock;
         this.quantity = quantity;
-    }
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
     }
 
     public Stock getStock() {
@@ -43,7 +33,4 @@ public class StockOrder {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-    
-    
-    
 }
