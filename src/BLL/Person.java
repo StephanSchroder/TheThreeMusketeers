@@ -12,13 +12,30 @@ import java.sql.Date;
  * @author Stephan
  */
 public abstract class Person {
+    private String idNumber;
+    private String firstName;
+    private String lastName;
+    private String title;
+    private Date dateOfBirth;
+    private String gender;
+    private String country;
+    private String province;
+    private String city;
+    private String street;
+    private String postalCode;
+    private String addressLine;
+    private String email;
+    private String cellNumber;
+    private String telNumber;
+    private Date dateAdded;
+    private Date lastUpdated;
 
-    public Person(String idNumber, String firstName, String lastName, String title, Date dob, String gender, String country, String province, String city, String street, String postalCode, String addressLine, String email, String cellNumber, String telNumber, Date dateAdded, Date lastUpdated) {
+    public Person(String idNumber, String firstName, String lastName, String title, Date dateOfBirth, String gender, String country, String province, String city, String street, String postalCode, String addressLine, String email, String cellNumber, String telNumber, Date dateAdded, Date lastUpdated) {
         this.idNumber = idNumber;
         this.firstName = firstName;
         this.lastName = lastName;
         this.title = title;
-        this.dob = dob;
+        this.dateOfBirth = dateOfBirth;
         this.gender = gender;
         this.country = country;
         this.province = province;
@@ -29,6 +46,18 @@ public abstract class Person {
         this.email = email;
         this.cellNumber = cellNumber;
         this.telNumber = telNumber;
+        this.dateAdded = dateAdded;
+        this.lastUpdated = lastUpdated;
+    }
+
+    public Person(String idNumber, String firstName, String lastName, String title, Date dateOfBirth, String gender, String country, Date dateAdded, Date lastUpdated) {
+        this.idNumber = idNumber;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.title = title;
+        this.dateOfBirth = dateOfBirth;
+        this.gender = gender;
+        this.country = country;
         this.dateAdded = dateAdded;
         this.lastUpdated = lastUpdated;
     }
@@ -65,12 +94,12 @@ public abstract class Person {
         this.title = title;
     }
 
-    public Date getDob() {
-        return dob;
+    public Date getDateOfBirth() {
+        return dateOfBirth;
     }
 
-    public void setDob(Date dob) {
-        this.dob = dob;
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public String getGender() {
@@ -168,28 +197,4 @@ public abstract class Person {
     public void setLastUpdated(Date lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
-    
-    
-    
-    private String idNumber;
-    private String firstName;
-    private String lastName;
-    private String title;
-    private Date dob;
-    private String gender;
-    private String country;
-    private String province;
-    private String city;
-    private String street;
-    private String postalCode;
-    private String addressLine;
-    private String email;
-    private String cellNumber;
-    private String telNumber;
-    private Date dateAdded;
-    private Date lastUpdated;
-    
-    
-    
-    
 }

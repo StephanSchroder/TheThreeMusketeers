@@ -75,7 +75,4 @@ public class Stock {
     public void setStatus(String status) {
         this.status = status;
     }
-    
-    
-    
 }
