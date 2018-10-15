@@ -5,6 +5,7 @@
  */
 package BLL;
 
+import DAL.DataHandler;
 import java.sql.Date;
 import java.util.*;
 
@@ -93,4 +94,48 @@ public class Order {
     public void setStock(LinkedList<StockOrder> stock) {
         this.stock = stock;
     }
+    
+        public void createOrder() {
+                DataHandler handler = new DataHandler();
+         String[] inputData = new String[] {"String#"+this.getOrderDate()+";String#"+this.getStatus()+";int#"+this.getIssuedByEmployee()+";int#"+this.getApprovedByEmployee()+";" };
+        String[] columnsData = new String[]{"OrderDate","Status","IssuedByEmployee","ApprovedByEmployee"};
+        handler.createRecords(Arrays.asList(columnsData), "Order", Arrays.asList(inputData));
+    }
+   
+    public static void createOrder(Order order) {
+        DataHandler handler = new DataHandler();
+         String[] inputData = new String[] {"String#"+order.getOrderDate()+";String#"+order.getStatus()+";int#"+order.getIssuedByEmployee()+";int#"+order.getApprovedByEmployee()+";" };
+        String[] columnsData = new String[]{"OrderDate","Status","IssuedByEmployee","ApprovedByEmployee"};
+        handler.createRecords(Arrays.asList(columnsData), "Order", Arrays.asList(inputData));
+    }
+    
+    public void updateOrder() {
+          DataHandler handler = new DataHandler();
+         String[] inputData = new String[] {"String;"+this.getOrderDate(),"String;"+this.getStatus(),"int;"+this.getIssuedByEmployee(),"int;"+this.getApprovedByEmployee() };
+        String[] columnsData = new String[]{"OrderDate","Status","IssuedByEmployee","ApprovedByEmployee"};
+        String[] whereClause = new String[]{"OrderID="+this.getOrderID()};
+        handler.updateRecords("Order", Arrays.asList(columnsData),Arrays.asList(inputData),Arrays.asList(whereClause));
+    }
+    
+    public static void updateOrder(Order order) {
+           DataHandler handler = new DataHandler();
+         String[] inputData = new String[] {"String;"+order.getOrderDate(),"String;"+order.getStatus(),"int;"+order.getIssuedByEmployee(),"int;"+order.getApprovedByEmployee() };
+        String[] columnsData = new String[]{"OrderDate","Status","IssuedByEmployee","ApprovedByEmployee"};
+        String[] whereClause = new String[]{"OrderID="+order.getOrderID()};
+        handler.updateRecords("Order", Arrays.asList(columnsData),Arrays.asList(inputData),Arrays.asList(whereClause));
+    }
+   
+    public void deleteOrder() {
+        DataHandler handler = new DataHandler();
+        String[] whereClause = new String[]{"OrderID="+this.getOrderID()};
+        handler.deleteRecords("Order", Arrays.asList(whereClause));
+    }
+    
+    public static void deleteOrder(Order order) {
+         DataHandler handler = new DataHandler();
+        String[] whereClause = new String[]{"OrderID="+order.getOrderID()};
+        handler.deleteRecords("Order", Arrays.asList(whereClause));
+    }
+    
+    
 }
