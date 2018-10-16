@@ -7,6 +7,9 @@ package PL;
 
 import BLL.User;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
@@ -16,6 +19,18 @@ import javax.swing.SwingConstants;
  */
 public class frmLogin extends javax.swing.JPanel {
 
+    public static void main(String args[]){
+        frmLogin login = new frmLogin();
+        
+        JFrame jf=new JFrame();
+        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        jf.setSize(443, 255);
+        jf.add(login);
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        jf.setLocation(dim.width/2-jf.getSize().width/2, dim.height/2-jf.getSize().height/2);
+        jf.setVisible(true);
+        
+    }
     /**
      * Creates new form frmLogin
      */
@@ -58,6 +73,11 @@ public class frmLogin extends javax.swing.JPanel {
                 txtUsernameFocusLost(evt);
             }
         });
+        txtUsername.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtUsernameMouseClicked(evt);
+            }
+        });
 
         jLabel6.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel6.setText("Password:");
@@ -69,6 +89,11 @@ public class frmLogin extends javax.swing.JPanel {
         btnLogin1.setBackground(new java.awt.Color(204, 204, 204));
         btnLogin1.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         btnLogin1.setText("Login");
+        btnLogin1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogin1ActionPerformed(evt);
+            }
+        });
 
         jLabel7.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
         jLabel7.setText("Login Form:");
@@ -134,6 +159,27 @@ public class frmLogin extends javax.swing.JPanel {
         // TODO add your handling code here:
         //METHODS
         //This method will return a integer code that will indicate the result of the authentication:
+        if (txtUsername.getText().trim().equals("")) {
+            txtUsername.setText("Username");
+
+        }
+        
+        txtUsername.setForeground(Color.LIGHT_GRAY);
+    }//GEN-LAST:event_txtUsernameFocusGained
+
+    private void txtUsernameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUsernameFocusLost
+        // TODO add your handling code here:
+        if (txtUsername.getText().trim().equals("Username")) {
+            txtUsername.setText("");
+
+        }
+        txtUsername.setForeground(Color.BLACK);
+
+
+    }//GEN-LAST:event_txtUsernameFocusLost
+
+    private void btnLogin1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogin1ActionPerformed
+        // TODO add your handling code here:
         //0 = Unknown unsuccessful login
         //1 = Invalid Username or Password characters
         //2 = User not found (database did not retrieve the user)
@@ -169,25 +215,19 @@ public class frmLogin extends javax.swing.JPanel {
                         JOptionPane.showMessageDialog(this,"Admin Login","Succesfull Login.",0);
                         
                     }
-                    
                     break;
             }
         }
-        
-        txtUsername.setForeground(Color.LIGHT_GRAY);
-    }//GEN-LAST:event_txtUsernameFocusGained
+    }//GEN-LAST:event_btnLogin1ActionPerformed
 
-    private void txtUsernameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUsernameFocusLost
+    private void txtUsernameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtUsernameMouseClicked
         // TODO add your handling code here:
         if (txtUsername.getText().trim().equals("Username")) {
-            JOptionPane.showMessageDialog(null, "Welcome " + txtUsername.getText(), "Succesfull Login", 1);
             txtUsername.setText("");
 
         }
         txtUsername.setForeground(Color.BLACK);
-
-
-    }//GEN-LAST:event_txtUsernameFocusLost
+    }//GEN-LAST:event_txtUsernameMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
