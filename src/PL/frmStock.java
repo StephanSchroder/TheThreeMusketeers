@@ -5,8 +5,15 @@
  */
 package PL;
 
+import BLL.Category;
 import java.awt.Color;
-
+import java.sql.Date;
+import BLL.Common;
+import BLL.Stock;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+import javax.swing.JOptionPane;
 /**
  *
  * @author Stephan
@@ -45,7 +52,7 @@ public class frmStock extends javax.swing.JPanel {
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         cmbCategory = new javax.swing.JComboBox<>();
-        spStockCoount = new javax.swing.JSpinner();
+        spStockCount = new javax.swing.JSpinner();
         dobPicker = new org.jdesktop.swingx.JXDatePicker();
 
         setBackground(new java.awt.Color(102, 153, 255));
@@ -158,6 +165,7 @@ public class frmStock extends javax.swing.JPanel {
         jLabel17.setText("Date Added:");
 
         cmbCategory.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        cmbCategory.setName("cmbCategory"); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -185,7 +193,7 @@ public class frmStock extends javax.swing.JPanel {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(spStockCoount, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
+                                    .addComponent(spStockCount, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
                                     .addComponent(txtItemName, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)))))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel16)
@@ -214,7 +222,7 @@ public class frmStock extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel16)
-                    .addComponent(spStockCoount, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(spStockCount, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel15)
@@ -261,12 +269,61 @@ public class frmStock extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(27, 27, 27)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(676, Short.MAX_VALUE))
+                .addContainerGap(90, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-
+        String category =null;
+        String itemName=null;
+        int stockCount=0;
+        String status =null;
+        Date dateAdded=null;
+        
+        category=cmbCategory.getSelectedItem().toString();
+        itemName=txtItemName.getText();
+        stockCount=(int) spStockCount.getValue();
+        status=txtStatus.getText();
+        dateAdded=(Date) dobPicker.getDate();
+        
+        String[] checkValues = new String[]{"1","124","2","1"};
+        String[] correctValues= new String[]{String.valueOf(Common.CheckInput(category)),String.valueOf(Common.CheckInput(itemName)),String.valueOf(Common.CheckInput(Integer.toString(stockCount))),String.valueOf(Common.CheckInput(status))};
+        
+        
+        for (int i = 0; i < checkValues.length; i++) {
+                     for (int j = 0; j < correctValues[i].length(); j++) {
+                if (correctValues[j]!=checkValues[i]&& j==correctValues[i].length()) {
+                    checkValues[i]=checkValues[i]+"!";
+                }
+                
+            }
+            
+           
+        }
+        boolean check = true;
+        for (int i = 0; i < checkValues.length; i++) {
+            if (checkValues[i].contains("*!")) {
+                check=false;
+                switch(i)
+                {
+                    case 0:{cmbCategory.setBackground(Color.red);}
+                    case 1:{txtItemName.setBackground(Color.red);}
+                    case 2:{spStockCount.setBackground(Color.red);}
+                    case 3:{txtStatus.setBackground(Color.red);}
+                }
+            }
+        }
+        if (check==true) {
+            Stock stock = new Stock(0, new Category(0, category), itemName, dateAdded, stockCount, status);//Get CatID
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "The items in red contains errors");
+        }
+        
+     
+        
+        
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
@@ -348,7 +405,7 @@ public class frmStock extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel17;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSpinner spStockCoount;
+    private javax.swing.JSpinner spStockCount;
     private javax.swing.JTable tblData;
     private javax.swing.JTextField txtItemName;
     private javax.swing.JTextField txtStatus;
