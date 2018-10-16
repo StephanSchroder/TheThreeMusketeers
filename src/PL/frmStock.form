@@ -61,7 +61,7 @@
                       <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="676" max="32767" attributes="0"/>
+              <EmptySpace pref="90" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -186,7 +186,7 @@
                               <Group type="102" alignment="1" attributes="0">
                                   <EmptySpace pref="51" max="32767" attributes="0"/>
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="spStockCoount" pref="214" max="32767" attributes="0"/>
+                                      <Component id="spStockCount" pref="214" max="32767" attributes="0"/>
                                       <Component id="txtItemName" pref="214" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
@@ -227,7 +227,7 @@
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel16" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="spStockCoount" alignment="3" min="-2" pref="29" max="-2" attributes="0"/>
+                      <Component id="spStockCount" alignment="3" min="-2" pref="29" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -337,12 +337,13 @@
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="0"/>
             </Property>
+            <Property name="name" type="java.lang.String" value="cmbCategory" noResource="true"/>
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
         </Component>
-        <Component class="javax.swing.JSpinner" name="spStockCoount">
+        <Component class="javax.swing.JSpinner" name="spStockCount">
         </Component>
         <Component class="org.jdesktop.swingx.JXDatePicker" name="dobPicker">
         </Component>
