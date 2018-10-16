@@ -7,6 +7,7 @@ package BLL;
 
 import DAL.DataHandler;
 import DAL.DataTablesCollection;
+import java.io.Serializable;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,7 +17,7 @@ import java.util.*;
  *
  * @author Stephan
  */
-public class User extends Person {
+public class User extends Person implements Serializable {
     private int userID;
     private String username;
     private String password;

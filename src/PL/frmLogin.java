@@ -9,6 +9,8 @@ import BLL.User;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
@@ -19,18 +21,19 @@ import javax.swing.SwingConstants;
  */
 public class frmLogin extends javax.swing.JPanel {
 
-    public static void main(String args[]){
+    public static void main(String args[]) {
         frmLogin login = new frmLogin();
-        
-        JFrame jf=new JFrame();
+
+        JFrame jf = new JFrame();
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jf.setSize(443, 255);
         jf.add(login);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        jf.setLocation(dim.width/2-jf.getSize().width/2, dim.height/2-jf.getSize().height/2);
+        jf.setLocation(dim.width / 2 - jf.getSize().width / 2, dim.height / 2 - jf.getSize().height / 2);
         jf.setVisible(true);
-        
+
     }
+
     /**
      * Creates new form frmLogin
      */
@@ -159,21 +162,21 @@ public class frmLogin extends javax.swing.JPanel {
         // TODO add your handling code here:
         //METHODS
         //This method will return a integer code that will indicate the result of the authentication:
-        if (txtUsername.getText().trim().equals("")) {
-            txtUsername.setText("Username");
-
-        }
-        
-        txtUsername.setForeground(Color.LIGHT_GRAY);
-    }//GEN-LAST:event_txtUsernameFocusGained
-
-    private void txtUsernameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUsernameFocusLost
-        // TODO add your handling code here:
         if (txtUsername.getText().trim().equals("Username")) {
             txtUsername.setText("");
 
         }
+
         txtUsername.setForeground(Color.BLACK);
+    }//GEN-LAST:event_txtUsernameFocusGained
+
+    private void txtUsernameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUsernameFocusLost
+        // TODO add your handling code here:
+        if (txtUsername.getText().trim().equals("")) {
+            txtUsername.setText("Username");
+
+        }
+        txtUsername.setForeground(Color.LIGHT_GRAY);
 
 
     }//GEN-LAST:event_txtUsernameFocusLost
@@ -188,44 +191,66 @@ public class frmLogin extends javax.swing.JPanel {
         //4 = Admin login successful
         String username = txtUsername.getText().trim();
         String password = txtPassword.getText().trim();
-        if(username.equals("") || username == null)
+        if (username.equals("") || username == null) {
             JOptionPane.showMessageDialog(this, "Please enter a username", "Invalid field entry", 3);
-        else if(password.equals("") || password == null)
+        } else if (password.equals("") || password == null) {
             JOptionPane.showMessageDialog(this, "Please enter a passwprd", "Invalid field entry", 3);
-        else{
+        } else {
             int result = User.AuthenticateLogin(username, password);
-            switch(result){
+            switch (result) {
                 case 0:
-                    JOptionPane.showMessageDialog(this,"Unknown unsuccesfull login","Unsuccesfull Login.",0);
+                    JOptionPane.showMessageDialog(this, "Unknown unsuccesfull login", "Unsuccesfull Login.", 0);
                     break;
                 case 1:
-                    JOptionPane.showMessageDialog(this,"Invalid Username or Password characters","Unsuccesfull Login.",0);
+                    JOptionPane.showMessageDialog(this, "Invalid Username or Password characters", "Unsuccesfull Login.", 0);
                     break;
                 case 2:
-                    JOptionPane.showMessageDialog(this,"User not found (database did not retrieve the user)","Unsuccesfull Login.",0);
+                    JOptionPane.showMessageDialog(this, "User not found (database did not retrieve the user)", "Unsuccesfull Login.", 0);
                     break;
                 case 3:
-                    JOptionPane.showMessageDialog(this,"User found but not authorized to login","Unsuccesfull Login.",0);
+                    JOptionPane.showMessageDialog(this, "User found but not authorized to login", "Unsuccesfull Login.", 0);
                     break;
                 case 4:
-                    if(!cbAdminCheck1.isSelected()){
-                        JOptionPane.showMessageDialog(this,"User Login","Succesfull Login.",0);
-                        
-                    }else{
-                        JOptionPane.showMessageDialog(this,"Admin Login","Succesfull Login.",0);
-                        
+                    JFrame jf = new JFrame();
+                    jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    jf.setSize(this.getWidth(), this.getHeight());
+                    if (!cbAdminCheck1.isSelected()) {
+                        JOptionPane.showMessageDialog(this, "User Login", "Succesfull Login.", 0);
+                        //User Login
+                        frmStock stock = new frmStock();
+                        jf.add(stock);
+
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Admin Login", "Succesfull Login.", 0);
+                        //Admin Login
+                        String options[] = {"Staff Page", "Stocks Page"};
+                        int option = JOptionPane.showOptionDialog(this, "Welcome " + username + " /nPlease select a option to open", "Succesfull Login.", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+                        if (option == 0) {
+                            frmStaff staff = new frmStaff();
+                            jf.add(staff);
+                        } else if (option == 1) {
+                            frmStock stock = new frmStock();
+                            jf.add(stock);
+                        }
                     }
+                    Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+                    jf.setLocation(dim.width / 2 - jf.getSize().width / 2, dim.height / 2 - jf.getSize().height / 2);
+                    jf.setVisible(true);
+                    this.setVisible(false);
                     break;
             }
+
         }
     }//GEN-LAST:event_btnLogin1ActionPerformed
 
+
     private void txtUsernameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtUsernameMouseClicked
         // TODO add your handling code here:
+
         if (txtUsername.getText().trim().equals("Username")) {
             txtUsername.setText("");
-
         }
+
         txtUsername.setForeground(Color.BLACK);
     }//GEN-LAST:event_txtUsernameMouseClicked
 
