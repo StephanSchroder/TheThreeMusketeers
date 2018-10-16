@@ -80,7 +80,7 @@ public class User extends Person {
     //3 = User found but not authorized to login
     //4 = User login successful
     //4 = Admin login successful
-    public int AuthenticateLogin(String username, String password){
+    public static int AuthenticateLogin(String username, String password){
             int userAuthed = 0;
             int usernameInputCode = Common.CheckInput(username);
             int passwordInputCode = Common.CheckInput(password);

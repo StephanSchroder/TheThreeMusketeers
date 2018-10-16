@@ -5,6 +5,7 @@
  */
 package PL;
 
+import BLL.User;
 import java.awt.Color;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
@@ -131,17 +132,55 @@ public class frmLogin extends javax.swing.JPanel {
 
     private void txtUsernameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUsernameFocusGained
         // TODO add your handling code here:
-        if (txtUsername.getText().trim().equals("")) {
-            txtUsername.setText("Username");
-
+        //METHODS
+        //This method will return a integer code that will indicate the result of the authentication:
+        //0 = Unknown unsuccessful login
+        //1 = Invalid Username or Password characters
+        //2 = User not found (database did not retrieve the user)
+        //3 = User found but not authorized to login
+        //4 = User login successful
+        //4 = Admin login successful
+        String username = txtUsername.getText().trim();
+        String password = txtPassword.getText().trim();
+        if(username.equals("") || username == null)
+            JOptionPane.showMessageDialog(this, "Please enter a username", "Invalid field entry", 3);
+        else if(password.equals("") || password == null)
+            JOptionPane.showMessageDialog(this, "Please enter a passwprd", "Invalid field entry", 3);
+        else{
+            int result = User.AuthenticateLogin(username, password);
+            switch(result){
+                case 0:
+                    JOptionPane.showMessageDialog(this,"Unknown unsuccesfull login","Unsuccesfull Login.",0);
+                    break;
+                case 1:
+                    JOptionPane.showMessageDialog(this,"Invalid Username or Password characters","Unsuccesfull Login.",0);
+                    break;
+                case 2:
+                    JOptionPane.showMessageDialog(this,"User not found (database did not retrieve the user)","Unsuccesfull Login.",0);
+                    break;
+                case 3:
+                    JOptionPane.showMessageDialog(this,"User found but not authorized to login","Unsuccesfull Login.",0);
+                    break;
+                case 4:
+                    if(!cbAdminCheck1.isSelected()){
+                        JOptionPane.showMessageDialog(this,"User Login","Succesfull Login.",0);
+                        
+                    }else{
+                        JOptionPane.showMessageDialog(this,"Admin Login","Succesfull Login.",0);
+                        
+                    }
+                    
+                    break;
+            }
         }
+        
         txtUsername.setForeground(Color.LIGHT_GRAY);
     }//GEN-LAST:event_txtUsernameFocusGained
 
     private void txtUsernameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUsernameFocusLost
         // TODO add your handling code here:
         if (txtUsername.getText().trim().equals("Username")) {
-            JOptionPane.showMessageDialog(null,"Welcome "+txtUsername.getText(),"Succesfull Login",1);
+            JOptionPane.showMessageDialog(null, "Welcome " + txtUsername.getText(), "Succesfull Login", 1);
             txtUsername.setText("");
 
         }
