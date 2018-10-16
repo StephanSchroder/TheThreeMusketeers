@@ -26,6 +26,16 @@ public class frmStock extends javax.swing.JPanel {
     public frmStock() {
         initComponents();
     }
+    
+    public void resetColor()
+    {
+        txtItemName.setBackground(Color.white);
+        cmbCategory.setBackground(Color.white);
+        spStockCount.setBackground(Color.white);
+        txtStatus.setBackground(Color.white);
+        dobPicker.setBackground(Color.white);
+          
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -123,6 +133,7 @@ public class frmStock extends javax.swing.JPanel {
         jLabel13.setText("Item name:");
 
         txtStockID.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        txtStockID.setEnabled(false);
         txtStockID.setName("txtUserName"); // NOI18N
         txtStockID.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -274,6 +285,7 @@ public class frmStock extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        resetColor();
         String category =null;
         String itemName=null;
         int stockCount=0;
@@ -315,6 +327,7 @@ public class frmStock extends javax.swing.JPanel {
         }
         if (check==true) {
             Stock stock = new Stock(0, (Category)cmbCategory.getSelectedItem(), itemName, dateAdded, stockCount, status);
+            stock.registerStock();
         }
         else
         {
@@ -328,12 +341,61 @@ public class frmStock extends javax.swing.JPanel {
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         //Update record
+        
+         resetColor();
+        String category =null;
+        String itemName=null;
+        int stockCount=0;
+        String status =null;
+        Date dateAdded=null;
+        
+        category=cmbCategory.getSelectedItem().toString();
+        itemName=txtItemName.getText();
+        stockCount=(int) spStockCount.getValue();
+        status=txtStatus.getText();
+        dateAdded=(Date) dobPicker.getDate();
+        
+        String[] checkValues = new String[]{"1","124","2","1"};
+        String[] correctValues= new String[]{String.valueOf(Common.CheckInput(category)),String.valueOf(Common.CheckInput(itemName)),String.valueOf(Common.CheckInput(Integer.toString(stockCount))),String.valueOf(Common.CheckInput(status))};
+        
+        
+        for (int i = 0; i < checkValues.length; i++) {
+                     for (int j = 0; j < correctValues[i].length(); j++) {
+                if (correctValues[j]!=checkValues[i]&& j==correctValues[i].length()) {
+                    checkValues[i]=checkValues[i]+"!";
+                }
+                
+            }
+            
+           
+        }
+        boolean check = true;
+        for (int i = 0; i < checkValues.length; i++) {
+            if (checkValues[i].contains("*!")) {
+                check=false;
+                switch(i)
+                {
+                    case 0:{cmbCategory.setBackground(Color.red);}
+                    case 1:{txtItemName.setBackground(Color.red);}
+                    case 2:{spStockCount.setBackground(Color.red);}
+                    case 3:{txtStatus.setBackground(Color.red);}
+                }
+            }
+        }
+        if (check==true) {
+            Stock stock = new Stock(Integer.valueOf(txtStockID.getText()), (Category)cmbCategory.getSelectedItem(), itemName, dateAdded, stockCount, status);
+            stock.updateStock();
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "The items in red contains errors");
+        }
 
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        // Delete Record
-
+       Stock stock = new Stock(Integer.valueOf(txtStockID.getText()),(Category)cmbCategory.getSelectedItem(),txtItemName.getText(),(Date) dobPicker.getDate(), (int)spStockCount.getValue(), txtStatus.getText());
+       stock.deleteStock();
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void txtStockIDFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStockIDFocusGained

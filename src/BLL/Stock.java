@@ -31,6 +31,8 @@ public class Stock {
         this.status = status;
     }
 
+    
+    
     public int getStockID() {
         return stockID;
     }
