@@ -79,7 +79,7 @@ public class User extends Person {
     //2 = User not found (database did not retrieve the user)
     //3 = User found but not authorized to login
     //4 = User login successful
-    //4 = Admin login successful
+    //5 = User login successful (with admin permissions)
     public int AuthenticateLogin(String username, String password){
             int userAuthed = 0;
             int usernameInputCode = Common.CheckInput(username);
