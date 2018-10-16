@@ -314,7 +314,7 @@ public class frmStock extends javax.swing.JPanel {
             }
         }
         if (check==true) {
-            Stock stock = new Stock(0, new Category(0, category), itemName, dateAdded, stockCount, status);//Get CatID
+            Stock stock = new Stock(0, (Category)cmbCategory.getSelectedItem(), itemName, dateAdded, stockCount, status);
         }
         else
         {
