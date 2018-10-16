@@ -192,6 +192,35 @@ public abstract class Person {
         this.dateAdded = dateAdded;
     }
     
+    public void synchronisePerson() {
+        //Person
+        //Conditions
+        ArrayList<String> columns = new ArrayList<>();
+        columns.add("IDNumber");
+        columns.add("FirstName");
+        columns.add("LastName");
+        columns.add("Title");
+        columns.add("DateOfBirth");
+        columns.add("Gender");
+        columns.add("Country");
+        columns.add("Province");
+        columns.add("City");
+        columns.add("Street");
+        columns.add("PostalCode");
+        columns.add("AddressLine");
+        columns.add("Email");
+        columns.add("CellNumber");
+        columns.add("TelNumber");
+        columns.add("DateAdded");
+        
+        //Execute
+        //DataHandler.readRecords(columns, tables, columns)
+    }
+    
+    public static Person synchronisePerson(Person person) {
+        return person;
+    }
+    
     public void registerPerson() {
         //Person
         //Columns
