@@ -6,6 +6,7 @@
 package PL;
 
 import java.awt.Color;
+import javax.swing.SwingConstants;
 
 /**
  *
@@ -18,6 +19,7 @@ public class frmLogin extends javax.swing.JPanel {
      */
     public frmLogin() {
         initComponents();
+        cbAdminCheck1.setHorizontalTextPosition(SwingConstants.RIGHT);
     }
         /**
      * This method is called from within the constructor to initialize the form.
