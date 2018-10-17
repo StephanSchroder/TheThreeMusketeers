@@ -460,4 +460,14 @@ public abstract class Person {
         //Execute
         DataHandler.deleteRecords("Person", conditions);
     }
+    
+    public static void deletePerson(int idNumber) {
+        //Person       
+        //Conditions
+        ArrayList<String> conditions = new ArrayList<>();
+        conditions.add("IDNumber='" + idNumber + "'");
+        
+        //Execute
+        DataHandler.deleteRecords("Person", conditions);
+    }
 }

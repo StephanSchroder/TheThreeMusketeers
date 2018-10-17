@@ -210,4 +210,14 @@ public class Order {
         //Execute
         DataHandler.deleteRecords("Order", conditions);
     }
+    
+    public static void deleteOrder(int orderID) {
+        //Order
+        //Conditions
+        ArrayList<String> conditions = new ArrayList<>();
+        conditions.add("OrderID=" + orderID);
+        
+        //Execute
+        DataHandler.deleteRecords("Order", conditions);
+    }
 }

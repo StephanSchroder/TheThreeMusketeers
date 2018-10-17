@@ -152,4 +152,14 @@ public class Category {
         //Execute
         DataHandler.deleteRecords("Category", conditions);
     }
+    
+    public static void deleteCategory(int categoryID) {
+        //Category
+        //Conditions
+        ArrayList<String> conditions = new ArrayList<>();
+        conditions.add("CategoryID=" + categoryID);
+        
+        //Execute
+        DataHandler.deleteRecords("Category", conditions);
+    }
 }

@@ -137,4 +137,15 @@ public class StockOrder {
         //Execute
         DataHandler.deleteRecords("StockOrder", conditions);
     }
+    
+    public static void deleteStockOrder(int orderID, int stockID) {
+        //StockOrder
+        //Conditions
+        ArrayList<String> conditions = new ArrayList<>();
+        conditions.add("OrderID=" + orderID);
+        conditions.add("StockID=" + stockID);
+        
+        //Execute
+        DataHandler.deleteRecords("StockOrder", conditions);
+    }
 }

@@ -208,7 +208,17 @@ public class Stock {
         //Execute
         DataHandler.deleteRecords("Stock", conditions);
     }
-      //readRecords(new List<string>{"*"}, new List<Classes.DataTablesCollection>{new Classes.DataTablesCollection("MainTable")}, new List<string>());
+    
+    public static void deleteStock(int stockID) {
+        //Stock
+        //Conditions
+        ArrayList<String> conditions = new ArrayList<>();
+        conditions.add("StockID=" + stockID);
+        
+        //Execute
+        DataHandler.deleteRecords("Stock", conditions);
+    }
+    
     public static List<Stock> getStock()
     {
         ResultSet rs = null;
