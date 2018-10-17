@@ -32,6 +32,15 @@ public class Order {
         this.stock = stock;
     }
 
+    public Order(int orderID, Date orderDate, Date receiveDate, String status, User placedByEmployee, User approvedByEmployee) {
+        this.orderID = orderID;
+        this.orderDate = orderDate;
+        this.receiveDate = receiveDate;
+        this.status = status;
+        this.placedByEmployee = placedByEmployee;
+        this.approvedByEmployee = approvedByEmployee;
+    }
+
     public Order(int orderID, Date orderDate, String status, User placedByEmployee) {
         this.orderID = orderID;
         this.orderDate = orderDate;
@@ -93,6 +102,34 @@ public class Order {
 
     public void setStock(LinkedList<StockOrder> stock) {
         this.stock = stock;
+    }
+    
+    //public Order(int orderID, Date orderDate, Date receiveDate, String status, User placedByEmployee, User approvedByEmployee, LinkedList<StockOrder> stock) {
+    public static List<Order> getOrders(){
+        List<Order> orders = new ArrayList<>();
+        String[][] dbData = DataHandler.readRecords(Arrays.asList("OrderID", "OrderDate", "ReceiveDate", "Status", "PlacedByEmployee", "ApprovedByEmployee"), Arrays.asList(new DataTablesCollection("Order")), Arrays.asList());
+        int count = dbData.length;
+        for (int i = 0; i < count; i++) {
+            orders.add(new Order(Integer.valueOf(dbData[i][0]), Date.valueOf(dbData[i][1]), Date.valueOf(dbData[i][2]), dbData[i][3], User.GetUserByUserId(Integer.valueOf(dbData[i][4])), User.GetUserByUserId(Integer.valueOf(dbData[i][5]))));
+        }
+        
+        for (Order order:orders){
+            order.stock = StockOrder.
+        }
+
+        return orders;
+    }
+    
+    public static Category getCategory(int categoryID){
+        Category category = null;
+        String[][] dbData = DataHandler.readRecords(Arrays.asList("CategoryID", "CategoryName", "Description"), Arrays.asList(new DataTablesCollection("Category")), Arrays.asList("CategoryID=" + categoryID));
+        int count = dbData.length;
+        if (count == 1)
+        {
+            category = new Category(Integer.valueOf(dbData[0][1]), dbData[0][2], dbData[0][3]);
+        }
+
+        return category;
     }
     
     public void registerOrder() {
