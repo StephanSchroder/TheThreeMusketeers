@@ -141,7 +141,7 @@ public class DataHandler {
             returnData = new String[totalRowCount][totalColumnCount];
             while (dbReturnData.next()) {
                 for (int j = 0; j < totalColumnCount; j++) {
-                    returnData[dbReturnData.getRow()][j] = dbReturnData.getString(j);
+                    returnData[dbReturnData.getRow()-1][j] = dbReturnData.getString(j+1);
                 }
             }
             
