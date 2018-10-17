@@ -114,6 +114,28 @@ public class User extends Person implements Serializable {
             return userAuthed;
     }
     
+    public static List<User> getUsers(){
+        List<User> users = new ArrayList<>();
+        String[][] dbData = DataHandler.readRecords(Arrays.asList("PersonID", "FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList());
+        int count = dbData.length;
+        for (int i = 0; i < count; i++) {
+            users.add(new User(dbData[i][0], dbData[i][1], dbData[i][2], Date.valueOf(dbData[i][3]), dbData[i][4], dbData[i][5], dbData[i][6], dbData[i][7], dbData[i][8], dbData[i][9], dbData[i][10], dbData[i][11], dbData[i][12], dbData[i][13], Date.valueOf(dbData[i][14]), Integer.valueOf(dbData[i][15]), dbData[i][16], dbData[i][17], dbData[i][18], dbData[i][19]));
+        }
+
+        return users;
+    }
+    
+    public static List<User> getUsersByAccountType(String accountType){
+        List<User> users = new ArrayList<>();
+        String[][] dbData = DataHandler.readRecords(Arrays.asList("PersonID", "FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("AccountType='" + accountType + "'"));
+        int count = dbData.length;
+        for (int i = 0; i < count; i++) {
+            users.add(new User(dbData[i][0], dbData[i][1], dbData[i][2], Date.valueOf(dbData[i][3]), dbData[i][4], dbData[i][5], dbData[i][6], dbData[i][7], dbData[i][8], dbData[i][9], dbData[i][10], dbData[i][11], dbData[i][12], dbData[i][13], Date.valueOf(dbData[i][14]), Integer.valueOf(dbData[i][15]), dbData[i][16], dbData[i][17], dbData[i][18], dbData[i][19]));
+        }
+
+        return users;
+    }
+    
     public static User GetUser(String username) {
         User user = null;
         int usernameInputCode = Common.CheckInput(username);
@@ -123,7 +145,7 @@ public class User extends Person implements Serializable {
             int count = dbData.length;
             if (count == 1)
             {
-                user = new User(dbData[0][1], dbData[0][2], dbData[0][3], Date.valueOf(dbData[0][4]), dbData[0][5], dbData[0][6], dbData[0][7], dbData[0][8], dbData[0][9], dbData[0][10], dbData[0][11], dbData[0][12], dbData[0][13], dbData[0][14], Date.valueOf(dbData[0][15]), Integer.valueOf(dbData[0][16]), dbData[0][17], dbData[0][18], dbData[0][19], dbData[0][20]);
+                user = new User(dbData[0][0], dbData[0][1], dbData[0][2], Date.valueOf(dbData[0][3]), dbData[0][4], dbData[0][5], dbData[0][6], dbData[0][7], dbData[0][8], dbData[0][9], dbData[0][10], dbData[0][11], dbData[0][12], dbData[0][13], Date.valueOf(dbData[0][14]), Integer.valueOf(dbData[0][15]), dbData[0][16], dbData[0][17], dbData[0][18], dbData[0][19]);
             }
         }
 
@@ -139,7 +161,7 @@ public class User extends Person implements Serializable {
             int count = dbData.length;
             if (count == 1)
             {
-                user = new User(dbData[0][1], dbData[0][2], dbData[0][3], Date.valueOf(dbData[0][4]), dbData[0][5], dbData[0][6], dbData[0][7], dbData[0][8], dbData[0][9], dbData[0][10], dbData[0][11], dbData[0][12], dbData[0][13], dbData[0][14], Date.valueOf(dbData[0][15]), Integer.valueOf(dbData[0][16]), dbData[0][17], dbData[0][18], dbData[0][19], dbData[0][20]);
+                user = new User(dbData[0][0], dbData[0][1], dbData[0][2], Date.valueOf(dbData[0][3]), dbData[0][4], dbData[0][5], dbData[0][6], dbData[0][7], dbData[0][8], dbData[0][9], dbData[0][10], dbData[0][11], dbData[0][12], dbData[0][13], Date.valueOf(dbData[0][14]), Integer.valueOf(dbData[0][15]), dbData[0][16], dbData[0][17], dbData[0][18], dbData[0][19]);
             }
         }
 
@@ -155,16 +177,6 @@ public class User extends Person implements Serializable {
             user = new User(dbData[0][1], dbData[0][2], dbData[0][3], Date.valueOf(dbData[0][4]), dbData[0][5], dbData[0][6], dbData[0][7], dbData[0][8], dbData[0][9], dbData[0][10], dbData[0][11], dbData[0][12], dbData[0][13], dbData[0][14], Date.valueOf(dbData[0][15]), Integer.valueOf(dbData[0][16]), dbData[0][17], dbData[0][18], dbData[0][19], dbData[0][20]);
         }
 
-        return user;
-    }
-    
-    public LinkedList<User> readUsers() {
-        LinkedList<User> list = null;
-        return null;
-    }
-    
-    public User readUser() {
-        User user = null;
         return user;
     }
     
