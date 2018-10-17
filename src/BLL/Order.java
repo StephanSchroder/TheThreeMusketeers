@@ -119,9 +119,9 @@ public class Order {
         return orders;
     }
     
-    public static List<Order> getOrdersPlacedByEmployee(User PlacedByEmployee){
+    public static List<Order> getOrdersPlacedByEmployee(int placedByEmployeeID){
         List<Order> orders = new ArrayList<>();
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("OrderID", "OrderDate", "ReceiveDate", "Status", "PlacedByEmployee", "ApprovedByEmployee"), Arrays.asList(new DataTablesCollection("Order")), Arrays.asList("PlacedByEmployee=" + PlacedByEmployee.getUserID()));
+        String[][] dbData = DataHandler.readRecords(Arrays.asList("OrderID", "OrderDate", "ReceiveDate", "Status", "PlacedByEmployee", "ApprovedByEmployee"), Arrays.asList(new DataTablesCollection("Order")), Arrays.asList("PlacedByEmployee=" + placedByEmployeeID));
         int count = dbData.length;
         for (int i = 0; i < count; i++) {
             orders.add(new Order(Integer.valueOf(dbData[i][0]), Date.valueOf(dbData[i][1]), Date.valueOf(dbData[i][2]), dbData[i][3], User.GetUserByUserId(Integer.valueOf(dbData[i][4])), User.GetUserByUserId(Integer.valueOf(dbData[i][5]))));
@@ -134,9 +134,9 @@ public class Order {
         return orders;
     }
     
-    public static List<Order> getOrdersApprovedByEmployee(User ApprovedByEmployee){
+    public static List<Order> getOrdersApprovedByEmployee(int approvedByEmployeeID){
         List<Order> orders = new ArrayList<>();
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("OrderID", "OrderDate", "ReceiveDate", "Status", "PlacedByEmployee", "ApprovedByEmployee"), Arrays.asList(new DataTablesCollection("Order")), Arrays.asList("ApprovedByEmployee=" + ApprovedByEmployee.getUserID()));
+        String[][] dbData = DataHandler.readRecords(Arrays.asList("OrderID", "OrderDate", "ReceiveDate", "Status", "PlacedByEmployee", "ApprovedByEmployee"), Arrays.asList(new DataTablesCollection("Order")), Arrays.asList("ApprovedByEmployee=" + approvedByEmployeeID));
         int count = dbData.length;
         for (int i = 0; i < count; i++) {
             orders.add(new Order(Integer.valueOf(dbData[i][0]), Date.valueOf(dbData[i][1]), Date.valueOf(dbData[i][2]), dbData[i][3], User.GetUserByUserId(Integer.valueOf(dbData[i][4])), User.GetUserByUserId(Integer.valueOf(dbData[i][5]))));

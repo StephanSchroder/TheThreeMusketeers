@@ -50,6 +50,17 @@ public class StockOrder {
         return stockOrders;
     }
     
+    public static List<StockOrder> getStockOrdersByStock(int stockID){
+        List<StockOrder> stockOrders = new ArrayList<>();
+        String[][] dbData = DataHandler.readRecords(Arrays.asList("OrderID", "StockID", "Quantity"), Arrays.asList(new DataTablesCollection("StockOrder")), Arrays.asList("StockID=" + stockID));
+        int count = dbData.length;
+        for (int i = 0; i < count; i++) {
+            stockOrders.add(new StockOrder(Stock.getStock(Integer.valueOf(dbData[i][0])), Integer.valueOf(dbData[i][1])));
+        }
+
+        return stockOrders;
+    }
+    
     public static StockOrder getStockOrder(int orderID, int stockID){
         StockOrder stockOrder = null;
         String[][] dbData = DataHandler.readRecords(Arrays.asList("OrderID", "StockID", "Quantity"), Arrays.asList(new DataTablesCollection("StockOrder")), Arrays.asList("OrderID=" + orderID, "StockID=" + stockID));

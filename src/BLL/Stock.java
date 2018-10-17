@@ -93,6 +93,28 @@ public class Stock {
         return stocks;
     }
     
+    public static List<Stock> getStocksByCategory(String categoryID){
+        List<Stock> stocks = new ArrayList<>();
+        String[][] dbData = DataHandler.readRecords(Arrays.asList("StockID", "CategoryID", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("CategoryID=" + categoryID));
+        int count = dbData.length;
+        for (int i = 0; i < count; i++) {
+            stocks.add(new Stock(Integer.valueOf(dbData[i][0]), Category.getCategory(Integer.valueOf(dbData[i][1])), dbData[i][2], Date.valueOf(dbData[i][3]), Integer.valueOf(dbData[i][4]), dbData[i][5]));
+        }
+
+        return stocks;
+    }
+    
+    public static List<Stock> getStocksByStatus(String status){
+        List<Stock> stocks = new ArrayList<>();
+        String[][] dbData = DataHandler.readRecords(Arrays.asList("StockID", "CategoryID", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("Status='" + status + "'"));
+        int count = dbData.length;
+        for (int i = 0; i < count; i++) {
+            stocks.add(new Stock(Integer.valueOf(dbData[i][0]), Category.getCategory(Integer.valueOf(dbData[i][1])), dbData[i][2], Date.valueOf(dbData[i][3]), Integer.valueOf(dbData[i][4]), dbData[i][5]));
+        }
+
+        return stocks;
+    }
+    
     public static Stock getStock(int stockID){
         Stock stock = null;
         String[][] dbData = DataHandler.readRecords(Arrays.asList("StockID", "CategoryID", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("StockID=" + stockID));
