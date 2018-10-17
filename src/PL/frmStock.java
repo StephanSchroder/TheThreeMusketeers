@@ -13,6 +13,8 @@ import BLL.Stock;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 /**
@@ -45,6 +47,17 @@ public class frmStock extends javax.swing.JPanel {
             rowData[5] = mysStockList.get(i).getStatus();
             model.addRow(rowData);
         }
+    }
+    
+    public void populateCategoryCMB()
+    {
+        List<Category> listCategories = Category.getCategories();
+        List<String> cmbData = new ArrayList<String>();
+        for(Category item : listCategories)
+        {
+            cmbData.add(item.getName());
+        }
+        cmbCategory.setModel(new DefaultComboBoxModel(cmbData.toArray()));
     }
     
     public void resetColor()
