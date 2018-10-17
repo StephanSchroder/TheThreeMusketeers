@@ -18,7 +18,7 @@ public class DataHandler {
     
     public DataHandler(){
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         } catch (ClassNotFoundException cnfe) {
             System.out.println("Class was not found");
         }

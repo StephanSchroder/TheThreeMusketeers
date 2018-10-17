@@ -90,7 +90,8 @@ public class User extends Person implements Serializable {
                 ResultSet dbData = DataHandler.readRecords(Arrays.asList("UserID", "AccountType"), Arrays.<DataTablesCollection>asList(new DataTablesCollection("User")), Arrays.asList("Username='" + username + "'", "Password='" + password + "'" ));
                 int count = -1;
                 try {
-                    boolean b = dbData.last();
+                   
+                    boolean b= dbData.last();
                     count = dbData.getRow();
                     dbData.beforeFirst();
                 } catch (SQLException sqle) {
