@@ -20,9 +20,9 @@ public class Order {
     private String status;
     private User placedByEmployee;
     private User approvedByEmployee;
-    private LinkedList<StockOrder> stock;
+    private List<StockOrder> stock;
 
-    public Order(int orderID, Date orderDate, Date receiveDate, String status, User placedByEmployee, User approvedByEmployee, LinkedList<StockOrder> stock) {
+    public Order(int orderID, Date orderDate, Date receiveDate, String status, User placedByEmployee, User approvedByEmployee, List<StockOrder> stock) {
         this.orderID = orderID;
         this.orderDate = orderDate;
         this.receiveDate = receiveDate;
@@ -96,15 +96,14 @@ public class Order {
         this.approvedByEmployee = approvedByEmployee;
     }
 
-    public LinkedList<StockOrder> getStock() {
+    public List<StockOrder> getStock() {
         return stock;
     }
 
-    public void setStock(LinkedList<StockOrder> stock) {
+    public void setStock(List<StockOrder> stock) {
         this.stock = stock;
     }
     
-    //public Order(int orderID, Date orderDate, Date receiveDate, String status, User placedByEmployee, User approvedByEmployee, LinkedList<StockOrder> stock) {
     public static List<Order> getOrders(){
         List<Order> orders = new ArrayList<>();
         String[][] dbData = DataHandler.readRecords(Arrays.asList("OrderID", "OrderDate", "ReceiveDate", "Status", "PlacedByEmployee", "ApprovedByEmployee"), Arrays.asList(new DataTablesCollection("Order")), Arrays.asList());
@@ -114,22 +113,69 @@ public class Order {
         }
         
         for (Order order:orders){
-            order.stock = StockOrder.
+            order.stock = StockOrder.getStockOrders(order.orderID);
         }
 
         return orders;
     }
     
-    public static Category getCategory(int categoryID){
-        Category category = null;
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("CategoryID", "CategoryName", "Description"), Arrays.asList(new DataTablesCollection("Category")), Arrays.asList("CategoryID=" + categoryID));
+    public static List<Order> getOrdersPlacedByEmployee(User PlacedByEmployee){
+        List<Order> orders = new ArrayList<>();
+        String[][] dbData = DataHandler.readRecords(Arrays.asList("OrderID", "OrderDate", "ReceiveDate", "Status", "PlacedByEmployee", "ApprovedByEmployee"), Arrays.asList(new DataTablesCollection("Order")), Arrays.asList("PlacedByEmployee=" + PlacedByEmployee.getUserID()));
+        int count = dbData.length;
+        for (int i = 0; i < count; i++) {
+            orders.add(new Order(Integer.valueOf(dbData[i][0]), Date.valueOf(dbData[i][1]), Date.valueOf(dbData[i][2]), dbData[i][3], User.GetUserByUserId(Integer.valueOf(dbData[i][4])), User.GetUserByUserId(Integer.valueOf(dbData[i][5]))));
+        }
+        
+        for (Order order:orders){
+            order.stock = StockOrder.getStockOrders(order.orderID);
+        }
+
+        return orders;
+    }
+    
+    public static List<Order> getOrdersApprovedByEmployee(User ApprovedByEmployee){
+        List<Order> orders = new ArrayList<>();
+        String[][] dbData = DataHandler.readRecords(Arrays.asList("OrderID", "OrderDate", "ReceiveDate", "Status", "PlacedByEmployee", "ApprovedByEmployee"), Arrays.asList(new DataTablesCollection("Order")), Arrays.asList("ApprovedByEmployee=" + ApprovedByEmployee.getUserID()));
+        int count = dbData.length;
+        for (int i = 0; i < count; i++) {
+            orders.add(new Order(Integer.valueOf(dbData[i][0]), Date.valueOf(dbData[i][1]), Date.valueOf(dbData[i][2]), dbData[i][3], User.GetUserByUserId(Integer.valueOf(dbData[i][4])), User.GetUserByUserId(Integer.valueOf(dbData[i][5]))));
+        }
+        
+        for (Order order:orders){
+            order.stock = StockOrder.getStockOrders(order.orderID);
+        }
+
+        return orders;
+    }
+    
+    public static List<Order> getOrdersByStatus(String status){
+        List<Order> orders = new ArrayList<>();
+        String[][] dbData = DataHandler.readRecords(Arrays.asList("OrderID", "OrderDate", "ReceiveDate", "Status", "PlacedByEmployee", "ApprovedByEmployee"), Arrays.asList(new DataTablesCollection("Order")), Arrays.asList("Status='" + status + "'"));
+        int count = dbData.length;
+        for (int i = 0; i < count; i++) {
+            orders.add(new Order(Integer.valueOf(dbData[i][0]), Date.valueOf(dbData[i][1]), Date.valueOf(dbData[i][2]), dbData[i][3], User.GetUserByUserId(Integer.valueOf(dbData[i][4])), User.GetUserByUserId(Integer.valueOf(dbData[i][5]))));
+        }
+        
+        for (Order order:orders){
+            order.stock = StockOrder.getStockOrders(order.orderID);
+        }
+
+        return orders;
+    }
+    
+    public static Order getOrder(int orderID){
+        Order order = null;
+        String[][] dbData = DataHandler.readRecords(Arrays.asList("OrderID", "OrderDate", "ReceiveDate", "Status", "PlacedByEmployee", "ApprovedByEmployee"), Arrays.asList(new DataTablesCollection("Order")), Arrays.asList("OrderID=" + orderID));
         int count = dbData.length;
         if (count == 1)
         {
-            category = new Category(Integer.valueOf(dbData[0][1]), dbData[0][2], dbData[0][3]);
+            order = new Order(Integer.valueOf(dbData[0][0]), Date.valueOf(dbData[0][1]), Date.valueOf(dbData[0][2]), dbData[0][3], User.GetUserByUserId(Integer.valueOf(dbData[0][4])), User.GetUserByUserId(Integer.valueOf(dbData[0][5])));
         }
+        
+        order.stock = StockOrder.getStockOrders(order.orderID);
 
-        return category;
+        return order;
     }
     
     public void registerOrder() {
