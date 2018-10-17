@@ -223,7 +223,12 @@ public class Stock {
     {
          List<Stock> listData = new ArrayList<>();
         List<String> colList = new ArrayList<String>();
-        colList.add("*");
+        colList.add("StockID");
+        colList.add("CategoryID");
+        colList.add("ItemName");
+        colList.add("dateAdded");
+        colList.add("StockCount");
+        colList.add("status");
         List<DataTablesCollection> tblList = new ArrayList<DataTablesCollection>();
         tblList.add(new DataTablesCollection("Stock"));        
         String[][] dataCollection= DataHandler.readRecords(colList,tblList , new ArrayList<String>());
