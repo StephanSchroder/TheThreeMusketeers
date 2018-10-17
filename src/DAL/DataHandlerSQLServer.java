@@ -32,7 +32,7 @@ public class DataHandlerSQLServer {
     //createRecords(new List<string> { "FirstColumn", "SecondColumn" }, "MainTable", new List<string> { "string#FirstValue;int#SecondValue", "string#ThirdValue;int#FourthValue" });
     //---Information:
     //You can insert multiple records, but only in one table, with this command.
-    public void createRecords(List<String> columns, String table, List<String> itemsToStore){
+    public static void createRecords(List<String> columns, String table, List<String> itemsToStore){
         try
         {
             Connection con = DriverManager.getConnection(connectionString, "root", "");
@@ -99,7 +99,7 @@ public class DataHandlerSQLServer {
     //SELECT * FROM MainTable
     //---Command to call:
     //readRecords(new List<string>{"*"}, new List<Classes.DataTablesCollection>{new Classes.DataTablesCollection("MainTable")}, new List<string>());
-    public String[][] readRecords(List<String> columns, List<DataTablesCollection> tables, List<String> conditions) {
+    public static String[][] readRecords(List<String> columns, List<DataTablesCollection> tables, List<String> conditions) {
         String[][] returnData = null;
         try
         {
@@ -160,7 +160,7 @@ public class DataHandlerSQLServer {
     //UPDATE MainTable SET FirstColumn='FirstValue', SecondColumn=SecondValue WHERE ThirdColumn=5
     //---Command to call:
     //updateRecords("MainTable", new List<string> { "FirstColumn", "SecondColumn" }, new List<string> { "string;FirstValue", "int;SecondValue" }, new List<string> { "ThirdColumn=5" });
-    public void updateRecords(String table, List<String> columnsToUpdate, List<String> dataToUpdate, List<String> conditions) {
+    public static void updateRecords(String table, List<String> columnsToUpdate, List<String> dataToUpdate, List<String> conditions) {
         try {
             Connection con = DriverManager.getConnection(connectionString, "root", "");
             boolean canExecute = false;
@@ -220,7 +220,7 @@ public class DataHandlerSQLServer {
     //DELETE FROM MainTable WHERE FirstColumn=5 AND SecondColumn='Yes'
     //---Command to call:
     //deleteRecords("MainTable", new List<string> { "FirstColumn=5", "SecondColumn='Yes'" });
-    public void deleteRecords(String table, List<String> conditions) {
+    public static void deleteRecords(String table, List<String> conditions) {
         try {
             Connection con = DriverManager.getConnection(connectionString, "root", "");
             boolean canExecute = false;
