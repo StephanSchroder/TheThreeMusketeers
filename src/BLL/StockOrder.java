@@ -39,7 +39,7 @@ public class StockOrder {
         this.quantity = quantity;
     }
     
-    public static List<StockOrder> getStockOrder(Order order){
+    public static List<StockOrder> getStockOrders(Order order){
         List<StockOrder> stockOrders = new ArrayList<>();
         String[][] dbData = DataHandler.readRecords(Arrays.asList("OrderID", "StockID", "Quantity"), Arrays.asList(new DataTablesCollection("StockOrder")), Arrays.asList());
         int count = dbData.length;
@@ -50,7 +50,7 @@ public class StockOrder {
         return stockOrders;
     }
     
-    public static Category getCategory(int categoryID){
+    public static Category getStockOrder(int categoryID){
         Category category = null;
         String[][] dbData = DataHandler.readRecords(Arrays.asList("CategoryID", "CategoryName", "Description"), Arrays.asList(new DataTablesCollection("Category")), Arrays.asList("CategoryID=" + categoryID));
         int count = dbData.length;
