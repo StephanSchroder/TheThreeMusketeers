@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author Stephan
@@ -25,6 +26,25 @@ public class frmStock extends javax.swing.JPanel {
      */
     public frmStock() {
         initComponents();
+        setModel();
+    }
+    
+    public void setModel()
+    {
+         DefaultTableModel model = (DefaultTableModel) tblData.getModel();
+       
+       List<Stock> mysStockList= Stock.getStock();
+        Object rowData[] = new Object[mysStockList.size()];
+        for(int i = 0; i < mysStockList.size(); i++)
+        {
+            rowData[0] = mysStockList.get(i).getStockID();
+            rowData[1] = mysStockList.get(i).getCategory().getName();
+            rowData[2] = mysStockList.get(i).getItemName();
+            rowData[3] = mysStockList.get(i).getDateAdded();
+            rowData[4] = mysStockList.get(i).getStockCount();
+            rowData[5] = mysStockList.get(i).getStatus();
+            model.addRow(rowData);
+        }
     }
     
     public void resetColor()

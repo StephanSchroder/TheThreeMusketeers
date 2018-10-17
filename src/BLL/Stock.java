@@ -6,9 +6,13 @@
 package BLL;
 
 import DAL.DataHandler;
+import DAL.DataTablesCollection;
 import java.sql.Date;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import javax.naming.spi.DirStateFactory;
 
 /**
  *
@@ -204,4 +208,21 @@ public class Stock {
         //Execute
         DataHandler.deleteRecords("Stock", conditions);
     }
+      //readRecords(new List<string>{"*"}, new List<Classes.DataTablesCollection>{new Classes.DataTablesCollection("MainTable")}, new List<string>());
+    public static List<Stock> getStock()
+    {
+        ResultSet rs = null;
+        List<DataTablesCollection> tableList = Arrays.asList(new DataTablesCollection("Stock"));
+        List<String> columnList = new ArrayList<String>();
+        columnList.add("*");
+       rs=DataHandler.readRecords(columnList,tableList , new ArrayList<String>()); 
+
+        Exchange ex = new Exchange();
+        List<Stock> listData;
+        listData = (List<Stock>) ex.DataTableToList(rs);
+        
+        return listData;
+    }
+        
+    
 }
