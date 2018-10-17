@@ -5,7 +5,7 @@
  */
 package BLL;
 
-import DAL.DataHandler;
+import DAL.*;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -456,6 +456,16 @@ public abstract class Person {
         if (!person.getEmail().isEmpty()) { conditions.add("Email='" + person.getEmail()+ "'"); }
         if (!person.getCellNumber().isEmpty()) { conditions.add("CellNumber='" + person.getCellNumber()+ "'"); }
         if (!person.getTelNumber().isEmpty()) { conditions.add("TelNumber='" + person.getTelNumber() + "'"); }
+        
+        //Execute
+        DataHandler.deleteRecords("Person", conditions);
+    }
+    
+    public static void deletePerson(int idNumber) {
+        //Person       
+        //Conditions
+        ArrayList<String> conditions = new ArrayList<>();
+        conditions.add("IDNumber='" + idNumber + "'");
         
         //Execute
         DataHandler.deleteRecords("Person", conditions);

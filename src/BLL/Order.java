@@ -5,7 +5,7 @@
  */
 package BLL;
 
-import DAL.DataHandler;
+import DAL.*;
 import java.sql.Date;
 import java.util.*;
 
@@ -206,6 +206,16 @@ public class Order {
         if (!order.getStatus().isEmpty()) { conditions.add("Status='" + order.getStatus()+ "'"); }
         if (order.getPlacedByEmployee() != null) { conditions.add("PlacedByEmployee=" + order.getPlacedByEmployee().getUserID()); }
         if (order.getApprovedByEmployee() != null) { conditions.add("ApprovedByEmployee=" + order.getApprovedByEmployee().getUserID()); }
+        
+        //Execute
+        DataHandler.deleteRecords("Order", conditions);
+    }
+    
+    public static void deleteOrder(int orderID) {
+        //Order
+        //Conditions
+        ArrayList<String> conditions = new ArrayList<>();
+        conditions.add("OrderID=" + orderID);
         
         //Execute
         DataHandler.deleteRecords("Order", conditions);

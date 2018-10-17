@@ -5,7 +5,7 @@
  */
 package BLL;
 
-import DAL.DataHandler;
+import DAL.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -133,6 +133,17 @@ public class StockOrder {
         conditions.add("OrderID=" + order.getOrderID());
         conditions.add("StockID=" + stockOrder.getStock().getStockID());
         conditions.add("Quantity=" + stockOrder.getQuantity());
+        
+        //Execute
+        DataHandler.deleteRecords("StockOrder", conditions);
+    }
+    
+    public static void deleteStockOrder(int orderID, int stockID) {
+        //StockOrder
+        //Conditions
+        ArrayList<String> conditions = new ArrayList<>();
+        conditions.add("OrderID=" + orderID);
+        conditions.add("StockID=" + stockID);
         
         //Execute
         DataHandler.deleteRecords("StockOrder", conditions);

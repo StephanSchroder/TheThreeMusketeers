@@ -5,8 +5,7 @@
  */
 package BLL;
 
-import DAL.DataHandler;
-import DAL.DataTablesCollection;
+import DAL.*;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -25,6 +24,7 @@ public class Stock {
     private Date dateAdded;
     private int stockCount;
     private String status;
+    private static DataHandler db = new DataHandler();
 
     public Stock(int stockID, Category category, String itemName, Date dateAdded, int stockCount, String status) {
         this.stockID = stockID;
@@ -102,7 +102,7 @@ public class Stock {
         if (!this.getStatus().isEmpty()) { values += ";string#" + this.getStatus(); }
         
         //Execute
-        DataHandler.createRecords(columns, "Stock", Arrays.asList(values));
+        db.createRecords(columns, "Stock", Arrays.asList(values));
     }
     
     public static void registerStock(Stock stock) {
@@ -122,7 +122,7 @@ public class Stock {
         if (!stock.getStatus().isEmpty()) { values += ";string#" + stock.getStatus(); }
         
         //Execute
-        DataHandler.createRecords(columns, "Stock", Arrays.asList(values));
+        db.createRecords(columns, "Stock", Arrays.asList(values));
     }
     
     public void updateStock() {
@@ -150,7 +150,7 @@ public class Stock {
         conditions.add("Status='" + this.getStatus()+ "'");
         
         //Execute
-        DataHandler.updateRecords("Stock", columns, values, conditions);
+        db.updateRecords("Stock", columns, values, conditions);
     }
     
     public static void updateStock(Stock stock) {
@@ -178,7 +178,7 @@ public class Stock {
         conditions.add("Status='" + stock.getStatus()+ "'");
         
         //Execute
-        DataHandler.updateRecords("Stock", columns, values, conditions);
+        db.updateRecords("Stock", columns, values, conditions);
     }
     
     public void deleteStock() {
@@ -192,7 +192,7 @@ public class Stock {
         conditions.add("Status='" + this.getStatus()+ "'");
         
         //Execute
-        DataHandler.deleteRecords("Stock", conditions);
+        db.deleteRecords("Stock", conditions);
     }
     
     public static void deleteStock(Stock stock) {
@@ -206,20 +206,39 @@ public class Stock {
         conditions.add("Status='" + stock.getStatus()+ "'");
         
         //Execute
-        DataHandler.deleteRecords("Stock", conditions);
+        db.deleteRecords("Stock", conditions);
     }
-      //readRecords(new List<string>{"*"}, new List<Classes.DataTablesCollection>{new Classes.DataTablesCollection("MainTable")}, new List<string>());
+    
+    public static void deleteStock(int stockID) {
+        //Stock
+        //Conditions
+        ArrayList<String> conditions = new ArrayList<>();
+        conditions.add("StockID=" + stockID);
+        
+        //Execute
+        db.deleteRecords("Stock", conditions);
+    }
+    
     public static List<Stock> getStock()
     {
-        ResultSet rs = null;
-        List<DataTablesCollection> tableList = Arrays.asList(new DataTablesCollection("Stock"));
-        List<String> columnList = new ArrayList<String>();
-        columnList.add("*");
-       rs=DataHandler.readRecords(columnList,tableList , new ArrayList<String>()); 
-
-        Exchange ex = new Exchange();
-        List<Stock> listData;
-        listData = (List<Stock>) ex.DataTableToList(rs);
+         List<Stock> listData = new ArrayList<>();
+        List<String> colList = new ArrayList<String>();
+        colList.add("*");
+        List<DataTablesCollection> tblList = new ArrayList<DataTablesCollection>();
+        tblList.add(new DataTablesCollection("Stock"));        
+        String[][] dataCollection= DataHandler.readRecords(colList,tblList , new ArrayList<String>());
+        
+        for (int i = 0; i < dataCollection.length; i++) {
+            int tmpStockID= Integer.valueOf(dataCollection[i][0]);
+            Category tmpCat = Category.getCategory(Integer.valueOf(dataCollection[i][1]));
+            String tmpName = dataCollection[i][2];
+            Date tmpDate = Date.valueOf(dataCollection[i][3]);
+            int tmpStockCount= Integer.valueOf(dataCollection[i][4]);
+            String tmpStatus = dataCollection[i][5];
+            Stock tmpStock = new Stock(tmpStockID, tmpCat, tmpName, tmpDate, tmpStockCount, tmpStatus);
+            listData.add(tmpStock);
+            
+        }
         
         return listData;
     }

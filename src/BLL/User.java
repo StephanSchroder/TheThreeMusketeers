@@ -5,8 +5,7 @@
  */
 package BLL;
 
-import DAL.DataHandler;
-import DAL.DataTablesCollection;
+import DAL.*;
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -87,26 +86,14 @@ public class User extends Person implements Serializable {
             int passwordInputCode = Common.CheckInput(password);
             if (((usernameInputCode == 1) || (usernameInputCode == 4)) && ((passwordInputCode == 1) || (passwordInputCode == 4) || (passwordInputCode == 5) || (passwordInputCode == 7)))
             {
-                ResultSet dbData = DataHandler.readRecords(Arrays.asList("UserID", "AccountType"), Arrays.<DataTablesCollection>asList(new DataTablesCollection("User")), Arrays.asList("Username='" + username + "'", "Password='" + password + "'" ));
-                int count = -1;
-                try {
-                   
-                    boolean b= dbData.last();
-                    count = dbData.getRow();
-                    dbData.beforeFirst();
-                } catch (SQLException sqle) {
-                    System.out.println("SQL Exception thrown and caught");
-                }
+                String[][] dbData = DataHandler.readRecords(Arrays.asList("UserID", "AccountType"), Arrays.<DataTablesCollection>asList(new DataTablesCollection("User")), Arrays.asList("Username='" + username + "'", "Password='" + password + "'" ));
+                int count = dbData.length;
                 if (count == 1)
                 {
                     userAuthed = 3;
                     String AccountType = "None";
-                    try {
-                        AccountType = dbData.getString(1);
-                    } catch (SQLException sqle) {
-                        System.out.println("SQL Exception thrown and caught");
-                    }
-                    if ((AccountType.equals("User")))
+                    AccountType = dbData[0][1];
+                    if ((AccountType.equals("Normal")))
                     {
                         userAuthed = 4;
                     }
@@ -132,22 +119,11 @@ public class User extends Person implements Serializable {
         int usernameInputCode = Common.CheckInput(username);
         if ((usernameInputCode == 1) || (usernameInputCode == 4))
         {
-            ResultSet dbData = DataHandler.readRecords(Arrays.asList("PersonID", "FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "ProvinceState", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("Username='" + username + "'"));
-            int count = -1;
-            try {
-                boolean b = dbData.last();
-                count = dbData.getRow();
-                dbData.beforeFirst();
-            } catch (SQLException sqle) {
-                System.out.println("SQL Exception thrown and caught");
-            }
+            String[][] dbData = DataHandler.readRecords(Arrays.asList("PersonID", "FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("Username='" + username + "'"));
+            int count = dbData.length;
             if (count == 1)
             {
-                try {
-                    user = new User(dbData.getString("FirstName"), dbData.getString("LastName"), dbData.getString("Title"), dbData.getDate("DateOfBirth"), dbData.getString("Gender"), dbData.getString("Country"), dbData.getString("Province"), dbData.getString("City"), dbData.getString("Street"), dbData.getString("PostalCode"), dbData.getString("AddressLine"), dbData.getString("Email"), dbData.getString("CellNumber"), dbData.getString("TelNumber"), dbData.getDate("DateAdded"), dbData.getInt("UserID"), dbData.getString("Username"), dbData.getString("Password"), dbData.getString("AccountType"), dbData.getString("IDNumber"));
-                } catch (SQLException sqle) {
-                    System.out.println("SQL Exception was thrown and caught");
-                }
+                user = new User(dbData[0][1], dbData[0][2], dbData[0][3], Date.valueOf(dbData[0][4]), dbData[0][5], dbData[0][6], dbData[0][7], dbData[0][8], dbData[0][9], dbData[0][10], dbData[0][11], dbData[0][12], dbData[0][13], dbData[0][14], Date.valueOf(dbData[0][15]), Integer.valueOf(dbData[0][16]), dbData[0][17], dbData[0][18], dbData[0][19], dbData[0][20]);
             }
         }
 
@@ -159,22 +135,11 @@ public class User extends Person implements Serializable {
         int usernameInputCode = Common.CheckInput(idNumber);
         if (usernameInputCode == 2)
         {
-            ResultSet dbData = DataHandler.readRecords(Arrays.asList("IDNumber", "FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("IDNumber='" + idNumber + "'"));
-            int count = -1;
-            try {
-                boolean b = dbData.last();
-                count = dbData.getRow();
-                dbData.beforeFirst();
-            } catch (SQLException sqle) {
-                System.out.println("SQL Exception thrown and caught");
-            }
+            String[][] dbData = DataHandler.readRecords(Arrays.asList("IDNumber", "FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("IDNumber='" + idNumber + "'"));
+            int count = dbData.length;
             if (count == 1)
             {
-                try {
-                    user = new User(dbData.getString("FirstName"), dbData.getString("LastName"), dbData.getString("Title"), dbData.getDate("DateOfBirth"), dbData.getString("Gender"), dbData.getString("Country"), dbData.getString("Province"), dbData.getString("City"), dbData.getString("Street"), dbData.getString("PostalCode"), dbData.getString("AddressLine"), dbData.getString("Email"), dbData.getString("CellNumber"), dbData.getString("TelNumber"), dbData.getDate("DateAdded"), dbData.getInt("UserID"), dbData.getString("Username"), dbData.getString("Password"), dbData.getString("AccountType"), dbData.getString("IDNumber"));
-                } catch (SQLException sqle) {
-                    System.out.println("SQL Exception was thrown and caught");
-                }
+                user = new User(dbData[0][1], dbData[0][2], dbData[0][3], Date.valueOf(dbData[0][4]), dbData[0][5], dbData[0][6], dbData[0][7], dbData[0][8], dbData[0][9], dbData[0][10], dbData[0][11], dbData[0][12], dbData[0][13], dbData[0][14], Date.valueOf(dbData[0][15]), Integer.valueOf(dbData[0][16]), dbData[0][17], dbData[0][18], dbData[0][19], dbData[0][20]);
             }
         }
 
@@ -324,6 +289,19 @@ public class User extends Person implements Serializable {
         conditions.add("Username='" + user.getUsername()+ "'");
         conditions.add("Password='" + user.getPassword()+ "'");
         conditions.add("AccountType='" + user.getAccountType()+ "'");
+        
+        //Execute
+        DataHandler.deleteRecords("User", conditions);
+    }
+    
+    public static void deleteUser(int idNumber, int userID) {
+        //Person
+        Person.deletePerson(idNumber);
+        
+        //User        
+        //Conditions
+        ArrayList<String> conditions = new ArrayList<>();
+        conditions.add("UserID=" + userID);
         
         //Execute
         DataHandler.deleteRecords("User", conditions);
