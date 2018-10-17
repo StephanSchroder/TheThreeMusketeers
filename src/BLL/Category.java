@@ -55,24 +55,24 @@ public class Category {
         this.description = description;
     }
     
-    public List<Category> getCategories(){
+    public static List<Category> getCategories(){
         List<Category> categories = new ArrayList<>();
         String[][] dbData = DataHandler.readRecords(Arrays.asList("CategoryID", "CategoryName", "Description"), Arrays.asList(new DataTablesCollection("Category")), Arrays.asList());
         int count = dbData.length;
         for (int i = 0; i < count; i++) {
-            categories.add(new Category(Integer.valueOf(dbData[i][1]), dbData[i][2], dbData[i][3]));
+            categories.add(new Category(Integer.valueOf(dbData[i][0]), dbData[i][1], dbData[i][2]));
         }
 
         return categories;
     }
     
-    public Category getCategory(int categoryID){
+    public static Category getCategory(int categoryID){
         Category category = null;
         String[][] dbData = DataHandler.readRecords(Arrays.asList("CategoryID", "CategoryName", "Description"), Arrays.asList(new DataTablesCollection("Category")), Arrays.asList("CategoryID=" + categoryID));
         int count = dbData.length;
         if (count == 1)
         {
-            category = new Category(Integer.valueOf(dbData[0][1]), dbData[0][2], dbData[0][3]);
+            category = new Category(Integer.valueOf(dbData[0][0]), dbData[0][1], dbData[0][2]);
         }
 
         return category;
