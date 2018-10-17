@@ -88,13 +88,11 @@ public class User extends Person implements Serializable {
             {
                 String[][] dbData = DataHandler.readRecords(Arrays.asList("UserID", "AccountType"), Arrays.<DataTablesCollection>asList(new DataTablesCollection("User")), Arrays.asList("Username='" + username + "'", "Password='" + password + "'" ));
                 int count = dbData.length;
-                System.out.println(count);
                 if (count == 1)
                 {
                     userAuthed = 3;
                     String AccountType = "None";
                     AccountType = dbData[0][1];
-                    System.out.println(AccountType);
                     if ((AccountType.equals("Normal")))
                     {
                         userAuthed = 4;
