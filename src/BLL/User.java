@@ -7,6 +7,7 @@ package BLL;
 
 import DAL.DataHandler;
 import DAL.DataTablesCollection;
+import java.io.Serializable;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,7 +17,7 @@ import java.util.*;
  *
  * @author Stephan
  */
-public class User extends Person {
+public class User extends Person implements Serializable {
     private int userID;
     private String username;
     private String password;
@@ -79,8 +80,8 @@ public class User extends Person {
     //2 = User not found (database did not retrieve the user)
     //3 = User found but not authorized to login
     //4 = User login successful
-    //5 = User login successful (with admin permissions)
-    public int AuthenticateLogin(String username, String password){
+    //4 = Admin login successful
+    public static int AuthenticateLogin(String username, String password){
             int userAuthed = 0;
             int usernameInputCode = Common.CheckInput(username);
             int passwordInputCode = Common.CheckInput(password);

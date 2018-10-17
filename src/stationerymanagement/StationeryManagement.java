@@ -5,6 +5,8 @@
  */
 package stationerymanagement;
 
+import PL.frmLogin;
+
 /**
  *
  * @author Stephan
@@ -16,6 +18,7 @@ public class StationeryManagement {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        
     }
     
 }
