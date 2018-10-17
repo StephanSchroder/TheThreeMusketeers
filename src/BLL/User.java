@@ -146,6 +146,18 @@ public class User extends Person implements Serializable {
         return user;
     }
     
+    public static User GetUserByUserId(int userId) {
+        User user = null;
+        String[][] dbData = DataHandler.readRecords(Arrays.asList("IDNumber", "FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("UserID=" + userId));
+        int count = dbData.length;
+        if (count == 1)
+        {
+            user = new User(dbData[0][1], dbData[0][2], dbData[0][3], Date.valueOf(dbData[0][4]), dbData[0][5], dbData[0][6], dbData[0][7], dbData[0][8], dbData[0][9], dbData[0][10], dbData[0][11], dbData[0][12], dbData[0][13], dbData[0][14], Date.valueOf(dbData[0][15]), Integer.valueOf(dbData[0][16]), dbData[0][17], dbData[0][18], dbData[0][19], dbData[0][20]);
+        }
+
+        return user;
+    }
+    
     public LinkedList<User> readUsers() {
         LinkedList<User> list = null;
         return null;
