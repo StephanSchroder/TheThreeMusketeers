@@ -327,4 +327,17 @@ public class User extends Person implements Serializable {
         //Execute
         DataHandler.deleteRecords("User", conditions);
     }
+    
+    public static void deleteUser(int idNumber, int userID) {
+        //Person
+        Person.deletePerson(idNumber);
+        
+        //User        
+        //Conditions
+        ArrayList<String> conditions = new ArrayList<>();
+        conditions.add("UserID=" + userID);
+        
+        //Execute
+        DataHandler.deleteRecords("User", conditions);
+    }
 }
