@@ -5,8 +5,7 @@
  */
 package BLL;
 
-import DAL.DataHandler;
-import DAL.DataTablesCollection;
+import DAL.*;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -222,15 +221,7 @@ public class Stock {
     
     public static List<Stock> getStock()
     {
-        ResultSet rs = null;
-        List<DataTablesCollection> tableList = Arrays.asList(new DataTablesCollection("Stock"));
-        List<String> columnList = new ArrayList<String>();
-        columnList.add("*");
-        rs=db.readRecords(columnList,tableList , new ArrayList<String>()); 
-
-        Exchange ex = new Exchange();
-        List<Stock> listData;
-        listData = (List<Stock>) ex.DataTableToList(rs);
+        List<Stock> listData = new ArrayList<>();
         
         return listData;
     }

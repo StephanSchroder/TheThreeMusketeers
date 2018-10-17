@@ -5,7 +5,7 @@
  */
 package BLL;
 
-import DAL.DataHandler;
+import DAL.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 

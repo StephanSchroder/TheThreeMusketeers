@@ -12,11 +12,11 @@ import java.util.*;
  *
  * @author Nico
  */
-public class DataHandler {
+public class DataHandlerSQLServer {
     //TODO: Fix connection String
     private static final String connectionString = "jdbc:mysql://localhost:3306/stationerymanagementdb?zeroDateTimeBehavior=convertToNull";
     
-    public DataHandler(){
+    public DataHandlerSQLServer(){
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException cnfe) {
@@ -37,13 +37,13 @@ public class DataHandler {
         {
             Connection con = DriverManager.getConnection(connectionString, "root", "");
             boolean canExecute = false;
-            String baseQuery = "INSERT INTO `" + table + "`(`";
+            String baseQuery = "INSERT INTO [" + table + "]([";
             
             for (int i = 0; i < columns.size() - 1; i++)
             {
-                baseQuery += columns.get(i) + "`, `";
+                baseQuery += columns.get(i) + "], [";
             }
-            baseQuery += columns.get(columns.size()-1) + "`) VALUES(";
+            baseQuery += columns.get(columns.size()-1) + "]) VALUES(";
             if (columns.size() == itemsToStore.get(0).split(";").length)
             {
                 canExecute = true;
@@ -104,16 +104,16 @@ public class DataHandler {
         try
         {
             Connection con = DriverManager.getConnection(connectionString, "root", "");
-            String query = "SELECT `";
+            String query = "SELECT [";
             
             for (int i = 0; i < columns.size() - 1; i++)
             {
-                query += columns.get(i) + "`, `";
+                query += columns.get(i) + "], [";
             }
-            query += columns.get(columns.size()-1) + "` FROM `" + tables.get(0).getMainTable() + "` ";
+            query += columns.get(columns.size()-1) + "] FROM [" + tables.get(0).getMainTable() + "] ";
             for (int i = 1; i < tables.size(); i++)
             {
-                query += tables.get(i).getJoinType() + " `" + tables.get(i).getMainTable() + "` ON `" + tables.get(i).getMainTable() + "`.`" + tables.get(i).getMainTableColumn() + "`=`" + tables.get(i).getJoiningTable() + "`.`" + tables.get(i).getJoiningTableColumn() + "` ";
+                query += tables.get(i).getJoinType() + " [" + tables.get(i).getMainTable() + "] ON [" + tables.get(i).getMainTable() + "].[" + tables.get(i).getMainTableColumn() + "]=[" + tables.get(i).getJoiningTable() + "].[" + tables.get(i).getJoiningTableColumn() + "] ";
             }
             if (conditions.size() > 0)
             {
@@ -164,7 +164,7 @@ public class DataHandler {
         try {
             Connection con = DriverManager.getConnection(connectionString, "root", "");
             boolean canExecute = false;
-            String baseQuery = "UPDATE `" + table + "` SET ";
+            String baseQuery = "UPDATE [" + table + "] SET ";
 
             if (columnsToUpdate.size() == dataToUpdate.size())
             {
@@ -175,21 +175,21 @@ public class DataHandler {
                     dataWithType = dataToUpdate.get(i).split(";");
                     if (dataWithType[0].equals("int"))
                     {
-                        baseQuery += "`" + columnsToUpdate.get(i) + "`=" + dataWithType[1] + ", ";
+                        baseQuery += "[" + columnsToUpdate.get(i) + "]=" + dataWithType[1] + ", ";
                     }
                     else
                     {
-                        baseQuery += "`" + columnsToUpdate.get(i) + "`='" + dataWithType[1] + "', ";
+                        baseQuery += "[" + columnsToUpdate.get(i) + "]='" + dataWithType[1] + "', ";
                     }
                 }
                 dataWithType = dataToUpdate.get(numberOfUpdates - 1).split(";");
                 if (dataWithType[0].equals("int"))
                 {
-                    baseQuery += "`" + columnsToUpdate.get(numberOfUpdates - 1) + "`=" + dataWithType[1];
+                    baseQuery += "[" + columnsToUpdate.get(numberOfUpdates - 1) + "]=" + dataWithType[1];
                 }
                 else
                 {
-                    baseQuery += "`" + columnsToUpdate.get(numberOfUpdates - 1) + "`='" + dataWithType[1] + "'";
+                    baseQuery += "[" + columnsToUpdate.get(numberOfUpdates - 1) + "]='" + dataWithType[1] + "'";
                 }
                 if (conditions.size() > 0)
                 {
@@ -224,7 +224,7 @@ public class DataHandler {
         try {
             Connection con = DriverManager.getConnection(connectionString, "root", "");
             boolean canExecute = false;
-            String baseQuery = "DELETE FROM `" + table + "` WHERE (";
+            String baseQuery = "DELETE FROM [" + table + "] WHERE (";
             Statement statement = con.createStatement();
             
             if (conditions.size() > 0)
