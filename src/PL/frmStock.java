@@ -35,7 +35,7 @@ public class frmStock extends javax.swing.JPanel {
     {
          DefaultTableModel model = (DefaultTableModel) tblData.getModel();
        
-       List<Stock> mysStockList= Stock.getStock();
+       List<Stock> mysStockList= Stock.getStocks();
         Object rowData[] = new Object[mysStockList.size()];
         for(int i = 0; i < mysStockList.size(); i++)
         {
