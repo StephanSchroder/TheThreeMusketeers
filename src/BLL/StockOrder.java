@@ -39,27 +39,27 @@ public class StockOrder {
         this.quantity = quantity;
     }
     
-    public static List<StockOrder> getStockOrders(Order order){
+    public static List<StockOrder> getStockOrders(int orderID){
         List<StockOrder> stockOrders = new ArrayList<>();
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("OrderID", "StockID", "Quantity"), Arrays.asList(new DataTablesCollection("StockOrder")), Arrays.asList());
+        String[][] dbData = DataHandler.readRecords(Arrays.asList("OrderID", "StockID", "Quantity"), Arrays.asList(new DataTablesCollection("StockOrder")), Arrays.asList("OrderID=" + orderID));
         int count = dbData.length;
         for (int i = 0; i < count; i++) {
-            stockOrders.add(new StockOrder(Integer.valueOf(dbData[i][0]), dbData[i][1], dbData[i][2]));
+            stockOrders.add(new StockOrder(Stock.getStock(Integer.valueOf(dbData[i][0])), Integer.valueOf(dbData[i][1])));
         }
 
         return stockOrders;
     }
     
-    public static Category getStockOrder(int categoryID){
-        Category category = null;
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("CategoryID", "CategoryName", "Description"), Arrays.asList(new DataTablesCollection("Category")), Arrays.asList("CategoryID=" + categoryID));
+    public static StockOrder getStockOrder(int orderID, int stockID){
+        StockOrder stockOrder = null;
+        String[][] dbData = DataHandler.readRecords(Arrays.asList("OrderID", "StockID", "Quantity"), Arrays.asList(new DataTablesCollection("StockOrder")), Arrays.asList("OrderID=" + orderID, "StockID=" + stockID));
         int count = dbData.length;
         if (count == 1)
         {
-            category = new Category(Integer.valueOf(dbData[0][0]), dbData[0][1], dbData[0][2]);
+            stockOrder = new StockOrder(Stock.getStock(Integer.valueOf(dbData[0][0])), Integer.valueOf(dbData[0][1]));
         }
 
-        return category;
+        return stockOrder;
     }
     
     public void registerStockOrder(Order order) {
