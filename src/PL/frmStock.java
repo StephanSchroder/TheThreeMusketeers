@@ -110,6 +110,11 @@ public class frmStock extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblData.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblDataMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblData);
 
         btnAdd.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
@@ -348,6 +353,7 @@ public class frmStock extends javax.swing.JPanel {
         if (check==true) {
             Stock stock = new Stock(0, (Category)cmbCategory.getSelectedItem(), itemName, dateAdded, stockCount, status);
             stock.registerStock();
+            ClearFields();
         }
         else
         {
@@ -359,6 +365,17 @@ public class frmStock extends javax.swing.JPanel {
         
     }//GEN-LAST:event_btnAddActionPerformed
 
+    private void ClearFields()
+    {
+        txtStockID.setText("");
+      txtItemName.setText("");
+      cmbCategory.setSelectedIndex(0);
+      spStockCount.setValue(0);
+      txtStatus.setText("");
+      dobPicker.setDate( dobPicker.getLinkDay());
+    }
+    
+    
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         //Update record
         
@@ -405,6 +422,7 @@ public class frmStock extends javax.swing.JPanel {
         if (check==true) {
             Stock stock = new Stock(Integer.valueOf(txtStockID.getText()), (Category)cmbCategory.getSelectedItem(), itemName, dateAdded, stockCount, status);
             stock.updateStock();
+            ClearFields();
         }
         else
         {
@@ -416,6 +434,7 @@ public class frmStock extends javax.swing.JPanel {
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
        Stock stock = new Stock(Integer.valueOf(txtStockID.getText()),(Category)cmbCategory.getSelectedItem(),txtItemName.getText(),(Date) dobPicker.getDate(), (int)spStockCount.getValue(), txtStatus.getText());
        stock.deleteStock();
+       ClearFields();
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void txtStockIDFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStockIDFocusGained
@@ -471,6 +490,25 @@ public class frmStock extends javax.swing.JPanel {
         }
         txtStatus.setForeground(Color.BLACK);
     }//GEN-LAST:event_txtStatusFocusLost
+
+    private void tblDataMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDataMouseClicked
+         int i = tblData.getSelectedRow();
+
+      Stock selectedStock=new Stock(Integer.valueOf(tblData.getValueAt(i, 0).toString()),
+              Category.getCategory(Integer.valueOf(tblData.getValueAt(i, 1).toString())),
+              tblData.getValueAt(i, 2).toString(),
+              Date.valueOf(tblData.getValueAt(i, 3).toString()),
+              Integer.valueOf(tblData.getValueAt(i, 4).toString()),
+              tblData.getValueAt(i, 5).toString());
+              
+      txtStockID.setText( String.valueOf(selectedStock.getStockID()));
+      txtItemName.setText(selectedStock.getItemName());
+      cmbCategory.setSelectedItem(selectedStock.getCategory().getName());
+      spStockCount.setValue(selectedStock.getStockCount());
+      txtStatus.setText(selectedStock.getStatus());
+      dobPicker.setDate(selectedStock.getDateAdded());
+      
+    }//GEN-LAST:event_tblDataMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
