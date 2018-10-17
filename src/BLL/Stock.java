@@ -82,6 +82,29 @@ public class Stock {
         this.status = status;
     }
     
+    public static List<Stock> getStocks(){
+        List<Stock> stocks = new ArrayList<>();
+        String[][] dbData = DataHandler.readRecords(Arrays.asList("StockID", "CategoryID", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList());
+        int count = dbData.length;
+        for (int i = 0; i < count; i++) {
+            stocks.add(new Stock(Integer.valueOf(dbData[i][0]), Category.getCategory(Integer.valueOf(dbData[i][1])), dbData[i][2], Date.valueOf(dbData[i][3]), Integer.valueOf(dbData[i][4]), dbData[i][5]));
+        }
+
+        return stocks;
+    }
+    
+    public static Stock getStock(int stockID){
+        Stock stock = null;
+        String[][] dbData = DataHandler.readRecords(Arrays.asList("StockID", "CategoryID", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("StockID=" + stockID));
+        int count = dbData.length;
+        if (count == 1)
+        {
+            stock = new Stock(Integer.valueOf(dbData[0][0]), Category.getCategory(Integer.valueOf(dbData[0][1])), dbData[0][2], Date.valueOf(dbData[0][3]), Integer.valueOf(dbData[0][4]), dbData[0][5]);
+        }
+
+        return stock;
+    }
+    
     public void registerStock() {
         //Stock
         //Columns
@@ -215,35 +238,4 @@ public class Stock {
         //Execute
         DataHandler.deleteRecords("Stock", conditions);
     }
-    
-    public static List<Stock> getStock()
-    {
-         List<Stock> listData = new ArrayList<>();
-        List<String> colList = new ArrayList<String>();
-        colList.add("StockID");
-        colList.add("CategoryID");
-        colList.add("ItemName");
-        colList.add("dateAdded");
-        colList.add("StockCount");
-        colList.add("status");
-        List<DataTablesCollection> tblList = new ArrayList<DataTablesCollection>();
-        tblList.add(new DataTablesCollection("Stock"));        
-        String[][] dataCollection= DataHandler.readRecords(colList,tblList , new ArrayList<String>());
-        
-        for (int i = 0; i < dataCollection.length; i++) {
-            int tmpStockID= Integer.valueOf(dataCollection[i][0]);
-            Category tmpCat = Category.getCategory(Integer.valueOf(dataCollection[i][1]));
-            String tmpName = dataCollection[i][2];
-            Date tmpDate = Date.valueOf(dataCollection[i][3]);
-            int tmpStockCount= Integer.valueOf(dataCollection[i][4]);
-            String tmpStatus = dataCollection[i][5];
-            Stock tmpStock = new Stock(tmpStockID, tmpCat, tmpName, tmpDate, tmpStockCount, tmpStatus);
-            listData.add(tmpStock);
-            
-        }
-        
-        return listData;
-    }
-        
-    
 }
