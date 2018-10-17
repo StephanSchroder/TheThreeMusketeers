@@ -17,7 +17,6 @@ public class Category {
     private int categoryID;
     private String name;
     private String description;
-    private static DataHandler db = new DataHandler();
 
     public Category(int categoryID, String name, String description) {
         this.categoryID = categoryID;
@@ -67,7 +66,7 @@ public class Category {
         if (!this.getDescription().isEmpty()) { values += ";string#" + this.getDescription(); }
         
         //Execute
-        db.createRecords(columns, "Category", Arrays.asList(values));
+        DataHandler.createRecords(columns, "Category", Arrays.asList(values));
     }
     
     public static void registerCategory(Category category) {
@@ -83,7 +82,7 @@ public class Category {
         if (!category.getDescription().isEmpty()) { values += ";string#" + category.getDescription(); }
         
         //Execute
-        db.createRecords(columns, "Category", Arrays.asList(values));
+        DataHandler.createRecords(columns, "Category", Arrays.asList(values));
     }
     
     public void updateCategory() {
@@ -105,7 +104,7 @@ public class Category {
         if (!this.getDescription().isEmpty()) { conditions.add("Description='" + this.getDescription()+ "'"); }
         
         //Execute
-        db.updateRecords("Category", columns, values, conditions);
+        DataHandler.updateRecords("Category", columns, values, conditions);
     }
     
     public static void updateCategory(Category category) {
@@ -127,7 +126,7 @@ public class Category {
         if (!category.getDescription().isEmpty()) { conditions.add("Description='" + category.getDescription()+ "'"); }
         
         //Execute
-        db.updateRecords("Category", columns, values, conditions);
+        DataHandler.updateRecords("Category", columns, values, conditions);
     }
     
     public void deleteCategory() {
@@ -139,7 +138,7 @@ public class Category {
         if (!this.getDescription().isEmpty()) { conditions.add("Description='" + this.getDescription()+ "'"); }
         
         //Execute
-        db.deleteRecords("Category", conditions);
+        DataHandler.deleteRecords("Category", conditions);
     }
     
     public static void deleteCategory(Category category) {
@@ -151,7 +150,7 @@ public class Category {
         if (!category.getDescription().isEmpty()) { conditions.add("Description='" + category.getDescription()+ "'"); }
         
         //Execute
-        db.deleteRecords("Category", conditions);
+        DataHandler.deleteRecords("Category", conditions);
     }
     
     public static void deleteCategory(int categoryID) {
@@ -161,6 +160,6 @@ public class Category {
         conditions.add("CategoryID=" + categoryID);
         
         //Execute
-        db.deleteRecords("Category", conditions);
+        DataHandler.deleteRecords("Category", conditions);
     }
 }

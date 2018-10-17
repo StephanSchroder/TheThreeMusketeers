@@ -21,7 +21,6 @@ public class Order {
     private User placedByEmployee;
     private User approvedByEmployee;
     private LinkedList<StockOrder> stock;
-    private static DataHandler db = new DataHandler();
 
     public Order(int orderID, Date orderDate, Date receiveDate, String status, User placedByEmployee, User approvedByEmployee, LinkedList<StockOrder> stock) {
         this.orderID = orderID;
@@ -109,7 +108,7 @@ public class Order {
         if (!this.getStatus().isEmpty()) { values += ";string#" + this.getStatus(); }
         
         //Execute
-        db.createRecords(columns, "Order", Arrays.asList(values));
+        DataHandler.createRecords(columns, "Order", Arrays.asList(values));
     }
     
     public static void registerOrder(Order order) {
@@ -125,7 +124,7 @@ public class Order {
         if (!order.getStatus().isEmpty()) { values += ";string#" + order.getStatus(); }
         
         //Execute
-        db.createRecords(columns, "Order", Arrays.asList(values));
+        DataHandler.createRecords(columns, "Order", Arrays.asList(values));
     }
     
     public void updateOrder() {
@@ -152,7 +151,7 @@ public class Order {
         if (this.getApprovedByEmployee() != null) { conditions.add("ApprovedByEmployee=" + this.getApprovedByEmployee().getUserID()); }
         
         //Execute
-        db.updateRecords("Order", columns, values, conditions);
+        DataHandler.updateRecords("Order", columns, values, conditions);
     }
     
     public static void updateOrder(Order order) {
@@ -179,7 +178,7 @@ public class Order {
         if (order.getApprovedByEmployee() != null) { conditions.add("ApprovedByEmployee=" + order.getApprovedByEmployee().getUserID()); }
         
         //Execute
-        db.updateRecords("Order", columns, values, conditions);
+        DataHandler.updateRecords("Order", columns, values, conditions);
     }
     
     public void deleteOrder() {
@@ -194,7 +193,7 @@ public class Order {
         if (this.getApprovedByEmployee() != null) { conditions.add("ApprovedByEmployee=" + this.getApprovedByEmployee().getUserID()); }
         
         //Execute
-        db.deleteRecords("Order", conditions);
+        DataHandler.deleteRecords("Order", conditions);
     }
     
     public static void deleteOrder(Order order) {
@@ -209,7 +208,7 @@ public class Order {
         if (order.getApprovedByEmployee() != null) { conditions.add("ApprovedByEmployee=" + order.getApprovedByEmployee().getUserID()); }
         
         //Execute
-        db.deleteRecords("Order", conditions);
+        DataHandler.deleteRecords("Order", conditions);
     }
     
     public static void deleteOrder(int orderID) {
@@ -219,6 +218,6 @@ public class Order {
         conditions.add("OrderID=" + orderID);
         
         //Execute
-        db.deleteRecords("Order", conditions);
+        DataHandler.deleteRecords("Order", conditions);
     }
 }

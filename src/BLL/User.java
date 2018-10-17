@@ -21,7 +21,6 @@ public class User extends Person implements Serializable {
     private String username;
     private String password;
     private String accountType;
-    private static DataHandler db = new DataHandler();
 
     public User(String firstName, String lastName, String title, Date dateOfBirth, String gender, String country, String province, String city, String street, 
             String postalCode, String addressLine, String email, String cellNumber, String telNumber, Date dateAdded, int userID, 
@@ -87,7 +86,7 @@ public class User extends Person implements Serializable {
             int passwordInputCode = Common.CheckInput(password);
             if (((usernameInputCode == 1) || (usernameInputCode == 4)) && ((passwordInputCode == 1) || (passwordInputCode == 4) || (passwordInputCode == 5) || (passwordInputCode == 7)))
             {
-                String[][] dbData = db.readRecords(Arrays.asList("UserID", "AccountType"), Arrays.<DataTablesCollection>asList(new DataTablesCollection("User")), Arrays.asList("Username='" + username + "'", "Password='" + password + "'" ));
+                String[][] dbData = DataHandler.readRecords(Arrays.asList("UserID", "AccountType"), Arrays.<DataTablesCollection>asList(new DataTablesCollection("User")), Arrays.asList("Username='" + username + "'", "Password='" + password + "'" ));
                 int count = dbData.length;
                 System.out.println(count);
                 if (count == 1)
@@ -95,7 +94,8 @@ public class User extends Person implements Serializable {
                     userAuthed = 3;
                     String AccountType = "None";
                     AccountType = dbData[0][1];
-                    if ((AccountType.equals("User")))
+                    System.out.println(AccountType);
+                    if ((AccountType.equals("Normal")))
                     {
                         userAuthed = 4;
                     }
@@ -121,7 +121,7 @@ public class User extends Person implements Serializable {
         int usernameInputCode = Common.CheckInput(username);
         if ((usernameInputCode == 1) || (usernameInputCode == 4))
         {
-            String[][] dbData = db.readRecords(Arrays.asList("PersonID", "FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("Username='" + username + "'"));
+            String[][] dbData = DataHandler.readRecords(Arrays.asList("PersonID", "FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("Username='" + username + "'"));
             int count = dbData.length;
             if (count == 1)
             {
@@ -137,7 +137,7 @@ public class User extends Person implements Serializable {
         int usernameInputCode = Common.CheckInput(idNumber);
         if (usernameInputCode == 2)
         {
-            String[][] dbData = db.readRecords(Arrays.asList("IDNumber", "FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("IDNumber='" + idNumber + "'"));
+            String[][] dbData = DataHandler.readRecords(Arrays.asList("IDNumber", "FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("IDNumber='" + idNumber + "'"));
             int count = dbData.length;
             if (count == 1)
             {
@@ -178,7 +178,7 @@ public class User extends Person implements Serializable {
         if (!this.getAccountType().isEmpty()) { values += ";string#" + this.getAccountType(); }
         
         //Execute
-        db.createRecords(columns, "User", Arrays.asList(values));
+        DataHandler.createRecords(columns, "User", Arrays.asList(values));
     }
     
     public static void registerUser(User user) {
@@ -201,7 +201,7 @@ public class User extends Person implements Serializable {
         if (!user.getAccountType().isEmpty()) { values += ";string#" + user.getAccountType(); }
         
         //Execute
-        db.createRecords(columns, "User", Arrays.asList(values));
+        DataHandler.createRecords(columns, "User", Arrays.asList(values));
     }
     
     public void updateUser() {
@@ -230,7 +230,7 @@ public class User extends Person implements Serializable {
         conditions.add("AccountType='" + this.getAccountType()+ "'");
         
         //Execute
-        db.updateRecords("User", columns, values, conditions);
+        DataHandler.updateRecords("User", columns, values, conditions);
     }
     
     public static void updateUser(User user) {
@@ -259,7 +259,7 @@ public class User extends Person implements Serializable {
         conditions.add("AccountType='" + user.getAccountType()+ "'");
         
         //Execute
-        db.updateRecords("User", columns, values, conditions);
+        DataHandler.updateRecords("User", columns, values, conditions);
     }
     
     public void deleteUser() {
@@ -276,7 +276,7 @@ public class User extends Person implements Serializable {
         conditions.add("AccountType='" + this.getAccountType()+ "'");
         
         //Execute
-        db.deleteRecords("User", conditions);
+        DataHandler.deleteRecords("User", conditions);
     }
     
     public static void deleteUser(User user) {
@@ -293,7 +293,7 @@ public class User extends Person implements Serializable {
         conditions.add("AccountType='" + user.getAccountType()+ "'");
         
         //Execute
-        db.deleteRecords("User", conditions);
+        DataHandler.deleteRecords("User", conditions);
     }
     
     public static void deleteUser(int idNumber, int userID) {
@@ -306,6 +306,6 @@ public class User extends Person implements Serializable {
         conditions.add("UserID=" + userID);
         
         //Execute
-        db.deleteRecords("User", conditions);
+        DataHandler.deleteRecords("User", conditions);
     }
 }
