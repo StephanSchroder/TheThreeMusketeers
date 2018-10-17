@@ -5,6 +5,9 @@
  */
 package BLL;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  *
  * @author Nico
@@ -22,6 +25,8 @@ public class Common {
         //6 = input contains numerical and special characters (0-9 and !, @, # etc.)
         //7 = input contains alphanumerical and special characters (A-Z and 0-9 and !, @, # etc.)
         //8 = input undetermined
+        //9 = valid email address
+        //10 = valid ID number 
         public static int CheckInput(String input)
         {
             int resultCode = 8;
@@ -29,6 +34,9 @@ public class Common {
             boolean containsAlphabetical = false;
             boolean containsNumbers = false;
             boolean containsSpecialCharacters = false;
+            
+            
+            
             //Scanning the input
             if (!(input.equals("")))
             {
@@ -77,6 +85,7 @@ public class Common {
                         else
                         {
                             resultCode = 4;
+                            
                         }
                     }
                     else
@@ -116,10 +125,23 @@ public class Common {
                         }
                     }
                 }
-            }
-            else
+            }else
             {
                 resultCode = 0;
+            }
+            
+            //Email validation - https://emailregex.com/
+            String regex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\\\.[A-Za-z]{2,64}";
+            Pattern pattern = Pattern.compile(regex);
+            Matcher matcher = pattern.matcher(input);
+            if(matcher.matches()){
+                resultCode = 9;
+            }
+            
+            //ID Validation
+            if(containsInput && containsNumbers && !containsSpecialCharacters && !containsAlphabetical &&
+                    input.length() == 13){
+                resultCode = 10;
             }
 
             return resultCode;
