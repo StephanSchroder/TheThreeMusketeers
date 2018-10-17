@@ -25,6 +25,7 @@ public class Stock {
     private Date dateAdded;
     private int stockCount;
     private String status;
+    private static DataHandler db = new DataHandler();
 
     public Stock(int stockID, Category category, String itemName, Date dateAdded, int stockCount, String status) {
         this.stockID = stockID;
@@ -102,7 +103,7 @@ public class Stock {
         if (!this.getStatus().isEmpty()) { values += ";string#" + this.getStatus(); }
         
         //Execute
-        DataHandler.createRecords(columns, "Stock", Arrays.asList(values));
+        db.createRecords(columns, "Stock", Arrays.asList(values));
     }
     
     public static void registerStock(Stock stock) {
@@ -122,7 +123,7 @@ public class Stock {
         if (!stock.getStatus().isEmpty()) { values += ";string#" + stock.getStatus(); }
         
         //Execute
-        DataHandler.createRecords(columns, "Stock", Arrays.asList(values));
+        db.createRecords(columns, "Stock", Arrays.asList(values));
     }
     
     public void updateStock() {
@@ -150,7 +151,7 @@ public class Stock {
         conditions.add("Status='" + this.getStatus()+ "'");
         
         //Execute
-        DataHandler.updateRecords("Stock", columns, values, conditions);
+        db.updateRecords("Stock", columns, values, conditions);
     }
     
     public static void updateStock(Stock stock) {
@@ -178,7 +179,7 @@ public class Stock {
         conditions.add("Status='" + stock.getStatus()+ "'");
         
         //Execute
-        DataHandler.updateRecords("Stock", columns, values, conditions);
+        db.updateRecords("Stock", columns, values, conditions);
     }
     
     public void deleteStock() {
@@ -192,7 +193,7 @@ public class Stock {
         conditions.add("Status='" + this.getStatus()+ "'");
         
         //Execute
-        DataHandler.deleteRecords("Stock", conditions);
+        db.deleteRecords("Stock", conditions);
     }
     
     public static void deleteStock(Stock stock) {
@@ -206,7 +207,7 @@ public class Stock {
         conditions.add("Status='" + stock.getStatus()+ "'");
         
         //Execute
-        DataHandler.deleteRecords("Stock", conditions);
+        db.deleteRecords("Stock", conditions);
     }
     
     public static void deleteStock(int stockID) {
@@ -216,7 +217,7 @@ public class Stock {
         conditions.add("StockID=" + stockID);
         
         //Execute
-        DataHandler.deleteRecords("Stock", conditions);
+        db.deleteRecords("Stock", conditions);
     }
     
     public static List<Stock> getStock()
@@ -225,7 +226,7 @@ public class Stock {
         List<DataTablesCollection> tableList = Arrays.asList(new DataTablesCollection("Stock"));
         List<String> columnList = new ArrayList<String>();
         columnList.add("*");
-       rs=DataHandler.readRecords(columnList,tableList , new ArrayList<String>()); 
+        rs=db.readRecords(columnList,tableList , new ArrayList<String>()); 
 
         Exchange ex = new Exchange();
         List<Stock> listData;

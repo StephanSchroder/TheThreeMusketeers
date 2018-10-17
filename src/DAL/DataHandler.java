@@ -14,13 +14,17 @@ import java.util.*;
  */
 public class DataHandler {
     //TODO: Fix connection String
-    private static final String connectionString = "";
+    private static final String connectionString = "jdbc:mysql://localhost:3306/stationerymanagementdb?zeroDateTimeBehavior=convertToNull";
+    private Connection con;
     
     public DataHandler(){
         try {
             Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection(connectionString);
         } catch (ClassNotFoundException cnfe) {
             System.out.println("Class was not found");
+        } catch (SQLException cnfe) {
+            System.out.println("Connection error");
         }
     }
     
@@ -32,10 +36,9 @@ public class DataHandler {
     //createRecords(new List<string> { "FirstColumn", "SecondColumn" }, "MainTable", new List<string> { "string#FirstValue;int#SecondValue", "string#ThirdValue;int#FourthValue" });
     //---Information:
     //You can insert multiple records, but only in one table, with this command.
-    public static void createRecords(List<String> columns, String table, List<String> itemsToStore){
+    public void createRecords(List<String> columns, String table, List<String> itemsToStore){
         try
         {
-            Connection con = DriverManager.getConnection(connectionString);
             boolean canExecute = false;
             String baseQuery = "INSERT INTO [" + table + "]([";
             
@@ -85,7 +88,6 @@ public class DataHandler {
                     System.out.println(rowsAffected[i] + " rows were affected during inserting");
                 }
             }
-            con.close();
         }
         catch (SQLException sqle)
         {
@@ -98,11 +100,10 @@ public class DataHandler {
     //SELECT * FROM MainTable
     //---Command to call:
     //readRecords(new List<string>{"*"}, new List<Classes.DataTablesCollection>{new Classes.DataTablesCollection("MainTable")}, new List<string>());
-    public static ResultSet readRecords(List<String> columns, List<DataTablesCollection> tables, List<String> conditions) {
+    public ResultSet readRecords(List<String> columns, List<DataTablesCollection> tables, List<String> conditions) {
         ResultSet returnData = null;
         try
         {
-            Connection con = DriverManager.getConnection(connectionString);
             String query = "SELECT [";
             
             for (int i = 0; i < columns.size() - 1; i++)
@@ -126,7 +127,6 @@ public class DataHandler {
             
             Statement statement = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
             returnData = statement.executeQuery(query);
-            con.close();
         }
         catch (SQLException sqle)
         {
@@ -141,9 +141,8 @@ public class DataHandler {
     //UPDATE MainTable SET FirstColumn='FirstValue', SecondColumn=SecondValue WHERE ThirdColumn=5
     //---Command to call:
     //updateRecords("MainTable", new List<string> { "FirstColumn", "SecondColumn" }, new List<string> { "string;FirstValue", "int;SecondValue" }, new List<string> { "ThirdColumn=5" });
-    public static void updateRecords(String table, List<String> columnsToUpdate, List<String> dataToUpdate, List<String> conditions) {
+    public void updateRecords(String table, List<String> columnsToUpdate, List<String> dataToUpdate, List<String> conditions) {
         try {
-            Connection con = DriverManager.getConnection(connectionString);
             boolean canExecute = false;
             String baseQuery = "UPDATE [" + table + "] SET ";
 
@@ -190,7 +189,6 @@ public class DataHandler {
                 int rowsAffected = statement.executeUpdate(baseQuery);
                 System.out.println(rowsAffected + " rows were affected during update");
             }
-            con.close();
 
         } catch (SQLException sqle) {
             System.out.println("While updating records, SQL Exception got thrown");
@@ -201,9 +199,8 @@ public class DataHandler {
     //DELETE FROM MainTable WHERE FirstColumn=5 AND SecondColumn='Yes'
     //---Command to call:
     //deleteRecords("MainTable", new List<string> { "FirstColumn=5", "SecondColumn='Yes'" });
-    public static void deleteRecords(String table, List<String> conditions) {
+    public void deleteRecords(String table, List<String> conditions) {
         try {
-            Connection con = DriverManager.getConnection(connectionString);
             boolean canExecute = false;
             String baseQuery = "DELETE FROM [" + table + "] WHERE (";
             Statement statement = con.createStatement();
@@ -222,11 +219,17 @@ public class DataHandler {
                 int rowsAffected = statement.executeUpdate(baseQuery);
                 System.out.println(rowsAffected + " rows were affected during delete");
             }
-            
-            con.close();
 
         } catch (SQLException sqle) {
             System.out.println("While deleting records, SQL Exception got thrown");
+        }
+    }
+    
+    public void closeConnection(){
+        try {
+            con.close();
+        } catch (SQLException e) {
+            System.out.println("Error closing connection");
         }
     }
 }

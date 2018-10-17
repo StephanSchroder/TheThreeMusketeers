@@ -16,6 +16,7 @@ import java.util.Arrays;
 public class StockOrder {
     private Stock stock;
     private int quantity;
+    private static DataHandler db = new DataHandler();
 
     public StockOrder(Stock stock, int quantity) {
         this.stock = stock;
@@ -53,7 +54,7 @@ public class StockOrder {
         values += ";int#" + this.getQuantity();
         
         //Execute
-        DataHandler.createRecords(columns, "StockOrder", Arrays.asList(values));
+        db.createRecords(columns, "StockOrder", Arrays.asList(values));
     }
     
     public static void registerStockOrder(Order order, StockOrder stockOrder) {
@@ -71,7 +72,7 @@ public class StockOrder {
         values += ";int#" + stockOrder.getQuantity();
         
         //Execute
-        DataHandler.createRecords(columns, "StockOrder", Arrays.asList(values));
+        db.createRecords(columns, "StockOrder", Arrays.asList(values));
     }
     
     public void updateStockOrder(Order order) {
@@ -91,7 +92,7 @@ public class StockOrder {
         conditions.add("Quantity=" + this.getQuantity());
         
         //Execute
-        DataHandler.updateRecords("StockOrder", columns, values, conditions);
+        db.updateRecords("StockOrder", columns, values, conditions);
     }
     
     public static void updateStockOrder(Order order, StockOrder stockOrder) {
@@ -111,7 +112,7 @@ public class StockOrder {
         conditions.add("Quantity=" + stockOrder.getQuantity());
         
         //Execute
-        DataHandler.updateRecords("StockOrder", columns, values, conditions);
+        db.updateRecords("StockOrder", columns, values, conditions);
     }
     
     public void deleteStockOrder(Order order) {
@@ -123,7 +124,7 @@ public class StockOrder {
         conditions.add("Quantity=" + this.getQuantity());
         
         //Execute
-        DataHandler.deleteRecords("StockOrder", conditions);
+        db.deleteRecords("StockOrder", conditions);
     }
     
     public static void deleteStockOrder(Order order, StockOrder stockOrder) {
@@ -135,7 +136,7 @@ public class StockOrder {
         conditions.add("Quantity=" + stockOrder.getQuantity());
         
         //Execute
-        DataHandler.deleteRecords("StockOrder", conditions);
+        db.deleteRecords("StockOrder", conditions);
     }
     
     public static void deleteStockOrder(int orderID, int stockID) {
@@ -146,6 +147,6 @@ public class StockOrder {
         conditions.add("StockID=" + stockID);
         
         //Execute
-        DataHandler.deleteRecords("StockOrder", conditions);
+        db.deleteRecords("StockOrder", conditions);
     }
 }

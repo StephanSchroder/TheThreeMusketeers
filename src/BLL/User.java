@@ -22,6 +22,7 @@ public class User extends Person implements Serializable {
     private String username;
     private String password;
     private String accountType;
+    private static DataHandler db = new DataHandler();
 
     public User(String firstName, String lastName, String title, Date dateOfBirth, String gender, String country, String province, String city, String street, 
             String postalCode, String addressLine, String email, String cellNumber, String telNumber, Date dateAdded, int userID, 
@@ -87,7 +88,7 @@ public class User extends Person implements Serializable {
             int passwordInputCode = Common.CheckInput(password);
             if (((usernameInputCode == 1) || (usernameInputCode == 4)) && ((passwordInputCode == 1) || (passwordInputCode == 4) || (passwordInputCode == 5) || (passwordInputCode == 7)))
             {
-                ResultSet dbData = DataHandler.readRecords(Arrays.asList("UserID", "AccountType"), Arrays.<DataTablesCollection>asList(new DataTablesCollection("User")), Arrays.asList("Username='" + username + "'", "Password='" + password + "'" ));
+                ResultSet dbData = db.readRecords(Arrays.asList("UserID", "AccountType"), Arrays.<DataTablesCollection>asList(new DataTablesCollection("User")), Arrays.asList("Username='" + username + "'", "Password='" + password + "'" ));
                 int count = -1;
                 try {
                     if (dbData.isBeforeFirst()) {
@@ -133,7 +134,7 @@ public class User extends Person implements Serializable {
         int usernameInputCode = Common.CheckInput(username);
         if ((usernameInputCode == 1) || (usernameInputCode == 4))
         {
-            ResultSet dbData = DataHandler.readRecords(Arrays.asList("PersonID", "FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "ProvinceState", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("Username='" + username + "'"));
+            ResultSet dbData = db.readRecords(Arrays.asList("PersonID", "FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "ProvinceState", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("Username='" + username + "'"));
             int count = -1;
             try {
                 boolean b = dbData.last();
@@ -160,7 +161,7 @@ public class User extends Person implements Serializable {
         int usernameInputCode = Common.CheckInput(idNumber);
         if (usernameInputCode == 2)
         {
-            ResultSet dbData = DataHandler.readRecords(Arrays.asList("IDNumber", "FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("IDNumber='" + idNumber + "'"));
+            ResultSet dbData = db.readRecords(Arrays.asList("IDNumber", "FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("IDNumber='" + idNumber + "'"));
             int count = -1;
             try {
                 boolean b = dbData.last();
@@ -212,7 +213,7 @@ public class User extends Person implements Serializable {
         if (!this.getAccountType().isEmpty()) { values += ";string#" + this.getAccountType(); }
         
         //Execute
-        DataHandler.createRecords(columns, "User", Arrays.asList(values));
+        db.createRecords(columns, "User", Arrays.asList(values));
     }
     
     public static void registerUser(User user) {
@@ -235,7 +236,7 @@ public class User extends Person implements Serializable {
         if (!user.getAccountType().isEmpty()) { values += ";string#" + user.getAccountType(); }
         
         //Execute
-        DataHandler.createRecords(columns, "User", Arrays.asList(values));
+        db.createRecords(columns, "User", Arrays.asList(values));
     }
     
     public void updateUser() {
@@ -264,7 +265,7 @@ public class User extends Person implements Serializable {
         conditions.add("AccountType='" + this.getAccountType()+ "'");
         
         //Execute
-        DataHandler.updateRecords("User", columns, values, conditions);
+        db.updateRecords("User", columns, values, conditions);
     }
     
     public static void updateUser(User user) {
@@ -293,7 +294,7 @@ public class User extends Person implements Serializable {
         conditions.add("AccountType='" + user.getAccountType()+ "'");
         
         //Execute
-        DataHandler.updateRecords("User", columns, values, conditions);
+        db.updateRecords("User", columns, values, conditions);
     }
     
     public void deleteUser() {
@@ -310,7 +311,7 @@ public class User extends Person implements Serializable {
         conditions.add("AccountType='" + this.getAccountType()+ "'");
         
         //Execute
-        DataHandler.deleteRecords("User", conditions);
+        db.deleteRecords("User", conditions);
     }
     
     public static void deleteUser(User user) {
@@ -327,7 +328,7 @@ public class User extends Person implements Serializable {
         conditions.add("AccountType='" + user.getAccountType()+ "'");
         
         //Execute
-        DataHandler.deleteRecords("User", conditions);
+        db.deleteRecords("User", conditions);
     }
     
     public static void deleteUser(int idNumber, int userID) {
@@ -340,6 +341,6 @@ public class User extends Person implements Serializable {
         conditions.add("UserID=" + userID);
         
         //Execute
-        DataHandler.deleteRecords("User", conditions);
+        db.deleteRecords("User", conditions);
     }
 }

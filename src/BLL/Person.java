@@ -33,6 +33,7 @@ public abstract class Person {
     private String cellNumber;
     private String telNumber;
     private Date dateAdded;
+    private static DataHandler db = new DataHandler();
 
     public Person(String idNumber, String firstName, String lastName, String title, Date dateOfBirth, String gender, String country, String province, String city, String street, String postalCode, String addressLine, String email, String cellNumber, String telNumber, Date dateAdded) {
         this.idNumber = idNumber;
@@ -260,7 +261,7 @@ public abstract class Person {
         if (!this.getTelNumber().isEmpty()) { values += ";string#" + this.getTelNumber(); }
         
         //Execute
-        DataHandler.createRecords(columns, "Person", Arrays.asList(values));
+        db.createRecords(columns, "Person", Arrays.asList(values));
     }
     
     public static void registerPerson(Person person) {
@@ -302,7 +303,7 @@ public abstract class Person {
         if (!person.getTelNumber().isEmpty()) { values += ";string#" + person.getTelNumber(); }
         
         //Execute
-        DataHandler.createRecords(columns, "Person", Arrays.asList(values));
+        db.createRecords(columns, "Person", Arrays.asList(values));
     }
     
     public void updatePerson() {
@@ -356,7 +357,7 @@ public abstract class Person {
         if (!this.getTelNumber().isEmpty()) { conditions.add("TelNumber='" + this.getTelNumber() + "'"); }
         
         //Execute
-        DataHandler.updateRecords("Person", columns, values, conditions);
+        db.updateRecords("Person", columns, values, conditions);
     }
     
     public static void updatePerson(Person person) {
@@ -410,7 +411,7 @@ public abstract class Person {
         if (!person.getTelNumber().isEmpty()) { conditions.add("TelNumber='" + person.getTelNumber() + "'"); }
         
         //Execute
-        DataHandler.updateRecords("Person", columns, values, conditions);
+        db.updateRecords("Person", columns, values, conditions);
     }
     
     public void deletePerson() {
@@ -434,7 +435,7 @@ public abstract class Person {
         if (!this.getTelNumber().isEmpty()) { conditions.add("TelNumber='" + this.getTelNumber() + "'"); }
         
         //Execute
-        DataHandler.deleteRecords("Person", conditions);
+        db.deleteRecords("Person", conditions);
     }
     
     public static void deletePerson(Person person) {
@@ -458,7 +459,7 @@ public abstract class Person {
         if (!person.getTelNumber().isEmpty()) { conditions.add("TelNumber='" + person.getTelNumber() + "'"); }
         
         //Execute
-        DataHandler.deleteRecords("Person", conditions);
+        db.deleteRecords("Person", conditions);
     }
     
     public static void deletePerson(int idNumber) {
@@ -468,6 +469,6 @@ public abstract class Person {
         conditions.add("IDNumber='" + idNumber + "'");
         
         //Execute
-        DataHandler.deleteRecords("Person", conditions);
+        db.deleteRecords("Person", conditions);
     }
 }
