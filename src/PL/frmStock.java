@@ -7,16 +7,21 @@ package PL;
 
 import BLL.Category;
 import java.awt.Color;
-import java.sql.Date;
+import java.util.Date;
 import BLL.Common;
 import BLL.Stock;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Stephan
@@ -28,67 +33,100 @@ public class frmStock extends javax.swing.JPanel {
      */
     public frmStock() {
         initComponents();
+        disableAllFields();
         setModel();
+        clearAllFields();
     }
-    int insertClick=0;
-    int updateClick=0;
-    public void setModel()
-    {
-         DefaultTableModel model = (DefaultTableModel) tblData.getModel();
-       
-       List<Stock> mysStockList= Stock.getStocks();
-        Object rowData[] = new Object[mysStockList.size()];
-        for(int i = 0; i < mysStockList.size(); i++)
-        {
-            rowData[0] = mysStockList.get(i).getStockID();
-            rowData[1] = mysStockList.get(i).getCategory().getName();
-            rowData[2] = mysStockList.get(i).getItemName();
-            rowData[3] = mysStockList.get(i).getDateAdded();
-            rowData[4] = mysStockList.get(i).getStockCount();
-            rowData[5] = mysStockList.get(i).getStatus();
+    int insertClick = 0;
+    int updateClick = 0;
+
+    public void setModel() {
+        DefaultTableModel model = (DefaultTableModel) tblData.getModel();
+        model.setNumRows(0);
+        List<Stock> stocks = Stock.getStocks();
+        populateCategoryCMB();
+        Object rowData[] = new Object[6];
+        Object columnData[] = new Object[6];
+        columnData[0] = "StockID";
+        columnData[1] = "CategoryName";
+        columnData[2] = "ItemName";
+        columnData[3] = "DateAdded";
+        columnData[4] = "StockCount";
+        columnData[5] = "Status";
+        model.setColumnCount(6);
+        model.setColumnIdentifiers(columnData);
+        for (int i = 0; i < stocks.size(); i++) {
+            rowData[0] = stocks.get(i).getStockID();
+            rowData[1] = stocks.get(i).getCategory().getName();
+            rowData[2] = stocks.get(i).getItemName();
+            rowData[3] = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").format(stocks.get(i).getDateAdded());
+            rowData[4] = stocks.get(i).getStockCount();
+            rowData[5] = stocks.get(i).getStatus();
             model.addRow(rowData);
         }
     }
-    
-    
-     private void ClearAllFields()
-    {
-      txtStockID.setText("");
-      txtItemName.setText("");
-      cmbCategory.setSelectedIndex(0);
-      spStockCount.setValue(0);
-      txtStatus.setText("");
-      dobPicker.setDate( dobPicker.getLinkDay());
+
+    public void disableAllFields() {
+        txtStockID.setEnabled(false);
+        cmbCategory.setEnabled(false);
+        txtItemName.setEnabled(false);
+        spStockCount.setEnabled(false);
+        txtStatus.setEnabled(false);
+        dobPicker.setEnabled(false);
     }
-     
-        private void ClearSomeFields()
-    {
-      txtItemName.setText("");
-      cmbCategory.setSelectedIndex(0);
-      spStockCount.setValue(0);
-      txtStatus.setText("");
-      dobPicker.setDate( dobPicker.getLinkDay());
+
+    public void prepareInsert() {
+        txtStockID.setEnabled(false);
+        cmbCategory.setEnabled(true);
+        txtItemName.setEnabled(true);
+        spStockCount.setEnabled(true);
+        txtStatus.setEnabled(true);
+        txtStatus.setText("Added");
+        dobPicker.setEnabled(false);
+        dobPicker.setDate(new Date());
     }
-     
-    public void populateCategoryCMB()
-    {
+
+    public void prepareUpdate() {
+        txtStockID.setEnabled(true);
+        cmbCategory.setEnabled(true);
+        txtItemName.setEnabled(true);
+        spStockCount.setEnabled(true);
+        txtStatus.setEnabled(true);
+        dobPicker.setEnabled(false);
+    }
+
+    private void clearAllFields() {
+        txtStockID.setText("");
+        txtStockID.setToolTipText(null);
+        txtItemName.setText("");
+        txtItemName.setToolTipText(null);
+        cmbCategory.setSelectedIndex(0);
+        cmbCategory.setToolTipText(null);
+        spStockCount.setValue(1);
+        spStockCount.setToolTipText(null);
+        txtStatus.setText("");
+        txtStatus.setToolTipText(null);
+        dobPicker.setDate(new Date());
+        dobPicker.setToolTipText(null);
+    }
+
+    public void populateCategoryCMB() {
         List<Category> listCategories = Category.getCategories();
         List<String> cmbData = new ArrayList<String>();
-        for(Category item : listCategories)
-        {
+        for (Category item : listCategories) {
             cmbData.add(item.getName());
         }
         cmbCategory.setModel(new DefaultComboBoxModel(cmbData.toArray()));
     }
-    
-    public void resetColor()
-    {
-        txtItemName.setBackground(Color.white);
+
+    public void resetColor() {
+        txtStockID.setBackground(Color.white);
         cmbCategory.setBackground(Color.white);
+        txtItemName.setBackground(Color.white);
         spStockCount.setBackground(Color.white);
         txtStatus.setBackground(Color.white);
         dobPicker.setBackground(Color.white);
-          
+
     }
 
     /**
@@ -344,185 +382,160 @@ public class frmStock extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        if (insertClick==0) {
+        if (insertClick == 0) {
             insertClick++;
-            btnUpdate.enable(false);
-            btnDelete.enable(false);
-        }
-        else
-        {
-        
-        resetColor();
-        String category =null;
-        String itemName=null;
-        int stockCount=0;
-        String status =null;
-        Date dateAdded=null;
-        
-        category=cmbCategory.getSelectedItem().toString();
-        itemName=txtItemName.getText();
-        stockCount=(int) spStockCount.getValue();
-        status=txtStatus.getText();
-        dateAdded=(Date) dobPicker.getDate();
-        
-        String[] checkValues = new String[]{"1","124","2","1"};
-        String[] correctValues= new String[]{String.valueOf(Common.CheckInput(category)),String.valueOf(Common.CheckInput(itemName)),String.valueOf(Common.CheckInput(Integer.toString(stockCount))),String.valueOf(Common.CheckInput(status))};
-        
-        
-        for (int i = 0; i < checkValues.length; i++) {
-                     for (int j = 0; j < correctValues[i].length(); j++) {
-                if (correctValues[j]!=checkValues[i]&& j==correctValues[i].length()) {
-                    checkValues[i]=checkValues[i]+"!";
+            btnUpdate.setEnabled(false);
+            btnDelete.setEnabled(false);
+            clearAllFields();
+            prepareInsert();
+        } else {
+            resetColor();
+            String category = null;
+            String itemName = null;
+            int stockCount = 0;
+            String status = null;
+
+            category = cmbCategory.getSelectedItem().toString();
+            itemName = txtItemName.getText();
+            stockCount = (int) spStockCount.getValue();
+            status = txtStatus.getText();
+
+            boolean check = true;
+            if (Common.checkInput(category) != 1 || category.length() > 50) {
+                check = false;
+                cmbCategory.setBackground(Color.red);
+                cmbCategory.setToolTipText("Only alphabetical characters. Max 50 characters");
+            }
+            if (Common.checkInput(itemName) != 1 || itemName.length() > 50) {
+                check = false;
+                txtItemName.setBackground(Color.red);
+                txtItemName.setToolTipText("Only alphabetical characters. Max 50 characters");
+            }
+            if (Common.checkInput(String.valueOf(stockCount)) != 2 || stockCount == 0 || stockCount > 10000) {
+                check = false;
+                spStockCount.setBackground(Color.red);
+                spStockCount.setToolTipText("Only numerical value between 1 and 10000");
+            }
+            if (Common.checkInput(status) != 1 || status.length() > 20) {
+                check = false;
+                txtStatus.setBackground(Color.red);
+                txtStatus.setToolTipText("Only alphabetical characters. Max 20 characters");
+            }
+            
+            if (check == true) {
+                int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to add this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
+                if (option == 0) {
+                    new Stock(0, Category.getCategory(cmbCategory.getSelectedItem().toString()), itemName, new Date(), stockCount, status).registerStock();
+                    setModel();
                 }
-                
-            }
-            
-           
-        }
-        boolean check = true;
-        for (int i = 0; i < checkValues.length; i++) {
-            if (checkValues[i].contains("*!")) {
-                check=false;
-                switch(i)
-                {
-                    case 0:{cmbCategory.setBackground(Color.red);}
-                    case 1:{txtItemName.setBackground(Color.red);}
-                    case 2:{spStockCount.setBackground(Color.red);}
-                    case 3:{txtStatus.setBackground(Color.red);}
+                clearAllFields();
+                disableAllFields();
+                resetColor();
+                insertClick = 0;
+                btnAdd.setEnabled(true);
+                btnUpdate.setEnabled(true);
+                btnDelete.setEnabled(true);
+            } else {
+                int option = JOptionPane.showConfirmDialog(this, "There were some errors, would you like to fix them?", "Confirmation.", JOptionPane.YES_NO_OPTION);
+                if (option == 1) {
+                    clearAllFields();
+                    disableAllFields();
+                    resetColor();
+                    insertClick = 0;
+                    btnAdd.setEnabled(true);
+                    btnUpdate.setEnabled(true);
+                    btnDelete.setEnabled(true);
                 }
             }
         }
-        if (check==true) {
-            
-                        int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to add this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
-                        if (option==0) {
-                Stock stock = new Stock(0, (Category)cmbCategory.getSelectedItem(), itemName, dateAdded, stockCount, status);
-            stock.registerStock();
-            btnAdd.enable(true);
-            btnUpdate.enable(true);
-            btnDelete.enable(true);
-            ClearAllFields();
-            insertClick=0;
-            
-            }
-            else
-            {
-            ClearAllFields();
-            btnAdd.enable(true);
-            btnUpdate.enable(true);
-            btnDelete.enable(true);
-            insertClick=0;
-            }
-        }
-        else
-        {
-            JOptionPane.showMessageDialog(null, "The items in red contains errors");
-        }
-        }
-     
-        
-        
     }//GEN-LAST:event_btnAddActionPerformed
 
-   
-    
-    
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         //Update record
-        if (updateClick==0) {
+        if (updateClick == 0) {
             updateClick++;
-            btnAdd.enable(false);
-            btnDelete.enable(false);
-        }
-        else
-        {
-         resetColor();
-        String category =null;
-        String itemName=null;
-        int stockCount=0;
-        String status =null;
-        Date dateAdded=null;
-        
-        category=cmbCategory.getSelectedItem().toString();
-        itemName=txtItemName.getText();
-        stockCount=(int) spStockCount.getValue();
-        status=txtStatus.getText();
-        dateAdded=(Date) dobPicker.getDate();
-        
-        String[] checkValues = new String[]{"1","124","2","1"};
-        String[] correctValues= new String[]{String.valueOf(Common.CheckInput(category)),String.valueOf(Common.CheckInput(itemName)),String.valueOf(Common.CheckInput(Integer.toString(stockCount))),String.valueOf(Common.CheckInput(status))};
-        
-        
-        for (int i = 0; i < checkValues.length; i++) {
-                     for (int j = 0; j < correctValues[i].length(); j++) {
-                if (correctValues[j]!=checkValues[i]&& j==correctValues[i].length()) {
-                    checkValues[i]=checkValues[i]+"!";
-                }
-                
+            btnAdd.setEnabled(false);
+            btnDelete.setEnabled(false);
+            prepareUpdate();
+        } else {
+            resetColor();
+            String category = null;
+            String itemName = null;
+            int stockCount = 0;
+            String status = null;
+
+            category = cmbCategory.getSelectedItem().toString();
+            itemName = txtItemName.getText();
+            stockCount = (int) spStockCount.getValue();
+            status = txtStatus.getText();
+            
+            boolean check = true;
+            if (Common.checkInput(txtStockID.getText()) != 2 || Stock.getStock(Integer.parseInt(txtStockID.getText())) == null) {
+                check = false;
+                txtStockID.setBackground(Color.red);
+                txtStockID.setToolTipText("Invalid Stock ID");
+            }
+            if (Common.checkInput(category) != 1 || category.length() > 50) {
+                check = false;
+                cmbCategory.setBackground(Color.red);
+                cmbCategory.setToolTipText("Only alphabetical characters. Max 50 characters");
+            }
+            if (Common.checkInput(itemName) != 1 || itemName.length() > 50) {
+                check = false;
+                txtItemName.setBackground(Color.red);
+                txtItemName.setToolTipText("Only alphabetical characters. Max 50 characters");
+            }
+            if (Common.checkInput(String.valueOf(stockCount)) != 2 || stockCount == 0 || stockCount > 10000) {
+                check = false;
+                spStockCount.setBackground(Color.red);
+                spStockCount.setToolTipText("Only numerical value between 1 and 10000");
+            }
+            if (Common.checkInput(status) != 1 || status.length() > 20) {
+                check = false;
+                txtStatus.setBackground(Color.red);
+                txtStatus.setToolTipText("Only alphabetical characters. Max 20 characters");
             }
             
-           
-        }
-        boolean check = true;
-        for (int i = 0; i < checkValues.length; i++) {
-            if (checkValues[i].contains("*!")) {
-                check=false;
-                switch(i)
-                {
-                    case 0:{cmbCategory.setBackground(Color.red);}
-                    case 1:{txtItemName.setBackground(Color.red);}
-                    case 2:{spStockCount.setBackground(Color.red);}
-                    case 3:{txtStatus.setBackground(Color.red);}
+            if (check == true) {
+                int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to update this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
+                if (option == 0) {
+                    new Stock(Integer.valueOf(txtStockID.getText()), Category.getCategory(cmbCategory.getSelectedItem().toString()), itemName, new Date(), stockCount, status).updateStock();
+                    setModel();
+                }
+                clearAllFields();
+                disableAllFields();
+                resetColor();
+                updateClick = 0;
+                btnAdd.setEnabled(true);
+                btnUpdate.setEnabled(true);
+                btnDelete.setEnabled(true);
+            } else {
+                int option = JOptionPane.showConfirmDialog(this, "There were some errors, would you like to fix them?", "Confirmation.", JOptionPane.YES_NO_OPTION);
+                if (option == 1) {
+                    clearAllFields();
+                    disableAllFields();
+                    resetColor();
+                    updateClick = 0;
+                    btnAdd.setEnabled(true);
+                    btnUpdate.setEnabled(true);
+                    btnDelete.setEnabled(true);
                 }
             }
-        }
-        if (check==true) {
-            
-           
-            
-                         int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to update this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
-                        if (option==0) {
-                Stock stock = new Stock(Integer.valueOf(txtStockID.getText()), (Category)cmbCategory.getSelectedItem(), itemName, dateAdded, stockCount, status);
-            stock.updateStock();
-            ClearAllFields();
-            updateClick=0;
-            btnAdd.enable(true);
-            btnUpdate.enable(true);
-            btnDelete.enable(true);
-        }
-        else
-        {
-            ClearAllFields();
-            updateClick=0;
-            btnAdd.enable(true);
-            btnUpdate.enable(true);
-            btnDelete.enable(true);
-        }
-        }
-        else
-        {
-            JOptionPane.showMessageDialog(null, "The items in red contains errors");
-        }
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-       int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to Delete this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
-        if (option==0) {
-           Stock stock = new Stock(Integer.valueOf(txtStockID.getText()),(Category)cmbCategory.getSelectedItem(),txtItemName.getText(),(Date) dobPicker.getDate(), (int)spStockCount.getValue(), txtStatus.getText());
-       stock.deleteStock();
-       btnAdd.enable(true);
-            btnUpdate.enable(true);
-            btnDelete.enable(true);
-       ClearAllFields(); 
+        // Delete Record
+        if (Common.checkInput(txtStockID.getText()) == 2 && Stock.getStock(Integer.parseInt(txtStockID.getText())) != null) {
+            int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to Delete this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
+            if (option == 0) {
+                new Stock(Integer.valueOf(txtStockID.getText()), Category.getCategory(cmbCategory.getSelectedItem().toString()), txtItemName.getText(), (Date) dobPicker.getDate(), (int) spStockCount.getValue(), txtStatus.getText()).deleteStock();
+                clearAllFields();
+                setModel();
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No valid stock item selected");
         }
-        else
-        {
-            btnAdd.enable(true);
-            btnUpdate.enable(true);
-            btnDelete.enable(true);
-        }
-        
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void txtStockIDFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStockIDFocusGained
@@ -580,24 +593,27 @@ public class frmStock extends javax.swing.JPanel {
     }//GEN-LAST:event_txtStatusFocusLost
 
     private void tblDataMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDataMouseClicked
-         int i = tblData.getSelectedRow();
+        int i = tblData.getSelectedRow();
 
-      Stock selectedStock=new Stock(Integer.valueOf(tblData.getValueAt(i, 0).toString()),
-              Category.getCategory(Integer.valueOf(tblData.getValueAt(i, 1).toString())),
-              tblData.getValueAt(i, 2).toString(),
-              Date.valueOf(tblData.getValueAt(i, 3).toString()),
-              Integer.valueOf(tblData.getValueAt(i, 4).toString()),
-              tblData.getValueAt(i, 5).toString());
-              
-      txtStockID.setText( String.valueOf(selectedStock.getStockID()));
-      txtItemName.setText(selectedStock.getItemName());
-      cmbCategory.setSelectedItem(selectedStock.getCategory().getName());
-      spStockCount.setValue(selectedStock.getStockCount());
-      txtStatus.setText(selectedStock.getStatus());
-      dobPicker.setDate(selectedStock.getDateAdded());
-      
+        Stock selectedStock;
+        try {
+            selectedStock = new Stock(Integer.valueOf(tblData.getValueAt(i, 0).toString()),
+                    Category.getCategory(tblData.getValueAt(i, 1).toString()),
+                    tblData.getValueAt(i, 2).toString(),
+                    new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(tblData.getValueAt(i, 3).toString()),
+                    Integer.valueOf(tblData.getValueAt(i, 4).toString()),
+                    tblData.getValueAt(i, 5).toString());
+
+            txtStockID.setText(String.valueOf(selectedStock.getStockID()));
+            txtItemName.setText(selectedStock.getItemName());
+            cmbCategory.setSelectedItem(selectedStock.getCategory().getName());
+            spStockCount.setValue(selectedStock.getStockCount());
+            txtStatus.setText(selectedStock.getStatus());
+            dobPicker.setDate(selectedStock.getDateAdded());
+        } catch (ParseException ex) {
+            Logger.getLogger(frmStock.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_tblDataMouseClicked
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;

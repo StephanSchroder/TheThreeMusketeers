@@ -78,6 +78,18 @@ public class Category {
         return category;
     }
     
+    public static Category getCategory(String categoryName){
+        Category category = null;
+        String[][] dbData = DataHandler.readRecords(Arrays.asList("CategoryID", "CategoryName", "Description"), Arrays.asList(new DataTablesCollection("Category")), Arrays.asList("CategoryName='" + categoryName + "'"));
+        int count = dbData.length;
+        if (count == 1)
+        {
+            category = new Category(Integer.valueOf(dbData[0][0]), dbData[0][1], dbData[0][2]);
+        }
+
+        return category;
+    }
+    
     public void registerCategory() {
         //Category
         //Columns
@@ -125,8 +137,6 @@ public class Category {
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
         conditions.add("CategoryID=" + this.getCategoryID());
-        conditions.add("CategoryName='" + this.getName()+ "'");
-        if (!this.getDescription().isEmpty()) { conditions.add("Description='" + this.getDescription()+ "'"); }
         
         //Execute
         DataHandler.updateRecords("Category", columns, values, conditions);
@@ -147,8 +157,6 @@ public class Category {
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
         conditions.add("CategoryID=" + category.getCategoryID());
-        conditions.add("CategoryName='" + category.getName()+ "'");
-        if (!category.getDescription().isEmpty()) { conditions.add("Description='" + category.getDescription()+ "'"); }
         
         //Execute
         DataHandler.updateRecords("Category", columns, values, conditions);

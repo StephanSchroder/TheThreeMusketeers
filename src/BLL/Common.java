@@ -27,7 +27,7 @@ public class Common {
     //8 = input undetermined
     //9 = valid email address
     //10 = valid ID number 
-    public static int CheckInput(String input) {
+    public static int checkInput(String input) {
         int resultCode = 8;
         boolean containsInput = false;
         boolean containsAlphabetical = false;
@@ -50,7 +50,7 @@ public class Common {
                 }
                 if (!containsSpecialCharacters) {
                     if (((input.charAt(i) == '!') || (input.charAt(i) == '@') || (input.charAt(i) == '#') || (input.charAt(i) == '$') || (input.charAt(i) == '%') || (input.charAt(i) == '^') || (input.charAt(i) == '&') || (input.charAt(i) == '*') || (input.charAt(i) == '(') || (input.charAt(i) == ')') || (input.charAt(i) == '`') || (input.charAt(i) == '~') || (input.charAt(i) == '-') || (input.charAt(i) == '_') || (input.charAt(i) == '=') || (input.charAt(i) == '+') || (input.charAt(i) == '[') || (input.charAt(i) == '{') || (input.charAt(i) == ']') || (input.charAt(i) == '}') || (input.charAt(i) == ';') || (input.charAt(i) == ':') || (input.charAt(i) == '\'') || (input.charAt(i) == '"') || (input.charAt(i) == '\\') || (input.charAt(i) == '|') || (input.charAt(i) == ',') || (input.charAt(i) == '<') || (input.charAt(i) == '.') || (input.charAt(i) == '>') || (input.charAt(i) == '/') || (input.charAt(i) == '?'))) {
-                        containsNumbers = true;
+                        containsSpecialCharacters = true;
                     }
                 }
             }
@@ -95,9 +95,9 @@ public class Common {
         }
 
         //Email validation - https://emailregex.com/
-        String regex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\\\.[A-Za-z]{2,64}";
+        String regex = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$";
         if (containsInput) {
-            Pattern pattern = Pattern.compile(regex);
+            Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
             Matcher matcher = pattern.matcher(input);
             if (matcher.matches()) {
                 resultCode = 9;
@@ -105,8 +105,7 @@ public class Common {
         }
 
         //ID Validation
-        if (containsInput && containsNumbers && !containsSpecialCharacters && !containsAlphabetical
-                && input.length() == 13) {
+        if (containsInput && containsNumbers && !containsSpecialCharacters && !containsAlphabetical && input.length() == 13) {
             resultCode = 10;
         }
 

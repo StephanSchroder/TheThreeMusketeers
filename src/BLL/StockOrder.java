@@ -122,8 +122,6 @@ public class StockOrder {
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
         conditions.add("OrderID=" + order.getOrderID());
-        conditions.add("StockID=" + this.getStock().getStockID());
-        conditions.add("Quantity=" + this.getQuantity());
         
         //Execute
         DataHandler.updateRecords("StockOrder", columns, values, conditions);
@@ -142,8 +140,6 @@ public class StockOrder {
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
         conditions.add("OrderID=" + order.getOrderID());
-        conditions.add("StockID=" + stockOrder.getStock().getStockID());
-        conditions.add("Quantity=" + stockOrder.getQuantity());
         
         //Execute
         DataHandler.updateRecords("StockOrder", columns, values, conditions);

@@ -6,11 +6,16 @@
 package BLL;
 
 import DAL.*;
-import java.sql.Date;
+import java.util.Date;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.naming.spi.DirStateFactory;
 
 /**
@@ -87,7 +92,11 @@ public class Stock {
         String[][] dbData = DataHandler.readRecords(Arrays.asList("StockID", "CategoryID", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList());
         int count = dbData.length;
         for (int i = 0; i < count; i++) {
-            stocks.add(new Stock(Integer.valueOf(dbData[i][0]), Category.getCategory(Integer.valueOf(dbData[i][1])), dbData[i][2], Date.valueOf(dbData[i][3]), Integer.valueOf(dbData[i][4]), dbData[i][5]));
+            try {
+                stocks.add(new Stock(Integer.valueOf(dbData[i][0]), Category.getCategory(Integer.valueOf(dbData[i][1])), dbData[i][2], new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(dbData[i][3]), Integer.valueOf(dbData[i][4]), dbData[i][5]));
+            } catch (ParseException ex) {
+                Logger.getLogger(Stock.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         return stocks;
@@ -98,7 +107,11 @@ public class Stock {
         String[][] dbData = DataHandler.readRecords(Arrays.asList("StockID", "CategoryID", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("CategoryID=" + categoryID));
         int count = dbData.length;
         for (int i = 0; i < count; i++) {
-            stocks.add(new Stock(Integer.valueOf(dbData[i][0]), Category.getCategory(Integer.valueOf(dbData[i][1])), dbData[i][2], Date.valueOf(dbData[i][3]), Integer.valueOf(dbData[i][4]), dbData[i][5]));
+            try {
+                stocks.add(new Stock(Integer.valueOf(dbData[i][0]), Category.getCategory(Integer.valueOf(dbData[i][1])), dbData[i][2], new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(dbData[i][3]), Integer.valueOf(dbData[i][4]), dbData[i][5]));
+            } catch (ParseException ex) {
+                Logger.getLogger(Stock.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         return stocks;
@@ -109,7 +122,11 @@ public class Stock {
         String[][] dbData = DataHandler.readRecords(Arrays.asList("StockID", "CategoryID", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("Status='" + status + "'"));
         int count = dbData.length;
         for (int i = 0; i < count; i++) {
-            stocks.add(new Stock(Integer.valueOf(dbData[i][0]), Category.getCategory(Integer.valueOf(dbData[i][1])), dbData[i][2], Date.valueOf(dbData[i][3]), Integer.valueOf(dbData[i][4]), dbData[i][5]));
+            try {
+                stocks.add(new Stock(Integer.valueOf(dbData[i][0]), Category.getCategory(Integer.valueOf(dbData[i][1])), dbData[i][2], new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(dbData[i][3]), Integer.valueOf(dbData[i][4]), dbData[i][5]));
+            } catch (ParseException ex) {
+                Logger.getLogger(Stock.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         return stocks;
@@ -121,7 +138,11 @@ public class Stock {
         int count = dbData.length;
         if (count == 1)
         {
-            stock = new Stock(Integer.valueOf(dbData[0][0]), Category.getCategory(Integer.valueOf(dbData[0][1])), dbData[0][2], Date.valueOf(dbData[0][3]), Integer.valueOf(dbData[0][4]), dbData[0][5]);
+            try {
+                stock = new Stock(Integer.valueOf(dbData[0][0]), Category.getCategory(Integer.valueOf(dbData[0][1])), dbData[0][2], new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(dbData[0][3]), Integer.valueOf(dbData[0][4]), dbData[0][5]);
+            } catch (ParseException ex) {
+                Logger.getLogger(Stock.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         return stock;
@@ -186,10 +207,6 @@ public class Stock {
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
         conditions.add("StockID=" + this.getStockID());
-        conditions.add("CategoryID=" + this.getCategory().getCategoryID());
-        conditions.add("ItemName='" + this.getItemName()+ "'");
-        conditions.add("StockCount=" + this.getStockCount());
-        conditions.add("Status='" + this.getStatus()+ "'");
         
         //Execute
         DataHandler.updateRecords("Stock", columns, values, conditions);
@@ -214,10 +231,6 @@ public class Stock {
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
         conditions.add("StockID=" + stock.getStockID());
-        conditions.add("CategoryID=" + stock.getCategory().getCategoryID());
-        conditions.add("ItemName='" + stock.getItemName()+ "'");
-        conditions.add("StockCount=" + stock.getStockCount());
-        conditions.add("Status='" + stock.getStatus()+ "'");
         
         //Execute
         DataHandler.updateRecords("Stock", columns, values, conditions);

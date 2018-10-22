@@ -6,7 +6,7 @@
 package BLL;
 
 import DAL.*;
-import java.sql.Date;
+import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -219,7 +219,7 @@ public abstract class Person {
         values += ";string#" + this.getFirstName();
         values += ";string#" + this.getLastName();
         values += ";string#" + this.getTitle();
-        values += ";string#" + this.getDateOfBirth();
+        values += ";string#" + new SimpleDateFormat("yyyy-MM-dd").format(this.getDateOfBirth());
         values += ";string#" + this.getGender();
         values += ";string#" + this.getCountry();
         if (!this.getProvince().isEmpty()) { values += ";string#" + this.getProvince(); }
@@ -312,20 +312,6 @@ public abstract class Person {
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
         conditions.add("IDNumber='" + this.getIdNumber() + "'");
-        conditions.add("FirstName='" + this.getFirstName()+ "'");
-        conditions.add("LastName='" + this.getLastName()+ "'");
-        conditions.add("Title='" + this.getTitle()+ "'");
-        conditions.add("DateOfBirth='" + this.getDateOfBirth()+ "'");
-        conditions.add("Gender='" + this.getGender()+ "'");
-        conditions.add("Country='" + this.getCountry()+ "'");
-        if (!this.getProvince().isEmpty()) { conditions.add("Province='" + this.getProvince()+ "'"); }
-        if (!this.getCity().isEmpty()) { conditions.add("City='" + this.getCity()+ "'"); }
-        if (!this.getStreet().isEmpty()) { conditions.add("Street='" + this.getStreet()+ "'"); }
-        if (!this.getPostalCode().isEmpty()) { conditions.add("PostalCode='" + this.getPostalCode()+ "'"); }
-        if (!this.getAddressLine().isEmpty()) { conditions.add("AddressLine='" + this.getAddressLine()+ "'"); }
-        if (!this.getEmail().isEmpty()) { conditions.add("Email='" + this.getEmail()+ "'"); }
-        if (!this.getCellNumber().isEmpty()) { conditions.add("CellNumber='" + this.getCellNumber()+ "'"); }
-        if (!this.getTelNumber().isEmpty()) { conditions.add("TelNumber='" + this.getTelNumber() + "'"); }
         
         //Execute
         DataHandler.updateRecords("Person", columns, values, conditions);
@@ -366,20 +352,6 @@ public abstract class Person {
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
         conditions.add("IDNumber='" + person.getIdNumber() + "'");
-        conditions.add("FirstName='" + person.getFirstName()+ "'");
-        conditions.add("LastName='" + person.getLastName()+ "'");
-        conditions.add("Title='" + person.getTitle()+ "'");
-        conditions.add("DateOfBirth='" + person.getDateOfBirth()+ "'");
-        conditions.add("Gender='" + person.getGender()+ "'");
-        conditions.add("Country='" + person.getCountry()+ "'");
-        if (!person.getProvince().isEmpty()) { conditions.add("Province='" + person.getProvince()+ "'"); }
-        if (!person.getCity().isEmpty()) { conditions.add("City='" + person.getCity()+ "'"); }
-        if (!person.getStreet().isEmpty()) { conditions.add("Street='" + person.getStreet()+ "'"); }
-        if (!person.getPostalCode().isEmpty()) { conditions.add("PostalCode='" + person.getPostalCode()+ "'"); }
-        if (!person.getAddressLine().isEmpty()) { conditions.add("AddressLine='" + person.getAddressLine()+ "'"); }
-        if (!person.getEmail().isEmpty()) { conditions.add("Email='" + person.getEmail()+ "'"); }
-        if (!person.getCellNumber().isEmpty()) { conditions.add("CellNumber='" + person.getCellNumber()+ "'"); }
-        if (!person.getTelNumber().isEmpty()) { conditions.add("TelNumber='" + person.getTelNumber() + "'"); }
         
         //Execute
         DataHandler.updateRecords("Person", columns, values, conditions);
@@ -433,7 +405,7 @@ public abstract class Person {
         DataHandler.deleteRecords("Person", conditions);
     }
     
-    public static void deletePerson(int idNumber) {
+    public static void deletePerson(String idNumber) {
         //Person       
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();

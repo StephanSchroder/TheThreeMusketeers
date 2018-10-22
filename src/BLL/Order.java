@@ -227,11 +227,6 @@ public class Order {
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
         conditions.add("OrderID=" + this.getOrderID());
-        conditions.add("OrderDate='" + this.getOrderDate()+ "'");
-        if (this.getReceiveDate() != null) { conditions.add("ReceiveDate='" + this.getReceiveDate()+ "'"); }
-        if (!this.getStatus().isEmpty()) { conditions.add("Status='" + this.getStatus()+ "'"); }
-        if (this.getPlacedByEmployee() != null) { conditions.add("PlacedByEmployee=" + this.getPlacedByEmployee().getUserID()); }
-        if (this.getApprovedByEmployee() != null) { conditions.add("ApprovedByEmployee=" + this.getApprovedByEmployee().getUserID()); }
         
         //Execute
         DataHandler.updateRecords("Order", columns, values, conditions);
@@ -254,11 +249,6 @@ public class Order {
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
         conditions.add("OrderID=" + order.getOrderID());
-        conditions.add("OrderDate='" + order.getOrderDate()+ "'");
-        if (order.getReceiveDate() != null) { conditions.add("ReceiveDate='" + order.getReceiveDate()+ "'"); }
-        if (!order.getStatus().isEmpty()) { conditions.add("Status='" + order.getStatus()+ "'"); }
-        if (order.getPlacedByEmployee() != null) { conditions.add("PlacedByEmployee=" + order.getPlacedByEmployee().getUserID()); }
-        if (order.getApprovedByEmployee() != null) { conditions.add("ApprovedByEmployee=" + order.getApprovedByEmployee().getUserID()); }
         
         //Execute
         DataHandler.updateRecords("Order", columns, values, conditions);

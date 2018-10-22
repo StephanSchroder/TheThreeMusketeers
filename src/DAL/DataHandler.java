@@ -20,7 +20,7 @@ public class DataHandler {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         } catch (ClassNotFoundException cnfe) {
-            System.out.println("Class was not found");
+            System.out.println(cnfe.getMessage());
         }
     }
     
@@ -90,7 +90,7 @@ public class DataHandler {
         }
         catch (SQLException sqle)
         {
-            System.out.println("While creating records, SQL Exception got thrown");
+            System.out.println(sqle.getMessage());
         }
     }
     
@@ -135,7 +135,7 @@ public class DataHandler {
                 totalRowCount = dbReturnData.getRow();
                 dbReturnData.beforeFirst();
             } catch (SQLException sqle) {
-                System.out.println("SQL Exception thrown and caught");
+                System.out.println(sqle.getMessage());
             }
             
             returnData = new String[totalRowCount][totalColumnCount];
@@ -149,7 +149,7 @@ public class DataHandler {
         }
         catch (SQLException sqle)
         {
-            System.out.println("While reading records, SQL Exception got thrown :" + sqle.getMessage());
+            System.out.println(sqle.getMessage());
         }
         
         return returnData;
@@ -212,7 +212,7 @@ public class DataHandler {
             
             con.close();
         } catch (SQLException sqle) {
-            System.out.println("While updating records, SQL Exception got thrown");
+            System.out.println(sqle.getMessage());
         }
     }
     //---DELETE QUERY:
@@ -244,7 +244,7 @@ public class DataHandler {
             
             con.close();
         } catch (SQLException sqle) {
-            System.out.println("While deleting records, SQL Exception got thrown");
+            System.out.println(sqle.getMessage());
         }
     }
 }
