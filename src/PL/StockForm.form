@@ -121,9 +121,9 @@
                   <Component id="btnLogOff1" min="-2" pref="40" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="btnSearch" alignment="1" min="-2" pref="29" max="-2" attributes="0"/>
-                      <Component id="txtSearch" alignment="3" min="-2" pref="29" max="-2" attributes="0"/>
-                      <Component id="cmbSorting" alignment="3" min="-2" pref="29" max="-2" attributes="0"/>
+                      <Component id="txtSearch" alignment="1" min="-2" pref="30" max="-2" attributes="0"/>
+                      <Component id="cmbSorting" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                      <Component id="btnSearch" alignment="3" min="-2" pref="29" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jScrollPane1" min="-2" pref="270" max="-2" attributes="0"/>
@@ -433,11 +433,17 @@
         </Container>
         <Component class="javax.swing.JComboBox" name="cmbSorting">
           <Properties>
+            <Property name="editable" type="boolean" value="true"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Times New Roman" size="14" style="1"/>
+            </Property>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="3">
-                <StringItem index="0" value="Order"/>
-                <StringItem index="1" value="Name"/>
-                <StringItem index="2" value="Surname"/>
+              <StringArray count="5">
+                <StringItem index="0" value="Sorting..."/>
+                <StringItem index="1" value="Category"/>
+                <StringItem index="2" value="Date"/>
+                <StringItem index="3" value="Name"/>
+                <StringItem index="4" value="Stock Quantity"/>
               </StringArray>
             </Property>
           </Properties>
