@@ -65,10 +65,10 @@ public class OrderForm extends javax.swing.JFrame {
         btnApprove = new javax.swing.JButton();
         btnDecline = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        staffMenu = new javax.swing.JMenu();
         jMenuItem6 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        jMenu3 = new javax.swing.JMenu();
+        stockMenu = new javax.swing.JMenu();
+        orderStockMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -207,8 +207,6 @@ public class OrderForm extends javax.swing.JFrame {
                     .addComponent(cmbOrderStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        jLabel11.getAccessibleContext().setAccessibleName("Order ID");
 
         cmbSorting.setEditable(true);
         cmbSorting.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
@@ -380,7 +378,6 @@ public class OrderForm extends javax.swing.JFrame {
 
         btnAdjustOrder.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         btnAdjustOrder.setText("Adjust");
-        btnAdjustOrder.setActionCommand("Adjust");
         btnAdjustOrder.setName("btnInsertRecord"); // NOI18N
         btnAdjustOrder.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -538,26 +535,26 @@ public class OrderForm extends javax.swing.JFrame {
                 .addGap(166, 166, 166))
         );
 
-        jMenu1.setText("Staff");
-        jMenu1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jMenu1.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        jMenu1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jMenu1.setIconTextGap(20);
+        staffMenu.setText("Staff");
+        staffMenu.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        staffMenu.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        staffMenu.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        staffMenu.setIconTextGap(20);
 
         jMenuItem6.setText("jMenuItem6");
-        jMenu1.add(jMenuItem6);
+        staffMenu.add(jMenuItem6);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(staffMenu);
 
-        jMenu2.setText("Stock");
-        jMenu2.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        jMenu2.setIconTextGap(10);
-        jMenuBar1.add(jMenu2);
+        stockMenu.setText("Stock");
+        stockMenu.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        stockMenu.setIconTextGap(10);
+        jMenuBar1.add(stockMenu);
 
-        jMenu3.setText("Order Stock");
-        jMenu3.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        jMenu3.setIconTextGap(10);
-        jMenuBar1.add(jMenu3);
+        orderStockMenu.setText("Order Stock");
+        orderStockMenu.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        orderStockMenu.setIconTextGap(10);
+        jMenuBar1.add(orderStockMenu);
 
         setJMenuBar(jMenuBar1);
 
@@ -1052,9 +1049,6 @@ public class OrderForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel20;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JPanel jPanel1;
@@ -1064,7 +1058,10 @@ public class OrderForm extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JMenu orderStockMenu;
     private javax.swing.JSpinner spOrderQuantity;
+    private javax.swing.JMenu staffMenu;
+    private javax.swing.JMenu stockMenu;
     private javax.swing.JTable tblData2;
     private javax.swing.JTable tblNewOrderItems;
     private javax.swing.JTable tblOrders;

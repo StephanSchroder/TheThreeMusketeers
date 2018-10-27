@@ -160,9 +160,9 @@ public class StockForm extends javax.swing.JFrame {
         btnSearch = new javax.swing.JButton();
         btnLogOff = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        staffMenu = new javax.swing.JMenu();
         jMenuItem6 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        stockMenu = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -443,21 +443,21 @@ public class StockForm extends javax.swing.JFrame {
                 .addGap(104, 104, 104))
         );
 
-        jMenu1.setText("Staff");
-        jMenu1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jMenu1.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        jMenu1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jMenu1.setIconTextGap(20);
+        staffMenu.setText("Staff");
+        staffMenu.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        staffMenu.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        staffMenu.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        staffMenu.setIconTextGap(20);
 
         jMenuItem6.setText("jMenuItem6");
-        jMenu1.add(jMenuItem6);
+        staffMenu.add(jMenuItem6);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(staffMenu);
 
-        jMenu2.setText("Stock");
-        jMenu2.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        jMenu2.setIconTextGap(10);
-        jMenuBar1.add(jMenu2);
+        stockMenu.setText("Stock");
+        stockMenu.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        stockMenu.setIconTextGap(10);
+        jMenuBar1.add(stockMenu);
 
         jMenu3.setText("Order Stock");
         jMenu3.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
@@ -946,8 +946,6 @@ public class StockForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem6;
@@ -955,6 +953,8 @@ public class StockForm extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSpinner spStockCount;
+    private javax.swing.JMenu staffMenu;
+    private javax.swing.JMenu stockMenu;
     private javax.swing.JTable tblData;
     private javax.swing.JTextField txtItemName;
     private javax.swing.JTextField txtSearch;
