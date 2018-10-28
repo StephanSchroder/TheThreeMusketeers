@@ -7,17 +7,27 @@ package PL;
 
 import BLL.Category;
 import BLL.Common;
+import BLL.Sorting.NameSort;
+import BLL.Sorting.SortCategory;
+import BLL.Sorting.SortDOB;
+import BLL.Sorting.SortDate;
+import BLL.Sorting.SortStockQuantity;
+import BLL.Sorting.SortSurname;
 import BLL.Stock;
 import BLL.User;
 import java.awt.Color;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -30,12 +40,16 @@ public class StockForm extends javax.swing.JFrame {
     /**
      * Creates new form StockForm
      */
-    
+  
     public StockForm() {
         initComponents();
         initModel();
         currentUser = null;
+         cmbChangeListener changeListener = new cmbChangeListener();
+         cmbSorting.addItemListener(changeListener);
     }
+    
+    List<Stock>stockList = new ArrayList<>();
     
     private User currentUser;
     public StockForm(User u) {
@@ -47,13 +61,13 @@ public class StockForm extends javax.swing.JFrame {
     
     private void initModel(){
         disableAllFields();
-        setModel();
+        stockList = setModel();
         clearAllFields();
     }
     int insertClick = 0;
     int updateClick = 0;
 
-    public void setModel() {
+    public List<Stock> setModel() {
         DefaultTableModel model = (DefaultTableModel) tblData.getModel();
         model.setNumRows(0);
         List<Stock> stocks = Stock.getStocks();
@@ -77,7 +91,34 @@ public class StockForm extends javax.swing.JFrame {
             rowData[5] = stocks.get(i).getStatus();
             model.addRow(rowData);
         }
+        return stocks;
     }
+    
+       private class cmbChangeListener implements ItemListener{
+
+
+        @Override
+        public void itemStateChanged(ItemEvent e) {
+                    JComboBox cb = (JComboBox) e.getSource();
+
+    Object item = e.getItem();
+
+    if (e.getStateChange() == ItemEvent.SELECTED) {
+        String txt=cmbSorting.getSelectedItem().toString();
+       switch (txt)
+        {
+           case "Category" :{ Collections.sort(stockList, new SortCategory());
+           break;}
+           case "Date" :{ Collections.sort(stockList, new SortDate());};
+           case "Stock Quantity" :{ Collections.sort(stockList, new SortStockQuantity()); break;}
+            case "Date of Birth" :{ Collections.sort(stockList, new SortDOB()); break;}
+            case "Name" :{ Collections.sort(stockList, new NameSort()); break;}
+            case "Surname" :{ Collections.sort(stockList, new SortSurname()); break;}
+        }
+    }
+        }
+   }
+
 
     public void disableAllFields() {
         txtStockID.setEnabled(false);
@@ -574,7 +615,7 @@ public class StockForm extends javax.swing.JFrame {
                 int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to add this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 0) {
                     new Stock(0, Category.getCategory(cmbCategory.getSelectedItem().toString()), itemName, new Date(), stockCount, status).registerStock();
-                    setModel();
+                   stockList =  setModel();
                 }
                 clearAllFields();
                 disableAllFields();
@@ -648,7 +689,7 @@ public class StockForm extends javax.swing.JFrame {
                 int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to update this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 0) {
                     new Stock(Integer.valueOf(txtStockID.getText()), Category.getCategory(cmbCategory.getSelectedItem().toString()), itemName, new Date(), stockCount, status).updateStock();
-                    setModel();
+                   stockList =  setModel();
                 }
                 clearAllFields();
                 disableAllFields();
@@ -679,7 +720,7 @@ public class StockForm extends javax.swing.JFrame {
             if (option == 0) {
                 new Stock(Integer.valueOf(txtStockID.getText()), Category.getCategory(cmbCategory.getSelectedItem().toString()), txtItemName.getText(), (Date) dobPicker.getDate(), (int) spStockCount.getValue(), txtStatus.getText()).deleteStock();
                 clearAllFields();
-                setModel();
+               stockList =  setModel();
             }
         } else {
             JOptionPane.showMessageDialog(null, "No valid stock item selected");

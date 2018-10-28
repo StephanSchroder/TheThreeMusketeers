@@ -6,16 +6,26 @@
 package PL;
 
 import BLL.User;
-import BLL.Listeners.cmbChangeListener;
 import java.awt.Color;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import  BLL.Common;
+import BLL.Sorting.NameSort;
+import BLL.Sorting.SortCategory;
+import BLL.Sorting.SortDOB;
+import BLL.Sorting.SortDate;
+import BLL.Sorting.SortStockQuantity;
+import BLL.Sorting.SortSurname;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 /**
@@ -23,7 +33,6 @@ import javax.swing.JOptionPane;
  * @author Stephan
  */
 public class StaffForm extends javax.swing.JFrame {
-
     /**
      * Creates new form StaffForm
      */
@@ -33,12 +42,11 @@ public class StaffForm extends javax.swing.JFrame {
         currentUser = null;
         
          cmbChangeListener changeListener = new cmbChangeListener();
-        
-        cmbSorting.addItemListener(changeListener);
+         cmbSorting.addItemListener(changeListener);
   
     }
     
-   
+   List<User> userList = new ArrayList<>();
     
     private User currentUser;
     public StaffForm(User u) {
@@ -46,11 +54,13 @@ public class StaffForm extends javax.swing.JFrame {
         initModel();
         currentUser = u;
         lbLoginedInUser.setText(u.getFullname());
+         cmbChangeListener changeListener = new cmbChangeListener();
+         cmbSorting.addItemListener(changeListener);
     }
     
     private void initModel(){
         disableAllFields();
-        setModel();
+        userList= setModel();
         clearAllFields();
     }
     int insertClick = 0;
@@ -65,7 +75,7 @@ public class StaffForm extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     
     
-       public void setModel() {
+       public List<User> setModel() {
         DefaultTableModel model = (DefaultTableModel) tblData.getModel();
         model.setNumRows(0);
         List<User> myUsers = User.getUsers();
@@ -116,6 +126,7 @@ public class StaffForm extends javax.swing.JFrame {
             rowData[19] = myUsers.get(i).getAccountType();
             model.addRow(rowData);
         }
+        return myUsers;
     }
 
     public void disableAllFields() {
@@ -249,6 +260,30 @@ public class StaffForm extends javax.swing.JFrame {
         txtPassword.setBackground(Color.white);
         cmbAccountType.setBackground(Color.white);
     }
+   private class cmbChangeListener implements ItemListener{
+
+
+        @Override
+        public void itemStateChanged(ItemEvent e) {
+                    JComboBox cb = (JComboBox) e.getSource();
+
+    Object item = e.getItem();
+
+    if (e.getStateChange() == ItemEvent.SELECTED) {
+        String txt=cmbSorting.getSelectedItem().toString();
+       switch (txt)
+        {
+           case "Category" :{ Collections.sort(userList, new SortCategory());
+           break;}
+           case "Date" :{ Collections.sort(userList, new SortDate());};
+           case "Stock Quantity" :{ Collections.sort(userList, new SortStockQuantity()); break;}
+            case "Date of Birth" :{ Collections.sort(userList, new SortDOB()); break;}
+            case "Name" :{ Collections.sort(userList, new NameSort()); break;}
+            case "Surname" :{ Collections.sort(userList, new SortSurname()); break;}
+        }
+    }
+        }
+   }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -1314,7 +1349,7 @@ public class StaffForm extends javax.swing.JFrame {
                 int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to add this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 0) {
                     new User(firstName, lastName, title, dateOfBirth, gender, country, province, city, street, postalCode, addressLine, email, cellNumber, telNumber, new Date(), 0, username, password, accountType, idNumber).registerUser();
-                    setModel();
+                    userList=setModel();
                 }
                 clearAllFields();
                 disableAllFields();
@@ -1477,7 +1512,7 @@ public class StaffForm extends javax.swing.JFrame {
                 int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to update this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 0) {
                     new User(firstName, lastName, title, dateOfBirth, gender, country, province, city, street, postalCode, addressLine, email, cellNumber, telNumber, new Date(), User.GetUserByIdNumber(idNumber).getUserID(), username, password, accountType, idNumber).updateUser();
-                    setModel();
+                    userList=setModel();
                 }
                 clearAllFields();
                 disableAllFields();
@@ -1508,7 +1543,7 @@ public class StaffForm extends javax.swing.JFrame {
             if (option == 0) {
                 User.deleteUser(txtIDNumber.getText(), User.GetUserByIdNumber(txtIDNumber.getText()).getUserID());
                 clearAllFields();
-                setModel();
+                userList=setModel();
             }
         } else {
             JOptionPane.showMessageDialog(null, "No valid user selected");
