@@ -116,7 +116,7 @@ public class Common {
 
     
     public static void logOff(javax.swing.JFrame j){
-        if(JOptionPane.showConfirmDialog(j, "Are you sure want to log off?")==0)
+        if(JOptionPane.showConfirmDialog(j, "Are you sure want to log off?","Programing 321",JOptionPane.YES_NO_OPTION)==0)
             System.exit(DO_NOTHING_ON_CLOSE);
     }
 }
