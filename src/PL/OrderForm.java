@@ -800,10 +800,20 @@ public class OrderForm extends javax.swing.JFrame {
 
     private void txtSearchOrdersFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchOrdersFocusGained
         // TODO add your handling code here:
+        if (txtSearchOrders.getText().trim().equals("")) {
+            txtSearchOrders.setText("Search data");
+
+        }
+        txtSearchOrders.setForeground(Color.LIGHT_GRAY);
     }//GEN-LAST:event_txtSearchOrdersFocusGained
 
     private void txtSearchOrdersFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchOrdersFocusLost
         // TODO add your handling code here:
+            if (txtSearchOrders.getText().trim().equals("Search data")) {
+            txtSearchOrders.setText("");
+
+        }
+        txtSearchOrders.setForeground(Color.BLACK);
     }//GEN-LAST:event_txtSearchOrdersFocusLost
 
     private void btnSearchOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchOrderActionPerformed

@@ -1597,10 +1597,20 @@ public class StaffForm extends javax.swing.JFrame {
 
     private void txtSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusGained
         // TODO add your handling code here:
+        if (txtSearch.getText().trim().equals("")) {
+            txtSearch.setText("Search data");
+
+        }
+        txtSearch.setForeground(Color.LIGHT_GRAY);
     }//GEN-LAST:event_txtSearchFocusGained
 
     private void txtSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusLost
         // TODO add your handling code here:
+            if (txtSearch.getText().trim().equals("Search data")) {
+            txtSearch.setText("");
+
+        }
+        txtSearch.setForeground(Color.BLACK);
     }//GEN-LAST:event_txtSearchFocusLost
 
     private void btnLogOff1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOff1ActionPerformed
