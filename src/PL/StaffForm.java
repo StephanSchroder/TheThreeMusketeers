@@ -6,6 +6,7 @@
 package PL;
 
 import BLL.User;
+import BLL.Listeners.cmbChangeListener;
 import java.awt.Color;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -30,7 +31,15 @@ public class StaffForm extends javax.swing.JFrame {
         initComponents();
         initModel();
         currentUser = null;
+        
+         cmbChangeListener changeListener = new cmbChangeListener();
+        
+        cmbSorting.addItemListener(changeListener);
+  
     }
+    
+   
+    
     private User currentUser;
     public StaffForm(User u) {
         initComponents();
