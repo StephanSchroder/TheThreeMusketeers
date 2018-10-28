@@ -166,6 +166,10 @@ public class LoginForm extends javax.swing.JFrame {
         //3 = User found but not authorized to login
         //4 = User login successful
         //5 = Admin login successful
+        User u;
+        StaffForm staff;
+        StockForm stock;
+                
         String username = txtUsername.getText().trim();
         String password = txtPassword.getText().trim();
         if (username.equals("") || username.equals("Username")) {
@@ -190,8 +194,8 @@ public class LoginForm extends javax.swing.JFrame {
                 case 4:
                 JOptionPane.showMessageDialog(this, "User Login", "Successfull Login", 1);
                 //User Login
-                User u = User.GetUserByUserForLogin(username, password);
-                StockForm stock = new StockForm();
+                u = User.GetUserByUserForLogin(username, password);
+                stock = new StockForm(u);
                 stock.setVisible(true);
                 this.dispose();
                 
@@ -200,21 +204,23 @@ public class LoginForm extends javax.swing.JFrame {
                 if (!cbAdminCheck1.isSelected()) {
                     JOptionPane.showMessageDialog(this, "User Login", "Successfull Login", 1);
                     //User Login
-                    StockForm stock1 = new StockForm();
-                    stock1.setVisible(true);
+                    u = User.GetUserByUserForLogin(username, password);
+                    stock = new StockForm(u);
+                    stock.setVisible(true);
                     this.dispose();
 
                 } else {
                     JOptionPane.showMessageDialog(this, "Admin Login", "Successfull Login", 1);
                     //Admin Login
+                    u = User.GetUserByUserForLogin(username, password);
                     String options[] = {"Staff Page", "Stocks Page"};
                     int option = JOptionPane.showOptionDialog(this, "Welcome " + username + " /nPlease select an option to open", "Succesfull Login.", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
                     if (option == 0) {
-                        StaffForm staff = new StaffForm();
+                        staff = new StaffForm(u);
                         staff.setVisible(true);
                     } else if (option == 1) {
-                        StockForm stock1 = new StockForm();
-                        stock1.setVisible(true);
+                        stock = new StockForm(u);
+                        stock.setVisible(true);
                     }
                 }
                 this.dispose();

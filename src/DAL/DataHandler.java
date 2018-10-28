@@ -14,7 +14,7 @@ import java.util.*;
  */
 public class DataHandler {
     //TODO: Fix connection String
-    private static final String connectionString = "jdbc:mysql://localhost:3306/stationerymanagementdb?zeroDateTimeBehavior=convertToNull";
+    private static final String connectionString = "jdbc:mysql://localhost:3306/stationerymanagementdb?";
     
     public DataHandler(){
         try {

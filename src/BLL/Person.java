@@ -65,6 +65,10 @@ public abstract class Person {
         this.dateAdded = dateAdded;
     }
 
+    public String getFullname(){
+        return firstName + " "+ lastName;
+    }
+    
     public String getIdNumber() {
         return idNumber;
     }

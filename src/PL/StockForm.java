@@ -8,6 +8,7 @@ package PL;
 import BLL.Category;
 import BLL.Common;
 import BLL.Stock;
+import BLL.User;
 import java.awt.Color;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,9 +30,23 @@ public class StockForm extends javax.swing.JFrame {
     /**
      * Creates new form StockForm
      */
+    
     public StockForm() {
         initComponents();
-            disableAllFields();
+        initModel();
+        currentUser = null;
+    }
+    
+    private User currentUser;
+    public StockForm(User u) {
+        initComponents();
+        initModel();
+        currentUser = u;
+        lbLoginedInUser.setText(u.getFullname());
+    }
+    
+    private void initModel(){
+        disableAllFields();
         setModel();
         clearAllFields();
     }
@@ -159,6 +174,7 @@ public class StockForm extends javax.swing.JFrame {
         txtSearch = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
         btnLogOff = new javax.swing.JButton();
+        lbLoginedInUser = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         staffMenu = new javax.swing.JMenu();
         jMenuItem6 = new javax.swing.JMenuItem();
@@ -391,14 +407,20 @@ public class StockForm extends javax.swing.JFrame {
             }
         });
 
+        lbLoginedInUser.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        lbLoginedInUser.setText("Logged In User");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnLogOff)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lbLoginedInUser)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnLogOff))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1109, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(jPanel1Layout.createSequentialGroup()
@@ -421,7 +443,9 @@ public class StockForm extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(14, 14, 14)
-                .addComponent(btnLogOff, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnLogOff, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbLoginedInUser))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtSearch, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -953,6 +977,7 @@ public class StockForm extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lbLoginedInUser;
     private javax.swing.JSpinner spStockCount;
     private javax.swing.JMenu staffMenu;
     private javax.swing.JMenu stockMenu;

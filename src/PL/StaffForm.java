@@ -28,7 +28,19 @@ public class StaffForm extends javax.swing.JFrame {
      */
     public StaffForm() {
         initComponents();
-                disableAllFields();
+        initModel();
+        currentUser = null;
+    }
+    private User currentUser;
+    public StaffForm(User u) {
+        initComponents();
+        initModel();
+        currentUser = u;
+        lbLoginedInUser.setText(u.getFullname());
+    }
+    
+    private void initModel(){
+        disableAllFields();
         setModel();
         clearAllFields();
     }
@@ -287,6 +299,7 @@ public class StaffForm extends javax.swing.JFrame {
         cmbSorting = new javax.swing.JComboBox<>();
         txtSearch = new javax.swing.JTextField();
         btnLogOff1 = new javax.swing.JButton();
+        lbLoginedInUser = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         staffMenu = new javax.swing.JMenu();
         jMenuItem6 = new javax.swing.JMenuItem();
@@ -766,6 +779,9 @@ public class StaffForm extends javax.swing.JFrame {
             }
         });
 
+        lbLoginedInUser.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        lbLoginedInUser.setText("Logged In User");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -814,11 +830,14 @@ public class StaffForm extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(cmbSorting, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(23, 23, 23)
-                                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(cmbSorting, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(23, 23, 23)
+                                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(lbLoginedInUser))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnLogOff1))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1109, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -830,7 +849,9 @@ public class StaffForm extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGap(32, 32, 32)
+                            .addGap(9, 9, 9)
+                            .addComponent(lbLoginedInUser)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(cmbSorting, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                             .addContainerGap()
@@ -1666,6 +1687,7 @@ public class StaffForm extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lbLoginedInUser;
     private javax.swing.JMenu orderStockMenu;
     private javax.swing.JMenu staffMenu;
     private javax.swing.JMenu stockMenu;
