@@ -1584,6 +1584,9 @@ public class StaffForm extends javax.swing.JFrame {
 
     private void btnLogOff1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOff1ActionPerformed
         // TODO add your handling code here:
+        Common.logOff(this);
+        
+        
     }//GEN-LAST:event_btnLogOff1ActionPerformed
 
     /**

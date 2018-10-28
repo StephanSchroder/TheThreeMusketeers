@@ -17,10 +17,13 @@
             <Property name="iconTextGap" type="int" value="20"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem6">
+            <MenuItem class="javax.swing.JMenuItem" name="mnOpenStaff">
               <Properties>
-                <Property name="text" type="java.lang.String" value="jMenuItem6"/>
+                <Property name="text" type="java.lang.String" value="Open Staff Form"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnOpenStaffActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>

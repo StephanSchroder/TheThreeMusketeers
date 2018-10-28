@@ -5,7 +5,10 @@
  */
 package PL;
 
+import BLL.Common;
 import java.awt.Color;
+import javax.swing.JOptionPane;
+import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
 
 /**
  *
@@ -66,7 +69,7 @@ public class OrderForm extends javax.swing.JFrame {
         btnDecline = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         staffMenu = new javax.swing.JMenu();
-        jMenuItem6 = new javax.swing.JMenuItem();
+        mnOpenStaff = new javax.swing.JMenuItem();
         stockMenu = new javax.swing.JMenu();
         orderStockMenu = new javax.swing.JMenu();
 
@@ -541,8 +544,13 @@ public class OrderForm extends javax.swing.JFrame {
         staffMenu.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         staffMenu.setIconTextGap(20);
 
-        jMenuItem6.setText("jMenuItem6");
-        staffMenu.add(jMenuItem6);
+        mnOpenStaff.setText("Open Staff Form");
+        mnOpenStaff.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnOpenStaffActionPerformed(evt);
+            }
+        });
+        staffMenu.add(mnOpenStaff);
 
         jMenuBar1.add(staffMenu);
 
@@ -944,6 +952,7 @@ public class OrderForm extends javax.swing.JFrame {
 
     private void btnLogOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOffActionPerformed
         // TODO add your handling code here:
+        Common.logOff(this);
     }//GEN-LAST:event_btnLogOffActionPerformed
 
     private void jPanel1formHierarchyChanged(java.awt.event.HierarchyEvent evt) {//GEN-FIRST:event_jPanel1formHierarchyChanged
@@ -993,6 +1002,13 @@ public class OrderForm extends javax.swing.JFrame {
     private void btnDeclineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeclineActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnDeclineActionPerformed
+
+    private void mnOpenStaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenStaffActionPerformed
+        // TODO add your handling code here:
+        StaffForm staff = new StaffForm();
+        staff.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_mnOpenStaffActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1050,7 +1066,6 @@ public class OrderForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -1058,6 +1073,7 @@ public class OrderForm extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JMenuItem mnOpenStaff;
     private javax.swing.JMenu orderStockMenu;
     private javax.swing.JSpinner spOrderQuantity;
     private javax.swing.JMenu staffMenu;

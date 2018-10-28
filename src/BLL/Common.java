@@ -7,6 +7,8 @@ package BLL;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
+import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
 
 /**
  *
@@ -112,4 +114,9 @@ public class Common {
         return resultCode;
     }
 
+    
+    public static void logOff(javax.swing.JFrame j){
+        if(JOptionPane.showConfirmDialog(j, "Are you sure want to log off?")==0)
+            System.exit(DO_NOTHING_ON_CLOSE);
+    }
 }

@@ -200,6 +200,24 @@ public class User extends Person implements Serializable {
         return user;
     }
     
+    public static User GetUserByUserForLogin(String name, String password) {
+        User user = null;
+        String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "IDNumber"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("FirstName= '" + name+"' AND  Password= '"+password+"'"));
+        int count = dbData.length;
+        if (count == 1)
+        {
+            try {
+                user = new User(dbData[0][0], dbData[0][1], dbData[0][2], new SimpleDateFormat("yyyy-MM-dd").parse(dbData[0][3]), dbData[0][4], dbData[0][5], dbData[0][6], dbData[0][7], dbData[0][8], dbData[0][9], dbData[0][10], dbData[0][11], dbData[0][12], dbData[0][13], new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(dbData[0][14]), Integer.valueOf(dbData[0][15]), dbData[0][16], dbData[0][17], dbData[0][18], dbData[0][19]);
+            } catch (ParseException ex) {
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return user;
+    }
+    
+    
+    
     public void registerUser() {
         //Person
         this.registerPerson();
