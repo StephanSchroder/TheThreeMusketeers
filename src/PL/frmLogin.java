@@ -211,30 +211,36 @@ public class frmLogin extends javax.swing.JPanel {
                     JOptionPane.showMessageDialog(this, "User not authorized to login", "Unsuccessfull Login", 0);
                     break;
                 case 4:
-                    JFrame jf = new JFrame();
+                   /* JFrame jf = new JFrame();
                     jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    jf.setSize(this.getWidth(), this.getHeight());
+                    jf.setSize(this.getWidth(), this.getHeight());*/
                     
                     JOptionPane.showMessageDialog(this, "User Login", "Successfull Login", 1);
                     //User Login
-                    frmStock stock = new frmStock();
+                    StockForm stock = new StockForm();
+                    stock.setVisible(true);
+                    this.setVisible(false);
+                    /*frmStock stock = new frmStock();
                     jf.add(stock);
                     
                     Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
                     jf.setSize(1129, 680);
                     jf.setLocation(dim.width / 2 - jf.getSize().width / 2, dim.height / 2 - jf.getSize().height / 2);
                     jf.setVisible(true);
-                    this.setVisible(false);
+                    this.setVisible(false);*/
                     break;
                 case 5:
-                    JFrame jf1 = new JFrame();
+                   /* JFrame jf1 = new JFrame();
                     jf1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    jf1.setSize(this.getWidth(), this.getHeight());
+                    jf1.setSize(this.getWidth(), this.getHeight());*/
                     if (!cbAdminCheck1.isSelected()) {
                         JOptionPane.showMessageDialog(this, "User Login", "Successfull Login", 1);
                         //User Login
-                        frmStock stock1 = new frmStock();
-                        jf1.add(stock1);
+                        StockForm stock1 = new StockForm();
+                        stock1.setVisible(true);
+                        this.setVisible(false);
+                        /*frmStock stock1 = new frmStock();
+                        jf1.add(stock1);*/
 
                     } else {
                         JOptionPane.showMessageDialog(this, "Admin Login", "Successfull Login", 1);
@@ -242,18 +248,19 @@ public class frmLogin extends javax.swing.JPanel {
                         String options[] = {"Staff Page", "Stocks Page"};
                         int option = JOptionPane.showOptionDialog(this, "Welcome " + username + " /nPlease select an option to open", "Succesfull Login.", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
                         if (option == 0) {
-                            frmStaff staff = new frmStaff();
-                            jf1.add(staff);
+                            StaffForm staff = new StaffForm();
+                            staff.setVisible(true);
                         } else if (option == 1) {
-                            frmStock stock1 = new frmStock();
-                            jf1.add(stock1);
+                            StockForm stock1 = new StockForm();
+                            stock1.setVisible(true);
                         }
                     }
-                    Dimension dim1 = Toolkit.getDefaultToolkit().getScreenSize();
+                    this.setVisible(false);
+                   /* Dimension dim1 = Toolkit.getDefaultToolkit().getScreenSize();
                     jf1.setSize(1250, 1000);
                     jf1.setLocation(dim1.width / 2 - jf1.getSize().width / 2, dim1.height / 2 - jf1.getSize().height / 2);
-                    jf1.setVisible(true);
-                    this.setVisible(false);
+                    jf1.setVisible(true);*/
+                    
                     break;
             }
 

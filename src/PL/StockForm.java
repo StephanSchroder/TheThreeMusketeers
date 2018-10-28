@@ -894,6 +894,7 @@ public class StockForm extends javax.swing.JFrame {
 
     private void btnLogOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOffActionPerformed
         // TODO add your handling code here:
+        Common.logOff(this);
     }//GEN-LAST:event_btnLogOffActionPerformed
 
     /**
