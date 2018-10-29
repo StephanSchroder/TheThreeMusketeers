@@ -5,6 +5,7 @@
  */
 package BLL;
 
+import PL.LoginForm;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
@@ -116,7 +117,9 @@ public class Common {
 
     
     public static void logOff(javax.swing.JFrame j){
-        if(JOptionPane.showConfirmDialog(j, "Are you sure want to log off?","Programing 321",JOptionPane.YES_NO_OPTION)==0)
-            System.exit(DO_NOTHING_ON_CLOSE);
+        if(JOptionPane.showConfirmDialog(j, "Are you sure want to log off?","Programing 321",JOptionPane.YES_NO_OPTION)==0) {
+            new LoginForm().setVisible(true);
+            j.dispose();
+        }
     }
 }

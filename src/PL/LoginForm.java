@@ -39,8 +39,10 @@ public class LoginForm extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         txtPassword = new javax.swing.JPasswordField();
         jLabel6 = new javax.swing.JLabel();
-        btnLogin1 = new javax.swing.JButton();
-        cbAdminCheck1 = new javax.swing.JCheckBox();
+        btnLogin = new javax.swing.JButton();
+        cbAdminCheck = new javax.swing.JCheckBox();
+        btnRegister = new javax.swing.JButton();
+        btnExit = new javax.swing.JButton();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -55,6 +57,7 @@ public class LoginForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(102, 153, 255));
+        setResizable(false);
 
         jPanel2.setBackground(new java.awt.Color(102, 153, 255));
 
@@ -83,18 +86,36 @@ public class LoginForm extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel6.setText("Password:");
 
-        btnLogin1.setBackground(new java.awt.Color(204, 204, 204));
-        btnLogin1.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        btnLogin1.setText("Login");
-        btnLogin1.addActionListener(new java.awt.event.ActionListener() {
+        btnLogin.setBackground(new java.awt.Color(204, 204, 204));
+        btnLogin.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        btnLogin.setText("Login");
+        btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLogin1ActionPerformed(evt);
+                btnLoginActionPerformed(evt);
             }
         });
 
-        cbAdminCheck1.setBackground(new java.awt.Color(102, 153, 255));
-        cbAdminCheck1.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-        cbAdminCheck1.setText("Login as admin");
+        cbAdminCheck.setBackground(new java.awt.Color(102, 153, 255));
+        cbAdminCheck.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+        cbAdminCheck.setText("Login as admin");
+
+        btnRegister.setBackground(new java.awt.Color(204, 204, 204));
+        btnRegister.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        btnRegister.setText("Register");
+        btnRegister.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegisterActionPerformed(evt);
+            }
+        });
+
+        btnExit.setBackground(new java.awt.Color(204, 204, 204));
+        btnExit.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        btnExit.setText("Exit");
+        btnExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExitActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -102,59 +123,62 @@ public class LoginForm extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(47, 47, 47)
+                .addComponent(jLabel7)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(47, 47, 47)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addContainerGap(20, Short.MAX_VALUE)
+                        .addComponent(cbAdminCheck)
+                        .addGap(18, 18, 18)))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addGap(63, 63, 63)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(cbAdminCheck1)
-                                .addGap(42, 42, 42)
-                                .addComponent(btnLogin1))
-                            .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(44, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(44, 44, 44))))
+                        .addComponent(btnLogin)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnRegister)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnExit))
+                    .addComponent(txtPassword)
+                    .addComponent(txtUsername))
+                .addGap(37, 37, 37))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(23, 23, 23)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
-                .addGap(35, 35, 35)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnLogin1)
-                    .addComponent(cbAdminCheck1))
-                .addGap(27, 27, 27))
+                    .addComponent(cbAdminCheck)
+                    .addComponent(btnLogin)
+                    .addComponent(btnRegister)
+                    .addComponent(btnExit))
+                .addContainerGap(39, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -192,7 +216,7 @@ public class LoginForm extends javax.swing.JFrame {
         txtUsername.setForeground(Color.BLACK);
     }//GEN-LAST:event_txtUsernameMouseClicked
 
-    private void btnLogin1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogin1ActionPerformed
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         // TODO add your handling code here:
         //0 = Unknown unsuccessful login
         //1 = Invalid Username or Password characters
@@ -210,49 +234,55 @@ public class LoginForm extends javax.swing.JFrame {
             int result = User.AuthenticateLogin(username, password);
             switch (result) {
                 case 0:
-                JOptionPane.showMessageDialog(this, "Unknown unsuccessfull login", "Error", 0);
-                break;
+                    JOptionPane.showMessageDialog(this, "Unknown unsuccessfull login", "Error", 0);
+                    break;
                 case 1:
-                JOptionPane.showMessageDialog(this, "Invalid Username or Password characters", "Unsuccessfull Login", 0);
-                break;
+                    JOptionPane.showMessageDialog(this, "Invalid Username or Password characters", "Unsuccessfull Login", 0);
+                    break;
                 case 2:
-                JOptionPane.showMessageDialog(this, "Login Failed", "Unsuccessfull Login", 0);
-                break;
+                    JOptionPane.showMessageDialog(this, "Login Failed", "Unsuccessfull Login", 0);
+                    break;
                 case 3:
-                JOptionPane.showMessageDialog(this, "User not authorized to login", "Unsuccessfull Login", 0);
-                break;
+                    JOptionPane.showMessageDialog(this, "User not authorized to login", "Unsuccessfull Login", 0);
+                    break;
                 case 4:
-                JOptionPane.showMessageDialog(this, "User Login", "Successfull Login", 1);
-                //User Login
-                new StockForm(User.GetUserByLoginDetails(username, password)).setVisible(true);
-                this.dispose();
-                
-                break;
-                case 5:            
-                if (!cbAdminCheck1.isSelected()) {
                     JOptionPane.showMessageDialog(this, "User Login", "Successfull Login", 1);
                     //User Login
                     new StockForm(User.GetUserByLoginDetails(username, password)).setVisible(true);
                     this.dispose();
-
-                } else {
-                    JOptionPane.showMessageDialog(this, "Admin Login", "Successfull Login", 1);
-                    //Admin Login
-                    String options[] = {"Staff Page", "Stocks Page"};
-                    int option = JOptionPane.showOptionDialog(this, "Welcome " + username + " ! Please select an option to open", "Succesfull Login.", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-                    if (option == 0) {
-                        new StaffForm(User.GetUserByLoginDetails(username, password)).setVisible(true);
-                    } else if (option == 1) {
+                    break;
+                case 5:
+                    if (!cbAdminCheck.isSelected()) {
+                        JOptionPane.showMessageDialog(this, "User Login", "Successfull Login", 1);
+                        //User Login
                         new StockForm(User.GetUserByLoginDetails(username, password)).setVisible(true);
+                        this.dispose();
+
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Admin Login", "Successfull Login", 1);
+                        //Admin Login
+                        String options[] = {"Staff Page", "Stocks Page"};
+                        int option = JOptionPane.showOptionDialog(this, "Welcome " + username + " ! Please select an option to open", "Succesfull Login.", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+                        if (option == 0) {
+                            new StaffForm(User.GetUserByLoginDetails(username, password)).setVisible(true);
+                        } else if (option == 1) {
+                            new StockForm(User.GetUserByLoginDetails(username, password)).setVisible(true);
+                        }
                     }
-                }
-                this.dispose();
-
-                break;
+                    this.dispose();
+                    break;
             }
-
         }
-    }//GEN-LAST:event_btnLogin1ActionPerformed
+    }//GEN-LAST:event_btnLoginActionPerformed
+
+    private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
+        new StaffForm().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnRegisterActionPerformed
+
+    private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
+        System.exit(DO_NOTHING_ON_CLOSE);
+    }//GEN-LAST:event_btnExitActionPerformed
 
     /**
      * @param args the command line arguments
@@ -290,8 +320,10 @@ public class LoginForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnLogin1;
-    private javax.swing.JCheckBox cbAdminCheck1;
+    private javax.swing.JButton btnExit;
+    private javax.swing.JButton btnLogin;
+    private javax.swing.JButton btnRegister;
+    private javax.swing.JCheckBox cbAdminCheck;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
