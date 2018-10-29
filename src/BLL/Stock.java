@@ -7,8 +7,6 @@ package BLL;
 
 import DAL.*;
 import java.util.Date;
-import java.sql.ResultSet;
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,7 +14,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.naming.spi.DirStateFactory;
 
 /**
  *
@@ -85,6 +82,21 @@ public class Stock {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+    
+    public static List<Stock> getStocksSearch(String itemName){
+        List<Stock> stocks = new ArrayList<>();
+        String[][] dbData = DataHandler.readRecords(Arrays.asList("StockID", "CategoryID", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("ItemName LIKE '%" + itemName + "%'"));
+        int count = dbData.length;
+        for (int i = 0; i < count; i++) {
+            try {
+                stocks.add(new Stock(Integer.valueOf(dbData[i][0]), Category.getCategory(Integer.valueOf(dbData[i][1])), dbData[i][2], new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(dbData[i][3]), Integer.valueOf(dbData[i][4]), dbData[i][5]));
+            } catch (ParseException ex) {
+                Logger.getLogger(Stock.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return stocks;
     }
     
     public static List<Stock> getStocks(){
