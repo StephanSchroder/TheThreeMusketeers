@@ -289,7 +289,7 @@ public class Stock {
 
     @Override
     public String toString() {
-        return "Stock{" + "stockID=" + stockID + ", category=" + category + ", itemName=" + itemName + ", dateAdded=" + dateAdded + ", stockCount=" + stockCount + ", status=" + status + '}';
+        return "stockID=" + stockID + ", category=" + category + ", itemName=" + itemName + ", stockCount=" + stockCount;
     }
     
     public static void generateReport(String filename, List<Stock> data )
