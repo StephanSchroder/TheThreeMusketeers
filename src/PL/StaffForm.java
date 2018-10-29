@@ -339,7 +339,7 @@ public class StaffForm extends javax.swing.JFrame {
         txtPassword = new javax.swing.JTextField();
         jLabel27 = new javax.swing.JLabel();
         cmbAccountType = new javax.swing.JComboBox<>();
-        btnAdd1 = new javax.swing.JButton();
+        btnAddRecord = new javax.swing.JButton();
         cmbSorting = new javax.swing.JComboBox<>();
         txtSearch = new javax.swing.JTextField();
         btnLogOff1 = new javax.swing.JButton();
@@ -791,12 +791,12 @@ public class StaffForm extends javax.swing.JFrame {
                 .addContainerGap(34, Short.MAX_VALUE))
         );
 
-        btnAdd1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        btnAdd1.setText("Insert Record");
-        btnAdd1.setName("btnInsertRecord"); // NOI18N
-        btnAdd1.addActionListener(new java.awt.event.ActionListener() {
+        btnAddRecord.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        btnAddRecord.setText("Insert Record");
+        btnAddRecord.setName("btnInsertRecord"); // NOI18N
+        btnAddRecord.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAdd1ActionPerformed(evt);
+                btnAddRecordActionPerformed(evt);
             }
         });
 
@@ -863,7 +863,7 @@ public class StaffForm extends javax.swing.JFrame {
                                             .addComponent(btnDelete, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                             .addComponent(btnUpdate, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGap(0, 0, Short.MAX_VALUE))
-                                    .addComponent(btnAdd1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(btnAddRecord, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(10, 10, 10)
@@ -942,7 +942,7 @@ public class StaffForm extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnAdd1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnAddRecord, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
@@ -1211,166 +1211,7 @@ public class StaffForm extends javax.swing.JFrame {
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
 
-        if (insertClick == 0) {
-            insertClick++;
-            btnUpdate.setEnabled(false);
-            btnDelete.setEnabled(false);
-            clearAllFields();
-            prepareInsert();
-        } else {
-            resetColor();
-            String idNumber;
-            String firstName;
-            String lastName;
-            String title;
-            Date dateOfBirth;
-            String gender;
-            String country;
-            String province;
-            String city;
-            String street;
-            String postalCode;
-            String addressLine ;
-            String email;
-            String cellNumber;
-            String telNumber;
-            String username;
-            String password;
-            String accountType;
-
-            idNumber = txtIDNumber.getText();
-            firstName = txtFirstName.getText();
-            lastName = txtLastName.getText();
-            title = cmbTitle.getSelectedItem().toString();
-            dateOfBirth = dobPicker.getDate();
-            gender = cmbGender.getSelectedItem().toString();
-            country = txtCountry.getText();
-            province = (txtProvince.getText() != null) ? txtProvince.getText() : "";
-            city = (txtCity.getText() != null) ? txtCity.getText() : "";
-            street = (txtStreet.getText() != null) ? txtStreet.getText() : "";
-            postalCode = (txtPostalCode.getText() != null) ? txtPostalCode.getText() : "";
-            addressLine = (txtAddressLine.getText() != null) ? txtAddressLine.getText() : "";
-            email = (txtEmail.getText() != null) ? txtEmail.getText() : "";
-            cellNumber = (txtCell.getText() != null) ? txtCell.getText() : "";
-            telNumber = (txtTel.getText() != null) ? txtTel.getText() : "";
-            username = txtUsername.getText();
-            password = txtPassword.getText();
-            accountType = cmbAccountType.getSelectedItem().toString();
-
-            boolean check = true;
-            if (Common.checkInput(idNumber) != 10 || idNumber.length() != 13) {
-                check = false;
-                txtIDNumber.setBackground(Color.red);
-                txtIDNumber.setToolTipText("Only numerical values. Must be 13 characters. Must be valid RSA ID Number");
-            }
-            if (Common.checkInput(firstName) != 1 || firstName.length() > 20) {
-                check = false;
-                txtFirstName.setBackground(Color.red);
-                txtFirstName.setToolTipText("Only alphabetical characters. Max 20 characters");
-            }
-            if (Common.checkInput(lastName) != 1 || lastName.length() > 20) {
-                check = false;
-                txtLastName.setBackground(Color.red);
-                txtLastName.setToolTipText("Only alphabetical characters. Max 20 characters");
-            }
-            if (!(Common.checkInput(title) == 1 || Common.checkInput(title) == 5) || title.length() > 4) {
-                check = false;
-                cmbTitle.setBackground(Color.red);
-                cmbTitle.setToolTipText("Only alphabetical characters. Max 4 characters");
-            }
-            //DATE OF BIRTH CHECK NOT INCLUDED
-            if (Common.checkInput(gender) != 1 || gender.length() > 6) {
-                check = false;
-                cmbGender.setBackground(Color.red);
-                cmbGender.setToolTipText("Only alphabetical characters. Max 6 characters");
-            }
-            if (Common.checkInput(country) != 1 || country.length() > 20) {
-                check = false;
-                txtCountry.setBackground(Color.red);
-                txtCountry.setToolTipText("Only alphabetical characters. Max 20 characters");
-            }
-            if (!(Common.checkInput(province) == 0 || Common.checkInput(province) == 1 || Common.checkInput(province) == 5) || province.length() > 20) {
-                check = false;
-                txtProvince.setBackground(Color.orange);
-                txtProvince.setToolTipText("(Optional Field) Only alphabetical characters and optional special characters. Max 20 characters");
-            }
-            if (!(Common.checkInput(city) == 0 || Common.checkInput(city) == 1) || city.length() > 30) {
-                check = false;
-                txtCity.setBackground(Color.orange);
-                txtCity.setToolTipText("(Optional Field) Only alphabetical characters. Max 30 characters");
-            }
-            if (!(Common.checkInput(street) == 0 || Common.checkInput(street) == 1 || Common.checkInput(street) == 4) || street.length() > 30) {
-                check = false;
-                txtStreet.setBackground(Color.orange);
-                txtStreet.setToolTipText("(Optional Field) Only alphabetical characters and optional numerical values. Max 30 characters");
-            }
-            if (!(Common.checkInput(postalCode) == 0 || Common.checkInput(postalCode) == 2) || postalCode.length() > 10) {
-                check = false;
-                txtPostalCode.setBackground(Color.orange);
-                txtPostalCode.setToolTipText("(Optional Field) Only numerical values. Max 10 characters");
-            }
-            if (addressLine.length() > 50) {
-                check = false;
-                txtAddressLine.setBackground(Color.orange);
-                txtAddressLine.setToolTipText("(Optional Field) Any characters. Max 50 characters");
-            }
-            if (!(Common.checkInput(email) == 0 || Common.checkInput(email) == 9) || email.length() > 30) {
-                check = false;
-                txtEmail.setBackground(Color.orange);
-                txtEmail.setToolTipText("(Optional Field) Only valid email address. Max 30 characters");
-            }
-            if (!(Common.checkInput(cellNumber) == 0 || (Common.checkInput(cellNumber) == 2 && cellNumber.length() == 10))) {
-                check = false;
-                txtCell.setBackground(Color.orange);
-                txtCell.setToolTipText("(Optional Field) Only numerical values. Must be 10 characters");
-            }
-            if (!(Common.checkInput(telNumber) == 0 || (Common.checkInput(telNumber) == 2 && telNumber.length() == 10))) {
-                check = false;
-                txtTel.setBackground(Color.orange);
-                txtTel.setToolTipText("(Optional Field) Only numerical values. Must be 10 characters");
-            }
-            if (Common.checkInput(username) != 1 || username.length() > 20) {
-                check = false;
-                txtUsername.setBackground(Color.red);
-                txtUsername.setToolTipText("Only alphabetical characters. Max 20 characters");
-            }
-            if (Common.checkInput(password) != 7 || password.length() < 4 || password.length() > 20) {
-                check = false;
-                txtPassword.setBackground(Color.red);
-                txtPassword.setToolTipText("Must contain alphabetical characters and at least one numerical value and at least one special character. Min 4 characters. Max 20 characters");
-            }
-            if (Common.checkInput(accountType) != 1 || accountType.length() > 50) {
-                check = false;
-                cmbAccountType.setBackground(Color.red);
-                cmbAccountType.setToolTipText("Only alphabetical characters. Max 50 characters");
-            }
-
-            if (check == true) {
-                int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to add this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
-                if (option == 0) {
-                    new User(firstName, lastName, title, dateOfBirth, gender, country, province, city, street, postalCode, addressLine, email, cellNumber, telNumber, new Date(), 0, username, password, accountType, idNumber).registerUser();
-                    userList=setModel();
-                }
-                clearAllFields();
-                disableAllFields();
-                resetColor();
-                insertClick = 0;
-                btnSearch.setEnabled(true);
-                btnUpdate.setEnabled(true);
-                btnDelete.setEnabled(true);
-            } else {
-                int option = JOptionPane.showConfirmDialog(this, "There were some errors, would you like to fix them?", "Confirmation.", JOptionPane.YES_NO_OPTION);
-                if (option == 1) {
-                    clearAllFields();
-                    disableAllFields();
-                    resetColor();
-                    insertClick = 0;
-                    btnSearch.setEnabled(true);
-                    btnUpdate.setEnabled(true);
-                    btnDelete.setEnabled(true);
-                }
-            }
-        }
+       
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
@@ -1635,9 +1476,169 @@ public class StaffForm extends javax.swing.JFrame {
         txtPassword.setForeground(Color.BLACK);
     }//GEN-LAST:event_txtPasswordFocusLost
 
-    private void btnAdd1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdd1ActionPerformed
+    private void btnAddRecordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddRecordActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnAdd1ActionPerformed
+         if (insertClick == 0) {
+            insertClick++;
+            btnUpdate.setEnabled(false);
+            btnDelete.setEnabled(false);
+            clearAllFields();
+            prepareInsert();
+        } else {
+            resetColor();
+            String idNumber;
+            String firstName;
+            String lastName;
+            String title;
+            Date dateOfBirth;
+            String gender;
+            String country;
+            String province;
+            String city;
+            String street;
+            String postalCode;
+            String addressLine ;
+            String email;
+            String cellNumber;
+            String telNumber;
+            String username;
+            String password;
+            String accountType;
+
+            idNumber = txtIDNumber.getText();
+            firstName = txtFirstName.getText();
+            lastName = txtLastName.getText();
+            title = cmbTitle.getSelectedItem().toString();
+            dateOfBirth = dobPicker.getDate();
+            gender = cmbGender.getSelectedItem().toString();
+            country = txtCountry.getText();
+            province = (txtProvince.getText() != null) ? txtProvince.getText() : "";
+            city = (txtCity.getText() != null) ? txtCity.getText() : "";
+            street = (txtStreet.getText() != null) ? txtStreet.getText() : "";
+            postalCode = (txtPostalCode.getText() != null) ? txtPostalCode.getText() : "";
+            addressLine = (txtAddressLine.getText() != null) ? txtAddressLine.getText() : "";
+            email = (txtEmail.getText() != null) ? txtEmail.getText() : "";
+            cellNumber = (txtCell.getText() != null) ? txtCell.getText() : "";
+            telNumber = (txtTel.getText() != null) ? txtTel.getText() : "";
+            username = txtUsername.getText();
+            password = txtPassword.getText();
+            accountType = cmbAccountType.getSelectedItem().toString();
+
+            boolean check = true;
+            if (Common.checkInput(idNumber) != 10 || idNumber.length() != 13) {
+                check = false;
+                txtIDNumber.setBackground(Color.red);
+                txtIDNumber.setToolTipText("Only numerical values. Must be 13 characters. Must be valid RSA ID Number");
+            }
+            if (Common.checkInput(firstName) != 1 || firstName.length() > 20) {
+                check = false;
+                txtFirstName.setBackground(Color.red);
+                txtFirstName.setToolTipText("Only alphabetical characters. Max 20 characters");
+            }
+            if (Common.checkInput(lastName) != 1 || lastName.length() > 20) {
+                check = false;
+                txtLastName.setBackground(Color.red);
+                txtLastName.setToolTipText("Only alphabetical characters. Max 20 characters");
+            }
+            if (!(Common.checkInput(title) == 1 || Common.checkInput(title) == 5) || title.length() > 4) {
+                check = false;
+                cmbTitle.setBackground(Color.red);
+                cmbTitle.setToolTipText("Only alphabetical characters. Max 4 characters");
+            }
+            //DATE OF BIRTH CHECK NOT INCLUDED
+            if (Common.checkInput(gender) != 1 || gender.length() > 6) {
+                check = false;
+                cmbGender.setBackground(Color.red);
+                cmbGender.setToolTipText("Only alphabetical characters. Max 6 characters");
+            }
+            if (Common.checkInput(country) != 1 || country.length() > 20) {
+                check = false;
+                txtCountry.setBackground(Color.red);
+                txtCountry.setToolTipText("Only alphabetical characters. Max 20 characters");
+            }
+            if (!(Common.checkInput(province) == 0 || Common.checkInput(province) == 1 || Common.checkInput(province) == 5) || province.length() > 20) {
+                check = false;
+                txtProvince.setBackground(Color.orange);
+                txtProvince.setToolTipText("(Optional Field) Only alphabetical characters and optional special characters. Max 20 characters");
+            }
+            if (!(Common.checkInput(city) == 0 || Common.checkInput(city) == 1) || city.length() > 30) {
+                check = false;
+                txtCity.setBackground(Color.orange);
+                txtCity.setToolTipText("(Optional Field) Only alphabetical characters. Max 30 characters");
+            }
+            if (!(Common.checkInput(street) == 0 || Common.checkInput(street) == 1 || Common.checkInput(street) == 4) || street.length() > 30) {
+                check = false;
+                txtStreet.setBackground(Color.orange);
+                txtStreet.setToolTipText("(Optional Field) Only alphabetical characters and optional numerical values. Max 30 characters");
+            }
+            if (!(Common.checkInput(postalCode) == 0 || Common.checkInput(postalCode) == 2) || postalCode.length() > 10) {
+                check = false;
+                txtPostalCode.setBackground(Color.orange);
+                txtPostalCode.setToolTipText("(Optional Field) Only numerical values. Max 10 characters");
+            }
+            if (addressLine.length() > 50) {
+                check = false;
+                txtAddressLine.setBackground(Color.orange);
+                txtAddressLine.setToolTipText("(Optional Field) Any characters. Max 50 characters");
+            }
+            if (!(Common.checkInput(email) == 0 || Common.checkInput(email) == 9) || email.length() > 30) {
+                check = false;
+                txtEmail.setBackground(Color.orange);
+                txtEmail.setToolTipText("(Optional Field) Only valid email address. Max 30 characters");
+            }
+            if (!(Common.checkInput(cellNumber) == 0 || (Common.checkInput(cellNumber) == 2 && cellNumber.length() == 10))) {
+                check = false;
+                txtCell.setBackground(Color.orange);
+                txtCell.setToolTipText("(Optional Field) Only numerical values. Must be 10 characters");
+            }
+            if (!(Common.checkInput(telNumber) == 0 || (Common.checkInput(telNumber) == 2 && telNumber.length() == 10))) {
+                check = false;
+                txtTel.setBackground(Color.orange);
+                txtTel.setToolTipText("(Optional Field) Only numerical values. Must be 10 characters");
+            }
+            if (Common.checkInput(username) != 1 || username.length() > 20) {
+                check = false;
+                txtUsername.setBackground(Color.red);
+                txtUsername.setToolTipText("Only alphabetical characters. Max 20 characters");
+            }
+            if (Common.checkInput(password) != 7 || password.length() < 4 || password.length() > 20) {
+                check = false;
+                txtPassword.setBackground(Color.red);
+                txtPassword.setToolTipText("Must contain alphabetical characters and at least one numerical value and at least one special character. Min 4 characters. Max 20 characters");
+            }
+            if (Common.checkInput(accountType) != 1 || accountType.length() > 50) {
+                check = false;
+                cmbAccountType.setBackground(Color.red);
+                cmbAccountType.setToolTipText("Only alphabetical characters. Max 50 characters");
+            }
+
+            if (check == true) {
+                int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to add this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
+                if (option == 0) {
+                    new User(firstName, lastName, title, dateOfBirth, gender, country, province, city, street, postalCode, addressLine, email, cellNumber, telNumber, new Date(), 0, username, password, accountType, idNumber).registerUser();
+                    userList=setModel();
+                }
+                clearAllFields();
+                disableAllFields();
+                resetColor();
+                insertClick = 0;
+                btnSearch.setEnabled(true);
+                btnUpdate.setEnabled(true);
+                btnDelete.setEnabled(true);
+            } else {
+                int option = JOptionPane.showConfirmDialog(this, "There were some errors, would you like to fix them?", "Confirmation.", JOptionPane.YES_NO_OPTION);
+                if (option == 1) {
+                    clearAllFields();
+                    disableAllFields();
+                    resetColor();
+                    insertClick = 0;
+                    btnSearch.setEnabled(true);
+                    btnUpdate.setEnabled(true);
+                    btnDelete.setEnabled(true);
+                }
+            }
+        }
+    }//GEN-LAST:event_btnAddRecordActionPerformed
 
     private void txtSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusGained
         // TODO add your handling code here:
@@ -1700,7 +1701,7 @@ public class StaffForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAdd1;
+    private javax.swing.JButton btnAddRecord;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnLogOff1;
     private javax.swing.JButton btnSearch;
