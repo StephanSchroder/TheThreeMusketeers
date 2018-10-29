@@ -41,7 +41,7 @@ public class StaffForm extends javax.swing.JFrame {
         currentUser = null;
         
          cmbChangeListener changeListener = new cmbChangeListener();
-         cmbSorting.addItemListener(changeListener);
+         cmbSearchParam.addItemListener(changeListener);
   
     }
     
@@ -54,7 +54,7 @@ public class StaffForm extends javax.swing.JFrame {
         currentUser = u;
         lbLoginedInUser.setText(u.getFullname());
          cmbChangeListener changeListener = new cmbChangeListener();
-         cmbSorting.addItemListener(changeListener);
+         cmbSearchParam.addItemListener(changeListener);
     }
     
     private void initModel(){
@@ -269,7 +269,7 @@ public class StaffForm extends javax.swing.JFrame {
     Object item = e.getItem();
 
     if (e.getStateChange() == ItemEvent.SELECTED) {
-        String txt=cmbSorting.getSelectedItem().toString();
+        String txt=cmbSearchParam.getSelectedItem().toString();
        switch (txt)
         {
            case "Category" :{ Collections.sort(userList, new SortCategory());
@@ -339,10 +339,11 @@ public class StaffForm extends javax.swing.JFrame {
         jLabel27 = new javax.swing.JLabel();
         cmbAccountType = new javax.swing.JComboBox<>();
         btnAddRecord = new javax.swing.JButton();
-        cmbSorting = new javax.swing.JComboBox<>();
+        cmbSearchParam = new javax.swing.JComboBox<>();
         txtSearch = new javax.swing.JTextField();
         btnLogOff1 = new javax.swing.JButton();
         lbLoginedInUser = new javax.swing.JLabel();
+        cmbSorting1 = new javax.swing.JComboBox<>();
         jMenuBar1 = new javax.swing.JMenuBar();
         staffMenu = new javax.swing.JMenu();
         jMenuItem6 = new javax.swing.JMenuItem();
@@ -799,8 +800,8 @@ public class StaffForm extends javax.swing.JFrame {
             }
         });
 
-        cmbSorting.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        cmbSorting.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sorting...", "Name", "Surname", " ", " " }));
+        cmbSearchParam.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        cmbSearchParam.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "First Name", "Last Name", "FullName", "Country", "City", "Province", "Tel number", "Cell number", "Email" }));
 
         txtSearch.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
         txtSearch.setName("txtUserName"); // NOI18N
@@ -824,6 +825,9 @@ public class StaffForm extends javax.swing.JFrame {
 
         lbLoginedInUser.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         lbLoginedInUser.setText("Logged In User");
+
+        cmbSorting1.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        cmbSorting1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sorting...", "Name", "Surname", " ", " " }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -875,13 +879,17 @@ public class StaffForm extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(cmbSorting, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(23, 23, 23)
-                                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(lbLoginedInUser)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(cmbSorting1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
-                                        .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(lbLoginedInUser))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txtSearch, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(cmbSearchParam, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(32, 32, 32)))
                                 .addComponent(btnLogOff1))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1109, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
@@ -895,12 +903,14 @@ public class StaffForm extends javax.swing.JFrame {
                             .addGap(9, 9, 9)
                             .addComponent(lbLoginedInUser)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(cmbSorting, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cmbSorting1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                             .addContainerGap()
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(txtSearch, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btnSearch, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cmbSearchParam, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(btnLogOff1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -950,7 +960,7 @@ public class StaffForm extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(91, 91, 91)
                                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(29, Short.MAX_VALUE))))))
+                                .addContainerGap(30, Short.MAX_VALUE))))))
         );
 
         staffMenu.setText("Staff");
@@ -1209,7 +1219,30 @@ public class StaffForm extends javax.swing.JFrame {
     }//GEN-LAST:event_txtTelFocusLost
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        String parameter = cmbSearchParam.getSelectedItem().toString();
+        String searchKeyword = txtSearch.getText();
+        switch(parameter)
+        {
 
+
+
+
+
+
+
+
+
+            case "First Name":{userList=User.getUserByFirstName(searchKeyword);   break;}
+            case "Last Name":{userList=User.getUserByLastName(searchKeyword);  break;}
+            case "FullName":{userList=User.getUserByFullName(searchKeyword);  break;}
+            case "Country":{userList=User.getUserByCountry(searchKeyword);  break;}
+            case "City":{userList=User.getUserByCity(searchKeyword);  break;}
+            case "Province":{userList=User.getUserByProvince(searchKeyword);  break;}
+            case "Tel number":{userList=User.getUserByTelNumber(searchKeyword);  break;}
+            case "Cell number":{userList=User.getUserByCellNumber(searchKeyword);  break;}
+            case "Email":{userList=User.getUserByEmail(searchKeyword);  break;}
+        }
+        setModel();
        
     }//GEN-LAST:event_btnSearchActionPerformed
 
@@ -1707,7 +1740,8 @@ public class StaffForm extends javax.swing.JFrame {
     private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox<String> cmbAccountType;
     private javax.swing.JComboBox<String> cmbGender;
-    private javax.swing.JComboBox<String> cmbSorting;
+    private javax.swing.JComboBox<String> cmbSearchParam;
+    private javax.swing.JComboBox<String> cmbSorting1;
     private javax.swing.JComboBox<String> cmbTitle;
     private org.jdesktop.swingx.JXDatePicker dobPicker;
     private javax.swing.JLabel jLabel10;
