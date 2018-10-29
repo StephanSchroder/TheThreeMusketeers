@@ -871,7 +871,7 @@ public class StockForm extends javax.swing.JFrame {
             String filename =JOptionPane.showInputDialog("Enter your desired fileName:");
         }
         
-        Stock.generateReport(fileName, stockList);
+        Stock.generateReport(fileName, stocks);
     }//GEN-LAST:event_generateReport
 
     /**
