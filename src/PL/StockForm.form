@@ -470,12 +470,11 @@
               <Font name="Times New Roman" size="14" style="1"/>
             </Property>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="5">
+              <StringArray count="4">
                 <StringItem index="0" value="Sorting..."/>
                 <StringItem index="1" value="Category"/>
-                <StringItem index="2" value="Date"/>
-                <StringItem index="3" value="Name"/>
-                <StringItem index="4" value="Stock Quantity"/>
+                <StringItem index="2" value="Name"/>
+                <StringItem index="3" value="Stock Quantity"/>
               </StringArray>
             </Property>
           </Properties>

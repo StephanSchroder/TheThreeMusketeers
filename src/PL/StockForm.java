@@ -9,8 +9,7 @@ import BLL.Category;
 import BLL.Common;
 import BLL.Sorting.NameSort;
 import BLL.Sorting.SortCategory;
-import BLL.Sorting.SortDOB;
-import BLL.Sorting.SortDate;
+
 import BLL.Sorting.SortStockQuantity;
 import BLL.Sorting.SortSurname;
 import BLL.Stock;
@@ -109,9 +108,9 @@ public class StockForm extends javax.swing.JFrame {
         {
            case "Category" :{ Collections.sort(stockList, new SortCategory());
            break;}
-           case "Date" :{ Collections.sort(stockList, new SortDate());};
+
            case "Stock Quantity" :{ Collections.sort(stockList, new SortStockQuantity()); break;}
-            case "Date of Birth" :{ Collections.sort(stockList, new SortDOB()); break;}
+
             case "Name" :{ Collections.sort(stockList, new NameSort()); break;}
             case "Surname" :{ Collections.sort(stockList, new SortSurname()); break;}
         }
@@ -417,7 +416,7 @@ public class StockForm extends javax.swing.JFrame {
 
         cmbSorting.setEditable(true);
         cmbSorting.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        cmbSorting.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sorting...", "Category", "Date", "Name", "Stock Quantity" }));
+        cmbSorting.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sorting...", "Category", "Name", "Stock Quantity" }));
 
         txtSearch.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
         txtSearch.setName("txtUserName"); // NOI18N

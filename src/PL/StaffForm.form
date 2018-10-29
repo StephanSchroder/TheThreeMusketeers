@@ -977,13 +977,12 @@
               <Font name="Times New Roman" size="14" style="1"/>
             </Property>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="6">
+              <StringArray count="5">
                 <StringItem index="0" value="Sorting..."/>
-                <StringItem index="1" value="Date of Birth"/>
-                <StringItem index="2" value="Name"/>
-                <StringItem index="3" value="Surname"/>
+                <StringItem index="1" value="Name"/>
+                <StringItem index="2" value="Surname"/>
+                <StringItem index="3" value=" "/>
                 <StringItem index="4" value=" "/>
-                <StringItem index="5" value=" "/>
               </StringArray>
             </Property>
           </Properties>

@@ -14,8 +14,7 @@ import javax.swing.table.DefaultTableModel;
 import  BLL.Common;
 import BLL.Sorting.NameSort;
 import BLL.Sorting.SortCategory;
-import BLL.Sorting.SortDOB;
-import BLL.Sorting.SortDate;
+
 import BLL.Sorting.SortStockQuantity;
 import BLL.Sorting.SortSurname;
 import java.awt.event.ItemEvent;
@@ -275,9 +274,9 @@ public class StaffForm extends javax.swing.JFrame {
         {
            case "Category" :{ Collections.sort(userList, new SortCategory());
            break;}
-           case "Date" :{ Collections.sort(userList, new SortDate());};
+
            case "Stock Quantity" :{ Collections.sort(userList, new SortStockQuantity()); break;}
-            case "Date of Birth" :{ Collections.sort(userList, new SortDOB()); break;}
+
             case "Name" :{ Collections.sort(userList, new NameSort()); break;}
             case "Surname" :{ Collections.sort(userList, new SortSurname()); break;}
         }
@@ -801,7 +800,7 @@ public class StaffForm extends javax.swing.JFrame {
         });
 
         cmbSorting.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        cmbSorting.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sorting...", "Date of Birth", "Name", "Surname", " ", " " }));
+        cmbSorting.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sorting...", "Name", "Surname", " ", " " }));
 
         txtSearch.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
         txtSearch.setName("txtUserName"); // NOI18N
