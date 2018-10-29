@@ -202,9 +202,9 @@ public class User extends Person implements Serializable {
         return user;
     }
     
-    public static User GetUserByUserForLogin(String name, String password) {
+    public static User GetUserByLoginDetails(String username, String password) {
         User user = null;
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "IDNumber"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("FirstName= '" + name+"' AND  Password= '"+password+"'"));
+        String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "IDNumber"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("Username= '" + username + "' AND  Password= '" + password + "'"));
         int count = dbData.length;
         if (count == 1)
         {

@@ -39,37 +39,45 @@ public class StockForm extends javax.swing.JFrame {
     /**
      * Creates new form StockForm
      */
+    
+    User currentUser;
+    List<Stock> stocks = new ArrayList<>();
+    int insertClick = 0;
+    int updateClick = 0;
   
+    
     public StockForm() {
         initComponents();
+        stocks = Stock.getStocks();
         initModel();
+        
         currentUser = null;
-         cmbChangeListener changeListener = new cmbChangeListener();
-         cmbSorting.addItemListener(changeListener);
+        
+        cmbChangeListener changeListener = new cmbChangeListener();
+        cmbSorting.addItemListener(changeListener);
     }
     
-    List<Stock>stockList = new ArrayList<>();
-    
-    private User currentUser;
     public StockForm(User u) {
         initComponents();
+        stocks = Stock.getStocks();
         initModel();
+        
         currentUser = u;
         lbLoginedInUser.setText(u.getFullname());
+        
+        cmbChangeListener changeListener = new cmbChangeListener();
+        cmbSorting.addItemListener(changeListener);
     }
     
     private void initModel(){
         disableAllFields();
-        stockList = setModel();
+        setModel();
         clearAllFields();
     }
-    int insertClick = 0;
-    int updateClick = 0;
 
-    public List<Stock> setModel() {
+    public void setModel() {
         DefaultTableModel model = (DefaultTableModel) tblData.getModel();
         model.setNumRows(0);
-        List<Stock> stocks = Stock.getStocks();
         populateCategoryCMB();
         Object rowData[] = new Object[6];
         Object columnData[] = new Object[6];
@@ -90,34 +98,42 @@ public class StockForm extends javax.swing.JFrame {
             rowData[5] = stocks.get(i).getStatus();
             model.addRow(rowData);
         }
-        return stocks;
     }
-    
-       private class cmbChangeListener implements ItemListener{
 
-
+    private class cmbChangeListener implements ItemListener {
         @Override
         public void itemStateChanged(ItemEvent e) {
-                    JComboBox cb = (JComboBox) e.getSource();
+            JComboBox cb = (JComboBox) e.getSource();
 
-    Object item = e.getItem();
+            Object item = e.getItem();
 
-    if (e.getStateChange() == ItemEvent.SELECTED) {
-        String txt=cmbSorting.getSelectedItem().toString();
-       switch (txt)
-        {
-           case "Category" :{ Collections.sort(stockList, new SortCategory());
-           break;}
-
-           case "Stock Quantity" :{ Collections.sort(stockList, new SortStockQuantity()); break;}
-
-            case "Name" :{ Collections.sort(stockList, new NameSort()); break;}
-            case "Surname" :{ Collections.sort(stockList, new SortSurname()); break;}
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                String txt = cmbSorting.getSelectedItem().toString();
+                System.out.println(cmbSorting.getSelectedItem().toString());
+                switch (txt) {
+                    case "Category": {
+                        stocks.sort(new SortCategory());
+                        break;
+                    }
+                   
+                    case "Stock Quantity": {
+                        stocks.sort(new SortStockQuantity());
+                        break;
+                    }
+                
+                    case "Name": {
+                        stocks.sort(new NameSort());
+                        break;
+                    }
+                    case "Surname": {
+                        stocks.sort(new SortSurname());
+                        break;
+                    }
+                }
+                setModel();
+            }
         }
     }
-        }
-   }
-
 
     public void disableAllFields() {
         txtStockID.setEnabled(false);
@@ -635,7 +651,8 @@ public class StockForm extends javax.swing.JFrame {
                 int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to add this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 0) {
                     new Stock(0, Category.getCategory(cmbCategory.getSelectedItem().toString()), itemName, new Date(), stockCount, status).registerStock();
-                   stockList =  setModel();
+                    stocks = Stock.getStocks();
+                    setModel();
                 }
                 clearAllFields();
                 disableAllFields();
@@ -709,7 +726,8 @@ public class StockForm extends javax.swing.JFrame {
                 int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to update this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 0) {
                     new Stock(Integer.valueOf(txtStockID.getText()), Category.getCategory(cmbCategory.getSelectedItem().toString()), itemName, new Date(), stockCount, status).updateStock();
-                   stockList =  setModel();
+                    stocks = Stock.getStocks();
+                    setModel();
                 }
                 clearAllFields();
                 disableAllFields();
@@ -732,6 +750,21 @@ public class StockForm extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // Delete Record
+        if (Common.checkInput(txtStockID.getText()) == 2 && Stock.getStock(Integer.parseInt(txtStockID.getText())) != null) {
+            int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to Delete this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
+            if (option == 0) {
+                new Stock(Integer.valueOf(txtStockID.getText()), Category.getCategory(cmbCategory.getSelectedItem().toString()), txtItemName.getText(), (Date) dobPicker.getDate(), (int) spStockCount.getValue(), txtStatus.getText()).deleteStock();
+                clearAllFields();
+                stocks = Stock.getStocks();
+                setModel();
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No valid stock item selected");
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void txtStockIDFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStockIDFocusGained
         // TODO add your handling code here:
@@ -810,167 +843,8 @@ public class StockForm extends javax.swing.JFrame {
     }//GEN-LAST:event_txtSearchFocusLost
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-
-      /*  if (insertClick == 0) {
-            insertClick++;
-            btnUpdate.setEnabled(false);
-            btnDelete.setEnabled(false);
-            clearAllFields();
-            prepareInsert();
-        } else {
-            resetColor();
-            String idNumber;
-            String firstName;
-            String lastName;
-            String title;
-            Date dateOfBirth;
-            String gender;
-            String country;
-            String province;
-            String city;
-            String street;
-            String postalCode;
-            String addressLine ;
-            String email;
-            String cellNumber;
-            String telNumber;
-            String username;
-            String password;
-            String accountType;
-
-            idNumber = txtIDNumber.getText();
-            firstName = txtFirstName.getText();
-            lastName = txtLastName.getText();
-            title = cmbTitle.getSelectedItem().toString();
-            dateOfBirth = dobPicker.getDate();
-            gender = cmbGender.getSelectedItem().toString();
-            country = txtCountry.getText();
-            province = (txtProvince.getText() != null) ? txtProvince.getText() : "";
-            city = (txtCity.getText() != null) ? txtCity.getText() : "";
-            street = (txtStreet.getText() != null) ? txtStreet.getText() : "";
-            postalCode = (txtPostalCode.getText() != null) ? txtPostalCode.getText() : "";
-            addressLine = (txtAddressLine.getText() != null) ? txtAddressLine.getText() : "";
-            email = (txtEmail.getText() != null) ? txtEmail.getText() : "";
-            cellNumber = (txtCell.getText() != null) ? txtCell.getText() : "";
-            telNumber = (txtTel.getText() != null) ? txtTel.getText() : "";
-            username = txtUsername.getText();
-            password = txtPassword.getText();
-            accountType = cmbAccountType.getSelectedItem().toString();
-
-            boolean check = true;
-            if (Common.checkInput(idNumber) != 10 || idNumber.length() != 13) {
-                check = false;
-                txtIDNumber.setBackground(Color.red);
-                txtIDNumber.setToolTipText("Only numerical values. Must be 13 characters. Must be valid RSA ID Number");
-            }
-            if (Common.checkInput(firstName) != 1 || firstName.length() > 20) {
-                check = false;
-                txtFirstName.setBackground(Color.red);
-                txtFirstName.setToolTipText("Only alphabetical characters. Max 20 characters");
-            }
-            if (Common.checkInput(lastName) != 1 || lastName.length() > 20) {
-                check = false;
-                txtLastName.setBackground(Color.red);
-                txtLastName.setToolTipText("Only alphabetical characters. Max 20 characters");
-            }
-            if (!(Common.checkInput(title) == 1 || Common.checkInput(title) == 5) || title.length() > 4) {
-                check = false;
-                cmbTitle.setBackground(Color.red);
-                cmbTitle.setToolTipText("Only alphabetical characters. Max 4 characters");
-            }
-            //DATE OF BIRTH CHECK NOT INCLUDED
-            if (Common.checkInput(gender) != 1 || gender.length() > 6) {
-                check = false;
-                cmbGender.setBackground(Color.red);
-                cmbGender.setToolTipText("Only alphabetical characters. Max 6 characters");
-            }
-            if (Common.checkInput(country) != 1 || country.length() > 20) {
-                check = false;
-                txtCountry.setBackground(Color.red);
-                txtCountry.setToolTipText("Only alphabetical characters. Max 20 characters");
-            }
-            if (!(Common.checkInput(province) == 0 || Common.checkInput(province) == 1 || Common.checkInput(province) == 5) || province.length() > 20) {
-                check = false;
-                txtProvince.setBackground(Color.orange);
-                txtProvince.setToolTipText("(Optional Field) Only alphabetical characters and optional special characters. Max 20 characters");
-            }
-            if (!(Common.checkInput(city) == 0 || Common.checkInput(city) == 1) || city.length() > 30) {
-                check = false;
-                txtCity.setBackground(Color.orange);
-                txtCity.setToolTipText("(Optional Field) Only alphabetical characters. Max 30 characters");
-            }
-            if (!(Common.checkInput(street) == 0 || Common.checkInput(street) == 1 || Common.checkInput(street) == 4) || street.length() > 30) {
-                check = false;
-                txtStreet.setBackground(Color.orange);
-                txtStreet.setToolTipText("(Optional Field) Only alphabetical characters and optional numerical values. Max 30 characters");
-            }
-            if (!(Common.checkInput(postalCode) == 0 || Common.checkInput(postalCode) == 2) || postalCode.length() > 10) {
-                check = false;
-                txtPostalCode.setBackground(Color.orange);
-                txtPostalCode.setToolTipText("(Optional Field) Only numerical values. Max 10 characters");
-            }
-            if (addressLine.length() > 50) {
-                check = false;
-                txtAddressLine.setBackground(Color.orange);
-                txtAddressLine.setToolTipText("(Optional Field) Any characters. Max 50 characters");
-            }
-            if (!(Common.checkInput(email) == 0 || Common.checkInput(email) == 9) || email.length() > 30) {
-                check = false;
-                txtEmail.setBackground(Color.orange);
-                txtEmail.setToolTipText("(Optional Field) Only valid email address. Max 30 characters");
-            }
-            if (!(Common.checkInput(cellNumber) == 0 || (Common.checkInput(cellNumber) == 2 && cellNumber.length() == 10))) {
-                check = false;
-                txtCell.setBackground(Color.orange);
-                txtCell.setToolTipText("(Optional Field) Only numerical values. Must be 10 characters");
-            }
-            if (!(Common.checkInput(telNumber) == 0 || (Common.checkInput(telNumber) == 2 && telNumber.length() == 10))) {
-                check = false;
-                txtTel.setBackground(Color.orange);
-                txtTel.setToolTipText("(Optional Field) Only numerical values. Must be 10 characters");
-            }
-            if (Common.checkInput(username) != 1 || username.length() > 20) {
-                check = false;
-                txtUsername.setBackground(Color.red);
-                txtUsername.setToolTipText("Only alphabetical characters. Max 20 characters");
-            }
-            if (Common.checkInput(password) != 7 || password.length() < 4 || password.length() > 20) {
-                check = false;
-                txtPassword.setBackground(Color.red);
-                txtPassword.setToolTipText("Must contain alphabetical characters and at least one numerical value and at least one special character. Min 4 characters. Max 20 characters");
-            }
-            if (Common.checkInput(accountType) != 1 || accountType.length() > 50) {
-                check = false;
-                cmbAccountType.setBackground(Color.red);
-                cmbAccountType.setToolTipText("Only alphabetical characters. Max 50 characters");
-            }
-
-            if (check == true) {
-                int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to add this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
-                if (option == 0) {
-                    new User(firstName, lastName, title, dateOfBirth, gender, country, province, city, street, postalCode, addressLine, email, cellNumber, telNumber, new Date(), 0, username, password, accountType, idNumber).registerUser();
-                    setModel();
-                }
-                clearAllFields();
-                disableAllFields();
-                resetColor();
-                insertClick = 0;
-                btnSearch.setEnabled(true);
-                btnUpdate.setEnabled(true);
-                btnDelete.setEnabled(true);
-            } else {
-                int option = JOptionPane.showConfirmDialog(this, "There were some errors, would you like to fix them?", "Confirmation.", JOptionPane.YES_NO_OPTION);
-                if (option == 1) {
-                    clearAllFields();
-                    disableAllFields();
-                    resetColor();
-                    insertClick = 0;
-                    btnSearch.setEnabled(true);
-                    btnUpdate.setEnabled(true);
-                    btnDelete.setEnabled(true);
-                }
-            }
-        }*/
+        stocks = Stock.getStocksSearch(txtSearch.getText());
+        setModel();
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void btnLogOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOffActionPerformed
@@ -990,7 +864,7 @@ public class StockForm extends javax.swing.JFrame {
             String filename =JOptionPane.showInputDialog("Enter your desired fileName:");
         }
         
-        Stock.generateReport(fileName, stockList);
+        Stock.generateReport(fileName, stocks);
     }//GEN-LAST:event_generateReport
 
     /**

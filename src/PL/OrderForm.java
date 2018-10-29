@@ -626,181 +626,6 @@ public class OrderForm extends javax.swing.JFrame {
         }*/
     }//GEN-LAST:event_tblSellItemsMouseClicked
 
-    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-       /* if (insertClick == 0) {
-            insertClick++;
-            btnUpdate.setEnabled(false);
-            btnDelete.setEnabled(false);
-            clearAllFields();
-            prepareInsert();
-        } else {
-            resetColor();
-            String category = null;
-            String itemName = null;
-            int stockCount = 0;
-            String status = null;
-
-            category = cmbCategory.getSelectedItem().toString();
-            itemName = txtItemName.getText();
-            stockCount = (int) spStockCount.getValue();
-            status = txtStatus.getText();
-
-            boolean check = true;
-            if (Common.checkInput(category) != 1 || category.length() > 50) {
-                check = false;
-                cmbCategory.setBackground(Color.red);
-                cmbCategory.setToolTipText("Only alphabetical characters. Max 50 characters");
-            }
-            if (Common.checkInput(itemName) != 1 || itemName.length() > 50) {
-                check = false;
-                txtItemName.setBackground(Color.red);
-                txtItemName.setToolTipText("Only alphabetical characters. Max 50 characters");
-            }
-            if (Common.checkInput(String.valueOf(stockCount)) != 2 || stockCount == 0 || stockCount > 10000) {
-                check = false;
-                spStockCount.setBackground(Color.red);
-                spStockCount.setToolTipText("Only numerical value between 1 and 10000");
-            }
-            if (Common.checkInput(status) != 1 || status.length() > 20) {
-                check = false;
-                txtStatus.setBackground(Color.red);
-                txtStatus.setToolTipText("Only alphabetical characters. Max 20 characters");
-            }
-
-            if (check == true) {
-                int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to add this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
-                if (option == 0) {
-                    new Stock(0, Category.getCategory(cmbCategory.getSelectedItem().toString()), itemName, new Date(), stockCount, status).registerStock();
-                    setModel();
-                }
-                clearAllFields();
-                disableAllFields();
-                resetColor();
-                insertClick = 0;
-                btnAdd.setEnabled(true);
-                btnUpdate.setEnabled(true);
-                btnDelete.setEnabled(true);
-            } else {
-                int option = JOptionPane.showConfirmDialog(this, "There were some errors, would you like to fix them?", "Confirmation.", JOptionPane.YES_NO_OPTION);
-                if (option == 1) {
-                    clearAllFields();
-                    disableAllFields();
-                    resetColor();
-                    insertClick = 0;
-                    btnAdd.setEnabled(true);
-                    btnUpdate.setEnabled(true);
-                    btnDelete.setEnabled(true);
-                }
-            }
-        }*/
-    }//GEN-LAST:event_btnAddActionPerformed
-
-    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-     /*   //Update record
-        if (updateClick == 0) {
-            updateClick++;
-            btnAdd.setEnabled(false);
-            btnDelete.setEnabled(false);
-            prepareUpdate();
-        } else {
-            resetColor();
-            String category = null;
-            String itemName = null;
-            int stockCount = 0;
-            String status = null;
-
-            category = cmbCategory.getSelectedItem().toString();
-            itemName = txtItemName.getText();
-            stockCount = (int) spStockCount.getValue();
-            status = txtStatus.getText();
-
-            boolean check = true;
-            if (Common.checkInput(txtStockID.getText()) != 2 || Stock.getStock(Integer.parseInt(txtStockID.getText())) == null) {
-                check = false;
-                txtStockID.setBackground(Color.red);
-                txtStockID.setToolTipText("Invalid Stock ID");
-            }
-            if (Common.checkInput(category) != 1 || category.length() > 50) {
-                check = false;
-                cmbCategory.setBackground(Color.red);
-                cmbCategory.setToolTipText("Only alphabetical characters. Max 50 characters");
-            }
-            if (Common.checkInput(itemName) != 1 || itemName.length() > 50) {
-                check = false;
-                txtItemName.setBackground(Color.red);
-                txtItemName.setToolTipText("Only alphabetical characters. Max 50 characters");
-            }
-            if (Common.checkInput(String.valueOf(stockCount)) != 2 || stockCount == 0 || stockCount > 10000) {
-                check = false;
-                spStockCount.setBackground(Color.red);
-                spStockCount.setToolTipText("Only numerical value between 1 and 10000");
-            }
-            if (Common.checkInput(status) != 1 || status.length() > 20) {
-                check = false;
-                txtStatus.setBackground(Color.red);
-                txtStatus.setToolTipText("Only alphabetical characters. Max 20 characters");
-            }
-
-            if (check == true) {
-                int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to update this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
-                if (option == 0) {
-                    new Stock(Integer.valueOf(txtStockID.getText()), Category.getCategory(cmbCategory.getSelectedItem().toString()), itemName, new Date(), stockCount, status).updateStock();
-                    setModel();
-                }
-                clearAllFields();
-                disableAllFields();
-                resetColor();
-                updateClick = 0;
-                btnAdd.setEnabled(true);
-                btnUpdate.setEnabled(true);
-                btnDelete.setEnabled(true);
-            } else {
-                int option = JOptionPane.showConfirmDialog(this, "There were some errors, would you like to fix them?", "Confirmation.", JOptionPane.YES_NO_OPTION);
-                if (option == 1) {
-                    clearAllFields();
-                    disableAllFields();
-                    resetColor();
-                    updateClick = 0;
-                    btnAdd.setEnabled(true);
-                    btnUpdate.setEnabled(true);
-                    btnDelete.setEnabled(true);
-                }
-            }
-        }*/
-    }//GEN-LAST:event_btnUpdateActionPerformed
-
-    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-     /*   // Delete Record
-        if (Common.checkInput(txtStockID.getText()) == 2 && Stock.getStock(Integer.parseInt(txtStockID.getText())) != null) {
-            int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to Delete this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
-            if (option == 0) {
-                new Stock(Integer.valueOf(txtStockID.getText()), Category.getCategory(cmbCategory.getSelectedItem().toString()), txtItemName.getText(), (Date) dobPicker.getDate(), (int) spStockCount.getValue(), txtStatus.getText()).deleteStock();
-                clearAllFields();
-                setModel();
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "No valid stock item selected");
-        }*/
-    }//GEN-LAST:event_btnDeleteActionPerformed
-
-    private void txtOrderIDFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtOrderIDFocusGained
-        // TODO add your handling code here:
-        if (txtOrderID.getText().trim().equals("")) {
-            txtOrderID.setText("Stock ID");
-
-        }
-        txtOrderID.setForeground(Color.LIGHT_GRAY);
-    }//GEN-LAST:event_txtOrderIDFocusGained
-
-    private void txtOrderIDFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtOrderIDFocusLost
-        // TODO add your handling code here:
-        if (txtOrderID.getText().trim().equals("Stock ID")) {
-            txtOrderID.setText("");
-
-        }
-        txtOrderID.setForeground(Color.BLACK);
-    }//GEN-LAST:event_txtOrderIDFocusLost
-
     private void txtSearchOrdersFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchOrdersFocusGained
         // TODO add your handling code here:
         if (txtSearchOrders.getText().trim().equals("")) {
@@ -1042,6 +867,181 @@ public class OrderForm extends javax.swing.JFrame {
         staff.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_mnOpenStaffActionPerformed
+
+    private void txtOrderIDFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtOrderIDFocusLost
+        // TODO add your handling code here:
+        if (txtOrderID.getText().trim().equals("Stock ID")) {
+            txtOrderID.setText("");
+
+        }
+        txtOrderID.setForeground(Color.BLACK);
+    }//GEN-LAST:event_txtOrderIDFocusLost
+
+    private void txtOrderIDFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtOrderIDFocusGained
+        // TODO add your handling code here:
+        if (txtOrderID.getText().trim().equals("")) {
+            txtOrderID.setText("Stock ID");
+
+        }
+        txtOrderID.setForeground(Color.LIGHT_GRAY);
+    }//GEN-LAST:event_txtOrderIDFocusGained
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        /*   // Delete Record
+        if (Common.checkInput(txtStockID.getText()) == 2 && Stock.getStock(Integer.parseInt(txtStockID.getText())) != null) {
+            int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to Delete this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
+            if (option == 0) {
+                new Stock(Integer.valueOf(txtStockID.getText()), Category.getCategory(cmbCategory.getSelectedItem().toString()), txtItemName.getText(), (Date) dobPicker.getDate(), (int) spStockCount.getValue(), txtStatus.getText()).deleteStock();
+                clearAllFields();
+                setModel();
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No valid stock item selected");
+        }*/
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        /*   //Update record
+        if (updateClick == 0) {
+            updateClick++;
+            btnAdd.setEnabled(false);
+            btnDelete.setEnabled(false);
+            prepareUpdate();
+        } else {
+            resetColor();
+            String category = null;
+            String itemName = null;
+            int stockCount = 0;
+            String status = null;
+
+            category = cmbCategory.getSelectedItem().toString();
+            itemName = txtItemName.getText();
+            stockCount = (int) spStockCount.getValue();
+            status = txtStatus.getText();
+
+            boolean check = true;
+            if (Common.checkInput(txtStockID.getText()) != 2 || Stock.getStock(Integer.parseInt(txtStockID.getText())) == null) {
+                check = false;
+                txtStockID.setBackground(Color.red);
+                txtStockID.setToolTipText("Invalid Stock ID");
+            }
+            if (Common.checkInput(category) != 1 || category.length() > 50) {
+                check = false;
+                cmbCategory.setBackground(Color.red);
+                cmbCategory.setToolTipText("Only alphabetical characters. Max 50 characters");
+            }
+            if (Common.checkInput(itemName) != 1 || itemName.length() > 50) {
+                check = false;
+                txtItemName.setBackground(Color.red);
+                txtItemName.setToolTipText("Only alphabetical characters. Max 50 characters");
+            }
+            if (Common.checkInput(String.valueOf(stockCount)) != 2 || stockCount == 0 || stockCount > 10000) {
+                check = false;
+                spStockCount.setBackground(Color.red);
+                spStockCount.setToolTipText("Only numerical value between 1 and 10000");
+            }
+            if (Common.checkInput(status) != 1 || status.length() > 20) {
+                check = false;
+                txtStatus.setBackground(Color.red);
+                txtStatus.setToolTipText("Only alphabetical characters. Max 20 characters");
+            }
+
+            if (check == true) {
+                int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to update this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
+                if (option == 0) {
+                    new Stock(Integer.valueOf(txtStockID.getText()), Category.getCategory(cmbCategory.getSelectedItem().toString()), itemName, new Date(), stockCount, status).updateStock();
+                    setModel();
+                }
+                clearAllFields();
+                disableAllFields();
+                resetColor();
+                updateClick = 0;
+                btnAdd.setEnabled(true);
+                btnUpdate.setEnabled(true);
+                btnDelete.setEnabled(true);
+            } else {
+                int option = JOptionPane.showConfirmDialog(this, "There were some errors, would you like to fix them?", "Confirmation.", JOptionPane.YES_NO_OPTION);
+                if (option == 1) {
+                    clearAllFields();
+                    disableAllFields();
+                    resetColor();
+                    updateClick = 0;
+                    btnAdd.setEnabled(true);
+                    btnUpdate.setEnabled(true);
+                    btnDelete.setEnabled(true);
+                }
+            }
+        }*/
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        /* if (insertClick == 0) {
+            insertClick++;
+            btnUpdate.setEnabled(false);
+            btnDelete.setEnabled(false);
+            clearAllFields();
+            prepareInsert();
+        } else {
+            resetColor();
+            String category = null;
+            String itemName = null;
+            int stockCount = 0;
+            String status = null;
+
+            category = cmbCategory.getSelectedItem().toString();
+            itemName = txtItemName.getText();
+            stockCount = (int) spStockCount.getValue();
+            status = txtStatus.getText();
+
+            boolean check = true;
+            if (Common.checkInput(category) != 1 || category.length() > 50) {
+                check = false;
+                cmbCategory.setBackground(Color.red);
+                cmbCategory.setToolTipText("Only alphabetical characters. Max 50 characters");
+            }
+            if (Common.checkInput(itemName) != 1 || itemName.length() > 50) {
+                check = false;
+                txtItemName.setBackground(Color.red);
+                txtItemName.setToolTipText("Only alphabetical characters. Max 50 characters");
+            }
+            if (Common.checkInput(String.valueOf(stockCount)) != 2 || stockCount == 0 || stockCount > 10000) {
+                check = false;
+                spStockCount.setBackground(Color.red);
+                spStockCount.setToolTipText("Only numerical value between 1 and 10000");
+            }
+            if (Common.checkInput(status) != 1 || status.length() > 20) {
+                check = false;
+                txtStatus.setBackground(Color.red);
+                txtStatus.setToolTipText("Only alphabetical characters. Max 20 characters");
+            }
+
+            if (check == true) {
+                int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to add this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
+                if (option == 0) {
+                    new Stock(0, Category.getCategory(cmbCategory.getSelectedItem().toString()), itemName, new Date(), stockCount, status).registerStock();
+                    setModel();
+                }
+                clearAllFields();
+                disableAllFields();
+                resetColor();
+                insertClick = 0;
+                btnAdd.setEnabled(true);
+                btnUpdate.setEnabled(true);
+                btnDelete.setEnabled(true);
+            } else {
+                int option = JOptionPane.showConfirmDialog(this, "There were some errors, would you like to fix them?", "Confirmation.", JOptionPane.YES_NO_OPTION);
+                if (option == 1) {
+                    clearAllFields();
+                    disableAllFields();
+                    resetColor();
+                    insertClick = 0;
+                    btnAdd.setEnabled(true);
+                    btnUpdate.setEnabled(true);
+                    btnDelete.setEnabled(true);
+                }
+            }
+        }*/
+    }//GEN-LAST:event_btnAddActionPerformed
 
     /**
      * @param args the command line arguments
