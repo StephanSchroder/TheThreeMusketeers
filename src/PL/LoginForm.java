@@ -166,10 +166,6 @@ public class LoginForm extends javax.swing.JFrame {
         //3 = User found but not authorized to login
         //4 = User login successful
         //5 = Admin login successful
-        User u;
-        StaffForm staff;
-        StockForm stock;
-                
         String username = txtUsername.getText().trim();
         String password = txtPassword.getText().trim();
         if (username.equals("") || username.equals("Username")) {
@@ -194,9 +190,7 @@ public class LoginForm extends javax.swing.JFrame {
                 case 4:
                 JOptionPane.showMessageDialog(this, "User Login", "Successfull Login", 1);
                 //User Login
-                u = User.GetUserByUserForLogin(username, password);
-                stock = new StockForm(u);
-                stock.setVisible(true);
+                new StockForm(User.GetUserByLoginDetails(username, password)).setVisible(true);
                 this.dispose();
                 
                 break;
@@ -204,23 +198,18 @@ public class LoginForm extends javax.swing.JFrame {
                 if (!cbAdminCheck1.isSelected()) {
                     JOptionPane.showMessageDialog(this, "User Login", "Successfull Login", 1);
                     //User Login
-                    u = User.GetUserByUserForLogin(username, password);
-                    stock = new StockForm(u);
-                    stock.setVisible(true);
+                    new StockForm(User.GetUserByLoginDetails(username, password)).setVisible(true);
                     this.dispose();
 
                 } else {
                     JOptionPane.showMessageDialog(this, "Admin Login", "Successfull Login", 1);
                     //Admin Login
-                    u = User.GetUserByUserForLogin(username, password);
                     String options[] = {"Staff Page", "Stocks Page"};
-                    int option = JOptionPane.showOptionDialog(this, "Welcome " + username + " /nPlease select an option to open", "Succesfull Login.", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+                    int option = JOptionPane.showOptionDialog(this, "Welcome " + username + " ! Please select an option to open", "Succesfull Login.", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
                     if (option == 0) {
-                        staff = new StaffForm(u);
-                        staff.setVisible(true);
+                        new StaffForm(User.GetUserByLoginDetails(username, password)).setVisible(true);
                     } else if (option == 1) {
-                        stock = new StockForm(u);
-                        stock.setVisible(true);
+                        new StockForm(User.GetUserByLoginDetails(username, password)).setVisible(true);
                     }
                 }
                 this.dispose();

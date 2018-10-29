@@ -285,4 +285,18 @@ public class Stock {
         //Execute
         DataHandler.deleteRecords("Stock", conditions);
     }
+
+    @Override
+    public String toString() {
+        return "Stock{" + "stockID=" + stockID + ", category=" + category + ", itemName=" + itemName + ", dateAdded=" + dateAdded + ", stockCount=" + stockCount + ", status=" + status + '}';
+    }
+    
+    public static void generateReport(String filename, List<Stock> data )
+    {
+        Reports report = new Reports();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        Date date = new Date();
+        report.createReport( (dateFormat.format(date)+filename), data);
+    }
+    
 }

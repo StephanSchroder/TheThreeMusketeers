@@ -5,8 +5,6 @@
  */
 package stationerymanagement;
 
-import PL.frmLogin;
-
 /**
  *
  * @author Stephan
