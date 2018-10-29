@@ -9,6 +9,7 @@ import DAL.*;
 import java.util.Date;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -273,4 +274,18 @@ public class Stock {
         //Execute
         DataHandler.deleteRecords("Stock", conditions);
     }
+
+    @Override
+    public String toString() {
+        return "Stock{" + "stockID=" + stockID + ", category=" + category + ", itemName=" + itemName + ", dateAdded=" + dateAdded + ", stockCount=" + stockCount + ", status=" + status + '}';
+    }
+    
+    public static void generateReport(String filename, List<Stock> data )
+    {
+        Reports report = new Reports();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        Date date = new Date();
+        report.createReport( (dateFormat.format(date)+filename), data);
+    }
+    
 }

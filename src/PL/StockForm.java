@@ -197,7 +197,7 @@ public class StockForm extends javax.swing.JFrame {
         tblData = new javax.swing.JTable();
         btnAdd = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
-        btnDelete = new javax.swing.JButton();
+        btnReport = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
@@ -216,6 +216,7 @@ public class StockForm extends javax.swing.JFrame {
         btnSearch = new javax.swing.JButton();
         btnLogOff = new javax.swing.JButton();
         lbLoginedInUser = new javax.swing.JLabel();
+        btnDelete1 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         staffMenu = new javax.swing.JMenu();
         jMenuItem6 = new javax.swing.JMenuItem();
@@ -279,13 +280,13 @@ public class StockForm extends javax.swing.JFrame {
             }
         });
 
-        btnDelete.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        btnDelete.setText("Delete Record");
-        btnDelete.setToolTipText("");
-        btnDelete.setName("btnDeleteRecord"); // NOI18N
-        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+        btnReport.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        btnReport.setText("Create Report");
+        btnReport.setToolTipText("");
+        btnReport.setName("btnDeleteRecord"); // NOI18N
+        btnReport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteActionPerformed(evt);
+                generateReport(evt);
             }
         });
 
@@ -451,6 +452,16 @@ public class StockForm extends javax.swing.JFrame {
         lbLoginedInUser.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         lbLoginedInUser.setText("Logged In User");
 
+        btnDelete1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        btnDelete1.setText("Delete Record");
+        btnDelete1.setToolTipText("");
+        btnDelete1.setName("btnDeleteRecord"); // NOI18N
+        btnDelete1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDelete1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -467,7 +478,6 @@ public class StockForm extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addGap(14, 14, 14)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(btnDelete, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnAdd, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnUpdate, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGap(182, 182, 182)
@@ -477,8 +487,14 @@ public class StockForm extends javax.swing.JFrame {
                             .addGap(18, 18, 18)
                             .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(18, 18, 18)
-                            .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(18, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(34, 34, 34)
+                    .addComponent(btnDelete1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGap(913, 913, 913)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -501,11 +517,16 @@ public class StockForm extends javax.swing.JFrame {
                         .addGap(14, 14, 14)
                         .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(104, 104, 104))
+                .addGap(24, 24, 24)
+                .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                    .addContainerGap(563, Short.MAX_VALUE)
+                    .addComponent(btnDelete1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(146, 146, 146)))
         );
 
         staffMenu.setText("Staff");
@@ -574,7 +595,7 @@ public class StockForm extends javax.swing.JFrame {
         if (insertClick == 0) {
             insertClick++;
             btnUpdate.setEnabled(false);
-            btnDelete.setEnabled(false);
+            btnReport.setEnabled(false);
             clearAllFields();
             prepareInsert();
         } else {
@@ -623,7 +644,7 @@ public class StockForm extends javax.swing.JFrame {
                 insertClick = 0;
                 btnAdd.setEnabled(true);
                 btnUpdate.setEnabled(true);
-                btnDelete.setEnabled(true);
+                btnReport.setEnabled(true);
             } else {
                 int option = JOptionPane.showConfirmDialog(this, "There were some errors, would you like to fix them?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 1) {
@@ -633,7 +654,7 @@ public class StockForm extends javax.swing.JFrame {
                     insertClick = 0;
                     btnAdd.setEnabled(true);
                     btnUpdate.setEnabled(true);
-                    btnDelete.setEnabled(true);
+                    btnReport.setEnabled(true);
                 }
             }
         }
@@ -644,7 +665,7 @@ public class StockForm extends javax.swing.JFrame {
         if (updateClick == 0) {
             updateClick++;
             btnAdd.setEnabled(false);
-            btnDelete.setEnabled(false);
+            btnReport.setEnabled(false);
             prepareUpdate();
         } else {
             resetColor();
@@ -697,7 +718,7 @@ public class StockForm extends javax.swing.JFrame {
                 updateClick = 0;
                 btnAdd.setEnabled(true);
                 btnUpdate.setEnabled(true);
-                btnDelete.setEnabled(true);
+                btnReport.setEnabled(true);
             } else {
                 int option = JOptionPane.showConfirmDialog(this, "There were some errors, would you like to fix them?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 1) {
@@ -707,25 +728,11 @@ public class StockForm extends javax.swing.JFrame {
                     updateClick = 0;
                     btnAdd.setEnabled(true);
                     btnUpdate.setEnabled(true);
-                    btnDelete.setEnabled(true);
+                    btnReport.setEnabled(true);
                 }
             }
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
-
-    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        // Delete Record
-        if (Common.checkInput(txtStockID.getText()) == 2 && Stock.getStock(Integer.parseInt(txtStockID.getText())) != null) {
-            int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to Delete this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
-            if (option == 0) {
-                new Stock(Integer.valueOf(txtStockID.getText()), Category.getCategory(cmbCategory.getSelectedItem().toString()), txtItemName.getText(), (Date) dobPicker.getDate(), (int) spStockCount.getValue(), txtStatus.getText()).deleteStock();
-                clearAllFields();
-               stockList =  setModel();
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "No valid stock item selected");
-        }
-    }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void txtStockIDFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStockIDFocusGained
         // TODO add your handling code here:
@@ -972,6 +979,21 @@ public class StockForm extends javax.swing.JFrame {
         Common.logOff(this);
     }//GEN-LAST:event_btnLogOffActionPerformed
 
+    private void btnDelete1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelete1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnDelete1ActionPerformed
+
+    private void generateReport(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateReport
+        // TODO add your handling code here:
+        String fileName="";
+        while(fileName.equals(""))
+        {
+            String filename =JOptionPane.showInputDialog("Enter your desired fileName:");
+        }
+        
+        Stock.generateReport(fileName, stockList);
+    }//GEN-LAST:event_generateReport
+
     /**
      * @param args the command line arguments
      */
@@ -1009,8 +1031,9 @@ public class StockForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
-    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnDelete1;
     private javax.swing.JButton btnLogOff;
+    private javax.swing.JButton btnReport;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox<String> cmbCategory;
