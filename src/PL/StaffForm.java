@@ -1223,15 +1223,6 @@ public class StaffForm extends javax.swing.JFrame {
         String searchKeyword = txtSearch.getText();
         switch(parameter)
         {
-
-
-
-
-
-
-
-
-
             case "First Name":{userList=User.getUserByFirstName(searchKeyword);   break;}
             case "Last Name":{userList=User.getUserByLastName(searchKeyword);  break;}
             case "FullName":{userList=User.getUserByFullName(searchKeyword);  break;}
