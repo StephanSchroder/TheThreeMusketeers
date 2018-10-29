@@ -19,7 +19,7 @@ public class SortCategory implements Comparator {
         Stock stock1 = (Stock)o1;
         Stock stock2 = (Stock)o2;
         
-        return stock1.getCategory().getName().compareTo(stock2.getCategory().getName());
+        return stock1.getCategory().getName().toLowerCase().compareTo(stock2.getCategory().getName().toLowerCase());
     }
     
 }
