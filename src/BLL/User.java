@@ -365,7 +365,7 @@ public class User extends Person implements Serializable {
     
        public static List<User> getUserByFirstName(String firstName){
          List<User> users = new ArrayList<>();
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("FirstName=" + firstName));
+        String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("FirstName='" + firstName + "'"));
         int count = dbData.length;
         for (int i = 0; i < count; i++) {
             try {
@@ -379,7 +379,7 @@ public class User extends Person implements Serializable {
     
     public static List<User> getUserByLastName(String lastName){
        List<User> users = new ArrayList<>();
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("LastName=" + lastName));
+        String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("LastName='" + lastName + "'"));
         int count = dbData.length;
         for (int i = 0; i < count; i++) {
             try {
@@ -421,7 +421,7 @@ public class User extends Person implements Serializable {
     
        public static List<User> getUserByCountry(String country){
        List<User> users = new ArrayList<>();
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("Country=" + country));
+        String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("Country='" + country + "'"));
         int count = dbData.length;
         for (int i = 0; i < count; i++) {
             try {
@@ -435,7 +435,7 @@ public class User extends Person implements Serializable {
 
           public static List<User> getUserByCity(String city){
        List<User> users = new ArrayList<>();
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("City=" + city));
+        String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("City='" + city + "'"));
         int count = dbData.length;
         for (int i = 0; i < count; i++) {
             try {
@@ -448,7 +448,7 @@ public class User extends Person implements Serializable {
     }
        public static List<User> getUserByProvince(String province){
        List<User> users = new ArrayList<>();
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("Province=" + province));
+        String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("Province='" + province + "'"));
         int count = dbData.length;
         for (int i = 0; i < count; i++) {
             try {
@@ -462,7 +462,7 @@ public class User extends Person implements Serializable {
 
        public static List<User> getUserByTelNumber(String telNum){
        List<User> users = new ArrayList<>();
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("TelNumber=" + telNum));
+        String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("TelNumber='" + telNum + "'"));
         int count = dbData.length;
         for (int i = 0; i < count; i++) {
             try {
@@ -475,7 +475,7 @@ public class User extends Person implements Serializable {
     }
        public static List<User> getUserByCellNumber(String celNum){
        List<User> users = new ArrayList<>();
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("CellNumber=" + celNum));
+        String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("CellNumber='" + celNum + "'"));
         int count = dbData.length;
         for (int i = 0; i < count; i++) {
             try {
@@ -488,7 +488,7 @@ public class User extends Person implements Serializable {
     }
        public static List<User> getUserByEmail(String email){
        List<User> users = new ArrayList<>();
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("Email=" + email));
+        String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("Email='" + email + "'"));
         int count = dbData.length;
         for (int i = 0; i < count; i++) {
             try {
