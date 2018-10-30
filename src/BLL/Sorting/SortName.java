@@ -13,7 +13,7 @@ import java.util.Comparator;
  *
  * @author Stephan
  */
-public class NameSort implements Comparator {
+public class SortName implements Comparator {
 
     @Override
     public int compare(Object o1, Object o2) {

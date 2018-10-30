@@ -7,7 +7,7 @@ package PL;
 
 import BLL.Common;
 import BLL.User;
-import BLL.UserDoesNotExistException;
+import BLL.Exceptions.UserDoesNotExistException;
 import java.awt.Color;
 import javax.swing.JOptionPane;
 import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;

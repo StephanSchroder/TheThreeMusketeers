@@ -254,7 +254,6 @@ public class Stock {
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
         conditions.add("StockID=" + this.getStockID());
-        conditions.add("CategoryID=" + this.getCategory().getCategoryID());
         conditions.add("ItemName='" + this.getItemName()+ "'");
         conditions.add("StockCount=" + this.getStockCount());
         conditions.add("Status='" + this.getStatus()+ "'");

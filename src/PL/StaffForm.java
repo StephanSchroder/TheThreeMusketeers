@@ -12,12 +12,12 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import BLL.Common;
-import BLL.Sorting.NameSort;
+import BLL.Sorting.SortName;
 import BLL.Sorting.SortCategory;
 
 import BLL.Sorting.SortStockQuantity;
 import BLL.Sorting.SortSurname;
-import BLL.UserDoesNotExistException;
+import BLL.Exceptions.UserDoesNotExistException;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.ParseException;
@@ -292,7 +292,7 @@ public class StaffForm extends javax.swing.JFrame {
                     }
 
                     case "Name": {
-                        Collections.sort(userList, new NameSort());
+                        Collections.sort(userList, new SortName());
                         break;
                     }
                     case "Surname": {
@@ -1519,7 +1519,7 @@ public class StaffForm extends javax.swing.JFrame {
             txtPassword.setText(selectedUser.getPassword());
             cmbAccountType.setSelectedItem(selectedUser.getAccountType());
         } catch (ParseException ex) {
-            Logger.getLogger(frmStock.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(StaffForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_tblDataMouseClicked
 

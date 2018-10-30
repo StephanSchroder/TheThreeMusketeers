@@ -7,14 +7,14 @@ package PL;
 
 import BLL.Category;
 import BLL.Common;
-import BLL.Sorting.NameSort;
+import BLL.Sorting.SortName;
 import BLL.Sorting.SortCategory;
 
 import BLL.Sorting.SortStockQuantity;
 import BLL.Sorting.SortSurname;
 import BLL.Stock;
 import BLL.User;
-import BLL.UserDoesNotExistException;
+import BLL.Exceptions.UserDoesNotExistException;
 import java.awt.Color;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -118,7 +118,6 @@ public class StockForm extends javax.swing.JFrame {
 
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 String txt = cmbSorting.getSelectedItem().toString();
-                System.out.println(cmbSorting.getSelectedItem().toString());
                 switch (txt) {
                     case "Category":
                         stocks.sort(new SortCategory());
@@ -127,7 +126,7 @@ public class StockForm extends javax.swing.JFrame {
                         stocks.sort(new SortStockQuantity());
                         break;
                     case "Name":
-                        stocks.sort(new NameSort());
+                        stocks.sort(new SortName());
                         break;
                     case "Surname":
                         stocks.sort(new SortSurname());
@@ -172,7 +171,7 @@ public class StockForm extends javax.swing.JFrame {
         txtStockID.setToolTipText(null);
         txtItemName.setText("");
         txtItemName.setToolTipText(null);
-        cmbCategory.setSelectedIndex(0);
+        cmbCategory.setSelectedIndex((cmbCategory.getItemCount() > 0) ? 0 : -1);
         cmbCategory.setToolTipText(null);
         spStockCount.setValue(1);
         spStockCount.setToolTipText(null);
@@ -234,7 +233,7 @@ public class StockForm extends javax.swing.JFrame {
         btnSearch = new javax.swing.JButton();
         btnLogOff = new javax.swing.JButton();
         lbLoginedInUser = new javax.swing.JLabel();
-        btnDelete1 = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
         jLabel14 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         staffMenu = new javax.swing.JMenu();
@@ -472,18 +471,18 @@ public class StockForm extends javax.swing.JFrame {
         lbLoginedInUser.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         lbLoginedInUser.setText("Logged In As: ");
 
-        btnDelete1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        btnDelete1.setText("Delete Record");
-        btnDelete1.setToolTipText("");
-        btnDelete1.setName("btnDeleteRecord"); // NOI18N
-        btnDelete1.addActionListener(new java.awt.event.ActionListener() {
+        btnDelete.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        btnDelete.setText("Delete Record");
+        btnDelete.setToolTipText("");
+        btnDelete.setName("btnDeleteRecord"); // NOI18N
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDelete1ActionPerformed(evt);
+                btnDeleteActionPerformed(evt);
             }
         });
 
         jLabel14.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
-        jLabel14.setText("Order Form:");
+        jLabel14.setText("Stock Form:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -505,7 +504,7 @@ public class StockForm extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(btnAdd, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
-                                .addComponent(btnDelete1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(btnDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(140, 140, 140)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -543,7 +542,7 @@ public class StockForm extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnDelete1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -620,7 +619,7 @@ public class StockForm extends javax.swing.JFrame {
             txtStatus.setText(selectedStock.getStatus());
             dobPicker.setDate(selectedStock.getDateAdded());
         } catch (ParseException ex) {
-            Logger.getLogger(frmStock.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(StockForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_tblDataMouseClicked
 
@@ -628,7 +627,7 @@ public class StockForm extends javax.swing.JFrame {
         if (insertClick == 0) {
             insertClick++;
             btnUpdate.setEnabled(false);
-            btnDelete1.setEnabled(false);
+            btnDelete.setEnabled(false);
             clearAllFields();
             prepareInsert();
         } else {
@@ -638,7 +637,7 @@ public class StockForm extends javax.swing.JFrame {
             int stockCount = 0;
             String status = null;
 
-            category = cmbCategory.getSelectedItem().toString();
+            category = (cmbCategory.getItemCount() > 0) ? cmbCategory.getSelectedItem().toString() : "";
             itemName = txtItemName.getText();
             stockCount = (int) spStockCount.getValue();
             status = txtStatus.getText();
@@ -668,7 +667,7 @@ public class StockForm extends javax.swing.JFrame {
             if (check == true) {
                 int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to add this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 0) {
-                    new Stock(0, Category.getCategory(cmbCategory.getSelectedItem().toString()), itemName, new Date(), stockCount, status).registerStock();
+                    new Stock(0, Category.getCategory(category), itemName, new Date(), stockCount, status).registerStock();
                     stocks = Stock.getStocks();
                     setModel();
                 }
@@ -678,7 +677,7 @@ public class StockForm extends javax.swing.JFrame {
                 insertClick = 0;
                 btnAdd.setEnabled(true);
                 btnUpdate.setEnabled(true);
-                btnDelete1.setEnabled(true);
+                btnDelete.setEnabled(true);
             } else {
                 int option = JOptionPane.showConfirmDialog(this, "There were some errors, would you like to fix them?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 1) {
@@ -688,7 +687,7 @@ public class StockForm extends javax.swing.JFrame {
                     insertClick = 0;
                     btnAdd.setEnabled(true);
                     btnUpdate.setEnabled(true);
-                    btnDelete1.setEnabled(true);
+                    btnDelete.setEnabled(true);
                 }
             }
         }
@@ -699,22 +698,24 @@ public class StockForm extends javax.swing.JFrame {
         if (updateClick == 0) {
             updateClick++;
             btnAdd.setEnabled(false);
-            btnDelete1.setEnabled(false);
+            btnDelete.setEnabled(false);
             prepareUpdate();
         } else {
             resetColor();
+            String stockID = null;
             String category = null;
             String itemName = null;
             int stockCount = 0;
             String status = null;
-
-            category = cmbCategory.getSelectedItem().toString();
+            
+            stockID = txtStockID.getText();
+            category = (cmbCategory.getItemCount() > 0) ? cmbCategory.getSelectedItem().toString() : "";
             itemName = txtItemName.getText();
             stockCount = (int) spStockCount.getValue();
             status = txtStatus.getText();
 
             boolean check = true;
-            if (Common.checkInput(txtStockID.getText()) != 2 || Stock.getStock(Integer.parseInt(txtStockID.getText())) == null) {
+            if (Common.checkInput(stockID) != 2 || Stock.getStock(Integer.parseInt(stockID)) == null) {
                 check = false;
                 txtStockID.setBackground(Color.red);
                 txtStockID.setToolTipText("Invalid Stock ID");
@@ -743,7 +744,7 @@ public class StockForm extends javax.swing.JFrame {
             if (check == true) {
                 int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to update this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 0) {
-                    new Stock(Integer.valueOf(txtStockID.getText()), Category.getCategory(cmbCategory.getSelectedItem().toString()), itemName, new Date(), stockCount, status).updateStock();
+                    new Stock(Integer.valueOf(stockID), Category.getCategory(category), itemName, new Date(), stockCount, status).updateStock();
                     stocks = Stock.getStocks();
                     setModel();
                 }
@@ -753,7 +754,7 @@ public class StockForm extends javax.swing.JFrame {
                 updateClick = 0;
                 btnAdd.setEnabled(true);
                 btnUpdate.setEnabled(true);
-                btnDelete1.setEnabled(true);
+                btnDelete.setEnabled(true);
             } else {
                 int option = JOptionPane.showConfirmDialog(this, "There were some errors, would you like to fix them?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 1) {
@@ -763,26 +764,11 @@ public class StockForm extends javax.swing.JFrame {
                     updateClick = 0;
                     btnAdd.setEnabled(true);
                     btnUpdate.setEnabled(true);
-                    btnDelete1.setEnabled(true);
+                    btnDelete.setEnabled(true);
                 }
             }
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
-
-    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        // Delete Record
-        if (Common.checkInput(txtStockID.getText()) == 2 && Stock.getStock(Integer.parseInt(txtStockID.getText())) != null) {
-            int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to Delete this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
-            if (option == 0) {
-                new Stock(Integer.valueOf(txtStockID.getText()), Category.getCategory(cmbCategory.getSelectedItem().toString()), txtItemName.getText(), (Date) dobPicker.getDate(), (int) spStockCount.getValue(), txtStatus.getText()).deleteStock();
-                clearAllFields();
-                stocks = Stock.getStocks();
-                setModel();
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "No valid stock item selected");
-        }
-    }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void txtStockIDFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStockIDFocusGained
         // TODO add your handling code here:
@@ -870,10 +856,6 @@ public class StockForm extends javax.swing.JFrame {
         Common.logOff(this);
     }//GEN-LAST:event_btnLogOffActionPerformed
 
-    private void btnDelete1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelete1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnDelete1ActionPerformed
-
     private void generateReport(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateReport
         // TODO add your handling code here:
         String fileName = "";
@@ -897,6 +879,21 @@ public class StockForm extends javax.swing.JFrame {
         orderForm.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_mnOpenOrderFormActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // Delete Record
+        if (Common.checkInput(txtStockID.getText()) == 2 && Stock.getStock(Integer.parseInt(txtStockID.getText())) != null) {
+            int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to Delete this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
+            if (option == 0) {
+                new Stock(Integer.valueOf(txtStockID.getText()), null, txtItemName.getText(), (Date) dobPicker.getDate(), (int) spStockCount.getValue(), txtStatus.getText()).deleteStock();
+                clearAllFields();
+                stocks = Stock.getStocks();
+                setModel();
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No valid stock item selected");
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -935,7 +932,7 @@ public class StockForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
-    private javax.swing.JButton btnDelete1;
+    private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnLogOff;
     private javax.swing.JButton btnReport;
     private javax.swing.JButton btnSearch;

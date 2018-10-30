@@ -122,7 +122,7 @@
                               <Group type="103" groupAlignment="1" max="-2" attributes="0">
                                   <Component id="btnAdd" alignment="0" max="32767" attributes="0"/>
                                   <Component id="btnUpdate" alignment="1" pref="190" max="32767" attributes="0"/>
-                                  <Component id="btnDelete1" max="32767" attributes="0"/>
+                                  <Component id="btnDelete" max="32767" attributes="0"/>
                               </Group>
                               <Component id="btnReport" min="-2" pref="190" max="-2" attributes="0"/>
                           </Group>
@@ -172,7 +172,7 @@
                           <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                           <Component id="btnUpdate" min="-2" pref="60" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="btnDelete1" min="-2" pref="60" max="-2" attributes="0"/>
+                          <Component id="btnDelete" min="-2" pref="60" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="btnReport" min="-2" pref="60" max="-2" attributes="0"/>
                       </Group>
@@ -534,7 +534,7 @@
             <Property name="text" type="java.lang.String" value="Logged In As: "/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="btnDelete1">
+        <Component class="javax.swing.JButton" name="btnDelete">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Times New Roman" size="18" style="1"/>
@@ -544,7 +544,7 @@
             <Property name="name" type="java.lang.String" value="btnDeleteRecord" noResource="true"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDelete1ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDeleteActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel14">
@@ -552,7 +552,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Times New Roman" size="36" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Order Form:"/>
+            <Property name="text" type="java.lang.String" value="Stock Form:"/>
           </Properties>
         </Component>
       </SubComponents>
