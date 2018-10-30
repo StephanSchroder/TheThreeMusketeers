@@ -291,13 +291,19 @@ public class Stock {
     public String toString() {
         return "stockID=" + stockID + ", category=" + category + ", itemName=" + itemName + ", stockCount=" + stockCount;
     }
-    
-    public static void generateReport(String filename, List<Stock> data )
+     public static void generateReport(String filename, List<Stock> data )
     {
         Reports report = new Reports();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        Date date = new Date();
-        report.createReport( (dateFormat.format(date)+filename), data);
+        ArrayList<Stock> localData = (ArrayList<Stock>) data;
+        
+        report.createReport( (filename), localData);
     }
+    
+    public String getReportFormat()
+    {
+        String format =String.format("Product Name: %1$5s  Quantity:  %2$5d", this.getItemName(),this.getStockCount());
+        return format;
+    }
+    
     
 }
