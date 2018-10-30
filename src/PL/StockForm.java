@@ -197,7 +197,32 @@ public class StockForm extends javax.swing.JFrame {
         spStockCount.setBackground(Color.white);
         txtStatus.setBackground(Color.white);
         dobPicker.setBackground(Color.white);
-
+    }
+    
+    public void setSorting(boolean value) {
+        cmbSorting.setEnabled(value);
+    }
+    
+    public void setSearching(boolean value) {
+        txtSearch.setEnabled(value);
+        btnSearch.setEnabled(value);
+    }
+    
+    public void setCRUDOperations(boolean value) {
+        btnAdd.setEnabled(value);
+        btnUpdate.setEnabled(value);
+        btnDelete.setEnabled(value);
+    }
+    
+    public void setReport(boolean value) {
+        btnReport.setEnabled(value);
+    }
+    
+    public void setUIAccess(boolean value) {
+        setSorting(value);
+        setSearching(value);
+        setCRUDOperations(value);
+        setReport(value);
     }
 
     /**
@@ -626,8 +651,8 @@ public class StockForm extends javax.swing.JFrame {
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         if (insertClick == 0) {
             insertClick++;
-            btnUpdate.setEnabled(false);
-            btnDelete.setEnabled(false);
+            setUIAccess(false);
+            btnAdd.setEnabled(true);
             clearAllFields();
             prepareInsert();
         } else {
@@ -675,9 +700,7 @@ public class StockForm extends javax.swing.JFrame {
                 disableAllFields();
                 resetColor();
                 insertClick = 0;
-                btnAdd.setEnabled(true);
-                btnUpdate.setEnabled(true);
-                btnDelete.setEnabled(true);
+                setUIAccess(true);
             } else {
                 int option = JOptionPane.showConfirmDialog(this, "There were some errors, would you like to fix them?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 1) {
@@ -685,9 +708,7 @@ public class StockForm extends javax.swing.JFrame {
                     disableAllFields();
                     resetColor();
                     insertClick = 0;
-                    btnAdd.setEnabled(true);
-                    btnUpdate.setEnabled(true);
-                    btnDelete.setEnabled(true);
+                    setUIAccess(true);
                 }
             }
         }
@@ -697,8 +718,8 @@ public class StockForm extends javax.swing.JFrame {
         //Update record
         if (updateClick == 0) {
             updateClick++;
-            btnAdd.setEnabled(false);
-            btnDelete.setEnabled(false);
+            setUIAccess(false);
+            btnUpdate.setEnabled(true);
             prepareUpdate();
         } else {
             resetColor();
@@ -752,9 +773,7 @@ public class StockForm extends javax.swing.JFrame {
                 disableAllFields();
                 resetColor();
                 updateClick = 0;
-                btnAdd.setEnabled(true);
-                btnUpdate.setEnabled(true);
-                btnDelete.setEnabled(true);
+                setUIAccess(true);
             } else {
                 int option = JOptionPane.showConfirmDialog(this, "There were some errors, would you like to fix them?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 1) {
@@ -762,9 +781,7 @@ public class StockForm extends javax.swing.JFrame {
                     disableAllFields();
                     resetColor();
                     updateClick = 0;
-                    btnAdd.setEnabled(true);
-                    btnUpdate.setEnabled(true);
-                    btnDelete.setEnabled(true);
+                    setUIAccess(true);
                 }
             }
         }
@@ -858,12 +875,28 @@ public class StockForm extends javax.swing.JFrame {
 
     private void generateReport(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateReport
         // TODO add your handling code here:
-        String fileName = "";
-        while (fileName.equals("")) {
-            String filename = JOptionPane.showInputDialog("Enter your desired fileName:");
-        }
+        boolean retry = false;
+        do {
+            String fileName = JOptionPane.showInputDialog("Enter your desired file name:");
+            if (fileName != null) {
+                if (Common.checkInput(fileName) == 1 && fileName.length() > 0) {
+                    Stock.generateReport(fileName, stocks);
+                    retry = false;
+                }
+                else{
+                    if (JOptionPane.showConfirmDialog(this, "Invalid file name (must only be alphabetical characters), would you like to try again?", "Error", JOptionPane.YES_NO_OPTION)==0) {
+                        retry = true;
+                    }
+                    else {
+                        retry = false;
+                    }
+                }
+            }
+            else {
+                retry = false;
+            }
+        } while (retry);
 
-        Stock.generateReport(fileName, stocks);
     }//GEN-LAST:event_generateReport
 
     private void mnOpenStaffFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenStaffFormActionPerformed
