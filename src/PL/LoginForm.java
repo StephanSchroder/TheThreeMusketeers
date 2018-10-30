@@ -282,7 +282,7 @@ public class LoginForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegisterActionPerformed
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
-        Common.logOff(this);
+        System.exit(EXIT_ON_CLOSE);
     }//GEN-LAST:event_btnExitActionPerformed
 
     /**
