@@ -7,6 +7,7 @@ package PL;
 
 import BLL.Common;
 import BLL.User;
+import BLL.UserDoesNotExistException;
 import java.awt.Color;
 import javax.swing.JOptionPane;
 import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
@@ -17,23 +18,34 @@ import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
  */
 public class OrderForm extends javax.swing.JFrame {
 
+    private User currentUser;
+
     /**
      * Creates new form OrderForm
      */
     public OrderForm() {
         initComponents();
         currentUser = null;
-    }
-    private User currentUser;
-    public OrderForm(User u) {
-        initComponents();
-        currentUser = u;
-        lbLoginedInUser.setText(u.getFullname());
+        lbLoginedInUser.setText("No User Selected");
+
     }
 
-    
-    
-    
+    public OrderForm(User u) {
+        initComponents();
+        try {
+            if (u == null) {
+                currentUser = null;
+                throw new UserDoesNotExistException(this);
+            }
+
+            currentUser = u;
+            lbLoginedInUser.setText(u.getFullname());
+        } catch (UserDoesNotExistException ex) {
+            ex.showMessage();
+            
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -604,7 +616,7 @@ public class OrderForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tblSellItemsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSellItemsMouseClicked
-     /*   int i = tblData.getSelectedRow();
+        /*   int i = tblData.getSelectedRow();
 
         Stock selectedStock;
         try {
@@ -637,7 +649,7 @@ public class OrderForm extends javax.swing.JFrame {
 
     private void txtSearchOrdersFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchOrdersFocusLost
         // TODO add your handling code here:
-            if (txtSearchOrders.getText().trim().equals("Search data")) {
+        if (txtSearchOrders.getText().trim().equals("Search data")) {
             txtSearchOrders.setText("");
 
         }
@@ -863,7 +875,7 @@ public class OrderForm extends javax.swing.JFrame {
 
     private void mnOpenStaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenStaffActionPerformed
         // TODO add your handling code here:
-        StaffForm staff = new StaffForm();
+        StaffForm staff = new StaffForm(currentUser);
         staff.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_mnOpenStaffActionPerformed

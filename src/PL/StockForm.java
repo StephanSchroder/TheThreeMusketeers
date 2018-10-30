@@ -14,6 +14,7 @@ import BLL.Sorting.SortStockQuantity;
 import BLL.Sorting.SortSurname;
 import BLL.Stock;
 import BLL.User;
+import BLL.UserDoesNotExistException;
 import java.awt.Color;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -39,37 +40,44 @@ public class StockForm extends javax.swing.JFrame {
     /**
      * Creates new form StockForm
      */
-    
-    User currentUser;
-    List<Stock> stocks = new ArrayList<>();
-    int insertClick = 0;
-    int updateClick = 0;
-  
-    
+    private User currentUser;
+    private List<Stock> stocks = new ArrayList<>();
+    private int insertClick = 0;
+    private int updateClick = 0;
+
     public StockForm() {
         initComponents();
         stocks = Stock.getStocks();
         initModel();
-        
+
         currentUser = null;
-        
+        lbLoginedInUser.setText("No User Selected");
         cmbChangeListener changeListener = new cmbChangeListener();
         cmbSorting.addItemListener(changeListener);
     }
-    
+
     public StockForm(User u) {
         initComponents();
-        stocks = Stock.getStocks();
-        initModel();
-        
-        currentUser = u;
-        lbLoginedInUser.setText(u.getFullname());
-        
-        cmbChangeListener changeListener = new cmbChangeListener();
-        cmbSorting.addItemListener(changeListener);
+        try {
+            if (u == null) {
+                currentUser = null;
+                throw new UserDoesNotExistException(this);
+            }
+            stocks = Stock.getStocks();
+            initModel();
+
+            currentUser = u;
+            lbLoginedInUser.setText(u.getFullname());
+
+            cmbChangeListener changeListener = new cmbChangeListener();
+            cmbSorting.addItemListener(changeListener);
+        } catch (UserDoesNotExistException ex) {
+            ex.showMessage();
+            
+        }
     }
-    
-    private void initModel(){
+
+    private void initModel() {
         disableAllFields();
         setModel();
         clearAllFields();
@@ -101,6 +109,7 @@ public class StockForm extends javax.swing.JFrame {
     }
 
     private class cmbChangeListener implements ItemListener {
+
         @Override
         public void itemStateChanged(ItemEvent e) {
             JComboBox cb = (JComboBox) e.getSource();
@@ -228,9 +237,10 @@ public class StockForm extends javax.swing.JFrame {
         btnDelete1 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         staffMenu = new javax.swing.JMenu();
-        jMenuItem6 = new javax.swing.JMenuItem();
+        mnOpenStaffForm = new javax.swing.JMenuItem();
         stockMenu = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
+        mnOpenOrderForm = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -536,8 +546,13 @@ public class StockForm extends javax.swing.JFrame {
         staffMenu.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         staffMenu.setIconTextGap(20);
 
-        jMenuItem6.setText("jMenuItem6");
-        staffMenu.add(jMenuItem6);
+        mnOpenStaffForm.setText("Open Staff Form");
+        mnOpenStaffForm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnOpenStaffFormActionPerformed(evt);
+            }
+        });
+        staffMenu.add(mnOpenStaffForm);
 
         jMenuBar1.add(staffMenu);
 
@@ -549,6 +564,15 @@ public class StockForm extends javax.swing.JFrame {
         jMenu3.setText("Order Stock");
         jMenu3.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         jMenu3.setIconTextGap(10);
+
+        mnOpenOrderForm.setText("Open Order Form");
+        mnOpenOrderForm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnOpenOrderFormActionPerformed(evt);
+            }
+        });
+        jMenu3.add(mnOpenOrderForm);
+
         jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
@@ -573,11 +597,11 @@ public class StockForm extends javax.swing.JFrame {
         Stock selectedStock;
         try {
             selectedStock = new Stock(Integer.valueOf(tblData.getValueAt(i, 0).toString()),
-                Category.getCategory(tblData.getValueAt(i, 1).toString()),
-                tblData.getValueAt(i, 2).toString(),
-                new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(tblData.getValueAt(i, 3).toString()),
-                Integer.valueOf(tblData.getValueAt(i, 4).toString()),
-                tblData.getValueAt(i, 5).toString());
+                    Category.getCategory(tblData.getValueAt(i, 1).toString()),
+                    tblData.getValueAt(i, 2).toString(),
+                    new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(tblData.getValueAt(i, 3).toString()),
+                    Integer.valueOf(tblData.getValueAt(i, 4).toString()),
+                    tblData.getValueAt(i, 5).toString());
 
             txtStockID.setText(String.valueOf(selectedStock.getStockID()));
             txtItemName.setText(selectedStock.getItemName());
@@ -810,7 +834,7 @@ public class StockForm extends javax.swing.JFrame {
 
     private void txtSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusGained
         // TODO add your handling code here:
-          if (txtSearch.getText().trim().equals("")) {
+        if (txtSearch.getText().trim().equals("")) {
             txtSearch.setText("Search data");
 
         }
@@ -819,7 +843,7 @@ public class StockForm extends javax.swing.JFrame {
 
     private void txtSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusLost
         // TODO add your handling code here:
-         if (txtSearch.getText().trim().equals("Search data")) {
+        if (txtSearch.getText().trim().equals("Search data")) {
             txtSearch.setText("");
 
         }
@@ -842,14 +866,27 @@ public class StockForm extends javax.swing.JFrame {
 
     private void generateReport(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateReport
         // TODO add your handling code here:
-        String fileName="";
-        while(fileName.equals(""))
-        {
-            String filename =JOptionPane.showInputDialog("Enter your desired fileName:");
+        String fileName = "";
+        while (fileName.equals("")) {
+            String filename = JOptionPane.showInputDialog("Enter your desired fileName:");
         }
-        
+
         Stock.generateReport(fileName, stocks);
     }//GEN-LAST:event_generateReport
+
+    private void mnOpenStaffFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenStaffFormActionPerformed
+        // TODO add your handling code here:
+        StaffForm staff = new StaffForm(currentUser);
+        staff.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_mnOpenStaffFormActionPerformed
+
+    private void mnOpenOrderFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenOrderFormActionPerformed
+        // TODO add your handling code here:
+        OrderForm orderForm = new OrderForm(currentUser);
+        orderForm.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_mnOpenOrderFormActionPerformed
 
     /**
      * @param args the command line arguments
@@ -904,11 +941,12 @@ public class StockForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel17;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbLoginedInUser;
+    private javax.swing.JMenuItem mnOpenOrderForm;
+    private javax.swing.JMenuItem mnOpenStaffForm;
     private javax.swing.JSpinner spStockCount;
     private javax.swing.JMenu staffMenu;
     private javax.swing.JMenu stockMenu;

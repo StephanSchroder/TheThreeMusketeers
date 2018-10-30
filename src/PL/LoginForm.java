@@ -6,6 +6,7 @@
 package PL;
 
 
+import BLL.Common;
 import BLL.User;
 import java.awt.Color;
 import javax.swing.JOptionPane;
@@ -281,7 +282,7 @@ public class LoginForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegisterActionPerformed
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
-        System.exit(DO_NOTHING_ON_CLOSE);
+        Common.logOff(this);
     }//GEN-LAST:event_btnExitActionPerformed
 
     /**
