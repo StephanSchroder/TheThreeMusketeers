@@ -18,6 +18,7 @@ import BLL.Sorting.SortCategory;
 import BLL.Sorting.SortStockQuantity;
 import BLL.Sorting.SortSurname;
 import BLL.Exceptions.UserDoesNotExistException;
+import BLL.FormSetUp;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.ParseException;
@@ -35,7 +36,7 @@ import org.jdesktop.swingx.JXTextField;
  *
  * @author Stephan
  */
-public class StaffForm extends javax.swing.JFrame {
+public class StaffForm extends javax.swing.JFrame implements FormSetUp{
 
     private User currentUser = null;
     private List<User> users = new ArrayList<>();
@@ -84,6 +85,15 @@ public class StaffForm extends javax.swing.JFrame {
         setModel();
         clearAllFields();
 
+    }
+    
+    @Override
+    public void setNavigation(boolean flag){
+        mnOpenOrderForm.setEnabled(flag);
+        mnOpenStockForm.setEnabled(flag);
+        
+        mnOpenOrderForm.setVisible(flag);
+        mnOpenStockForm.setVisible(flag);
     }
 
     /**
@@ -1018,19 +1028,19 @@ public class StaffForm extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(0, 54, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnAddRecord, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(22, Short.MAX_VALUE))))
+                        .addContainerGap(27, Short.MAX_VALUE))))
         );
 
         staffMenu.setText("Staff");
         staffMenu.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        staffMenu.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        staffMenu.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         staffMenu.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         staffMenu.setIconTextGap(20);
         jMenuBar1.add(staffMenu);

@@ -8,15 +8,13 @@ package PL;
 import BLL.Common;
 import BLL.User;
 import BLL.Exceptions.UserDoesNotExistException;
-import java.awt.Color;
-import javax.swing.JOptionPane;
-import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
+import BLL.FormSetUp;
 
 /**
  *
  * @author Stephan
  */
-public class OrderForm extends javax.swing.JFrame {
+public class OrderForm extends javax.swing.JFrame implements FormSetUp{
 
     private User currentUser;
 
@@ -46,6 +44,16 @@ public class OrderForm extends javax.swing.JFrame {
             
         }
         this.setLocationRelativeTo(null);
+    }
+    
+    @Override
+    public void setNavigation(boolean flag){
+        mnOpenStaff.setEnabled(flag);
+        mnOpenStockForm.setEnabled(flag);
+        
+        mnOpenStaff.setVisible(flag);
+        mnOpenStockForm.setVisible(flag);
+        
     }
 
     /**
@@ -497,16 +505,17 @@ public class OrderForm extends javax.swing.JFrame {
                                 .addGap(1129, 1129, 1129)
                                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                        .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(35, 35, 35))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(34, 34, 34)))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(10, 10, 10)
+                                        .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addContainerGap()
+                                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addContainerGap()
+                                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(35, 35, 35)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -561,9 +570,9 @@ public class OrderForm extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(7, 7, 7)
                         .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(11, 11, 11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -616,7 +625,7 @@ public class OrderForm extends javax.swing.JFrame {
         jMenuBar1.add(stockMenu);
 
         orderStockMenu.setText("Order Stock");
-        orderStockMenu.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        orderStockMenu.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         orderStockMenu.setIconTextGap(10);
         jMenuBar1.add(orderStockMenu);
 

@@ -15,6 +15,7 @@ import BLL.Sorting.SortSurname;
 import BLL.Stock;
 import BLL.User;
 import BLL.Exceptions.UserDoesNotExistException;
+import BLL.FormSetUp;
 import java.awt.Color;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -35,7 +36,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Stephan
  */
-public class StockForm extends javax.swing.JFrame {
+public class StockForm extends javax.swing.JFrame implements FormSetUp {
 
     /**
      * Creates new form StockForm
@@ -77,6 +78,15 @@ public class StockForm extends javax.swing.JFrame {
             
         }
         this.setLocationRelativeTo(null);
+    }
+    
+    @Override
+    public void setNavigation(boolean flag){
+        mnOpenOrderForm.setEnabled(flag);
+        mnOpenStaffForm.setEnabled(flag);
+        
+        mnOpenOrderForm.setVisible(flag);
+        mnOpenStaffForm.setVisible(flag);
     }
 
     private void initModel() {
@@ -542,7 +552,7 @@ public class StockForm extends javax.swing.JFrame {
                         .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -594,7 +604,7 @@ public class StockForm extends javax.swing.JFrame {
         jMenuBar1.add(staffMenu);
 
         stockMenu.setText("Stock");
-        stockMenu.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        stockMenu.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         stockMenu.setIconTextGap(10);
         jMenuBar1.add(stockMenu);
 
@@ -618,7 +628,9 @@ public class StockForm extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
