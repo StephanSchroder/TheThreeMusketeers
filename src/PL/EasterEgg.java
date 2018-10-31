@@ -68,6 +68,8 @@ public class EasterEgg extends javax.swing.JFrame {
         }while (xFound==false && yFound==false && i<populated);
         return true;
     }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
