@@ -37,6 +37,15 @@ public class Stock {
         this.status = status;
     }
     
+    public Stock(int stockID, int categoryId, String itemName, Date dateAdded, int stockCount, String status) {
+        this.stockID = stockID;
+        this.category = Category.getCategory(categoryId);
+        this.itemName = itemName;
+        this.dateAdded = dateAdded;
+        this.stockCount = stockCount;
+        this.status = status;
+    }
+    
     public int getStockID() {
         return stockID;
     }
@@ -86,79 +95,23 @@ public class Stock {
     }
     
     public static List<Stock> getStocksSearch(String itemName){
-        List<Stock> stocks = new ArrayList<>();
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("StockID", "CategoryID", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("ItemName LIKE '%" + itemName + "%'"));
-        int count = dbData.length;
-        for (int i = 0; i < count; i++) {
-            try {
-                stocks.add(new Stock(Integer.valueOf(dbData[i][0]), Category.getCategory(Integer.valueOf(dbData[i][1])), dbData[i][2], new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(dbData[i][3]), Integer.valueOf(dbData[i][4]), dbData[i][5]));
-            } catch (ParseException ex) {
-                Logger.getLogger(Stock.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-        return stocks;
+        return DataHandler.<Stock>readRecords(Stock.class, Arrays.asList("StockID", "CategoryID", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("ItemName LIKE '%" + itemName + "%'"));
     }
     
     public static List<Stock> getStocks(){
-        List<Stock> stocks = new ArrayList<>();
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("StockID", "CategoryID", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList());
-        int count = dbData.length;
-        for (int i = 0; i < count; i++) {
-            try {
-                stocks.add(new Stock(Integer.valueOf(dbData[i][0]), Category.getCategory(Integer.valueOf(dbData[i][1])), dbData[i][2], new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(dbData[i][3]), Integer.valueOf(dbData[i][4]), dbData[i][5]));
-            } catch (ParseException ex) {
-                Logger.getLogger(Stock.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-        return stocks;
+        return DataHandler.<Stock>readRecords(Stock.class, Arrays.asList("StockID", "CategoryID", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList());
     }
     
     public static List<Stock> getStocksByCategory(String categoryID){
-        List<Stock> stocks = new ArrayList<>();
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("StockID", "CategoryID", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("CategoryID=" + categoryID));
-        int count = dbData.length;
-        for (int i = 0; i < count; i++) {
-            try {
-                stocks.add(new Stock(Integer.valueOf(dbData[i][0]), Category.getCategory(Integer.valueOf(dbData[i][1])), dbData[i][2], new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(dbData[i][3]), Integer.valueOf(dbData[i][4]), dbData[i][5]));
-            } catch (ParseException ex) {
-                Logger.getLogger(Stock.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-        return stocks;
+        return DataHandler.<Stock>readRecords(Stock.class, Arrays.asList("StockID", "CategoryID", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("CategoryID=" + categoryID));
     }
     
     public static List<Stock> getStocksByStatus(String status){
-        List<Stock> stocks = new ArrayList<>();
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("StockID", "CategoryID", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("Status='" + status + "'"));
-        int count = dbData.length;
-        for (int i = 0; i < count; i++) {
-            try {
-                stocks.add(new Stock(Integer.valueOf(dbData[i][0]), Category.getCategory(Integer.valueOf(dbData[i][1])), dbData[i][2], new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(dbData[i][3]), Integer.valueOf(dbData[i][4]), dbData[i][5]));
-            } catch (ParseException ex) {
-                Logger.getLogger(Stock.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-        return stocks;
+        return DataHandler.<Stock>readRecords(Stock.class, Arrays.asList("StockID", "CategoryID", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("Status='" + status + "'"));
     }
     
     public static Stock getStock(int stockID){
-        Stock stock = null;
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("StockID", "CategoryID", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("StockID=" + stockID));
-        int count = dbData.length;
-        if (count == 1)
-        {
-            try {
-                stock = new Stock(Integer.valueOf(dbData[0][0]), Category.getCategory(Integer.valueOf(dbData[0][1])), dbData[0][2], new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(dbData[0][3]), Integer.valueOf(dbData[0][4]), dbData[0][5]);
-            } catch (ParseException ex) {
-                Logger.getLogger(Stock.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-        return stock;
+        return DataHandler.<Stock>readRecords(Stock.class, Arrays.asList("StockID", "CategoryID", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("StockID=" + stockID)).get(0);
     }
     
     public void registerStock() {

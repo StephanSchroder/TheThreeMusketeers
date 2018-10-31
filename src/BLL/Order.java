@@ -52,6 +52,31 @@ public class Order {
         this.placedByEmployee = placedByEmployee;
     }
 
+    public Order(int orderID, Date orderDate, Date receiveDate, String status, int placedByEmployee, int approvedByEmployee, List<StockOrder> stock) {
+        this.orderID = orderID;
+        this.orderDate = orderDate;
+        this.receiveDate = receiveDate;
+        this.status = status;
+        this.placedByEmployee = User.GetUserByUserId(placedByEmployee);
+        this.approvedByEmployee = User.GetUserByUserId(approvedByEmployee);
+    }
+
+    public Order(int orderID, Date orderDate, Date receiveDate, String status, int placedByEmployee, int approvedByEmployee) {
+        this.orderID = orderID;
+        this.orderDate = orderDate;
+        this.receiveDate = receiveDate;
+        this.status = status;
+        this.placedByEmployee = User.GetUserByUserId(placedByEmployee);
+        this.approvedByEmployee = User.GetUserByUserId(approvedByEmployee);
+    }
+
+    public Order(int orderID, Date orderDate, String status, int placedByEmployee) {
+        this.orderID = orderID;
+        this.orderDate = orderDate;
+        this.status = status;
+        this.placedByEmployee = User.GetUserByUserId(placedByEmployee);
+    }
+
     public int getOrderID() {
         return orderID;
     }
@@ -109,16 +134,7 @@ public class Order {
     }
     
     public static List<Order> getOrders(){
-        List<Order> orders = new ArrayList<>();
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("OrderID", "OrderDate", "ReceiveDate", "Status", "PlacedByEmployee", "ApprovedByEmployee"), Arrays.asList(new DataTablesCollection("Order")), Arrays.asList());
-        int count = dbData.length;
-        for (int i = 0; i < count; i++) {
-            try {
-                orders.add(new Order(Integer.valueOf(dbData[i][0]), new SimpleDateFormat("yyyy-MM-dd").parse(dbData[i][1]), new SimpleDateFormat("yyyy-MM-dd").parse(dbData[i][2]), dbData[i][3], User.GetUserByUserId(Integer.valueOf(dbData[i][4])), User.GetUserByUserId(Integer.valueOf(dbData[i][5]))));
-            } catch (ParseException ex) {
-                Logger.getLogger(Order.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+        List<Order> orders = DataHandler.<Order>readRecords(Order.class, Arrays.asList("OrderID", "OrderDate", "ReceiveDate", "Status", "PlacedByEmployee", "ApprovedByEmployee"), Arrays.asList(new DataTablesCollection("Order")), Arrays.asList());
         
         for (Order order:orders){
             order.stock = StockOrder.getStockOrders(order.orderID);
@@ -128,16 +144,7 @@ public class Order {
     }
     
     public static List<Order> getOrdersPlacedByEmployee(int placedByEmployeeID){
-        List<Order> orders = new ArrayList<>();
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("OrderID", "OrderDate", "ReceiveDate", "Status", "PlacedByEmployee", "ApprovedByEmployee"), Arrays.asList(new DataTablesCollection("Order")), Arrays.asList("PlacedByEmployee=" + placedByEmployeeID));
-        int count = dbData.length;
-        for (int i = 0; i < count; i++) {
-            try {
-                orders.add(new Order(Integer.valueOf(dbData[i][0]), new SimpleDateFormat("yyyy-MM-dd").parse(dbData[i][1]), new SimpleDateFormat("yyyy-MM-dd").parse(dbData[i][2]), dbData[i][3], User.GetUserByUserId(Integer.valueOf(dbData[i][4])), User.GetUserByUserId(Integer.valueOf(dbData[i][5]))));
-            } catch (ParseException ex) {
-                Logger.getLogger(Order.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+        List<Order> orders = DataHandler.<Order>readRecords(Order.class, Arrays.asList("OrderID", "OrderDate", "ReceiveDate", "Status", "PlacedByEmployee", "ApprovedByEmployee"), Arrays.asList(new DataTablesCollection("Order")), Arrays.asList("PlacedByEmployee=" + placedByEmployeeID));
         
         for (Order order:orders){
             order.stock = StockOrder.getStockOrders(order.orderID);
@@ -147,16 +154,7 @@ public class Order {
     }
     
     public static List<Order> getOrdersApprovedByEmployee(int approvedByEmployeeID){
-        List<Order> orders = new ArrayList<>();
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("OrderID", "OrderDate", "ReceiveDate", "Status", "PlacedByEmployee", "ApprovedByEmployee"), Arrays.asList(new DataTablesCollection("Order")), Arrays.asList("ApprovedByEmployee=" + approvedByEmployeeID));
-        int count = dbData.length;
-        for (int i = 0; i < count; i++) {
-            try {
-                orders.add(new Order(Integer.valueOf(dbData[i][0]), new SimpleDateFormat("yyyy-MM-dd").parse(dbData[i][1]), new SimpleDateFormat("yyyy-MM-dd").parse(dbData[i][2]), dbData[i][3], User.GetUserByUserId(Integer.valueOf(dbData[i][4])), User.GetUserByUserId(Integer.valueOf(dbData[i][5]))));
-            } catch (ParseException ex) {
-                Logger.getLogger(Order.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+        List<Order> orders = DataHandler.<Order>readRecords(Order.class, Arrays.asList("OrderID", "OrderDate", "ReceiveDate", "Status", "PlacedByEmployee", "ApprovedByEmployee"), Arrays.asList(new DataTablesCollection("Order")), Arrays.asList("ApprovedByEmployee=" + approvedByEmployeeID));
         
         for (Order order:orders){
             order.stock = StockOrder.getStockOrders(order.orderID);
@@ -166,16 +164,7 @@ public class Order {
     }
     
     public static List<Order> getOrdersByStatus(String status){
-        List<Order> orders = new ArrayList<>();
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("OrderID", "OrderDate", "ReceiveDate", "Status", "PlacedByEmployee", "ApprovedByEmployee"), Arrays.asList(new DataTablesCollection("Order")), Arrays.asList("Status='" + status + "'"));
-        int count = dbData.length;
-        for (int i = 0; i < count; i++) {
-            try {
-                orders.add(new Order(Integer.valueOf(dbData[i][0]), new SimpleDateFormat("yyyy-MM-dd").parse(dbData[i][1]), new SimpleDateFormat("yyyy-MM-dd").parse(dbData[i][2]), dbData[i][3], User.GetUserByUserId(Integer.valueOf(dbData[i][4])), User.GetUserByUserId(Integer.valueOf(dbData[i][5]))));
-            } catch (ParseException ex) {
-                Logger.getLogger(Order.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+        List<Order> orders = DataHandler.<Order>readRecords(Order.class, Arrays.asList("OrderID", "OrderDate", "ReceiveDate", "Status", "PlacedByEmployee", "ApprovedByEmployee"), Arrays.asList(new DataTablesCollection("Order")), Arrays.asList("Status='" + status + "'"));
         
         for (Order order:orders){
             order.stock = StockOrder.getStockOrders(order.orderID);
@@ -185,17 +174,7 @@ public class Order {
     }
     
     public static Order getOrder(int orderID){
-        Order order = null;
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("OrderID", "OrderDate", "ReceiveDate", "Status", "PlacedByEmployee", "ApprovedByEmployee"), Arrays.asList(new DataTablesCollection("Order")), Arrays.asList("OrderID=" + orderID));
-        int count = dbData.length;
-        if (count == 1)
-        {
-            try {
-                order = new Order(Integer.valueOf(dbData[0][0]), new SimpleDateFormat("yyyy-MM-dd").parse(dbData[0][1]), new SimpleDateFormat("yyyy-MM-dd").parse(dbData[0][2]), dbData[0][3], User.GetUserByUserId(Integer.valueOf(dbData[0][4])), User.GetUserByUserId(Integer.valueOf(dbData[0][5])));
-            } catch (ParseException ex) {
-                Logger.getLogger(Order.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+        Order order = DataHandler.<Order>readRecords(Order.class, Arrays.asList("OrderID", "OrderDate", "ReceiveDate", "Status", "PlacedByEmployee", "ApprovedByEmployee"), Arrays.asList(new DataTablesCollection("Order")), Arrays.asList("OrderID=" + orderID)).get(0);
         
         order.stock = StockOrder.getStockOrders(order.orderID);
 

@@ -5,6 +5,7 @@
  */
 package DAL;
 
+import BLL.Exchange;
 import java.sql.*;
 import java.util.*;
 
@@ -144,6 +145,47 @@ public class DataHandler {
                     returnData[dbReturnData.getRow()-1][j] = dbReturnData.getString(j+1);
                 }
             }
+            
+            con.close();
+        }
+        catch (SQLException sqle)
+        {
+            System.out.println(sqle.getMessage());
+        }
+        
+        return returnData;
+    }
+    
+    public static <T> List<T> readRecords(Class<?> t, List<String> columns, List<DataTablesCollection> tables, List<String> conditions) {
+        List<T> returnData = new ArrayList<>();
+        try
+        {
+            Connection con = DriverManager.getConnection(connectionString, "root", "");
+            String query = "SELECT `";
+            
+            for (int i = 0; i < columns.size() - 1; i++)
+            {
+                query += columns.get(i) + "`, `";
+            }
+            query += columns.get(columns.size()-1) + "` FROM `" + tables.get(0).getMainTable() + "` ";
+            for (int i = 1; i < tables.size(); i++)
+            {
+                query += tables.get(i).getJoinType() + " `" + tables.get(i).getMainTable() + "` ON `" + tables.get(i).getMainTable() + "`.`" + tables.get(i).getMainTableColumn() + "`=`" + tables.get(i).getJoiningTable() + "`.`" + tables.get(i).getJoiningTableColumn() + "` ";
+            }
+            if (conditions.size() > 0)
+            {
+                query += "WHERE (";
+                for (int i = 0; i < conditions.size() - 1; i++)
+                {
+                    query += conditions.get(i) + ") AND (";
+                }
+                query += conditions.get(conditions.size()-1) + ")";
+            }
+            
+            Statement statement = con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            ResultSet dbReturnData = statement.executeQuery(query);
+            
+            returnData = Exchange.<T>DataTableToList(t, dbReturnData);
             
             con.close();
         }
