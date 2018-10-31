@@ -792,56 +792,32 @@ public class StockForm extends javax.swing.JFrame {
 
     private void txtStockIDFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStockIDFocusGained
         // TODO add your handling code here:
-        if (txtStockID.getText().trim().equals("")) {
-            txtStockID.setText("Stock ID");
-
-        }
-        txtStockID.setForeground(Color.LIGHT_GRAY);
+        Common.focusGain("Stock ID", txtStockID);
     }//GEN-LAST:event_txtStockIDFocusGained
 
     private void txtStockIDFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStockIDFocusLost
         // TODO add your handling code here:
-        if (txtStockID.getText().trim().equals("Stock ID")) {
-            txtStockID.setText("");
-
-        }
-        txtStockID.setForeground(Color.BLACK);
+        Common.focusLost("Stock ID", txtStockID);
     }//GEN-LAST:event_txtStockIDFocusLost
 
     private void txtItemNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtItemNameFocusGained
         // TODO add your handling code here:
-        if (txtItemName.getText().trim().equals("")) {
-            txtItemName.setText("Item Name");
-
-        }
-        txtItemName.setForeground(Color.LIGHT_GRAY);
+        Common.focusGain("Item Name", txtItemName);
     }//GEN-LAST:event_txtItemNameFocusGained
 
     private void txtItemNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtItemNameFocusLost
         // TODO add your handling code here:
-        if (txtItemName.getText().trim().equals("Item Name")) {
-            txtItemName.setText("");
-
-        }
-        txtItemName.setForeground(Color.BLACK);
+        Common.focusLost("Item Name", txtItemName);
     }//GEN-LAST:event_txtItemNameFocusLost
 
     private void txtStatusFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStatusFocusGained
         // TODO add your handling code here:
-        if (txtStatus.getText().trim().equals("")) {
-            txtStatus.setText("Item Status");
-
-        }
-        txtStatus.setForeground(Color.LIGHT_GRAY);
+        Common.focusGain("Item Status", txtStatus);
     }//GEN-LAST:event_txtStatusFocusGained
 
     private void txtStatusFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStatusFocusLost
         // TODO add your handling code here:
-        if (txtStatus.getText().trim().equals("Item Status")) {
-            txtStatus.setText("");
-
-        }
-        txtStatus.setForeground(Color.BLACK);
+        Common.focusLost("Item Status", txtStatus);
     }//GEN-LAST:event_txtStatusFocusLost
 
     private void jPanel1formHierarchyChanged(java.awt.event.HierarchyEvent evt) {//GEN-FIRST:event_jPanel1formHierarchyChanged
@@ -850,20 +826,12 @@ public class StockForm extends javax.swing.JFrame {
 
     private void txtSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusGained
         // TODO add your handling code here:
-        if (txtSearch.getText().trim().equals("")) {
-            txtSearch.setText("Search data");
-
-        }
-        txtSearch.setForeground(Color.LIGHT_GRAY);
+        Common.focusGain("Serach data", txtSearch);
     }//GEN-LAST:event_txtSearchFocusGained
 
     private void txtSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusLost
         // TODO add your handling code here:
-        if (txtSearch.getText().trim().equals("Search data")) {
-            txtSearch.setText("");
-
-        }
-        txtSearch.setForeground(Color.BLACK);
+        Common.focusLost("Serach data", txtSearch);
     }//GEN-LAST:event_txtSearchFocusLost
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed

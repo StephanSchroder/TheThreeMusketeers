@@ -37,7 +37,7 @@ import org.jdesktop.swingx.JXTextField;
  */
 public class StaffForm extends javax.swing.JFrame {
 
-    private  User currentUser = null;
+    private User currentUser = null;
     private List<User> users = new ArrayList<>();
     private int insertClick = 0;
     private int updateClick = 0;
@@ -49,14 +49,14 @@ public class StaffForm extends javax.swing.JFrame {
         initComponents();
         users = User.getUsers();
         initModel();
-        
+
         currentUser = null;
         lbLoginedInUser.setText("New user registration");
         cmbSortingChangeListener changeListener = new cmbSortingChangeListener();
         cmbSorting1.addItemListener(changeListener);
         this.setLocationRelativeTo(null);
     }
-    
+
     public StaffForm(User u) {
         initComponents();
         try {
@@ -74,7 +74,7 @@ public class StaffForm extends javax.swing.JFrame {
             cmbSorting1.addItemListener(changeListener);
         } catch (UserDoesNotExistException ex) {
             ex.showMessage();
-            
+
         }
         this.setLocationRelativeTo(null);
     }
@@ -83,7 +83,7 @@ public class StaffForm extends javax.swing.JFrame {
         disableAllFields();
         setModel();
         clearAllFields();
-        
+
     }
 
     /**
@@ -304,23 +304,23 @@ public class StaffForm extends javax.swing.JFrame {
         txtPassword.setBackground(Color.white);
         cmbAccountType.setBackground(Color.white);
     }
-    
+
     public void setSorting(boolean value) {
         cmbSorting1.setEnabled(value);
     }
-    
+
     public void setSearching(boolean value) {
         cmbSearchParam.setEnabled(value);
         txtSearch.setEnabled(value);
         btnSearch.setEnabled(value);
     }
-    
+
     public void setCRUDOperations(boolean value) {
         btnAddRecord.setEnabled(value);
         btnUpdate.setEnabled(value);
         btnDelete.setEnabled(value);
     }
-    
+
     public void setUIAccess(boolean value) {
         setSorting(value);
         setSearching(value);
@@ -1081,161 +1081,146 @@ public class StaffForm extends javax.swing.JFrame {
 
     private void txtFirstNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtFirstNameFocusGained
         // TODO add your handling code here:
-                    focusGain("First Name", txtFirstName);
+        Common.focusGain("First Name", txtFirstName);
 
     }//GEN-LAST:event_txtFirstNameFocusGained
 
     private void txtFirstNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtFirstNameFocusLost
         // TODO add your handling code here:
-                   focusLost("First Name", txtFirstName);
+        Common.focusLost("First Name", txtFirstName);
 
     }//GEN-LAST:event_txtFirstNameFocusLost
 
     private void txtIDNumberFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIDNumberFocusGained
         // TODO add your handling code here:
-                    focusGain("ID Number",txtIDNumber);
+        Common.focusGain("ID Number", txtIDNumber);
 
     }//GEN-LAST:event_txtIDNumberFocusGained
 
     private void txtIDNumberFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIDNumberFocusLost
         // TODO add your handling code here:
 
-                    focusLost("ID Number",txtIDNumber);
+        Common.focusLost("ID Number", txtIDNumber);
 
     }//GEN-LAST:event_txtIDNumberFocusLost
 
     private void txtLastNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLastNameFocusGained
         // TODO add your handling code here:
-                    focusGain("Last Name",txtLastName);
+        Common.focusGain("Last Name", txtLastName);
 
     }//GEN-LAST:event_txtLastNameFocusGained
 
     private void txtLastNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLastNameFocusLost
         // TODO add your handling code here:
-                    focusLost("Last Name",txtLastName);
+        Common.focusLost("Last Name", txtLastName);
 
     }//GEN-LAST:event_txtLastNameFocusLost
 
     private void txtCountryFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCountryFocusGained
         // TODO add your handling code here:
-                    focusGain("Country",txtCountry);
+        Common.focusGain("Country", txtCountry);
 
     }//GEN-LAST:event_txtCountryFocusGained
 
     private void txtCountryFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCountryFocusLost
         // TODO add your handling code here:
-            focusLost("Country",txtCountry);
+        Common.focusLost("Country", txtCountry);
 
     }//GEN-LAST:event_txtCountryFocusLost
 
     private void txtProvinceFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtProvinceFocusGained
         // TODO add your handling code here:
 
-                    focusGain("Province",txtProvince);
+        Common.focusGain("Province", txtProvince);
 
     }//GEN-LAST:event_txtProvinceFocusGained
 
     private void txtProvinceFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtProvinceFocusLost
         // TODO add your handling code here:
-                    focusLost("Province",txtProvince);
+        Common.focusLost("Province", txtProvince);
 
     }//GEN-LAST:event_txtProvinceFocusLost
 
     private void txtCityFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCityFocusGained
         // TODO add your handling code here:
-                    focusGain("City",txtCity);
+        Common.focusGain("City", txtCity);
 
     }//GEN-LAST:event_txtCityFocusGained
 
     private void txtCityFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCityFocusLost
         // TODO add your handling code here:
-                    focusLost("City",txtCity);
+        Common.focusLost("City", txtCity);
 
     }//GEN-LAST:event_txtCityFocusLost
 
     private void txtPostalCodeFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPostalCodeFocusGained
         // TODO add your handling code here:
-                    focusGain("Postal Code",txtPostalCode);
+        Common.focusGain("Postal Code", txtPostalCode);
 
     }//GEN-LAST:event_txtPostalCodeFocusGained
 
     private void txtPostalCodeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPostalCodeFocusLost
         // TODO add your handling code here:
-                    focusLost("Postal Code",txtPostalCode);
+        Common.focusLost("Postal Code", txtPostalCode);
 
     }//GEN-LAST:event_txtPostalCodeFocusLost
 
     private void txtStreetFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStreetFocusGained
         // TODO add your handling code here:
-            focusGain("Street Address",txtStreet);
+        Common.focusGain("Street Address", txtStreet);
 
     }//GEN-LAST:event_txtStreetFocusGained
 
     private void txtStreetFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStreetFocusLost
         // TODO add your handling code here:
-            focusLost("Street Address",txtStreet);
+        Common.focusLost("Street Address", txtStreet);
 
     }//GEN-LAST:event_txtStreetFocusLost
 
     private void txtAddressLineFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAddressLineFocusGained
         // TODO add your handling code here:
-            focusGain("Address Line",txtAddressLine);
+        Common.focusGain("Address Line", txtAddressLine);
 
     }//GEN-LAST:event_txtAddressLineFocusGained
 
     private void txtAddressLineFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAddressLineFocusLost
         // TODO add your handling code here:
-            focusLost("Address Line",txtAddressLine);
+        Common.focusLost("Address Line", txtAddressLine);
 
     }//GEN-LAST:event_txtAddressLineFocusLost
 
     private void txtEmailFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtEmailFocusGained
         // TODO add your handling code here:
-            focusGain("Email Address",txtEmail);
+        Common.focusGain("Email Address", txtEmail);
 
     }//GEN-LAST:event_txtEmailFocusGained
 
     private void txtEmailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtEmailFocusLost
         // TODO add your handling code here:
-        focusLost("Email Address",txtEmail);
+        Common.focusLost("Email Address", txtEmail);
     }//GEN-LAST:event_txtEmailFocusLost
 
     private void txtCellFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCellFocusGained
         // TODO add your handling code here:
-        focusGain("Cellphone number",txtCell);
+        Common.focusGain("Cellphone number", txtCell);
 
     }//GEN-LAST:event_txtCellFocusGained
 
     private void txtCellFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCellFocusLost
         // TODO add your handling code here:
-        focusLost("Cellphone number",txtCell);
+        Common.focusLost("Cellphone number", txtCell);
     }//GEN-LAST:event_txtCellFocusLost
 
     private void txtTelFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTelFocusGained
         // TODO add your handling code here:
-        focusGain("Tellphone number",txtTel);
+        Common.focusGain("Tellphone number", txtTel);
     }//GEN-LAST:event_txtTelFocusGained
 
     private void txtTelFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTelFocusLost
         // TODO add your handling code here:
-        focusLost("Tellphone number",txtTel);
+        Common.focusLost("Tellphone number", txtTel);
     }//GEN-LAST:event_txtTelFocusLost
 
-    private void focusGain(String str, JTextField tx) {
-        if (tx.getText().trim().equals(str)) {
-            tx.setText("");
-
-        }
-        tx.setForeground(Color.BLACK);
-    }
-
-    private void focusLost(String str, JTextField tx) {
-        if (tx.getText().trim().equals("")) {
-            tx.setText(str);
-
-        }
-        tx.setForeground(Color.LIGHT_GRAY);
-    }
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         String parameter = cmbSearchParam.getSelectedItem().toString();
@@ -1497,22 +1482,22 @@ public class StaffForm extends javax.swing.JFrame {
 
     private void txtUsernameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUsernameFocusGained
         // TODO add your handling code here:
-        focusGain("Username",txtUsername);
+        Common.focusGain("Username", txtUsername);
     }//GEN-LAST:event_txtUsernameFocusGained
 
     private void txtUsernameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUsernameFocusLost
         // TODO add your handling code here:
-        focusLost("Username",txtUsername);
+        Common.focusLost("Username", txtUsername);
     }//GEN-LAST:event_txtUsernameFocusLost
 
     private void txtPasswordFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPasswordFocusGained
         // TODO add your handling code here:
-        focusGain("Password", txtPassword);
+        Common.focusGain("Password", txtPassword);
     }//GEN-LAST:event_txtPasswordFocusGained
 
     private void txtPasswordFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPasswordFocusLost
         // TODO add your handling code here:
-        focusLost("Password", txtPassword);
+        Common.focusLost("Password", txtPassword);
     }//GEN-LAST:event_txtPasswordFocusLost
 
     private void btnAddRecordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddRecordActionPerformed
@@ -1677,12 +1662,12 @@ public class StaffForm extends javax.swing.JFrame {
 
     private void txtSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusGained
         // TODO add your handling code here:
-        focusGain("Search data", txtSearch);
+        Common.focusGain("Search data", txtSearch);
     }//GEN-LAST:event_txtSearchFocusGained
 
     private void txtSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusLost
         // TODO add your handling code here:
-        focusGain("Search data", txtSearch);
+        Common.focusGain("Search data", txtSearch);
     }//GEN-LAST:event_txtSearchFocusLost
 
     private void btnLogOff1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOff1ActionPerformed

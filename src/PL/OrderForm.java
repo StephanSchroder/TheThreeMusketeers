@@ -663,20 +663,12 @@ public class OrderForm extends javax.swing.JFrame {
 
     private void txtSearchOrdersFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchOrdersFocusGained
         // TODO add your handling code here:
-        if (txtSearchOrders.getText().trim().equals("")) {
-            txtSearchOrders.setText("Search data");
-
-        }
-        txtSearchOrders.setForeground(Color.LIGHT_GRAY);
+        Common.focusGain("Serach data", txtSearchOrders);
     }//GEN-LAST:event_txtSearchOrdersFocusGained
 
     private void txtSearchOrdersFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchOrdersFocusLost
         // TODO add your handling code here:
-        if (txtSearchOrders.getText().trim().equals("Search data")) {
-            txtSearchOrders.setText("");
-
-        }
-        txtSearchOrders.setForeground(Color.BLACK);
+        Common.focusLost("Serach data", txtSearchOrders);
     }//GEN-LAST:event_txtSearchOrdersFocusLost
 
     private void btnSearchOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchOrderActionPerformed
@@ -862,10 +854,12 @@ public class OrderForm extends javax.swing.JFrame {
 
     private void txtSearchStockFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchStockFocusGained
         // TODO add your handling code here:
+        Common.focusGain("Serach orders", txtSearchStock);
     }//GEN-LAST:event_txtSearchStockFocusGained
 
     private void txtSearchStockFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchStockFocusLost
         // TODO add your handling code here:
+        Common.focusGain("Serach orders", txtSearchOrders);
     }//GEN-LAST:event_txtSearchStockFocusLost
 
     private void btnSearchStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchStockActionPerformed
@@ -878,10 +872,12 @@ public class OrderForm extends javax.swing.JFrame {
 
     private void txtItemNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtItemNameFocusGained
         // TODO add your handling code here:
+        Common.focusGain("Item Name", txtItemName);
     }//GEN-LAST:event_txtItemNameFocusGained
 
     private void txtItemNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtItemNameFocusLost
         // TODO add your handling code here:
+        Common.focusLost("Item Name", txtItemName);
     }//GEN-LAST:event_txtItemNameFocusLost
 
     private void btnAdjustOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdjustOrderActionPerformed
@@ -905,20 +901,12 @@ public class OrderForm extends javax.swing.JFrame {
 
     private void txtOrderIDFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtOrderIDFocusLost
         // TODO add your handling code here:
-        if (txtOrderID.getText().trim().equals("Stock ID")) {
-            txtOrderID.setText("");
-
-        }
-        txtOrderID.setForeground(Color.BLACK);
+        Common.focusGain("Order ID", txtOrderID);
     }//GEN-LAST:event_txtOrderIDFocusLost
 
     private void txtOrderIDFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtOrderIDFocusGained
         // TODO add your handling code here:
-        if (txtOrderID.getText().trim().equals("")) {
-            txtOrderID.setText("Stock ID");
-
-        }
-        txtOrderID.setForeground(Color.LIGHT_GRAY);
+        Common.focusLost("Order ID", txtOrderID);
     }//GEN-LAST:event_txtOrderIDFocusGained
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed

@@ -6,9 +6,11 @@
 package BLL;
 
 import PL.LoginForm;
+import java.awt.Color;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
 
 /**
@@ -121,5 +123,21 @@ public class Common {
             new LoginForm().setVisible(true);
             j.dispose();
         }
+    }
+    
+    public static void focusGain(String str, JTextField tx) {
+        if (tx.getText().trim().equals(str)) {
+            tx.setText("");
+
+        }
+        tx.setForeground(Color.BLACK);
+    }
+
+    public static void focusLost(String str, JTextField tx) {
+        if (tx.getText().trim().equals("")) {
+            tx.setText(str);
+
+        }
+        tx.setForeground(Color.LIGHT_GRAY);
     }
 }
