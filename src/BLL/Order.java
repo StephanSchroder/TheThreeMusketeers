@@ -52,6 +52,15 @@ public class Order {
         this.placedByEmployee = placedByEmployee;
     }
 
+    public Order(int orderID, Date orderDate, Date receiveDate, String status, int placedByEmployee, int approvedByEmployee, List<StockOrder> stock) {
+        this.orderID = orderID;
+        this.orderDate = orderDate;
+        this.receiveDate = receiveDate;
+        this.status = status;
+        this.placedByEmployee = User.GetUserByUserId(placedByEmployee);
+        this.approvedByEmployee = User.GetUserByUserId(approvedByEmployee);
+    }
+
     public Order(int orderID, Date orderDate, Date receiveDate, String status, int placedByEmployee, int approvedByEmployee) {
         this.orderID = orderID;
         this.orderDate = orderDate;
