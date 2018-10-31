@@ -96,6 +96,7 @@ public class OrderForm extends javax.swing.JFrame {
         staffMenu = new javax.swing.JMenu();
         mnOpenStaff = new javax.swing.JMenuItem();
         stockMenu = new javax.swing.JMenu();
+        mnOpenStockForm = new javax.swing.JMenuItem();
         orderStockMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -481,14 +482,6 @@ public class OrderForm extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnLogOff))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane2))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -532,7 +525,15 @@ public class OrderForm extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(lbLoginedInUser)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnLogOff))
+                            .addComponent(jScrollPane2))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -601,6 +602,15 @@ public class OrderForm extends javax.swing.JFrame {
         stockMenu.setText("Stock");
         stockMenu.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         stockMenu.setIconTextGap(10);
+
+        mnOpenStockForm.setText("Open Stock Form");
+        mnOpenStockForm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnOpenStockFormActionPerformed(evt);
+            }
+        });
+        stockMenu.add(mnOpenStockForm);
+
         jMenuBar1.add(stockMenu);
 
         orderStockMenu.setText("Order Stock");
@@ -1066,6 +1076,12 @@ public class OrderForm extends javax.swing.JFrame {
         }*/
     }//GEN-LAST:event_btnAddActionPerformed
 
+    private void mnOpenStockFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenStockFormActionPerformed
+        // TODO add your handling code here:
+        new StockForm(currentUser).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_mnOpenStockFormActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1132,6 +1148,7 @@ public class OrderForm extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JLabel lbLoginedInUser;
     private javax.swing.JMenuItem mnOpenStaff;
+    private javax.swing.JMenuItem mnOpenStockForm;
     private javax.swing.JMenu orderStockMenu;
     private javax.swing.JSpinner spOrderQuantity;
     private javax.swing.JMenu staffMenu;

@@ -67,9 +67,7 @@ public class Reports<T> {
             doc.close();
             writer.close();
             
-        } catch (DocumentException ex) {
-            Logger.getLogger(Reports.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (FileNotFoundException ex) {
+        } catch (DocumentException | FileNotFoundException ex) {
             Logger.getLogger(Reports.class.getName()).log(Level.SEVERE, null, ex);
         }
     

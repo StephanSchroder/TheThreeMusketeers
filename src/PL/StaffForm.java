@@ -26,7 +26,10 @@ import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import org.jdesktop.swingx.JXTextField;
 
 /**
  *
@@ -34,7 +37,7 @@ import javax.swing.JOptionPane;
  */
 public class StaffForm extends javax.swing.JFrame {
 
-    private  User currentUser = null;
+    private User currentUser = null;
 
     /**
      * Creates new form StaffForm
@@ -51,7 +54,6 @@ public class StaffForm extends javax.swing.JFrame {
 
     List<User> userList = new ArrayList<>();
 
-    
     public StaffForm(User u) {
         initComponents();
         initModel();
@@ -61,7 +63,7 @@ public class StaffForm extends javax.swing.JFrame {
                 throw new UserDoesNotExistException(this);
             }
             currentUser = u;
-            lbLoginedInUser.setText(lbLoginedInUser.getText()+u.getFullname());
+            lbLoginedInUser.setText(lbLoginedInUser.getText() + u.getFullname());
             cmbChangeListener changeListener = new cmbChangeListener();
             cmbSearchParam.addItemListener(changeListener);
         } catch (UserDoesNotExistException ex) {
@@ -428,6 +430,11 @@ public class StaffForm extends javax.swing.JFrame {
                 txtLastNameFocusLost(evt);
             }
         });
+        txtLastName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtLastNameActionPerformed(evt);
+            }
+        });
 
         jLabel8.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel8.setText("Title:");
@@ -466,6 +473,11 @@ public class StaffForm extends javax.swing.JFrame {
                 txtCountryFocusLost(evt);
             }
         });
+        txtCountry.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCountryActionPerformed(evt);
+            }
+        });
 
         txtProvince.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
         txtProvince.setName("txtUserName"); // NOI18N
@@ -475,6 +487,11 @@ public class StaffForm extends javax.swing.JFrame {
             }
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtProvinceFocusLost(evt);
+            }
+        });
+        txtProvince.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtProvinceActionPerformed(evt);
             }
         });
 
@@ -500,6 +517,11 @@ public class StaffForm extends javax.swing.JFrame {
             }
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtPostalCodeFocusLost(evt);
+            }
+        });
+        txtPostalCode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPostalCodeActionPerformed(evt);
             }
         });
 
@@ -1038,219 +1060,161 @@ public class StaffForm extends javax.swing.JFrame {
 
     private void txtFirstNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtFirstNameFocusGained
         // TODO add your handling code here:
-        if (txtFirstName.getText().trim().equals("")) {
-            txtFirstName.setText("Firstname");
+                    focusGain("First Name", txtFirstName);
 
-        }
-        txtFirstName.setForeground(Color.LIGHT_GRAY);
     }//GEN-LAST:event_txtFirstNameFocusGained
 
     private void txtFirstNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtFirstNameFocusLost
         // TODO add your handling code here:
-        if (txtFirstName.getText().trim().equals("Firstname")) {
-            txtFirstName.setText("");
+                   focusLost("First Name", txtFirstName);
 
-        }
-        txtFirstName.setForeground(Color.BLACK);
     }//GEN-LAST:event_txtFirstNameFocusLost
 
     private void txtIDNumberFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIDNumberFocusGained
         // TODO add your handling code here:
-        if (txtIDNumber.getText().trim().equals("")) {
-            txtIDNumber.setText("ID Number");
+                    focusGain("ID Number",txtIDNumber);
 
-        }
-        txtIDNumber.setForeground(Color.LIGHT_GRAY);
     }//GEN-LAST:event_txtIDNumberFocusGained
 
     private void txtIDNumberFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIDNumberFocusLost
         // TODO add your handling code here:
-        if (txtIDNumber.getText().trim().equals("ID Number")) {
-            txtIDNumber.setText("");
 
-        }
-        txtIDNumber.setForeground(Color.BLACK);
+                    focusLost("ID Number",txtIDNumber);
+
     }//GEN-LAST:event_txtIDNumberFocusLost
 
     private void txtLastNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLastNameFocusGained
         // TODO add your handling code here:
-        if (txtLastName.getText().trim().equals("")) {
-            txtLastName.setText("Lastname");
+                    focusGain("Last Name",txtLastName);
 
-        }
-        txtLastName.setForeground(Color.LIGHT_GRAY);
     }//GEN-LAST:event_txtLastNameFocusGained
 
     private void txtLastNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLastNameFocusLost
         // TODO add your handling code here:
-        if (txtLastName.getText().trim().equals("Lastname")) {
-            txtLastName.setText("");
+                    focusLost("Last Name",txtLastName);
 
-        }
-        txtLastName.setForeground(Color.BLACK);
     }//GEN-LAST:event_txtLastNameFocusLost
 
     private void txtCountryFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCountryFocusGained
         // TODO add your handling code here:
-        if (txtCountry.getText().trim().equals("")) {
-            txtCountry.setText("Country");
+                    focusGain("Country",txtCountry);
 
-        }
-        txtCountry.setForeground(Color.LIGHT_GRAY);
     }//GEN-LAST:event_txtCountryFocusGained
 
     private void txtCountryFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCountryFocusLost
         // TODO add your handling code here:
-        if (txtCountry.getText().trim().equals("Country")) {
-            txtCountry.setText("");
+            focusLost("Country",txtCountry);
 
-        }
-        txtCountry.setForeground(Color.BLACK);
     }//GEN-LAST:event_txtCountryFocusLost
 
     private void txtProvinceFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtProvinceFocusGained
         // TODO add your handling code here:
-        if (txtProvince.getText().trim().equals("")) {
-            txtProvince.setText("Province");
 
-        }
-        txtProvince.setForeground(Color.LIGHT_GRAY);
+                    focusGain("Province",txtProvince);
+
     }//GEN-LAST:event_txtProvinceFocusGained
 
     private void txtProvinceFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtProvinceFocusLost
         // TODO add your handling code here:
-        if (txtProvince.getText().trim().equals("Province")) {
-            txtProvince.setText("");
+                    focusLost("Province",txtProvince);
 
-        }
-        txtProvince.setForeground(Color.BLACK);
     }//GEN-LAST:event_txtProvinceFocusLost
 
     private void txtCityFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCityFocusGained
         // TODO add your handling code here:
-        if (txtCity.getText().trim().equals("")) {
-            txtCity.setText("City");
+                    focusGain("City",txtCity);
 
-        }
-        txtCity.setForeground(Color.LIGHT_GRAY);
     }//GEN-LAST:event_txtCityFocusGained
 
     private void txtCityFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCityFocusLost
         // TODO add your handling code here:
-        if (txtCity.getText().trim().equals("City")) {
-            txtCity.setText("");
+                    focusLost("City",txtCity);
 
-        }
-        txtCity.setForeground(Color.BLACK);
     }//GEN-LAST:event_txtCityFocusLost
 
     private void txtPostalCodeFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPostalCodeFocusGained
         // TODO add your handling code here:
-        if (txtPostalCode.getText().trim().equals("")) {
-            txtPostalCode.setText("Postal code");
+                    focusGain("Postal Code",txtPostalCode);
 
-        }
-        txtPostalCode.setForeground(Color.LIGHT_GRAY);
     }//GEN-LAST:event_txtPostalCodeFocusGained
 
     private void txtPostalCodeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPostalCodeFocusLost
         // TODO add your handling code here:
-        if (txtPostalCode.getText().trim().equals("Postal code")) {
-            txtPostalCode.setText("");
+                    focusLost("Postal Code",txtPostalCode);
 
-        }
-        txtPostalCode.setForeground(Color.BLACK);
     }//GEN-LAST:event_txtPostalCodeFocusLost
 
     private void txtStreetFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStreetFocusGained
         // TODO add your handling code here:
-        if (txtStreet.getText().trim().equals("")) {
-            txtStreet.setText("Street Address");
+            focusGain("Street Address",txtStreet);
 
-        }
-        txtStreet.setForeground(Color.LIGHT_GRAY);
     }//GEN-LAST:event_txtStreetFocusGained
 
     private void txtStreetFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStreetFocusLost
         // TODO add your handling code here:
-        if (txtStreet.getText().trim().equals("Street Address")) {
-            txtStreet.setText("");
+            focusLost("Street Address",txtStreet);
 
-        }
-        txtStreet.setForeground(Color.LIGHT_GRAY);
     }//GEN-LAST:event_txtStreetFocusLost
 
     private void txtAddressLineFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAddressLineFocusGained
         // TODO add your handling code here:
-        if (txtAddressLine.getText().trim().equals("")) {
-            txtAddressLine.setText("Address Line");
+            focusGain("Address Line",txtAddressLine);
 
-        }
-        txtAddressLine.setForeground(Color.LIGHT_GRAY);
     }//GEN-LAST:event_txtAddressLineFocusGained
 
     private void txtAddressLineFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAddressLineFocusLost
         // TODO add your handling code here:
-        if (txtAddressLine.getText().trim().equals("Address Line")) {
-            txtAddressLine.setText("");
+            focusLost("Address Line",txtAddressLine);
 
-        }
-        txtAddressLine.setForeground(Color.BLACK);
     }//GEN-LAST:event_txtAddressLineFocusLost
 
     private void txtEmailFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtEmailFocusGained
         // TODO add your handling code here:
-        if (txtEmail.getText().trim().equals("")) {
-            txtEmail.setText("Email Address");
+            focusGain("Email Address",txtEmail);
 
-        }
-        txtEmail.setForeground(Color.LIGHT_GRAY);
     }//GEN-LAST:event_txtEmailFocusGained
 
     private void txtEmailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtEmailFocusLost
         // TODO add your handling code here:
-        if (txtEmail.getText().trim().equals("Email Address")) {
-            txtEmail.setText("");
-
-        }
-        txtEmail.setForeground(Color.BLACK);
+        focusLost("Email Address",txtEmail);
     }//GEN-LAST:event_txtEmailFocusLost
 
     private void txtCellFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCellFocusGained
         // TODO add your handling code here:
-        if (txtCell.getText().trim().equals("")) {
-            txtCell.setText("Cellphone number");
+        focusGain("Cellphone number",txtCell);
 
-        }
-        txtCell.setForeground(Color.LIGHT_GRAY);
     }//GEN-LAST:event_txtCellFocusGained
 
     private void txtCellFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCellFocusLost
         // TODO add your handling code here:
-        if (txtCell.getText().trim().equals("Cellphone number")) {
-            txtCell.setText("");
-
-        }
-        txtCell.setForeground(Color.BLACK);
+        focusLost("Cellphone number",txtCell);
     }//GEN-LAST:event_txtCellFocusLost
 
     private void txtTelFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTelFocusGained
         // TODO add your handling code here:
-        if (txtTel.getText().trim().equals("")) {
-            txtTel.setText("Telephone number");
-
-        }
-        txtTel.setForeground(Color.LIGHT_GRAY);
+        focusGain("Tellphone number",txtTel);
     }//GEN-LAST:event_txtTelFocusGained
 
     private void txtTelFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTelFocusLost
         // TODO add your handling code here:
-        if (txtTel.getText().trim().equals("Telephone number")) {
-            txtTel.setText("");
+        focusLost("Tellphone number",txtTel);
+    }//GEN-LAST:event_txtTelFocusLost
+
+    private void focusGain(String str, JTextField tx) {
+        if (tx.getText().trim().equals(str)) {
+            tx.setText("");
 
         }
-        txtTel.setForeground(Color.BLACK);
-    }//GEN-LAST:event_txtTelFocusLost
+        tx.setForeground(Color.BLACK);
+    }
+
+    private void focusLost(String str, JTextField tx) {
+        if (tx.getText().trim().equals("")) {
+            tx.setText(str);
+
+        }
+        tx.setForeground(Color.LIGHT_GRAY);
+    }
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         String parameter = cmbSearchParam.getSelectedItem().toString();
@@ -1525,38 +1489,22 @@ public class StaffForm extends javax.swing.JFrame {
 
     private void txtUsernameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUsernameFocusGained
         // TODO add your handling code here:
-        if (txtUsername.getText().trim().equals("")) {
-            txtUsername.setText("Username");
-
-        }
-        txtUsername.setForeground(Color.LIGHT_GRAY);
+        focusGain("Username",txtUsername);
     }//GEN-LAST:event_txtUsernameFocusGained
 
     private void txtUsernameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUsernameFocusLost
         // TODO add your handling code here:
-        if (txtUsername.getText().trim().equals("Username")) {
-            txtUsername.setText("");
-
-        }
-        txtUsername.setForeground(Color.BLACK);
+        focusLost("Username",txtUsername);
     }//GEN-LAST:event_txtUsernameFocusLost
 
     private void txtPasswordFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPasswordFocusGained
         // TODO add your handling code here:
-        if (txtPassword.getText().trim().equals("")) {
-            txtPassword.setText("Password");
-
-        }
-        txtPassword.setForeground(Color.LIGHT_GRAY);
+        focusGain("Password", txtPassword);
     }//GEN-LAST:event_txtPasswordFocusGained
 
     private void txtPasswordFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPasswordFocusLost
         // TODO add your handling code here:
-        if (txtPassword.getText().trim().equals("Password")) {
-            txtPassword.setText("");
-
-        }
-        txtPassword.setForeground(Color.BLACK);
+        focusLost("Password", txtPassword);
     }//GEN-LAST:event_txtPasswordFocusLost
 
     private void btnAddRecordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddRecordActionPerformed
@@ -1725,20 +1673,12 @@ public class StaffForm extends javax.swing.JFrame {
 
     private void txtSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusGained
         // TODO add your handling code here:
-        if (txtSearch.getText().trim().equals("")) {
-            txtSearch.setText("Search data");
-
-        }
-        txtSearch.setForeground(Color.LIGHT_GRAY);
+        focusGain("Search data", txtSearch);
     }//GEN-LAST:event_txtSearchFocusGained
 
     private void txtSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusLost
         // TODO add your handling code here:
-        if (txtSearch.getText().trim().equals("Search data")) {
-            txtSearch.setText("");
-
-        }
-        txtSearch.setForeground(Color.BLACK);
+        focusGain("Search data", txtSearch);
     }//GEN-LAST:event_txtSearchFocusLost
 
     private void btnLogOff1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOff1ActionPerformed
@@ -1761,6 +1701,22 @@ public class StaffForm extends javax.swing.JFrame {
         stockForm.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_mnOpenStockFormActionPerformed
+
+    private void txtProvinceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtProvinceActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtProvinceActionPerformed
+
+    private void txtPostalCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPostalCodeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPostalCodeActionPerformed
+
+    private void txtLastNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLastNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtLastNameActionPerformed
+
+    private void txtCountryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCountryActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCountryActionPerformed
 
     /**
      * @param args the command line arguments
