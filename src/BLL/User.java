@@ -21,13 +21,14 @@ import java.util.logging.Logger;
  * @author Stephan
  */
 public class User extends Person implements Serializable {
+
     private int userID;
     private String username;
     private String password;
     private String accountType;
 
-    public User(String firstName, String lastName, String title, Date dateOfBirth, String gender, String country, String province, String city, String street, 
-            String postalCode, String addressLine, String email, String cellNumber, String telNumber, Date dateAdded, int userID, 
+    public User(String firstName, String lastName, String title, Date dateOfBirth, String gender, String country, String province, String city, String street,
+            String postalCode, String addressLine, String email, String cellNumber, String telNumber, Date dateAdded, int userID,
             String username, String password, String accountType, String idNumber) {
         super(idNumber, firstName, lastName, title, dateOfBirth, gender, country, province, city, street, postalCode, addressLine, email, cellNumber, telNumber, dateAdded);
         this.userID = userID;
@@ -43,9 +44,7 @@ public class User extends Person implements Serializable {
         this.password = password;
         this.accountType = accountType;
     }
-    
-    
-    
+
     public int getUserID() {
         return userID;
     }
@@ -77,7 +76,7 @@ public class User extends Person implements Serializable {
     public void setAccountType(String accountType) {
         this.accountType = accountType;
     }
-    
+
     //METHODS
     //This method will return a integer code that will indicate the result of the authentication:
     //0 = Unknown unsuccessful login
@@ -86,429 +85,264 @@ public class User extends Person implements Serializable {
     //3 = User found but not authorized to login
     //4 = User login successful
     //5 = Admin login successful
-    public static int AuthenticateLogin(String username, String password){
-            int userAuthed = 0;
-            int usernameInputCode = Common.checkInput(username);
-            int passwordInputCode = Common.checkInput(password);
-            if ((usernameInputCode == 1) && ((passwordInputCode == 1) || (passwordInputCode == 4) || (passwordInputCode == 5) || (passwordInputCode == 7)))
-            {
-                userAuthed = 2;
-                String[][] dbData = DataHandler.readRecords(Arrays.asList("UserID", "AccountType"), Arrays.<DataTablesCollection>asList(new DataTablesCollection("User")), Arrays.asList("Username='" + username + "'", "Password='" + password + "'" ));
-                if (dbData.length == 1)
-                {
-                    userAuthed = 3;
-                    String AccountType = dbData[0][1];
-                    if (AccountType.equals("Normal") || AccountType.equals("AdminRequested") || AccountType.equals("AdminRejected"))
-                    {
-                        userAuthed = 4;
-                    }
-                    if (AccountType.equals("Admin"))
-                    {
-                        userAuthed = 5;
-                    }
+    public static int AuthenticateLogin(String username, String password) {
+        int userAuthed = 0;
+        int usernameInputCode = Common.checkInput(username);
+        int passwordInputCode = Common.checkInput(password);
+        if ((usernameInputCode == 1) && ((passwordInputCode == 1) || (passwordInputCode == 4) || (passwordInputCode == 5) || (passwordInputCode == 7))) {
+            userAuthed = 2;
+            String[][] dbData = DataHandler.readRecords(Arrays.asList("UserID", "AccountType"), Arrays.<DataTablesCollection>asList(new DataTablesCollection("User")), Arrays.asList("Username='" + username + "'", "Password='" + password + "'"));
+            if (dbData.length == 1) {
+                userAuthed = 3;
+                String AccountType = dbData[0][1];
+                if (AccountType.equals("Normal") || AccountType.equals("AdminRequested") || AccountType.equals("AdminRejected")) {
+                    userAuthed = 4;
+                }
+                if (AccountType.equals("Admin")) {
+                    userAuthed = 5;
                 }
             }
-            else
-            {
-                userAuthed = 1;
-            }
-            
-            return userAuthed;
-    }
-    
-    public static List<User> getUsers(){
-        List<User> users = new ArrayList<>();
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList());
-        int count = dbData.length;
-        for (int i = 0; i < count; i++) {
-            try {
-                users.add(new User(dbData[i][0], dbData[i][1], dbData[i][2], new SimpleDateFormat("yyyy-MM-dd").parse(dbData[i][3]), dbData[i][4], dbData[i][5], dbData[i][6], dbData[i][7], dbData[i][8], dbData[i][9], dbData[i][10], dbData[i][11], dbData[i][12], dbData[i][13], new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(dbData[i][14]), Integer.valueOf(dbData[i][15]), dbData[i][16], dbData[i][17], dbData[i][18], dbData[i][19]));
-            } catch (ParseException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        } else {
+            userAuthed = 1;
         }
 
-        return users;
+        return userAuthed;
     }
-    
-    public static List<User> getUsersByAccountType(String accountType){
-        List<User> users = new ArrayList<>();
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("AccountType='" + accountType + "'"));
-        int count = dbData.length;
-        for (int i = 0; i < count; i++) {
-            try {
-                users.add(new User(dbData[i][0], dbData[i][1], dbData[i][2], new SimpleDateFormat("yyyy-MM-dd").parse(dbData[i][3]), dbData[i][4], dbData[i][5], dbData[i][6], dbData[i][7], dbData[i][8], dbData[i][9], dbData[i][10], dbData[i][11], dbData[i][12], dbData[i][13], new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(dbData[i][14]), Integer.valueOf(dbData[i][15]), dbData[i][16], dbData[i][17], dbData[i][18], dbData[i][19]));
-            } catch (ParseException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
 
-        return users;
+    public static List<User> getUsers() {
+        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList());
     }
-    
+
+    public static List<User> getUsersByAccountType(String accountType) {
+        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("AccountType='" + accountType + "'"));
+    }
+
     public static User GetUser(String username) {
         User user = null;
         int usernameInputCode = Common.checkInput(username);
-        if ((usernameInputCode == 1) || (usernameInputCode == 4))
-        {
-            String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("Username='" + username + "'"));
-            int count = dbData.length;
-            if (count == 1)
-            {
-                try {
-                    user = new User(dbData[0][0], dbData[0][1], dbData[0][2], new SimpleDateFormat("yyyy-MM-dd").parse(dbData[0][3]), dbData[0][4], dbData[0][5], dbData[0][6], dbData[0][7], dbData[0][8], dbData[0][9], dbData[0][10], dbData[0][11], dbData[0][12], dbData[0][13], new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(dbData[0][14]), Integer.valueOf(dbData[0][15]), dbData[0][16], dbData[0][17], dbData[0][18], dbData[0][19]);
-                } catch (ParseException ex) {
-                    Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+        if ((usernameInputCode == 1) || (usernameInputCode == 4)) {
+            user = DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("Username='" + username + "'")).get(0);
         }
 
         return user;
     }
-    
+
     public static User GetUserByIdNumber(String idNumber) {
         User user = null;
         int usernameInputCode = Common.checkInput(idNumber);
-        if (usernameInputCode == 2 || usernameInputCode == 10)
-        {
-            String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "IDNumber"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("PersonID='" + idNumber + "'"));
-            int count = dbData.length;
-            if (count == 1)
-            {
-                try {
-                    user = new User(dbData[0][0], dbData[0][1], dbData[0][2], new SimpleDateFormat("yyyy-MM-dd").parse(dbData[0][3]), dbData[0][4], dbData[0][5], dbData[0][6], dbData[0][7], dbData[0][8], dbData[0][9], dbData[0][10], dbData[0][11], dbData[0][12], dbData[0][13], new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(dbData[0][14]), Integer.valueOf(dbData[0][15]), dbData[0][16], dbData[0][17], dbData[0][18], dbData[0][19]);
-                } catch (ParseException ex) {
-                    Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+        if (usernameInputCode == 2 || usernameInputCode == 10) {
+            user = DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "IDNumber"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("PersonID='" + idNumber + "'")).get(0);
         }
 
         return user;
     }
-    
+
     public static User GetUserByUserId(int userId) {
-        User user = null;
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "IDNumber"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("UserID=" + userId));
-        int count = dbData.length;
-        if (count == 1)
-        {
-            try {
-                user = new User(dbData[0][0], dbData[0][1], dbData[0][2], new SimpleDateFormat("yyyy-MM-dd").parse(dbData[0][3]), dbData[0][4], dbData[0][5], dbData[0][6], dbData[0][7], dbData[0][8], dbData[0][9], dbData[0][10], dbData[0][11], dbData[0][12], dbData[0][13], new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(dbData[0][14]), Integer.valueOf(dbData[0][15]), dbData[0][16], dbData[0][17], dbData[0][18], dbData[0][19]);
-            } catch (ParseException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-        return user;
+        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "IDNumber"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("UserID=" + userId)).get(0);
     }
-    
+
     public static User GetUserByLoginDetails(String username, String password) {
-        User user = null;
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "IDNumber"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("Username= '" + username + "' AND  Password= '" + password + "'"));
-        int count = dbData.length;
-        if (count == 1)
-        {
-            try {
-                user = new User(dbData[0][0], dbData[0][1], dbData[0][2], new SimpleDateFormat("yyyy-MM-dd").parse(dbData[0][3]), dbData[0][4], dbData[0][5], dbData[0][6], dbData[0][7], dbData[0][8], dbData[0][9], dbData[0][10], dbData[0][11], dbData[0][12], dbData[0][13], new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(dbData[0][14]), Integer.valueOf(dbData[0][15]), dbData[0][16], dbData[0][17], dbData[0][18], dbData[0][19]);
-            } catch (ParseException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-        return user;
+        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "IDNumber"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("Username= '" + username + "' AND  Password= '" + password + "'")).get(0);
     }
-    
-    
-    
+
     public void registerUser() {
         //Person
         this.registerPerson();
-        
+
         //User
         //Columns
         ArrayList<String> columns = new ArrayList<>();
         columns.add("PersonID");
         columns.add("Username");
         columns.add("Password");
-        if (!this.getAccountType().isEmpty()) { columns.add("AccountType"); }
-        
+        if (!this.getAccountType().isEmpty()) {
+            columns.add("AccountType");
+        }
+
         //Values
         String values = "";
         values += "string#" + this.getIdNumber();
         values += ";string#" + this.getUsername();
         values += ";string#" + this.getPassword();
-        if (!this.getAccountType().isEmpty()) { values += ";string#" + this.getAccountType(); }
-        
+        if (!this.getAccountType().isEmpty()) {
+            values += ";string#" + this.getAccountType();
+        }
+
         //Execute
         DataHandler.createRecords(columns, "User", Arrays.asList(values));
     }
-    
+
     public static void registerUser(User user) {
         //Person
         user.registerPerson();
-        
+
         //User
         //Columns
         ArrayList<String> columns = new ArrayList<>();
         columns.add("PersonID");
         columns.add("Username");
         columns.add("Password");
-        if (!user.getAccountType().isEmpty()) { columns.add("AccountType"); }
-        
+        if (!user.getAccountType().isEmpty()) {
+            columns.add("AccountType");
+        }
+
         //Values
         String values = "";
         values += "string#" + user.getIdNumber();
         values += ";string#" + user.getUsername();
         values += ";string#" + user.getPassword();
-        if (!user.getAccountType().isEmpty()) { values += ";string#" + user.getAccountType(); }
-        
+        if (!user.getAccountType().isEmpty()) {
+            values += ";string#" + user.getAccountType();
+        }
+
         //Execute
         DataHandler.createRecords(columns, "User", Arrays.asList(values));
     }
-    
+
     public void updateUser() {
         //Person
         this.updatePerson();
-        
+
         //User
         //Columns
         ArrayList<String> columns = new ArrayList<>();
         columns.add("Username");
         columns.add("Password");
         columns.add("AccountType");
-        
+
         //Values
         ArrayList<String> values = new ArrayList<>();
         values.add("string;" + this.getUsername());
         values.add("string;" + this.getPassword());
         values.add("string;" + this.getAccountType());
-        
+
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
         conditions.add("UserID=" + this.getUserID());
-        
+
         //Execute
         DataHandler.updateRecords("User", columns, values, conditions);
     }
-    
+
     public static void updateUser(User user) {
         //Person
         user.updatePerson();
-        
+
         //User
         //Columns
         ArrayList<String> columns = new ArrayList<>();
         columns.add("Username");
         columns.add("Password");
         columns.add("AccountType");
-        
+
         //Values
         ArrayList<String> values = new ArrayList<>();
         values.add("string;" + user.getUsername());
         values.add("string;" + user.getPassword());
         values.add("string;" + user.getAccountType());
-        
+
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
         conditions.add("UserID=" + user.getUserID());
-        
+
         //Execute
         DataHandler.updateRecords("User", columns, values, conditions);
     }
-    
+
     public void deleteUser() {
         //Person
         this.deletePerson();
-        
+
         //User        
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
         conditions.add("UserID=" + this.getUserID());
-        conditions.add("PersonID='" + this.getIdNumber()+ "'");
-        conditions.add("Username='" + this.getUsername()+ "'");
-        conditions.add("Password='" + this.getPassword()+ "'");
-        conditions.add("AccountType='" + this.getAccountType()+ "'");
-        
+        conditions.add("PersonID='" + this.getIdNumber() + "'");
+        conditions.add("Username='" + this.getUsername() + "'");
+        conditions.add("Password='" + this.getPassword() + "'");
+        conditions.add("AccountType='" + this.getAccountType() + "'");
+
         //Execute
         DataHandler.deleteRecords("User", conditions);
     }
-    
+
     public static void deleteUser(User user) {
         //Person
         user.deletePerson();
-        
+
         //User        
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
         conditions.add("UserID=" + user.getUserID());
-        conditions.add("PersonID='" + user.getIdNumber()+ "'");
-        conditions.add("Username='" + user.getUsername()+ "'");
-        conditions.add("Password='" + user.getPassword()+ "'");
-        conditions.add("AccountType='" + user.getAccountType()+ "'");
-        
+        conditions.add("PersonID='" + user.getIdNumber() + "'");
+        conditions.add("Username='" + user.getUsername() + "'");
+        conditions.add("Password='" + user.getPassword() + "'");
+        conditions.add("AccountType='" + user.getAccountType() + "'");
+
         //Execute
         DataHandler.deleteRecords("User", conditions);
     }
-    
+
     public static void deleteUser(String idNumber, int userID) {
         //Person
         Person.deletePerson(idNumber);
-        
+
         //User        
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
         conditions.add("UserID=" + userID);
-        
+
         //Execute
         DataHandler.deleteRecords("User", conditions);
     }
-    
-       public static List<User> getUserByFirstName(String firstName){
-         List<User> users = new ArrayList<>();
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("FirstName='" + firstName + "'"));
-        int count = dbData.length;
-        for (int i = 0; i < count; i++) {
-            try {
-                users.add(new User(dbData[i][0], dbData[i][1], dbData[i][2], new SimpleDateFormat("yyyy-MM-dd").parse(dbData[i][3]), dbData[i][4], dbData[i][5], dbData[i][6], dbData[i][7], dbData[i][8], dbData[i][9], dbData[i][10], dbData[i][11], dbData[i][12], dbData[i][13], new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(dbData[i][14]), Integer.valueOf(dbData[i][15]), dbData[i][16], dbData[i][17], dbData[i][18], dbData[i][19]));
-            } catch (ParseException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return users;
-    }
-    
-    public static List<User> getUserByLastName(String lastName){
-       List<User> users = new ArrayList<>();
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("LastName='" + lastName + "'"));
-        int count = dbData.length;
-        for (int i = 0; i < count; i++) {
-            try {
-                users.add(new User(dbData[i][0], dbData[i][1], dbData[i][2], new SimpleDateFormat("yyyy-MM-dd").parse(dbData[i][3]), dbData[i][4], dbData[i][5], dbData[i][6], dbData[i][7], dbData[i][8], dbData[i][9], dbData[i][10], dbData[i][11], dbData[i][12], dbData[i][13], new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(dbData[i][14]), Integer.valueOf(dbData[i][15]), dbData[i][16], dbData[i][17], dbData[i][18], dbData[i][19]));
-            } catch (ParseException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return users;
+
+    public static List<User> getUserByFirstName(String firstName) {
+        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("FirstName='" + firstName + "'"));
     }
 
+    public static List<User> getUserByLastName(String lastName) {
+        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("LastName='" + lastName + "'"));
+    }
 
-    public static List<User> getUserByFullName(String Fullname){
-        String[] nameSurname= Fullname.split("\\s");
-        String name= null;
+    public static List<User> getUserByFullName(String Fullname) {
+        String[] nameSurname = Fullname.split("\\s");
+        String name = null;
         List<User> users = new ArrayList<>();
-        String surname=null;
-        if (nameSurname.length>=2) {
-            name=nameSurname[0];
-            surname=nameSurname[1];
-            
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("FirstName= '" + name + "' AND  LastName= '" + surname + "'"));
-        int count = dbData.length;
-        for (int i = 0; i < count; i++) {
-            try {
-                users.add(new User(dbData[i][0], dbData[i][1], dbData[i][2], new SimpleDateFormat("yyyy-MM-dd").parse(dbData[i][3]), dbData[i][4], dbData[i][5], dbData[i][6], dbData[i][7], dbData[i][8], dbData[i][9], dbData[i][10], dbData[i][11], dbData[i][12], dbData[i][13], new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(dbData[i][14]), Integer.valueOf(dbData[i][15]), dbData[i][16], dbData[i][17], dbData[i][18], dbData[i][19]));
-            } catch (ParseException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        String surname = null;
+        if (nameSurname.length >= 2) {
+            name = nameSurname[0];
+            surname = nameSurname[1];
+
+            users = DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("FirstName= '" + name + "' AND  LastName= '" + surname + "'"));
+            return users;
+        } else {
+            return users;
         }
-        return users;
-        }
-        else
-        {
-          return users;  
-        }
-       
-    }
-    
-       public static List<User> getUserByCountry(String country){
-       List<User> users = new ArrayList<>();
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("Country='" + country + "'"));
-        int count = dbData.length;
-        for (int i = 0; i < count; i++) {
-            try {
-                users.add(new User(dbData[i][0], dbData[i][1], dbData[i][2], new SimpleDateFormat("yyyy-MM-dd").parse(dbData[i][3]), dbData[i][4], dbData[i][5], dbData[i][6], dbData[i][7], dbData[i][8], dbData[i][9], dbData[i][10], dbData[i][11], dbData[i][12], dbData[i][13], new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(dbData[i][14]), Integer.valueOf(dbData[i][15]), dbData[i][16], dbData[i][17], dbData[i][18], dbData[i][19]));
-            } catch (ParseException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return users;
+
     }
 
-          public static List<User> getUserByCity(String city){
-       List<User> users = new ArrayList<>();
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("City='" + city + "'"));
-        int count = dbData.length;
-        for (int i = 0; i < count; i++) {
-            try {
-                users.add(new User(dbData[i][0], dbData[i][1], dbData[i][2], new SimpleDateFormat("yyyy-MM-dd").parse(dbData[i][3]), dbData[i][4], dbData[i][5], dbData[i][6], dbData[i][7], dbData[i][8], dbData[i][9], dbData[i][10], dbData[i][11], dbData[i][12], dbData[i][13], new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(dbData[i][14]), Integer.valueOf(dbData[i][15]), dbData[i][16], dbData[i][17], dbData[i][18], dbData[i][19]));
-            } catch (ParseException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return users;
-    }
-       public static List<User> getUserByProvince(String province){
-       List<User> users = new ArrayList<>();
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("Province='" + province + "'"));
-        int count = dbData.length;
-        for (int i = 0; i < count; i++) {
-            try {
-                users.add(new User(dbData[i][0], dbData[i][1], dbData[i][2], new SimpleDateFormat("yyyy-MM-dd").parse(dbData[i][3]), dbData[i][4], dbData[i][5], dbData[i][6], dbData[i][7], dbData[i][8], dbData[i][9], dbData[i][10], dbData[i][11], dbData[i][12], dbData[i][13], new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(dbData[i][14]), Integer.valueOf(dbData[i][15]), dbData[i][16], dbData[i][17], dbData[i][18], dbData[i][19]));
-            } catch (ParseException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return users;
+    public static List<User> getUserByCountry(String country) {
+        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("Country='" + country + "'"));
     }
 
-       public static List<User> getUserByTelNumber(String telNum){
-       List<User> users = new ArrayList<>();
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("TelNumber='" + telNum + "'"));
-        int count = dbData.length;
-        for (int i = 0; i < count; i++) {
-            try {
-                users.add(new User(dbData[i][0], dbData[i][1], dbData[i][2], new SimpleDateFormat("yyyy-MM-dd").parse(dbData[i][3]), dbData[i][4], dbData[i][5], dbData[i][6], dbData[i][7], dbData[i][8], dbData[i][9], dbData[i][10], dbData[i][11], dbData[i][12], dbData[i][13], new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(dbData[i][14]), Integer.valueOf(dbData[i][15]), dbData[i][16], dbData[i][17], dbData[i][18], dbData[i][19]));
-            } catch (ParseException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return users;
-    }
-       public static List<User> getUserByCellNumber(String celNum){
-       List<User> users = new ArrayList<>();
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("CellNumber='" + celNum + "'"));
-        int count = dbData.length;
-        for (int i = 0; i < count; i++) {
-            try {
-                users.add(new User(dbData[i][0], dbData[i][1], dbData[i][2], new SimpleDateFormat("yyyy-MM-dd").parse(dbData[i][3]), dbData[i][4], dbData[i][5], dbData[i][6], dbData[i][7], dbData[i][8], dbData[i][9], dbData[i][10], dbData[i][11], dbData[i][12], dbData[i][13], new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(dbData[i][14]), Integer.valueOf(dbData[i][15]), dbData[i][16], dbData[i][17], dbData[i][18], dbData[i][19]));
-            } catch (ParseException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return users;
-    }
-       public static List<User> getUserByEmail(String email){
-       List<User> users = new ArrayList<>();
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("Email='" + email + "'"));
-        int count = dbData.length;
-        for (int i = 0; i < count; i++) {
-            try {
-                users.add(new User(dbData[i][0], dbData[i][1], dbData[i][2], new SimpleDateFormat("yyyy-MM-dd").parse(dbData[i][3]), dbData[i][4], dbData[i][5], dbData[i][6], dbData[i][7], dbData[i][8], dbData[i][9], dbData[i][10], dbData[i][11], dbData[i][12], dbData[i][13], new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(dbData[i][14]), Integer.valueOf(dbData[i][15]), dbData[i][16], dbData[i][17], dbData[i][18], dbData[i][19]));
-            } catch (ParseException ex) {
-                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return users;
+    public static List<User> getUserByCity(String city) {
+        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("City='" + city + "'"));
     }
 
+    public static List<User> getUserByProvince(String province) {
+        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("Province='" + province + "'"));
+    }
 
-    
+    public static List<User> getUserByTelNumber(String telNum) {
+        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("TelNumber='" + telNum + "'"));
+    }
 
+    public static List<User> getUserByCellNumber(String celNum) {
+        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("CellNumber='" + celNum + "'"));
+    }
 
+    public static List<User> getUserByEmail(String email) {
+        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("Email='" + email + "'"));
+    }
 
-
-    
-    
-    
-    
-    
 }

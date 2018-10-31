@@ -5,115 +5,185 @@
  */
 package BLL;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
-import java.sql.*;
-import java.util.*;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Nico
  */
-public class Exchange<T> {
-    private Class<T> typeOfT;
- 
-    @SuppressWarnings("unchecked")
-    public Exchange() {
-        this.typeOfT = (Class<T>)
-                ((ParameterizedType)getClass()
-                .getGenericSuperclass())
-                .getActualTypeArguments()[0];
-    }
-    
-    public List<T> DataTableToList(ResultSet rs) {
-        List<T> returnData = new ArrayList<T>();
-        Class t = typeOfT;
-        Constructor[] constructorInfos = t.getConstructors();
-        int rowCount = -1;
+public class Exchange {
+    public static <I> List<I> DataTableToList(Class<?> t, ResultSet data) {
+        //Validate ResultSet for valid data
+        List<I> results = new ArrayList<I>();
+        ResultSetMetaData rsmd = null;;
         int columnCount = -1;
+        int rowCount = -1;
         try {
-            columnCount = rs.getMetaData().getColumnCount();
-            boolean b = rs.last();
-            rowCount = rs.getRow();
-            rs.beforeFirst();
+            rsmd = data.getMetaData();
+            columnCount = rsmd.getColumnCount();
+            data.last();
+            rowCount = data.getRow();
+            data.beforeFirst();
         } catch (SQLException sqle) {
-            System.out.println("SQL Exception thrown and caught");
+            System.out.println(sqle.getMessage());
         }
-        Object[] parameters = new Object[columnCount];
         
-        try {
-            while (rs.next()) {
-                for (int i = 1; i <= columnCount; i++)
-                {
-                    Object column = rs.getObject(i);
-                    if (column == null)
-                    {
-                        parameters[i] = null;
+        if (rowCount > 0) {
+            //Get basic variables to be used
+            Constructor[] constructors = t.getConstructors();
+            
+            //Validate constructors for valid constructors
+            try {
+                //Iterating per row
+                while (data.next()) {
+                    //First creating parameters array with row information
+                    Object[] parameters = new Object[columnCount];
+                    
+                    for (int i = 1; i <= columnCount; i++) {
+                        Object value = data.getObject(i);
+                        if (data.wasNull()) {
+                            parameters[i - 1] = null;
+                        } else {
+                            parameters[i - 1] = value;
+                        }
                     }
-                    else
-                    {
-                        switch (column.getClass().getSimpleName())
-                        {
-                            case "Byte":
-                                parameters[i] = (rs.getBigDecimal(i) == BigDecimal.valueOf(0));
-                                break;
-                            default:
-                                parameters[i] = column;
-                                break;
+                    
+                    //Now checking for constructor data type match
+                    int constructorIndex = 0;
+                    boolean constructorFound = false;
+                    
+                    while (!constructorFound && constructorIndex < constructors.length) {
+                        Constructor constructor = constructors[constructorIndex];
+                        if (constructor.getParameterCount() == parameters.length) {
+                            constructorFound = constructorMatch(properDataTypes(parameters, constructor), constructor);
+                        }
+                        if (!constructorFound) {
+                            constructorIndex++;
+                        }
+                    }
+                    if (constructorFound) {
+                        //Invoke that constructor
+                        try {
+                            results.add((I)constructors[constructorIndex].<I>newInstance(properDataTypes(parameters, constructors[constructorIndex])));
+                        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                            Logger.getLogger(Exchange.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                 }
-                int index = 0;
-                int paramindex = 0;
-                boolean constructorFound = false;
-                while((!constructorFound) && (index < constructorInfos.length))
-                {
-                    Constructor constructor = constructorInfos[index];
-                    if (constructor.getParameters().length == parameters.length)
-                    {
-                        paramindex = 0;
-                        boolean parametersValidated = true;
-                        while ((parametersValidated) && (paramindex < constructor.getParameters().length))
-                        {
-                            Parameter parameter = constructor.getParameters()[paramindex];
-                            if ((parameters[paramindex] != null) && (parameter.getClass() != parameters[paramindex].getClass()))
-                            {
-                                if (!parameter.getClass().isPrimitive())
-                                {
-                                    parametersValidated = false;
-                                }
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(Exchange.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }        
+        
+        return results;
+    }
+        
+    
+    private static Object[] properDataTypes(Object[] parameters, Constructor constructor) {
+        Object[] newParameters = new Object[parameters.length];
+        for (int i = 0; i < constructor.getParameterCount(); i++) {
+            if (parameters[i] != null) {
+                if (!parameters[i].getClass().getName().equals(constructor.getParameters()[i].getParameterizedType().getTypeName())) {
+                    switch (parameters[i].getClass().getName()) {
+                        case "java.lang.Integer":
+                            newParameters[i] = parameters[i];
+                            break;
+                        case "java.lang.String":
+                            newParameters[i] = parameters[i];
+                            break;
+                        case "java.sql.Timestamp":
+                            if (constructor.getParameters()[i].getParameterizedType().getTypeName().equals("java.util.Date")) {
+                                newParameters[i] = new java.util.Date(((java.sql.Timestamp)parameters[i]).getTime());
                             }
-                            paramindex++;
-                        }
-                        if (parametersValidated)
-                        {
-                            constructorFound = true;
-                        }
-                        else
-                        {
-                            index++;
-                        }
+                            break;
+                        case "java.sql.Date":
+                            if (constructor.getParameters()[i].getParameterizedType().getTypeName().equals("java.util.Date")) {
+                                newParameters[i] = new java.util.Date(((java.sql.Date)parameters[i]).getTime());
+                            }
+                            break;
+                        case "java.math.BigDecimal":
+                            if (constructor.getParameters()[i].getParameterizedType().getTypeName().equals("double")) {
+                                newParameters[i] = ((BigDecimal)parameters[i]).doubleValue();
+                            }
+                            break;
+                        case "java.lang.Boolean":
+                            newParameters[i] = parameters[i];
+                            break;
+                        default:
+                            newParameters[i] = parameters[i];
+                            break;
                     }
                 }
-                if (constructorFound)
-                {
-                    returnData.add((T)constructorInfos[index].newInstance(parameters));
-                }
-                else
-                {
-                    System.out.println("There was error");
+                else {
+                    newParameters[i] = parameters[i];
                 }
             }
-        } catch (SQLException e) {
-            System.out.println("SQL Exception occured");
-        } catch (InstantiationException e) {
-            System.out.println("Instantiation Exception occured");
-        } catch (IllegalAccessException e) {
-            System.out.println("Illegal Access Exception occured");
-        } catch (InvocationTargetException e) {
-            System.out.println("Invocation Target Exception occured");
+            else {
+                newParameters[i] = null;
+            }
         }
-
-        return returnData;
+        return newParameters;
+    }
+        
+    
+    private static boolean constructorMatch(Object[] parameters, Constructor constructor) {
+        boolean result = true;
+        for (int i = 0; i < constructor.getParameterCount(); i++) {
+            if (parameters[i] != null) {
+                if (!parameters[i].getClass().getName().equals(constructor.getParameters()[i].getParameterizedType().getTypeName())) {
+                    switch (parameters[i].getClass().getName()) {
+                        case "java.lang.Integer":
+                            if (!constructor.getParameters()[i].getParameterizedType().getTypeName().equals("int")) {
+                                result = false;
+                            }
+                            break;
+                        case "java.lang.String":
+                            result = false;
+                            break;
+                        case "java.sql.Timestamp":
+                            if (!constructor.getParameters()[i].getParameterizedType().getTypeName().equals("java.util.Date")) {
+                                parameters[i] = (Date)parameters[i];
+                                result = false;
+                            }
+                            break;
+                        case "java.sql.Date":
+                            if (!constructor.getParameters()[i].getParameterizedType().getTypeName().equals("java.util.Date")) {
+                                result = false;
+                            }
+                            break;
+                        case "java.lang.Double":
+                            if (!constructor.getParameters()[i].getParameterizedType().getTypeName().equals("double")) {
+                                result = false;
+                            }
+                            break;
+                        case "java.math.BigDecimal":
+                            if (!constructor.getParameters()[i].getParameterizedType().getTypeName().equals("double")) {
+                                result = false;
+                            }
+                            break;
+                        case "java.lang.Boolean":
+                            if (!constructor.getParameters()[i].getParameterizedType().getTypeName().equals("boolean")) {
+                                result = false;
+                            }
+                            break;
+                        default:
+                            result = false;
+                            break;
+                    }
+                }
+            }
+        }
+        return result;
     }
 }

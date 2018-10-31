@@ -40,37 +40,15 @@ public class StockOrder {
     }
     
     public static List<StockOrder> getStockOrders(int orderID){
-        List<StockOrder> stockOrders = new ArrayList<>();
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("OrderID", "StockID", "Quantity"), Arrays.asList(new DataTablesCollection("StockOrder")), Arrays.asList("OrderID=" + orderID));
-        int count = dbData.length;
-        for (int i = 0; i < count; i++) {
-            stockOrders.add(new StockOrder(Stock.getStock(Integer.valueOf(dbData[i][0])), Integer.valueOf(dbData[i][1])));
-        }
-
-        return stockOrders;
+        return DataHandler.<StockOrder>readRecords(StockOrder.class, Arrays.asList("OrderID", "StockID", "Quantity"), Arrays.asList(new DataTablesCollection("StockOrder")), Arrays.asList("OrderID=" + orderID));
     }
     
     public static List<StockOrder> getStockOrdersByStock(int stockID){
-        List<StockOrder> stockOrders = new ArrayList<>();
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("OrderID", "StockID", "Quantity"), Arrays.asList(new DataTablesCollection("StockOrder")), Arrays.asList("StockID=" + stockID));
-        int count = dbData.length;
-        for (int i = 0; i < count; i++) {
-            stockOrders.add(new StockOrder(Stock.getStock(Integer.valueOf(dbData[i][0])), Integer.valueOf(dbData[i][1])));
-        }
-
-        return stockOrders;
+        return DataHandler.<StockOrder>readRecords(StockOrder.class, Arrays.asList("OrderID", "StockID", "Quantity"), Arrays.asList(new DataTablesCollection("StockOrder")), Arrays.asList("StockID=" + stockID));
     }
     
     public static StockOrder getStockOrder(int orderID, int stockID){
-        StockOrder stockOrder = null;
-        String[][] dbData = DataHandler.readRecords(Arrays.asList("OrderID", "StockID", "Quantity"), Arrays.asList(new DataTablesCollection("StockOrder")), Arrays.asList("OrderID=" + orderID, "StockID=" + stockID));
-        int count = dbData.length;
-        if (count == 1)
-        {
-            stockOrder = new StockOrder(Stock.getStock(Integer.valueOf(dbData[0][0])), Integer.valueOf(dbData[0][1]));
-        }
-
-        return stockOrder;
+        return DataHandler.<StockOrder>readRecords(StockOrder.class, Arrays.asList("OrderID", "StockID", "Quantity"), Arrays.asList(new DataTablesCollection("StockOrder")), Arrays.asList("OrderID=" + orderID, "StockID=" + stockID)).get(0);
     }
     
     public void registerStockOrder(Order order) {
