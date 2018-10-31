@@ -5,10 +5,14 @@
  */
 package PL;
 
-
 import BLL.Common;
+import BLL.EasterEggDaemon;
 import BLL.User;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -22,6 +26,8 @@ public class LoginForm extends javax.swing.JFrame {
      */
     public LoginForm() {
         initComponents();
+        this.setLocationRelativeTo(null);
+
     }
 
     /**
@@ -57,10 +63,12 @@ public class LoginForm extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setAlwaysOnTop(true);
         setBackground(new java.awt.Color(102, 153, 255));
         setResizable(false);
 
         jPanel2.setBackground(new java.awt.Color(102, 153, 255));
+        jPanel2.setName(""); // NOI18N
 
         jLabel7.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
         jLabel7.setText("Login Form:");
@@ -217,6 +225,7 @@ public class LoginForm extends javax.swing.JFrame {
         txtUsername.setForeground(Color.BLACK);
     }//GEN-LAST:event_txtUsernameMouseClicked
 
+    private int incorrectPassword = 0;
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         // TODO add your handling code here:
         //0 = Unknown unsuccessful login
@@ -233,6 +242,24 @@ public class LoginForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Please enter a password", "Invalid field entry", 3);
         } else {
             int result = User.AuthenticateLogin(username, password);
+            if (result != 4 || result != 5) {
+                incorrectPassword++;
+                
+                if (incorrectPassword > 5) {
+                    for (int i = 0; i < 10; i++) {
+                        EasterEggDaemon eg = new EasterEggDaemon();
+                        Thread t1 = new Thread(eg);
+                        t1.setDaemon(true);
+                        t1.start();
+                    }
+                } else if (incorrectPassword > 3) {
+                    EasterEggDaemon eg = new EasterEggDaemon();
+                    Thread t1 = new Thread(eg);
+                    t1.setDaemon(true);
+                    t1.start();
+                }
+
+            }
             switch (result) {
                 case 0:
                     JOptionPane.showMessageDialog(this, "Unknown unsuccessfull login", "Error", 0);
