@@ -34,7 +34,6 @@ public class EasterEggDaemon implements Runnable {
     }
 
     private void playMusic() {
-        System.out.println("Test");
         String name = "Gandalf.wav";
         InputStream is = null;
         

@@ -54,6 +54,7 @@ public class StockForm extends javax.swing.JFrame {
         lbLoginedInUser.setText("No User Logged In");
         cmbChangeListener changeListener = new cmbChangeListener();
         cmbSorting.addItemListener(changeListener);
+        this.setLocationRelativeTo(null);
     }
 
     public StockForm(User u) {
@@ -75,12 +76,14 @@ public class StockForm extends javax.swing.JFrame {
             ex.showMessage();
             
         }
+        this.setLocationRelativeTo(null);
     }
 
     private void initModel() {
         disableAllFields();
         setModel();
         clearAllFields();
+        
     }
 
     public void setModel() {

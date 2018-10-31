@@ -27,6 +27,7 @@ public class OrderForm extends javax.swing.JFrame {
         initComponents();
         currentUser = null;
         lbLoginedInUser.setText(lbLoginedInUser.getText()+"No User Selected");
+        this.setLocationRelativeTo(null);
 
     }
 
@@ -44,6 +45,7 @@ public class OrderForm extends javax.swing.JFrame {
             ex.showMessage();
             
         }
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -625,8 +627,8 @@ public class OrderForm extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 20, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

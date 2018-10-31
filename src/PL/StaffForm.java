@@ -54,6 +54,7 @@ public class StaffForm extends javax.swing.JFrame {
         lbLoginedInUser.setText("New user registration");
         cmbSortingChangeListener changeListener = new cmbSortingChangeListener();
         cmbSorting1.addItemListener(changeListener);
+        this.setLocationRelativeTo(null);
     }
     
     public StaffForm(User u) {
@@ -75,12 +76,14 @@ public class StaffForm extends javax.swing.JFrame {
             ex.showMessage();
             
         }
+        this.setLocationRelativeTo(null);
     }
 
     private void initModel() {
         disableAllFields();
         setModel();
         clearAllFields();
+        
     }
 
     /**
