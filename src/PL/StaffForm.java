@@ -37,47 +37,51 @@ import org.jdesktop.swingx.JXTextField;
  */
 public class StaffForm extends javax.swing.JFrame {
 
-    private User currentUser = null;
+    private  User currentUser = null;
+    private List<User> users = new ArrayList<>();
+    private int insertClick = 0;
+    private int updateClick = 0;
 
     /**
      * Creates new form StaffForm
      */
     public StaffForm() {
         initComponents();
+        users = User.getUsers();
         initModel();
+        
         currentUser = null;
         lbLoginedInUser.setText("New user registration");
-        cmbChangeListener changeListener = new cmbChangeListener();
-        cmbSearchParam.addItemListener(changeListener);
-
+        cmbSortingChangeListener changeListener = new cmbSortingChangeListener();
+        cmbSorting1.addItemListener(changeListener);
     }
-
-    List<User> userList = new ArrayList<>();
-
+    
     public StaffForm(User u) {
         initComponents();
-        initModel();
         try {
             if (u == null) {
                 currentUser = null;
                 throw new UserDoesNotExistException(this);
             }
+            users = User.getUsers();
+            initModel();
+
             currentUser = u;
             lbLoginedInUser.setText(lbLoginedInUser.getText() + u.getFullname());
-            cmbChangeListener changeListener = new cmbChangeListener();
-            cmbSearchParam.addItemListener(changeListener);
+
+            cmbSortingChangeListener changeListener = new cmbSortingChangeListener();
+            cmbSorting1.addItemListener(changeListener);
         } catch (UserDoesNotExistException ex) {
             ex.showMessage();
+            
         }
     }
 
     private void initModel() {
         disableAllFields();
-        userList = setModel();
+        setModel();
         clearAllFields();
     }
-    int insertClick = 0;
-    int updateClick = 0;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -86,10 +90,9 @@ public class StaffForm extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
 
-    public List<User> setModel() {
+    public void setModel() {
         DefaultTableModel model = (DefaultTableModel) tblData.getModel();
         model.setNumRows(0);
-        List<User> myUsers = User.getUsers();
         Object rowData[] = new Object[20];
         Object columnData[] = new Object[20];
         columnData[0] = "IDNumber";
@@ -114,30 +117,57 @@ public class StaffForm extends javax.swing.JFrame {
         columnData[19] = "AccountType";
         model.setColumnCount(20);
         model.setColumnIdentifiers(columnData);
-        for (int i = 0; i < myUsers.size(); i++) {
-            rowData[0] = myUsers.get(i).getIdNumber();
-            rowData[1] = myUsers.get(i).getFirstName();
-            rowData[2] = myUsers.get(i).getLastName();
-            rowData[3] = myUsers.get(i).getTitle();
-            rowData[4] = new SimpleDateFormat("yyyy-MM-dd").format(myUsers.get(i).getDateOfBirth());
-            rowData[5] = myUsers.get(i).getGender();
-            rowData[6] = myUsers.get(i).getCountry();
-            rowData[7] = myUsers.get(i).getProvince();
-            rowData[8] = myUsers.get(i).getCity();
-            rowData[9] = myUsers.get(i).getStreet();
-            rowData[10] = myUsers.get(i).getPostalCode();
-            rowData[11] = myUsers.get(i).getAddressLine();
-            rowData[12] = myUsers.get(i).getEmail();
-            rowData[13] = myUsers.get(i).getCellNumber();
-            rowData[14] = myUsers.get(i).getTelNumber();
-            rowData[15] = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").format(myUsers.get(i).getDateAdded());
-            rowData[16] = myUsers.get(i).getUserID();
-            rowData[17] = myUsers.get(i).getUsername();
-            rowData[18] = myUsers.get(i).getPassword();
-            rowData[19] = myUsers.get(i).getAccountType();
+        for (int i = 0; i < users.size(); i++) {
+            rowData[0] = users.get(i).getIdNumber();
+            rowData[1] = users.get(i).getFirstName();
+            rowData[2] = users.get(i).getLastName();
+            rowData[3] = users.get(i).getTitle();
+            rowData[4] = new SimpleDateFormat("yyyy-MM-dd").format(users.get(i).getDateOfBirth());
+            rowData[5] = users.get(i).getGender();
+            rowData[6] = users.get(i).getCountry();
+            rowData[7] = users.get(i).getProvince();
+            rowData[8] = users.get(i).getCity();
+            rowData[9] = users.get(i).getStreet();
+            rowData[10] = users.get(i).getPostalCode();
+            rowData[11] = users.get(i).getAddressLine();
+            rowData[12] = users.get(i).getEmail();
+            rowData[13] = users.get(i).getCellNumber();
+            rowData[14] = users.get(i).getTelNumber();
+            rowData[15] = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").format(users.get(i).getDateAdded());
+            rowData[16] = users.get(i).getUserID();
+            rowData[17] = users.get(i).getUsername();
+            rowData[18] = users.get(i).getPassword();
+            rowData[19] = users.get(i).getAccountType();
             model.addRow(rowData);
         }
-        return myUsers;
+    }
+
+    private class cmbSortingChangeListener implements ItemListener {
+
+        @Override
+        public void itemStateChanged(ItemEvent e) {
+            JComboBox cb = (JComboBox) e.getSource();
+
+            Object item = e.getItem();
+
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                String txt = cmbSorting1.getSelectedItem().toString();
+                switch (txt) {
+                    case "Category":
+                        Collections.sort(users, new SortCategory());
+                        break;
+                    case "Stock Quantity":
+                        Collections.sort(users, new SortStockQuantity());
+                        break;
+                    case "Name":
+                        Collections.sort(users, new SortName());
+                        break;
+                    case "Surname":
+                        Collections.sort(users, new SortSurname());
+                        break;
+                }
+            }
+        }
     }
 
     public void disableAllFields() {
@@ -271,39 +301,27 @@ public class StaffForm extends javax.swing.JFrame {
         txtPassword.setBackground(Color.white);
         cmbAccountType.setBackground(Color.white);
     }
-
-    private class cmbChangeListener implements ItemListener {
-
-        @Override
-        public void itemStateChanged(ItemEvent e) {
-            JComboBox cb = (JComboBox) e.getSource();
-
-            Object item = e.getItem();
-
-            if (e.getStateChange() == ItemEvent.SELECTED) {
-                String txt = cmbSearchParam.getSelectedItem().toString();
-                switch (txt) {
-                    case "Category": {
-                        Collections.sort(userList, new SortCategory());
-                        break;
-                    }
-
-                    case "Stock Quantity": {
-                        Collections.sort(userList, new SortStockQuantity());
-                        break;
-                    }
-
-                    case "Name": {
-                        Collections.sort(userList, new SortName());
-                        break;
-                    }
-                    case "Surname": {
-                        Collections.sort(userList, new SortSurname());
-                        break;
-                    }
-                }
-            }
-        }
+    
+    public void setSorting(boolean value) {
+        cmbSorting1.setEnabled(value);
+    }
+    
+    public void setSearching(boolean value) {
+        cmbSearchParam.setEnabled(value);
+        txtSearch.setEnabled(value);
+        btnSearch.setEnabled(value);
+    }
+    
+    public void setCRUDOperations(boolean value) {
+        btnAddRecord.setEnabled(value);
+        btnUpdate.setEnabled(value);
+        btnDelete.setEnabled(value);
+    }
+    
+    public void setUIAccess(boolean value) {
+        setSorting(value);
+        setSearching(value);
+        setCRUDOperations(value);
     }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -1220,42 +1238,33 @@ public class StaffForm extends javax.swing.JFrame {
         String parameter = cmbSearchParam.getSelectedItem().toString();
         String searchKeyword = txtSearch.getText();
         switch (parameter) {
-            case "First Name": {
-                userList = User.getUserByFirstName(searchKeyword);
+            case "First Name":
+                users = User.getUserByFirstName(searchKeyword);
                 break;
-            }
-            case "Last Name": {
-                userList = User.getUserByLastName(searchKeyword);
+            case "Last Name":
+                users = User.getUserByLastName(searchKeyword);
                 break;
-            }
-            case "FullName": {
-                userList = User.getUserByFullName(searchKeyword);
+            case "FullName":
+                users = User.getUserByFullName(searchKeyword);
                 break;
-            }
-            case "Country": {
-                userList = User.getUserByCountry(searchKeyword);
+            case "Country":
+                users = User.getUserByCountry(searchKeyword);
                 break;
-            }
-            case "City": {
-                userList = User.getUserByCity(searchKeyword);
+            case "City":
+                users = User.getUserByCity(searchKeyword);
                 break;
-            }
-            case "Province": {
-                userList = User.getUserByProvince(searchKeyword);
+            case "Province":
+                users = User.getUserByProvince(searchKeyword);
                 break;
-            }
-            case "Tel number": {
-                userList = User.getUserByTelNumber(searchKeyword);
+            case "Tel number":
+                users = User.getUserByTelNumber(searchKeyword);
                 break;
-            }
-            case "Cell number": {
-                userList = User.getUserByCellNumber(searchKeyword);
+            case "Cell number":
+                users = User.getUserByCellNumber(searchKeyword);
                 break;
-            }
-            case "Email": {
-                userList = User.getUserByEmail(searchKeyword);
+            case "Email":
+                users = User.getUserByEmail(searchKeyword);
                 break;
-            }
         }
         setModel();
 
@@ -1265,8 +1274,8 @@ public class StaffForm extends javax.swing.JFrame {
         //Update record
         if (updateClick == 0) {
             updateClick++;
-            btnSearch.setEnabled(false);
-            btnDelete.setEnabled(false);
+            setUIAccess(false);
+            btnUpdate.setEnabled(true);
             prepareUpdate();
         } else {
             resetColor();
@@ -1400,15 +1409,13 @@ public class StaffForm extends javax.swing.JFrame {
                 int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to update this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 0) {
                     new User(firstName, lastName, title, dateOfBirth, gender, country, province, city, street, postalCode, addressLine, email, cellNumber, telNumber, new Date(), User.GetUserByIdNumber(idNumber).getUserID(), username, password, accountType, idNumber).updateUser();
-                    userList = setModel();
+                    setModel();
                 }
                 clearAllFields();
                 disableAllFields();
                 resetColor();
                 updateClick = 0;
-                btnSearch.setEnabled(true);
-                btnUpdate.setEnabled(true);
-                btnDelete.setEnabled(true);
+                setUIAccess(true);
             } else {
                 int option = JOptionPane.showConfirmDialog(this, "There were some errors, would you like to fix them?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 1) {
@@ -1416,9 +1423,7 @@ public class StaffForm extends javax.swing.JFrame {
                     disableAllFields();
                     resetColor();
                     updateClick = 0;
-                    btnSearch.setEnabled(true);
-                    btnUpdate.setEnabled(true);
-                    btnDelete.setEnabled(true);
+                    setUIAccess(true);
                 }
             }
         }
@@ -1431,7 +1436,7 @@ public class StaffForm extends javax.swing.JFrame {
             if (option == 0) {
                 User.deleteUser(txtIDNumber.getText(), User.GetUserByIdNumber(txtIDNumber.getText()).getUserID());
                 clearAllFields();
-                userList = setModel();
+                setModel();
             }
         } else {
             JOptionPane.showMessageDialog(null, "No valid user selected");
@@ -1511,8 +1516,8 @@ public class StaffForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (insertClick == 0) {
             insertClick++;
-            btnUpdate.setEnabled(false);
-            btnDelete.setEnabled(false);
+            setUIAccess(false);
+            btnAddRecord.setEnabled(true);
             clearAllFields();
             prepareInsert();
         } else {
@@ -1647,15 +1652,13 @@ public class StaffForm extends javax.swing.JFrame {
                 int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to add this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 0) {
                     new User(firstName, lastName, title, dateOfBirth, gender, country, province, city, street, postalCode, addressLine, email, cellNumber, telNumber, new Date(), 0, username, password, accountType, idNumber).registerUser();
-                    userList = setModel();
+                    setModel();
                 }
                 clearAllFields();
                 disableAllFields();
                 resetColor();
                 insertClick = 0;
-                btnSearch.setEnabled(true);
-                btnUpdate.setEnabled(true);
-                btnDelete.setEnabled(true);
+                setUIAccess(true);
             } else {
                 int option = JOptionPane.showConfirmDialog(this, "There were some errors, would you like to fix them?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 1) {
@@ -1663,9 +1666,7 @@ public class StaffForm extends javax.swing.JFrame {
                     disableAllFields();
                     resetColor();
                     insertClick = 0;
-                    btnSearch.setEnabled(true);
-                    btnUpdate.setEnabled(true);
-                    btnDelete.setEnabled(true);
+                    setUIAccess(true);
                 }
             }
         }

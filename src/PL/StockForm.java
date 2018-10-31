@@ -51,7 +51,7 @@ public class StockForm extends javax.swing.JFrame {
         initModel();
 
         currentUser = null;
-        lbLoginedInUser.setText("No User Selected");
+        lbLoginedInUser.setText("No User Logged In");
         cmbChangeListener changeListener = new cmbChangeListener();
         cmbSorting.addItemListener(changeListener);
     }
@@ -67,7 +67,7 @@ public class StockForm extends javax.swing.JFrame {
             initModel();
 
             currentUser = u;
-            lbLoginedInUser.setText(lbLoginedInUser.getText()+u.getFullname());
+            lbLoginedInUser.setText(lbLoginedInUser.getText() + u.getFullname());
 
             cmbChangeListener changeListener = new cmbChangeListener();
             cmbSorting.addItemListener(changeListener);

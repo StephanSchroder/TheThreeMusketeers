@@ -96,12 +96,6 @@ public class Exchange {
             if (parameters[i] != null) {
                 if (!parameters[i].getClass().getName().equals(constructor.getParameters()[i].getParameterizedType().getTypeName())) {
                     switch (parameters[i].getClass().getName()) {
-                        case "java.lang.Integer":
-                            newParameters[i] = parameters[i];
-                            break;
-                        case "java.lang.String":
-                            newParameters[i] = parameters[i];
-                            break;
                         case "java.sql.Timestamp":
                             if (constructor.getParameters()[i].getParameterizedType().getTypeName().equals("java.util.Date")) {
                                 newParameters[i] = new java.util.Date(((java.sql.Timestamp)parameters[i]).getTime());
@@ -116,9 +110,6 @@ public class Exchange {
                             if (constructor.getParameters()[i].getParameterizedType().getTypeName().equals("double")) {
                                 newParameters[i] = ((BigDecimal)parameters[i]).doubleValue();
                             }
-                            break;
-                        case "java.lang.Boolean":
-                            newParameters[i] = parameters[i];
                             break;
                         default:
                             newParameters[i] = parameters[i];
@@ -147,9 +138,6 @@ public class Exchange {
                             if (!constructor.getParameters()[i].getParameterizedType().getTypeName().equals("int")) {
                                 result = false;
                             }
-                            break;
-                        case "java.lang.String":
-                            result = false;
                             break;
                         case "java.sql.Timestamp":
                             if (!constructor.getParameters()[i].getParameterizedType().getTypeName().equals("java.util.Date")) {
