@@ -6,8 +6,12 @@
 package BLL;
 
 import DAL.*;
-import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -109,7 +113,11 @@ public class Order {
         String[][] dbData = DataHandler.readRecords(Arrays.asList("OrderID", "OrderDate", "ReceiveDate", "Status", "PlacedByEmployee", "ApprovedByEmployee"), Arrays.asList(new DataTablesCollection("Order")), Arrays.asList());
         int count = dbData.length;
         for (int i = 0; i < count; i++) {
-            orders.add(new Order(Integer.valueOf(dbData[i][0]), Date.valueOf(dbData[i][1]), Date.valueOf(dbData[i][2]), dbData[i][3], User.GetUserByUserId(Integer.valueOf(dbData[i][4])), User.GetUserByUserId(Integer.valueOf(dbData[i][5]))));
+            try {
+                orders.add(new Order(Integer.valueOf(dbData[i][0]), new SimpleDateFormat("yyyy-MM-dd").parse(dbData[i][1]), new SimpleDateFormat("yyyy-MM-dd").parse(dbData[i][2]), dbData[i][3], User.GetUserByUserId(Integer.valueOf(dbData[i][4])), User.GetUserByUserId(Integer.valueOf(dbData[i][5]))));
+            } catch (ParseException ex) {
+                Logger.getLogger(Order.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
         for (Order order:orders){
@@ -124,7 +132,11 @@ public class Order {
         String[][] dbData = DataHandler.readRecords(Arrays.asList("OrderID", "OrderDate", "ReceiveDate", "Status", "PlacedByEmployee", "ApprovedByEmployee"), Arrays.asList(new DataTablesCollection("Order")), Arrays.asList("PlacedByEmployee=" + placedByEmployeeID));
         int count = dbData.length;
         for (int i = 0; i < count; i++) {
-            orders.add(new Order(Integer.valueOf(dbData[i][0]), Date.valueOf(dbData[i][1]), Date.valueOf(dbData[i][2]), dbData[i][3], User.GetUserByUserId(Integer.valueOf(dbData[i][4])), User.GetUserByUserId(Integer.valueOf(dbData[i][5]))));
+            try {
+                orders.add(new Order(Integer.valueOf(dbData[i][0]), new SimpleDateFormat("yyyy-MM-dd").parse(dbData[i][1]), new SimpleDateFormat("yyyy-MM-dd").parse(dbData[i][2]), dbData[i][3], User.GetUserByUserId(Integer.valueOf(dbData[i][4])), User.GetUserByUserId(Integer.valueOf(dbData[i][5]))));
+            } catch (ParseException ex) {
+                Logger.getLogger(Order.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
         for (Order order:orders){
@@ -139,7 +151,11 @@ public class Order {
         String[][] dbData = DataHandler.readRecords(Arrays.asList("OrderID", "OrderDate", "ReceiveDate", "Status", "PlacedByEmployee", "ApprovedByEmployee"), Arrays.asList(new DataTablesCollection("Order")), Arrays.asList("ApprovedByEmployee=" + approvedByEmployeeID));
         int count = dbData.length;
         for (int i = 0; i < count; i++) {
-            orders.add(new Order(Integer.valueOf(dbData[i][0]), Date.valueOf(dbData[i][1]), Date.valueOf(dbData[i][2]), dbData[i][3], User.GetUserByUserId(Integer.valueOf(dbData[i][4])), User.GetUserByUserId(Integer.valueOf(dbData[i][5]))));
+            try {
+                orders.add(new Order(Integer.valueOf(dbData[i][0]), new SimpleDateFormat("yyyy-MM-dd").parse(dbData[i][1]), new SimpleDateFormat("yyyy-MM-dd").parse(dbData[i][2]), dbData[i][3], User.GetUserByUserId(Integer.valueOf(dbData[i][4])), User.GetUserByUserId(Integer.valueOf(dbData[i][5]))));
+            } catch (ParseException ex) {
+                Logger.getLogger(Order.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
         for (Order order:orders){
@@ -154,7 +170,11 @@ public class Order {
         String[][] dbData = DataHandler.readRecords(Arrays.asList("OrderID", "OrderDate", "ReceiveDate", "Status", "PlacedByEmployee", "ApprovedByEmployee"), Arrays.asList(new DataTablesCollection("Order")), Arrays.asList("Status='" + status + "'"));
         int count = dbData.length;
         for (int i = 0; i < count; i++) {
-            orders.add(new Order(Integer.valueOf(dbData[i][0]), Date.valueOf(dbData[i][1]), Date.valueOf(dbData[i][2]), dbData[i][3], User.GetUserByUserId(Integer.valueOf(dbData[i][4])), User.GetUserByUserId(Integer.valueOf(dbData[i][5]))));
+            try {
+                orders.add(new Order(Integer.valueOf(dbData[i][0]), new SimpleDateFormat("yyyy-MM-dd").parse(dbData[i][1]), new SimpleDateFormat("yyyy-MM-dd").parse(dbData[i][2]), dbData[i][3], User.GetUserByUserId(Integer.valueOf(dbData[i][4])), User.GetUserByUserId(Integer.valueOf(dbData[i][5]))));
+            } catch (ParseException ex) {
+                Logger.getLogger(Order.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
         for (Order order:orders){
@@ -170,7 +190,11 @@ public class Order {
         int count = dbData.length;
         if (count == 1)
         {
-            order = new Order(Integer.valueOf(dbData[0][0]), Date.valueOf(dbData[0][1]), Date.valueOf(dbData[0][2]), dbData[0][3], User.GetUserByUserId(Integer.valueOf(dbData[0][4])), User.GetUserByUserId(Integer.valueOf(dbData[0][5])));
+            try {
+                order = new Order(Integer.valueOf(dbData[0][0]), new SimpleDateFormat("yyyy-MM-dd").parse(dbData[0][1]), new SimpleDateFormat("yyyy-MM-dd").parse(dbData[0][2]), dbData[0][3], User.GetUserByUserId(Integer.valueOf(dbData[0][4])), User.GetUserByUserId(Integer.valueOf(dbData[0][5])));
+            } catch (ParseException ex) {
+                Logger.getLogger(Order.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         
         order.stock = StockOrder.getStockOrders(order.orderID);
