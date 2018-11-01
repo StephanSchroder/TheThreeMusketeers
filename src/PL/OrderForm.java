@@ -8,13 +8,13 @@ package PL;
 import BLL.Common;
 import BLL.User;
 import BLL.Exceptions.UserDoesNotExistException;
-import BLL.FormSetUp;
+import BLL.Interfaces.IFormSetUp;
 
 /**
  *
  * @author Stephan
  */
-public class OrderForm extends javax.swing.JFrame implements FormSetUp{
+public class OrderForm extends javax.swing.JFrame implements IFormSetUp{
 
     private User currentUser;
 

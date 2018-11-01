@@ -5,6 +5,7 @@
  */
 package BLL;
 
+import BLL.Interfaces.IOrder;
 import DAL.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,7 +18,7 @@ import java.util.logging.Logger;
  *
  * @author Stephan
  */
-public class Order {
+public class Order implements IOrder {
     private int orderID;
     private Date orderDate;
     private Date receiveDate;

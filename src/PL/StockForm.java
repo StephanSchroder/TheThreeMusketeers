@@ -15,7 +15,6 @@ import BLL.Sorting.SortSurname;
 import BLL.Stock;
 import BLL.User;
 import BLL.Exceptions.UserDoesNotExistException;
-import BLL.FormSetUp;
 import java.awt.Color;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -31,12 +30,13 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import BLL.Interfaces.IFormSetUp;
 
 /**
  *
  * @author Stephan
  */
-public class StockForm extends javax.swing.JFrame implements FormSetUp {
+public class StockForm extends javax.swing.JFrame implements IFormSetUp {
 
     /**
      * Creates new form StockForm

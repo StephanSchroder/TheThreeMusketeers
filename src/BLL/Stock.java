@@ -5,6 +5,7 @@
  */
 package BLL;
 
+import BLL.Interfaces.IStock;
 import DAL.*;
 import java.text.DateFormat;
 import java.util.Date;
@@ -20,7 +21,7 @@ import java.util.logging.Logger;
  *
  * @author Stephan
  */
-public class Stock {
+public class Stock implements IStock {
     private int stockID;
     private Category category;
     private String itemName;
@@ -243,6 +244,7 @@ public class Stock {
     public String toString() {
         return "stockID=" + stockID + ", category=" + category + ", itemName=" + itemName + ", stockCount=" + stockCount;
     }
+    
      public static void generateReport(String filename, List<Stock> data )
     {
         Reports report = new Reports();

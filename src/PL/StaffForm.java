@@ -18,7 +18,6 @@ import BLL.Sorting.SortCategory;
 import BLL.Sorting.SortStockQuantity;
 import BLL.Sorting.SortSurname;
 import BLL.Exceptions.UserDoesNotExistException;
-import BLL.FormSetUp;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.ParseException;
@@ -31,12 +30,13 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import org.jdesktop.swingx.JXTextField;
+import BLL.Interfaces.IFormSetUp;
 
 /**
  *
  * @author Stephan
  */
-public class StaffForm extends javax.swing.JFrame implements FormSetUp{
+public class StaffForm extends javax.swing.JFrame implements IFormSetUp{
 
     private User currentUser = null;
     private List<User> users = new ArrayList<>();
