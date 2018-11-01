@@ -56,6 +56,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         cmbSortingChangeListener changeListener = new cmbSortingChangeListener();
         cmbSorting1.addItemListener(changeListener);
         this.setLocationRelativeTo(null);
+        Common.playMusic(2);
     }
 
     public StaffForm(User u) {
@@ -78,6 +79,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
 
         }
         this.setLocationRelativeTo(null);
+        Common.playMusic(2);
     }
 
     private void initModel() {

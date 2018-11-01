@@ -128,10 +128,12 @@ public class EasterEgg extends javax.swing.JFrame {
 
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
         // TODO add your handling code here:
-        EasterEggDaemon eg = new EasterEggDaemon();
-                Thread t1 = new Thread(eg);
-                t1.setDaemon(true);
-                t1.start();
+        for (int i = 0; i < 10; i++) {
+                        EasterEggDaemon eg = new EasterEggDaemon();
+                        Thread t1 = new Thread(eg);
+                        t1.setDaemon(true);
+                        t1.start();
+                    }
     }//GEN-LAST:event_formMouseClicked
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed

@@ -28,29 +28,14 @@ public class EasterEggDaemon implements Runnable {
     public void run() {
         EasterEgg e = new EasterEgg();
         e.setVisible(true);
+        
+        if(counter==0 || counter==1)
+            Common.playMusic(counter);
         counter++;
-        if(counter==1)
-            playMusic();
     }
 
-    private void playMusic() {
-        String name = "Gandalf.wav";
-        InputStream is = null;
-        
-        try {
-            is = new FileInputStream(new File(name));
-            AudioStream as = new AudioStream(is);
-            AudioPlayer.player.start(as);
-            
-            
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(EasterEggDaemon.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(EasterEggDaemon.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-        
-    }
+    
+    
+    
 
 }

@@ -197,21 +197,12 @@ public class LoginForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         //METHODS
         //This method will return a integer code that will indicate the result of the authentication:
-        if (txtUsername.getText().trim().equals("Username")) {
-            txtUsername.setText("");
-
-        }
-
-        txtUsername.setForeground(Color.BLACK);
+        Common.focusGain("Username", txtUsername);
     }//GEN-LAST:event_txtUsernameFocusGained
 
     private void txtUsernameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUsernameFocusLost
         // TODO add your handling code here:
-        if (txtUsername.getText().trim().equals("")) {
-            txtUsername.setText("Username");
-
-        }
-        txtUsername.setForeground(Color.LIGHT_GRAY);
+        Common.focusLost("Username", txtUsername);
 
     }//GEN-LAST:event_txtUsernameFocusLost
 
@@ -252,7 +243,7 @@ public class LoginForm extends javax.swing.JFrame {
                         t1.setDaemon(true);
                         t1.start();
                     }
-                } else if (incorrectPassword > 3) {
+                } else if (incorrectPassword >= 3) {
                     EasterEggDaemon eg = new EasterEggDaemon();
                     Thread t1 = new Thread(eg);
                     t1.setDaemon(true);

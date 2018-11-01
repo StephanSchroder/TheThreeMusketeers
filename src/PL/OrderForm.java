@@ -26,6 +26,7 @@ public class OrderForm extends javax.swing.JFrame implements FormSetUp{
         currentUser = null;
         lbLoginedInUser.setText(lbLoginedInUser.getText()+"No User Selected");
         this.setLocationRelativeTo(null);
+        Common.playMusic(2);
 
     }
 
@@ -44,6 +45,7 @@ public class OrderForm extends javax.swing.JFrame implements FormSetUp{
             
         }
         this.setLocationRelativeTo(null);
+        Common.playMusic(2);
     }
     
     @Override

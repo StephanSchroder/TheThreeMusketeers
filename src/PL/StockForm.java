@@ -56,6 +56,7 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
         cmbChangeListener changeListener = new cmbChangeListener();
         cmbSorting.addItemListener(changeListener);
         this.setLocationRelativeTo(null);
+        Common.playMusic(2);
     }
 
     public StockForm(User u) {
@@ -78,6 +79,7 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
             
         }
         this.setLocationRelativeTo(null);
+        Common.playMusic(2);
     }
     
     @Override
