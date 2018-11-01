@@ -26,10 +26,7 @@ import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import org.jdesktop.swingx.JXTextField;
 import BLL.Interfaces.IFormSetUp;
 
 /**
@@ -70,7 +67,7 @@ public class StaffForm extends javax.swing.JFrame implements IFormSetUp{
             initModel();
 
             currentUser = u;
-            lbLoginedInUser.setText(lbLoginedInUser.getText() + u.getFullname());
+            lbLoginedInUser.setText("Logged in as: " + u.getFullname() + ((u.getAccountType().equals("Admin")) ? " with Admin privileges" : ""));
 
             cmbSortingChangeListener changeListener = new cmbSortingChangeListener();
             cmbSorting1.addItemListener(changeListener);
@@ -86,7 +83,6 @@ public class StaffForm extends javax.swing.JFrame implements IFormSetUp{
         disableAllFields();
         setModel();
         clearAllFields();
-
     }
     
     @Override

@@ -9,13 +9,9 @@ import BLL.Interfaces.IUser;
 import DAL.*;
 import java.io.Serializable;
 import java.util.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -26,7 +22,8 @@ public class User extends Person implements Serializable, IUser {
     private int userID;
     private String username;
     private String password;
-    private String accountType;
+    private accountTypeState accountType;
+    private enum accountTypeState { NORMAL, ADMIN, ADMIN_REQUESTED, ADMIN_REJECTED, ADMIN_NORMAL, BANNED, RESTRICTED, NOT_SET };
 
     public User(String firstName, String lastName, String title, Date dateOfBirth, String gender, String country, String province, String city, String street,
             String postalCode, String addressLine, String email, String cellNumber, String telNumber, Date dateAdded, int userID,
@@ -35,7 +32,32 @@ public class User extends Person implements Serializable, IUser {
         this.userID = userID;
         this.username = username;
         this.password = password;
-        this.accountType = accountType;
+        switch (accountType) {
+            case "Normal":
+                this.accountType = accountTypeState.NORMAL;
+                break;
+            case "Admin":
+                this.accountType = accountTypeState.ADMIN;
+                break;
+            case "AdminRequested":
+                this.accountType = accountTypeState.ADMIN_REQUESTED;
+                break;
+            case "AdminRejected":
+                this.accountType = accountTypeState.ADMIN_REJECTED;
+                break;
+            case "AdminNormal":
+                this.accountType = accountTypeState.ADMIN_NORMAL;
+                break;
+            case "Banned":
+                this.accountType = accountTypeState.BANNED;
+                break;
+            case "Restricted":
+                this.accountType = accountTypeState.RESTRICTED;
+                break;
+            default:
+                this.accountType = accountTypeState.NOT_SET;
+                break;
+        }
     }
 
     public User(int userID, String username, String password, String accountType, String idNumber, String firstName, String lastName, String title, Date dateOfBirth, String gender, String country, Date dateAdded) {
@@ -43,7 +65,32 @@ public class User extends Person implements Serializable, IUser {
         this.userID = userID;
         this.username = username;
         this.password = password;
-        this.accountType = accountType;
+        switch (accountType) {
+            case "Normal":
+                this.accountType = accountTypeState.NORMAL;
+                break;
+            case "Admin":
+                this.accountType = accountTypeState.ADMIN;
+                break;
+            case "AdminRequested":
+                this.accountType = accountTypeState.ADMIN_REQUESTED;
+                break;
+            case "AdminRejected":
+                this.accountType = accountTypeState.ADMIN_REJECTED;
+                break;
+            case "AdminNormal":
+                this.accountType = accountTypeState.ADMIN_NORMAL;
+                break;
+            case "Banned":
+                this.accountType = accountTypeState.BANNED;
+                break;
+            case "Restricted":
+                this.accountType = accountTypeState.RESTRICTED;
+                break;
+            default:
+                this.accountType = accountTypeState.NOT_SET;
+                break;
+        }
     }
 
     public int getUserID() {
@@ -71,11 +118,53 @@ public class User extends Person implements Serializable, IUser {
     }
 
     public String getAccountType() {
-        return accountType;
+        switch (accountType) {
+            case NORMAL:
+                return "Normal";
+            case ADMIN:
+                return "Admin";
+            case ADMIN_REQUESTED:
+                return "AdminRequested";
+            case ADMIN_REJECTED:
+                return "AdminRejected";
+            case ADMIN_NORMAL:
+                return "AdminNormal";
+            case BANNED:
+                return "Banned";
+            case RESTRICTED:
+                return "Restricted";
+            default:
+                return "NotSet";
+        }
     }
 
     public void setAccountType(String accountType) {
-        this.accountType = accountType;
+        switch (accountType) {
+            case "Normal":
+                this.accountType = accountTypeState.NORMAL;
+                break;
+            case "Admin":
+                this.accountType = accountTypeState.ADMIN;
+                break;
+            case "AdminRequested":
+                this.accountType = accountTypeState.ADMIN_REQUESTED;
+                break;
+            case "AdminRejected":
+                this.accountType = accountTypeState.ADMIN_REJECTED;
+                break;
+            case "AdminNormal":
+                this.accountType = accountTypeState.ADMIN_NORMAL;
+                break;
+            case "Banned":
+                this.accountType = accountTypeState.BANNED;
+                break;
+            case "Restricted":
+                this.accountType = accountTypeState.RESTRICTED;
+                break;
+            default:
+                this.accountType = accountTypeState.NOT_SET;
+                break;
+        }
     }
 
     //METHODS

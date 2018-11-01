@@ -21,7 +21,6 @@ import java.awt.event.ItemListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -70,7 +69,7 @@ public class StockForm extends javax.swing.JFrame implements IFormSetUp {
             initModel();
 
             currentUser = u;
-            lbLoginedInUser.setText(lbLoginedInUser.getText() + u.getFullname());
+            lbLoginedInUser.setText("Logged in as: " + u.getFullname() + ((u.getAccountType().equals("Admin")) ? " with Admin privileges" : ""));
 
             cmbChangeListener changeListener = new cmbChangeListener();
             cmbSorting.addItemListener(changeListener);

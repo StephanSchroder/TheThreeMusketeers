@@ -9,10 +9,6 @@ import BLL.Common;
 import BLL.EasterEggDaemon;
 import BLL.User;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -274,7 +270,9 @@ public class LoginForm extends javax.swing.JFrame {
                     if (!cbAdminCheck.isSelected()) {
                         JOptionPane.showMessageDialog(this, "User Login", "Successfull Login", 1);
                         //User Login
-                        new StockForm(User.GetUserByLoginDetails(username, password)).setVisible(true);
+                        User u = User.GetUserByLoginDetails(username, password);
+                        u.setAccountType("AdminNormal");
+                        new StockForm(u).setVisible(true);
                         this.dispose();
 
                     } else {

@@ -7,15 +7,10 @@ package BLL;
 
 import BLL.Interfaces.IStock;
 import DAL.*;
-import java.text.DateFormat;
 import java.util.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *

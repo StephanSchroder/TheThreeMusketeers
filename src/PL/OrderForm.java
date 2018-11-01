@@ -39,7 +39,7 @@ public class OrderForm extends javax.swing.JFrame implements IFormSetUp{
             }
 
             currentUser = u;
-            lbLoginedInUser.setText(lbLoginedInUser.getText()+u.getFullname());
+            lbLoginedInUser.setText("Logged in as: " + u.getFullname() + ((u.getAccountType().equals("Admin")) ? " with Admin privileges" : ""));
         } catch (UserDoesNotExistException ex) {
             ex.showMessage();
             
