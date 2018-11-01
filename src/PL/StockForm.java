@@ -7,11 +7,9 @@ package PL;
 
 import BLL.Category;
 import BLL.Common;
-import BLL.Sorting.SortName;
 import BLL.Sorting.SortCategory;
 
 import BLL.Sorting.SortStockQuantity;
-import BLL.Sorting.SortSurname;
 import BLL.Stock;
 import BLL.User;
 import BLL.Exceptions.UserDoesNotExistException;
@@ -69,7 +67,7 @@ public class StockForm extends javax.swing.JFrame implements IFormSetUp {
             initModel();
 
             currentUser = u;
-            lbLoginedInUser.setText("Logged in as: " + u.getFullname() + ((u.getAccountType().equals("Admin")) ? " with Admin privileges" : ""));
+            lbLoginedInUser.setText("Logged in as: " + u.getFullname() + ((u.getAccountType().equals(User.accountTypeState.ADMIN)) ? " with Admin privileges" : ""));
 
             cmbChangeListener changeListener = new cmbChangeListener();
             cmbSorting.addItemListener(changeListener);
@@ -134,16 +132,16 @@ public class StockForm extends javax.swing.JFrame implements IFormSetUp {
                 String txt = cmbSorting.getSelectedItem().toString();
                 switch (txt) {
                     case "Category":
-                        stocks.sort(new SortCategory());
+                        //stocks.sort(new SortCategory());
                         break;
                     case "Stock Quantity":
-                        stocks.sort(new SortStockQuantity());
+                        //stocks.sort(new SortStockQuantity());
                         break;
                     case "Name":
-                        stocks.sort(new SortName());
+                        //stocks.sort(new SortName());
                         break;
                     case "Surname":
-                        stocks.sort(new SortSurname());
+                        //stocks.sort(new SortSurname());
                         break;
                 }
                 setModel();

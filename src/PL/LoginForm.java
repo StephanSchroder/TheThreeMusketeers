@@ -62,6 +62,11 @@ public class LoginForm extends javax.swing.JFrame {
         setAlwaysOnTop(true);
         setBackground(new java.awt.Color(102, 153, 255));
         setResizable(false);
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+        });
 
         jPanel2.setBackground(new java.awt.Color(102, 153, 255));
         jPanel2.setName(""); // NOI18N
@@ -271,7 +276,7 @@ public class LoginForm extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(this, "User Login", "Successfull Login", 1);
                         //User Login
                         User u = User.GetUserByLoginDetails(username, password);
-                        u.setAccountType("AdminNormal");
+                        u.setAccountType(User.accountTypeState.ADMIN_NORMAL);
                         new StockForm(u).setVisible(true);
                         this.dispose();
 
@@ -300,6 +305,10 @@ public class LoginForm extends javax.swing.JFrame {
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
         System.exit(EXIT_ON_CLOSE);
     }//GEN-LAST:event_btnExitActionPerformed
+
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_formKeyPressed
 
     /**
      * @param args the command line arguments
