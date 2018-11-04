@@ -124,11 +124,6 @@ public class LoginForm extends javax.swing.JFrame {
                 btnExitActionPerformed(evt);
             }
         });
-        btnExit.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                btnExitKeyPressed(evt);
-            }
-        });
 
         jButton1.setBackground(new java.awt.Color(102, 153, 255));
         jButton1.setForeground(new java.awt.Color(102, 153, 255));

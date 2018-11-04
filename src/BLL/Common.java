@@ -126,14 +126,13 @@ public class Common {
         return resultCode;
     }
 
-    
-    public static void logOff(javax.swing.JFrame j){
-        if(JOptionPane.showConfirmDialog(j, "Are you sure want to log off?","Programing 321",JOptionPane.YES_NO_OPTION)==0) {
+    public static void logOff(javax.swing.JFrame j) {
+        if (JOptionPane.showConfirmDialog(j, "Are you sure want to log off?", "Programing 321", JOptionPane.YES_NO_OPTION) == 0) {
             new LoginForm().setVisible(true);
             j.dispose();
         }
     }
-    
+
     public static void focusGain(String str, JTextField tx) {
         if (tx.getText().trim().equals(str)) {
             tx.setText("");
@@ -151,11 +150,15 @@ public class Common {
     }
     static AudioStream as = null;
     static InputStream is = null;
-    public enum sound {PASS,EGG,TRANSITION};
+
+    public enum sound {
+        PASS, EGG, TRANSITION
+    };
+
     public static void playMusic(int counter) {
         String name = "";
-        
-        switch(counter){
+
+        switch (counter) {
             case 0:
                 name = "pass.wav";
                 break;
@@ -168,45 +171,45 @@ public class Common {
             default:
                 name = "Gandalf.wav";
                 break;
-                        
+
         }
-        
+
         InputStream is = null;
-        
+
         try {
             is = new FileInputStream(new File(name));
             as = new AudioStream(is);
             AudioPlayer.player.start(as);
-            
-            if(counter == 3){
-                
+
+            if (counter == 3) {
+
             }
-            
+
         } catch (FileNotFoundException ex) {
             Logger.getLogger(EasterEggDaemon.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(EasterEggDaemon.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
-    
-    
+
     private static List<EasterEggDaemon> threads = new ArrayList<>();
-    public static void spam(int count){
+
+    public static void spam(int count) {
         for (int i = 0; i < count; i++) {
-                        EasterEggDaemon eg = new EasterEggDaemon();
-                        Thread t1 = new Thread(eg);
-                        threads.add(eg);
-                        t1.setDaemon(true);
-                        t1.start();
-                    }
+            EasterEggDaemon eg = new EasterEggDaemon();
+            Thread t1 = new Thread(eg);
+            threads.add(eg);
+            t1.setDaemon(true);
+            t1.start();
+        }
     }
-    
-    public synchronized static void killSpam(){
-        for(EasterEggDaemon t: threads){
+
+    public synchronized static void killSpam() {
+        for (EasterEggDaemon t : threads) {
             t.dispose();
         }
-        
+
         AudioPlayer.player.stop(as);
     }
 }
