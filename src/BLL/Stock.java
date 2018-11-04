@@ -18,25 +18,31 @@ import java.util.List;
  */
 public class Stock implements IStock {
     private int stockID;
-    private Category category;
     private String itemName;
+    private String model;
+    private double price;
+    private Category category;
     private Date dateAdded;
     private int stockCount;
     private String status;
     
-    public Stock(int stockID, Category category, String itemName, Date dateAdded, int stockCount, String status) {
+    public Stock(int stockID, Category category, String model, double price, String itemName, Date dateAdded, int stockCount, String status) {
         this.stockID = stockID;
         this.category = category;
         this.itemName = itemName;
+        this.model = model;
+        this.price = price;
         this.dateAdded = dateAdded;
         this.stockCount = stockCount;
         this.status = status;
     }
     
-    public Stock(int stockID, int categoryId, String itemName, Date dateAdded, int stockCount, String status) {
+    public Stock(int stockID, int categoryId, String model, double price, String itemName, Date dateAdded, int stockCount, String status) {
         this.stockID = stockID;
         this.category = Category.getCategory(categoryId);
         this.itemName = itemName;
+        this.model = model;
+        this.price = price;
         this.dateAdded = dateAdded;
         this.stockCount = stockCount;
         this.status = status;
@@ -56,6 +62,22 @@ public class Stock implements IStock {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public String getItemName() {
@@ -91,23 +113,27 @@ public class Stock implements IStock {
     }
     
     public static List<Stock> getStocksSearch(String itemName){
-        return DataHandler.<Stock>readRecords(Stock.class, Arrays.asList("StockID", "CategoryID", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("ItemName LIKE '%" + itemName + "%'"));
+        return DataHandler.<Stock>readRecords(Stock.class, Arrays.asList("StockID", "CategoryID", "Model", "Price", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("ItemName LIKE '%" + itemName + "%'"));
     }
     
     public static List<Stock> getStocks(){
-        return DataHandler.<Stock>readRecords(Stock.class, Arrays.asList("StockID", "CategoryID", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList());
+        return DataHandler.<Stock>readRecords(Stock.class, Arrays.asList("StockID", "CategoryID", "Model", "Price", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList());
     }
     
     public static List<Stock> getStocksByCategory(String categoryID){
-        return DataHandler.<Stock>readRecords(Stock.class, Arrays.asList("StockID", "CategoryID", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("CategoryID=" + categoryID));
+        return DataHandler.<Stock>readRecords(Stock.class, Arrays.asList("StockID", "CategoryID", "Model", "Price", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("CategoryID=" + categoryID));
+    }
+    
+    public static List<Stock> getStocksByModel(String model){
+        return DataHandler.<Stock>readRecords(Stock.class, Arrays.asList("StockID", "CategoryID", "Model", "Price", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("Model='" + model + "'"));
     }
     
     public static List<Stock> getStocksByStatus(String status){
-        return DataHandler.<Stock>readRecords(Stock.class, Arrays.asList("StockID", "CategoryID", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("Status='" + status + "'"));
+        return DataHandler.<Stock>readRecords(Stock.class, Arrays.asList("StockID", "CategoryID", "Model", "Price", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("Status='" + status + "'"));
     }
     
     public static Stock getStock(int stockID){
-        return DataHandler.<Stock>readRecords(Stock.class, Arrays.asList("StockID", "CategoryID", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("StockID=" + stockID)).get(0);
+        return DataHandler.<Stock>readRecords(Stock.class, Arrays.asList("StockID", "CategoryID", "Model", "Price", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("StockID=" + stockID)).get(0);
     }
     
     public void registerStock() {
@@ -115,6 +141,8 @@ public class Stock implements IStock {
         //Columns
         ArrayList<String> columns = new ArrayList<>();
         columns.add("CategoryID");
+        if (!this.getModel().isEmpty()) { columns.add("Model"); }
+        columns.add("Price");
         columns.add("ItemName");
         columns.add("StockCount");
         if (!this.getStatus().isEmpty()) { columns.add("Status"); }
@@ -122,6 +150,8 @@ public class Stock implements IStock {
         //Values
         String values = "";
         values += "int#" + this.getCategory().getCategoryID();
+        if (!this.getModel().isEmpty()) { values += ";string#" + this.getModel(); }
+        values += ";int#" + this.getPrice();
         values += ";string#" + this.getItemName();
         values += ";int#" + this.getStockCount();
         if (!this.getStatus().isEmpty()) { values += ";string#" + this.getStatus(); }
@@ -135,6 +165,8 @@ public class Stock implements IStock {
         //Columns
         ArrayList<String> columns = new ArrayList<>();
         columns.add("CategoryID");
+        if (!stock.getModel().isEmpty()) { columns.add("Model"); }
+        columns.add("Price");
         columns.add("ItemName");
         columns.add("StockCount");
         if (!stock.getStatus().isEmpty()) { columns.add("Status"); }
@@ -142,6 +174,8 @@ public class Stock implements IStock {
         //Values
         String values = "";
         values += "int#" + stock.getCategory().getCategoryID();
+        if (!stock.getModel().isEmpty()) { values += ";string#" + stock.getModel(); }
+        values += ";int#" + stock.getPrice();
         values += ";string#" + stock.getItemName();
         values += ";int#" + stock.getStockCount();
         if (!stock.getStatus().isEmpty()) { values += ";string#" + stock.getStatus(); }
@@ -155,6 +189,8 @@ public class Stock implements IStock {
         //Columns
         ArrayList<String> columns = new ArrayList<>();
         columns.add("CategoryID");
+        columns.add("Model");
+        columns.add("Price");
         columns.add("ItemName");
         columns.add("StockCount");
         columns.add("Status");
@@ -162,6 +198,8 @@ public class Stock implements IStock {
         //Values
         ArrayList<String> values = new ArrayList<>();
         values.add("int;" + this.getCategory().getCategoryID());
+        values.add("string;" + this.getModel());
+        values.add("int;" + this.getPrice());
         values.add("string;" + this.getItemName());
         values.add("int;" + this.getStockCount());
         values.add("string;" + this.getStatus());
@@ -179,6 +217,8 @@ public class Stock implements IStock {
         //Columns
         ArrayList<String> columns = new ArrayList<>();
         columns.add("CategoryID");
+        columns.add("Model");
+        columns.add("Price");
         columns.add("ItemName");
         columns.add("StockCount");
         columns.add("Status");
@@ -186,6 +226,8 @@ public class Stock implements IStock {
         //Values
         ArrayList<String> values = new ArrayList<>();
         values.add("int;" + stock.getCategory().getCategoryID());
+        values.add("string;" + stock.getModel());
+        values.add("int;" + stock.getPrice());
         values.add("string;" + stock.getItemName());
         values.add("int;" + stock.getStockCount());
         values.add("string;" + stock.getStatus());
@@ -203,6 +245,9 @@ public class Stock implements IStock {
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
         conditions.add("StockID=" + this.getStockID());
+        conditions.add("CategoryID=" + this.getCategory().getCategoryID());
+        conditions.add("Model='" + this.getModel()+ "'");
+        conditions.add("Price='" + this.getPrice()+ "'");
         conditions.add("ItemName='" + this.getItemName()+ "'");
         conditions.add("StockCount=" + this.getStockCount());
         conditions.add("Status='" + this.getStatus()+ "'");
@@ -217,6 +262,8 @@ public class Stock implements IStock {
         ArrayList<String> conditions = new ArrayList<>();
         conditions.add("StockID=" + stock.getStockID());
         conditions.add("CategoryID=" + stock.getCategory().getCategoryID());
+        conditions.add("Model='" + stock.getModel()+ "'");
+        conditions.add("Price='" + stock.getModel()+ "'");
         conditions.add("ItemName='" + stock.getItemName()+ "'");
         conditions.add("StockCount=" + stock.getStockCount());
         conditions.add("Status='" + stock.getStatus()+ "'");
@@ -237,7 +284,7 @@ public class Stock implements IStock {
 
     @Override
     public String toString() {
-        return "stockID=" + stockID + ", category=" + category + ", itemName=" + itemName + ", stockCount=" + stockCount;
+        return "Stock{" + "stockID=" + stockID + ", itemName=" + itemName + ", model=" + model + ", price=" + price + ", category=" + category + ", dateAdded=" + dateAdded + ", stockCount=" + stockCount + ", status=" + status + '}';
     }
     
      public static void generateReport(String filename, List<Stock> data )
@@ -253,6 +300,4 @@ public class Stock implements IStock {
         String format =String.format("Product Name: %1$5s  Quantity:  %2$5d", this.getItemName(),this.getStockCount());
         return format;
     }
-    
-    
 }
