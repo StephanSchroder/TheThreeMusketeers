@@ -5,8 +5,8 @@
  */
 package PL;
 
-
 import BLL.Common;
+import BLL.EasterEggDaemon;
 import BLL.User;
 import java.awt.Color;
 import javax.swing.JOptionPane;
@@ -22,6 +22,8 @@ public class LoginForm extends javax.swing.JFrame {
      */
     public LoginForm() {
         initComponents();
+        this.setLocationRelativeTo(null);
+
     }
 
     /**
@@ -57,10 +59,17 @@ public class LoginForm extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setAlwaysOnTop(true);
         setBackground(new java.awt.Color(102, 153, 255));
         setResizable(false);
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+        });
 
         jPanel2.setBackground(new java.awt.Color(102, 153, 255));
+        jPanel2.setName(""); // NOI18N
 
         jLabel7.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
         jLabel7.setText("Login Form:");
@@ -189,21 +198,12 @@ public class LoginForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         //METHODS
         //This method will return a integer code that will indicate the result of the authentication:
-        if (txtUsername.getText().trim().equals("Username")) {
-            txtUsername.setText("");
-
-        }
-
-        txtUsername.setForeground(Color.BLACK);
+        Common.focusGain("Username", txtUsername);
     }//GEN-LAST:event_txtUsernameFocusGained
 
     private void txtUsernameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUsernameFocusLost
         // TODO add your handling code here:
-        if (txtUsername.getText().trim().equals("")) {
-            txtUsername.setText("Username");
-
-        }
-        txtUsername.setForeground(Color.LIGHT_GRAY);
+        Common.focusLost("Username", txtUsername);
 
     }//GEN-LAST:event_txtUsernameFocusLost
 
@@ -217,6 +217,7 @@ public class LoginForm extends javax.swing.JFrame {
         txtUsername.setForeground(Color.BLACK);
     }//GEN-LAST:event_txtUsernameMouseClicked
 
+    private int incorrectPassword = 0;
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         // TODO add your handling code here:
         //0 = Unknown unsuccessful login
@@ -233,6 +234,24 @@ public class LoginForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Please enter a password", "Invalid field entry", 3);
         } else {
             int result = User.AuthenticateLogin(username, password);
+            if (result != 4 || result != 5) {
+                incorrectPassword++;
+                
+                if (incorrectPassword > 5) {
+                    for (int i = 0; i < 10; i++) {
+                        EasterEggDaemon eg = new EasterEggDaemon();
+                        Thread t1 = new Thread(eg);
+                        t1.setDaemon(true);
+                        t1.start();
+                    }
+                } else if (incorrectPassword >= 3) {
+                    EasterEggDaemon eg = new EasterEggDaemon();
+                    Thread t1 = new Thread(eg);
+                    t1.setDaemon(true);
+                    t1.start();
+                }
+
+            }
             switch (result) {
                 case 0:
                     JOptionPane.showMessageDialog(this, "Unknown unsuccessfull login", "Error", 0);
@@ -256,7 +275,9 @@ public class LoginForm extends javax.swing.JFrame {
                     if (!cbAdminCheck.isSelected()) {
                         JOptionPane.showMessageDialog(this, "User Login", "Successfull Login", 1);
                         //User Login
-                        new StockForm(User.GetUserByLoginDetails(username, password)).setVisible(true);
+                        User u = User.GetUserByLoginDetails(username, password);
+                        u.setAccountType(User.accountTypeState.ADMIN_NORMAL);
+                        new StockForm(u).setVisible(true);
                         this.dispose();
 
                     } else {
@@ -284,6 +305,10 @@ public class LoginForm extends javax.swing.JFrame {
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
         System.exit(EXIT_ON_CLOSE);
     }//GEN-LAST:event_btnExitActionPerformed
+
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_formKeyPressed
 
     /**
      * @param args the command line arguments

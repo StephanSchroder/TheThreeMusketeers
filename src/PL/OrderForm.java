@@ -8,15 +8,13 @@ package PL;
 import BLL.Common;
 import BLL.User;
 import BLL.Exceptions.UserDoesNotExistException;
-import java.awt.Color;
-import javax.swing.JOptionPane;
-import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
+import BLL.Interfaces.IFormSetUp;
 
 /**
  *
  * @author Stephan
  */
-public class OrderForm extends javax.swing.JFrame {
+public class OrderForm extends javax.swing.JFrame implements IFormSetUp{
 
     private User currentUser;
 
@@ -27,6 +25,8 @@ public class OrderForm extends javax.swing.JFrame {
         initComponents();
         currentUser = null;
         lbLoginedInUser.setText(lbLoginedInUser.getText()+"No User Selected");
+        this.setLocationRelativeTo(null);
+        Common.playMusic(2);
 
     }
 
@@ -39,11 +39,23 @@ public class OrderForm extends javax.swing.JFrame {
             }
 
             currentUser = u;
-            lbLoginedInUser.setText(lbLoginedInUser.getText()+u.getFullname());
+            lbLoginedInUser.setText("Logged in as: " + u.getFullname() + ((u.getAccountType().equals(User.accountTypeState.ADMIN)) ? " with Admin privileges" : ""));
         } catch (UserDoesNotExistException ex) {
             ex.showMessage();
             
         }
+        this.setLocationRelativeTo(null);
+        Common.playMusic(2);
+    }
+    
+    @Override
+    public void setNavigation(boolean flag){
+        mnOpenStaff.setEnabled(flag);
+        mnOpenStockForm.setEnabled(flag);
+        
+        mnOpenStaff.setVisible(flag);
+        mnOpenStockForm.setVisible(flag);
+        
     }
 
     /**
@@ -96,6 +108,7 @@ public class OrderForm extends javax.swing.JFrame {
         staffMenu = new javax.swing.JMenu();
         mnOpenStaff = new javax.swing.JMenuItem();
         stockMenu = new javax.swing.JMenu();
+        mnOpenStockForm = new javax.swing.JMenuItem();
         orderStockMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -481,14 +494,6 @@ public class OrderForm extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnLogOff))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane2))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -502,16 +507,17 @@ public class OrderForm extends javax.swing.JFrame {
                                 .addGap(1129, 1129, 1129)
                                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                        .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(35, 35, 35))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(34, 34, 34)))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(10, 10, 10)
+                                        .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addContainerGap()
+                                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addContainerGap()
+                                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(35, 35, 35)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -532,7 +538,15 @@ public class OrderForm extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(lbLoginedInUser)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnLogOff))
+                            .addComponent(jScrollPane2))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -558,9 +572,9 @@ public class OrderForm extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(7, 7, 7)
                         .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(11, 11, 11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -601,10 +615,19 @@ public class OrderForm extends javax.swing.JFrame {
         stockMenu.setText("Stock");
         stockMenu.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         stockMenu.setIconTextGap(10);
+
+        mnOpenStockForm.setText("Open Stock Form");
+        mnOpenStockForm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnOpenStockFormActionPerformed(evt);
+            }
+        });
+        stockMenu.add(mnOpenStockForm);
+
         jMenuBar1.add(stockMenu);
 
         orderStockMenu.setText("Order Stock");
-        orderStockMenu.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        orderStockMenu.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         orderStockMenu.setIconTextGap(10);
         jMenuBar1.add(orderStockMenu);
 
@@ -615,8 +638,8 @@ public class OrderForm extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 20, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -651,20 +674,12 @@ public class OrderForm extends javax.swing.JFrame {
 
     private void txtSearchOrdersFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchOrdersFocusGained
         // TODO add your handling code here:
-        if (txtSearchOrders.getText().trim().equals("")) {
-            txtSearchOrders.setText("Search data");
-
-        }
-        txtSearchOrders.setForeground(Color.LIGHT_GRAY);
+        Common.focusGain("Serach data", txtSearchOrders);
     }//GEN-LAST:event_txtSearchOrdersFocusGained
 
     private void txtSearchOrdersFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchOrdersFocusLost
         // TODO add your handling code here:
-        if (txtSearchOrders.getText().trim().equals("Search data")) {
-            txtSearchOrders.setText("");
-
-        }
-        txtSearchOrders.setForeground(Color.BLACK);
+        Common.focusLost("Serach data", txtSearchOrders);
     }//GEN-LAST:event_txtSearchOrdersFocusLost
 
     private void btnSearchOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchOrderActionPerformed
@@ -850,10 +865,12 @@ public class OrderForm extends javax.swing.JFrame {
 
     private void txtSearchStockFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchStockFocusGained
         // TODO add your handling code here:
+        Common.focusGain("Serach orders", txtSearchStock);
     }//GEN-LAST:event_txtSearchStockFocusGained
 
     private void txtSearchStockFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchStockFocusLost
         // TODO add your handling code here:
+        Common.focusGain("Serach orders", txtSearchOrders);
     }//GEN-LAST:event_txtSearchStockFocusLost
 
     private void btnSearchStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchStockActionPerformed
@@ -866,10 +883,12 @@ public class OrderForm extends javax.swing.JFrame {
 
     private void txtItemNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtItemNameFocusGained
         // TODO add your handling code here:
+        Common.focusGain("Item Name", txtItemName);
     }//GEN-LAST:event_txtItemNameFocusGained
 
     private void txtItemNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtItemNameFocusLost
         // TODO add your handling code here:
+        Common.focusLost("Item Name", txtItemName);
     }//GEN-LAST:event_txtItemNameFocusLost
 
     private void btnAdjustOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdjustOrderActionPerformed
@@ -893,20 +912,12 @@ public class OrderForm extends javax.swing.JFrame {
 
     private void txtOrderIDFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtOrderIDFocusLost
         // TODO add your handling code here:
-        if (txtOrderID.getText().trim().equals("Stock ID")) {
-            txtOrderID.setText("");
-
-        }
-        txtOrderID.setForeground(Color.BLACK);
+        Common.focusGain("Order ID", txtOrderID);
     }//GEN-LAST:event_txtOrderIDFocusLost
 
     private void txtOrderIDFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtOrderIDFocusGained
         // TODO add your handling code here:
-        if (txtOrderID.getText().trim().equals("")) {
-            txtOrderID.setText("Stock ID");
-
-        }
-        txtOrderID.setForeground(Color.LIGHT_GRAY);
+        Common.focusLost("Order ID", txtOrderID);
     }//GEN-LAST:event_txtOrderIDFocusGained
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
@@ -1066,6 +1077,12 @@ public class OrderForm extends javax.swing.JFrame {
         }*/
     }//GEN-LAST:event_btnAddActionPerformed
 
+    private void mnOpenStockFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenStockFormActionPerformed
+        // TODO add your handling code here:
+        new StockForm(currentUser).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_mnOpenStockFormActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1132,6 +1149,7 @@ public class OrderForm extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JLabel lbLoginedInUser;
     private javax.swing.JMenuItem mnOpenStaff;
+    private javax.swing.JMenuItem mnOpenStockForm;
     private javax.swing.JMenu orderStockMenu;
     private javax.swing.JSpinner spOrderQuantity;
     private javax.swing.JMenu staffMenu;

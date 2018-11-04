@@ -23,10 +23,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 /**
  *
@@ -67,9 +65,7 @@ public class Reports<T> {
             doc.close();
             writer.close();
             
-        } catch (DocumentException ex) {
-            Logger.getLogger(Reports.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (FileNotFoundException ex) {
+        } catch (DocumentException | FileNotFoundException ex) {
             Logger.getLogger(Reports.class.getName()).log(Level.SEVERE, null, ex);
         }
     

@@ -7,11 +7,9 @@ package PL;
 
 import BLL.Category;
 import BLL.Common;
-import BLL.Sorting.SortName;
 import BLL.Sorting.SortCategory;
 
 import BLL.Sorting.SortStockQuantity;
-import BLL.Sorting.SortSurname;
 import BLL.Stock;
 import BLL.User;
 import BLL.Exceptions.UserDoesNotExistException;
@@ -21,7 +19,6 @@ import java.awt.event.ItemListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -30,12 +27,13 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import BLL.Interfaces.IFormSetUp;
 
 /**
  *
  * @author Stephan
  */
-public class StockForm extends javax.swing.JFrame {
+public class StockForm extends javax.swing.JFrame implements IFormSetUp {
 
     /**
      * Creates new form StockForm
@@ -51,9 +49,11 @@ public class StockForm extends javax.swing.JFrame {
         initModel();
 
         currentUser = null;
-        lbLoginedInUser.setText("No User Selected");
+        lbLoginedInUser.setText("No User Logged In");
         cmbChangeListener changeListener = new cmbChangeListener();
         cmbSorting.addItemListener(changeListener);
+        this.setLocationRelativeTo(null);
+        Common.playMusic(2);
     }
 
     public StockForm(User u) {
@@ -67,7 +67,7 @@ public class StockForm extends javax.swing.JFrame {
             initModel();
 
             currentUser = u;
-            lbLoginedInUser.setText(lbLoginedInUser.getText()+u.getFullname());
+            lbLoginedInUser.setText("Logged in as: " + u.getFullname() + ((u.getAccountType().equals(User.accountTypeState.ADMIN)) ? " with Admin privileges" : ""));
 
             cmbChangeListener changeListener = new cmbChangeListener();
             cmbSorting.addItemListener(changeListener);
@@ -75,12 +75,24 @@ public class StockForm extends javax.swing.JFrame {
             ex.showMessage();
             
         }
+        this.setLocationRelativeTo(null);
+        Common.playMusic(2);
+    }
+    
+    @Override
+    public void setNavigation(boolean flag){
+        mnOpenOrderForm.setEnabled(flag);
+        mnOpenStaffForm.setEnabled(flag);
+        
+        mnOpenOrderForm.setVisible(flag);
+        mnOpenStaffForm.setVisible(flag);
     }
 
     private void initModel() {
         disableAllFields();
         setModel();
         clearAllFields();
+        
     }
 
     public void setModel() {
@@ -120,16 +132,16 @@ public class StockForm extends javax.swing.JFrame {
                 String txt = cmbSorting.getSelectedItem().toString();
                 switch (txt) {
                     case "Category":
-                        stocks.sort(new SortCategory());
+                        //stocks.sort(new SortCategory());
                         break;
                     case "Stock Quantity":
-                        stocks.sort(new SortStockQuantity());
+                        //stocks.sort(new SortStockQuantity());
                         break;
                     case "Name":
-                        stocks.sort(new SortName());
+                        //stocks.sort(new SortName());
                         break;
                     case "Surname":
-                        stocks.sort(new SortSurname());
+                        //stocks.sort(new SortSurname());
                         break;
                 }
                 setModel();
@@ -539,7 +551,7 @@ public class StockForm extends javax.swing.JFrame {
                         .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -591,7 +603,7 @@ public class StockForm extends javax.swing.JFrame {
         jMenuBar1.add(staffMenu);
 
         stockMenu.setText("Stock");
-        stockMenu.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        stockMenu.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         stockMenu.setIconTextGap(10);
         jMenuBar1.add(stockMenu);
 
@@ -615,7 +627,9 @@ public class StockForm extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -789,56 +803,32 @@ public class StockForm extends javax.swing.JFrame {
 
     private void txtStockIDFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStockIDFocusGained
         // TODO add your handling code here:
-        if (txtStockID.getText().trim().equals("")) {
-            txtStockID.setText("Stock ID");
-
-        }
-        txtStockID.setForeground(Color.LIGHT_GRAY);
+        Common.focusGain("Stock ID", txtStockID);
     }//GEN-LAST:event_txtStockIDFocusGained
 
     private void txtStockIDFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStockIDFocusLost
         // TODO add your handling code here:
-        if (txtStockID.getText().trim().equals("Stock ID")) {
-            txtStockID.setText("");
-
-        }
-        txtStockID.setForeground(Color.BLACK);
+        Common.focusLost("Stock ID", txtStockID);
     }//GEN-LAST:event_txtStockIDFocusLost
 
     private void txtItemNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtItemNameFocusGained
         // TODO add your handling code here:
-        if (txtItemName.getText().trim().equals("")) {
-            txtItemName.setText("Item Name");
-
-        }
-        txtItemName.setForeground(Color.LIGHT_GRAY);
+        Common.focusGain("Item Name", txtItemName);
     }//GEN-LAST:event_txtItemNameFocusGained
 
     private void txtItemNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtItemNameFocusLost
         // TODO add your handling code here:
-        if (txtItemName.getText().trim().equals("Item Name")) {
-            txtItemName.setText("");
-
-        }
-        txtItemName.setForeground(Color.BLACK);
+        Common.focusLost("Item Name", txtItemName);
     }//GEN-LAST:event_txtItemNameFocusLost
 
     private void txtStatusFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStatusFocusGained
         // TODO add your handling code here:
-        if (txtStatus.getText().trim().equals("")) {
-            txtStatus.setText("Item Status");
-
-        }
-        txtStatus.setForeground(Color.LIGHT_GRAY);
+        Common.focusGain("Item Status", txtStatus);
     }//GEN-LAST:event_txtStatusFocusGained
 
     private void txtStatusFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStatusFocusLost
         // TODO add your handling code here:
-        if (txtStatus.getText().trim().equals("Item Status")) {
-            txtStatus.setText("");
-
-        }
-        txtStatus.setForeground(Color.BLACK);
+        Common.focusLost("Item Status", txtStatus);
     }//GEN-LAST:event_txtStatusFocusLost
 
     private void jPanel1formHierarchyChanged(java.awt.event.HierarchyEvent evt) {//GEN-FIRST:event_jPanel1formHierarchyChanged
@@ -847,20 +837,12 @@ public class StockForm extends javax.swing.JFrame {
 
     private void txtSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusGained
         // TODO add your handling code here:
-        if (txtSearch.getText().trim().equals("")) {
-            txtSearch.setText("Search data");
-
-        }
-        txtSearch.setForeground(Color.LIGHT_GRAY);
+        Common.focusGain("Serach data", txtSearch);
     }//GEN-LAST:event_txtSearchFocusGained
 
     private void txtSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusLost
         // TODO add your handling code here:
-        if (txtSearch.getText().trim().equals("Search data")) {
-            txtSearch.setText("");
-
-        }
-        txtSearch.setForeground(Color.BLACK);
+        Common.focusLost("Serach data", txtSearch);
     }//GEN-LAST:event_txtSearchFocusLost
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed

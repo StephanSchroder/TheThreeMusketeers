@@ -6,10 +6,20 @@
 package BLL;
 
 import PL.LoginForm;
+import java.awt.Color;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
-import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
+import javax.swing.JTextField;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 
 /**
  *
@@ -121,5 +131,57 @@ public class Common {
             new LoginForm().setVisible(true);
             j.dispose();
         }
+    }
+    
+    public static void focusGain(String str, JTextField tx) {
+        if (tx.getText().trim().equals(str)) {
+            tx.setText("");
+
+        }
+        tx.setForeground(Color.BLACK);
+    }
+
+    public static void focusLost(String str, JTextField tx) {
+        if (tx.getText().trim().equals("")) {
+            tx.setText(str);
+
+        }
+        tx.setForeground(Color.LIGHT_GRAY);
+    }
+    
+    public enum sound {PASS,EGG,TRANSITION};
+    public static void playMusic(int counter) {
+        String name = "";
+        
+        switch(counter){
+            case 0:
+                name = "pass.wav";
+                break;
+            case 1:
+                name = "Gandalf.wav";
+                break;
+            case 2:
+                name = "russian.wav";
+                break;
+            default:
+                name = "Gandalf.wav";
+                break;
+                        
+        }
+        
+        InputStream is = null;
+        
+        try {
+            is = new FileInputStream(new File(name));
+            AudioStream as = new AudioStream(is);
+            AudioPlayer.player.start(as);
+            
+            
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(EasterEggDaemon.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(EasterEggDaemon.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 }
