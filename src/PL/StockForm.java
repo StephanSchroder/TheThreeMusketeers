@@ -278,6 +278,7 @@ public class StockForm extends javax.swing.JFrame implements IFormSetUp {
         stockMenu = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
         mnOpenOrderForm = new javax.swing.JMenuItem();
+        orderStockMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -620,6 +621,11 @@ public class StockForm extends javax.swing.JFrame implements IFormSetUp {
         jMenu3.add(mnOpenOrderForm);
 
         jMenuBar1.add(jMenu3);
+
+        orderStockMenu2.setText("Category");
+        orderStockMenu2.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        orderStockMenu2.setIconTextGap(10);
+        jMenuBar1.add(orderStockMenu2);
 
         setJMenuBar(jMenuBar1);
 
@@ -970,6 +976,7 @@ public class StockForm extends javax.swing.JFrame implements IFormSetUp {
     private javax.swing.JLabel lbLoginedInUser;
     private javax.swing.JMenuItem mnOpenOrderForm;
     private javax.swing.JMenuItem mnOpenStaffForm;
+    private javax.swing.JMenu orderStockMenu2;
     private javax.swing.JSpinner spStockCount;
     private javax.swing.JMenu staffMenu;
     private javax.swing.JMenu stockMenu;

@@ -110,6 +110,7 @@ public class OrderForm extends javax.swing.JFrame implements IFormSetUp{
         stockMenu = new javax.swing.JMenu();
         mnOpenStockForm = new javax.swing.JMenuItem();
         orderStockMenu = new javax.swing.JMenu();
+        orderStockMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -631,6 +632,11 @@ public class OrderForm extends javax.swing.JFrame implements IFormSetUp{
         orderStockMenu.setIconTextGap(10);
         jMenuBar1.add(orderStockMenu);
 
+        orderStockMenu2.setText("Category");
+        orderStockMenu2.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        orderStockMenu2.setIconTextGap(10);
+        jMenuBar1.add(orderStockMenu2);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -1151,6 +1157,7 @@ public class OrderForm extends javax.swing.JFrame implements IFormSetUp{
     private javax.swing.JMenuItem mnOpenStaff;
     private javax.swing.JMenuItem mnOpenStockForm;
     private javax.swing.JMenu orderStockMenu;
+    private javax.swing.JMenu orderStockMenu2;
     private javax.swing.JSpinner spOrderQuantity;
     private javax.swing.JMenu staffMenu;
     private javax.swing.JMenu stockMenu;

@@ -172,4 +172,9 @@ public class Category implements ICategory {
         //Execute
         DataHandler.deleteRecords("Category", conditions);
     }
+    
+     public static List<Category> getCategorySearch(String itemName){
+        return DataHandler.<Category>readRecords(Category.class, Arrays.asList("CategoryID", "CategoryName", "Description"), Arrays.asList(new DataTablesCollection("Category")), Arrays.asList("CategoryName LIKE '%" + itemName + "%'"));
+    }
+    
 }

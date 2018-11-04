@@ -536,6 +536,7 @@ public class StaffForm extends javax.swing.JFrame implements IFormSetUp{
         mnOpenStockForm = new javax.swing.JMenuItem();
         miOrderMenu = new javax.swing.JMenu();
         mnOpenOrderForm = new javax.swing.JMenuItem();
+        orderStockMenu2 = new javax.swing.JMenu();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -1129,11 +1130,9 @@ public class StaffForm extends javax.swing.JFrame implements IFormSetUp{
                                             .addComponent(txtLastName)
                                             .addComponent(cmbTitle, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                             .addComponent(dobPicker, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(cmbGender, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(30, 30, 30)))
+                                            .addComponent(cmbGender, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1267,7 +1266,7 @@ public class StaffForm extends javax.swing.JFrame implements IFormSetUp{
 
         jMenuBar1.add(miStockMenu);
 
-        miOrderMenu.setText("Order");
+        miOrderMenu.setText("Order Stock");
         miOrderMenu.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         miOrderMenu.setIconTextGap(10);
 
@@ -1280,6 +1279,11 @@ public class StaffForm extends javax.swing.JFrame implements IFormSetUp{
         miOrderMenu.add(mnOpenOrderForm);
 
         jMenuBar1.add(miOrderMenu);
+
+        orderStockMenu2.setText("Category");
+        orderStockMenu2.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        orderStockMenu2.setIconTextGap(10);
+        jMenuBar1.add(orderStockMenu2);
 
         setJMenuBar(jMenuBar1);
 
@@ -2312,6 +2316,7 @@ public class StaffForm extends javax.swing.JFrame implements IFormSetUp{
     private javax.swing.JMenu miStockMenu;
     private javax.swing.JMenuItem mnOpenOrderForm;
     private javax.swing.JMenuItem mnOpenStockForm;
+    private javax.swing.JMenu orderStockMenu2;
     private javax.swing.JTable tblData;
     private javax.swing.JTextField txtAddressLine;
     private javax.swing.JTextField txtCell;
