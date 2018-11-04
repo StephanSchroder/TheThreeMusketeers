@@ -7,22 +7,18 @@ package PL;
 
 import BLL.Category;
 import BLL.Common;
-import BLL.Sorting.SortName;
 import BLL.Sorting.SortCategory;
 
 import BLL.Sorting.SortStockQuantity;
-import BLL.Sorting.SortSurname;
 import BLL.Stock;
 import BLL.User;
 import BLL.Exceptions.UserDoesNotExistException;
-import BLL.FormSetUp;
 import java.awt.Color;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -31,12 +27,13 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import BLL.Interfaces.IFormSetUp;
 
 /**
  *
  * @author Stephan
  */
-public class StockForm extends javax.swing.JFrame implements FormSetUp {
+public class StockForm extends javax.swing.JFrame implements IFormSetUp {
 
     /**
      * Creates new form StockForm
@@ -56,7 +53,9 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
         cmbChangeListener changeListener = new cmbChangeListener();
         cmbSorting.addItemListener(changeListener);
         this.setLocationRelativeTo(null);
-        Common.playMusic(2);
+        if (LoginForm.enableEasterEggs) {
+            Common.playMusic(2);
+        }
     }
 
     public StockForm(User u) {
@@ -70,7 +69,7 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
             initModel();
 
             currentUser = u;
-            lbLoginedInUser.setText(lbLoginedInUser.getText() + u.getFullname());
+            lbLoginedInUser.setText("Logged in as: " + u.getFullname() + ((u.getAccountType().equals(User.accountTypeState.ADMIN)) ? " with Admin privileges" : ""));
 
             cmbChangeListener changeListener = new cmbChangeListener();
             cmbSorting.addItemListener(changeListener);
@@ -79,7 +78,9 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
             
         }
         this.setLocationRelativeTo(null);
-        Common.playMusic(2);
+        if (LoginForm.enableEasterEggs) {
+            Common.playMusic(2);
+        }
     }
     
     @Override
@@ -102,23 +103,28 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
         DefaultTableModel model = (DefaultTableModel) tblData.getModel();
         model.setNumRows(0);
         populateCategoryCMB();
-        Object rowData[] = new Object[6];
-        Object columnData[] = new Object[6];
+        Object rowData[] = new Object[8];
+        Object columnData[] = new Object[8];
         columnData[0] = "StockID";
         columnData[1] = "CategoryName";
-        columnData[2] = "ItemName";
-        columnData[3] = "DateAdded";
-        columnData[4] = "StockCount";
-        columnData[5] = "Status";
-        model.setColumnCount(6);
+        columnData[2] = "Model";
+        columnData[3] = "Price";
+        columnData[4] = "ItemName";
+        columnData[5] = "DateAdded";
+        columnData[6] = "StockCount";
+        columnData[7] = "Status";
+        
+        model.setColumnCount(8);
         model.setColumnIdentifiers(columnData);
         for (int i = 0; i < stocks.size(); i++) {
             rowData[0] = stocks.get(i).getStockID();
             rowData[1] = stocks.get(i).getCategory().getName();
-            rowData[2] = stocks.get(i).getItemName();
-            rowData[3] = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").format(stocks.get(i).getDateAdded());
-            rowData[4] = stocks.get(i).getStockCount();
-            rowData[5] = stocks.get(i).getStatus();
+            rowData[2] = stocks.get(i).getModel();
+            rowData[3] = stocks.get(i).getPrice();
+            rowData[4] = stocks.get(i).getItemName();
+            rowData[5] = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").format(stocks.get(i).getDateAdded());
+            rowData[6] = stocks.get(i).getStockCount();
+            rowData[7] = stocks.get(i).getStatus();
             model.addRow(rowData);
         }
     }
@@ -135,16 +141,19 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
                 String txt = cmbSorting.getSelectedItem().toString();
                 switch (txt) {
                     case "Category":
-                        stocks.sort(new SortCategory());
+                        //stocks.sort(new SortCategory());
                         break;
                     case "Stock Quantity":
-                        stocks.sort(new SortStockQuantity());
+                        //stocks.sort(new SortStockQuantity());
                         break;
                     case "Name":
-                        stocks.sort(new SortName());
+                        //stocks.sort(new SortName());
                         break;
                     case "Surname":
-                        stocks.sort(new SortSurname());
+                        //stocks.sort(new SortSurname());
+                        break;
+                    case "Price":
+                        //stocks.sort(new SortSurname());
                         break;
                 }
                 setModel();
@@ -194,6 +203,8 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
         txtStatus.setToolTipText(null);
         dobPicker.setDate(new Date());
         dobPicker.setToolTipText(null);
+        txtPrice.setText("");
+        txtModel.setText("");
     }
 
     public void populateCategoryCMB() {
@@ -212,6 +223,8 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
         spStockCount.setBackground(Color.white);
         txtStatus.setBackground(Color.white);
         dobPicker.setBackground(Color.white);
+        txtModel.setBackground(Color.white);
+        txtPrice.setBackground(Color.white);
     }
     
     public void setSorting(boolean value) {
@@ -268,6 +281,11 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
         cmbCategory = new javax.swing.JComboBox<>();
         spStockCount = new javax.swing.JSpinner();
         dobPicker = new org.jdesktop.swingx.JXDatePicker();
+        jLabel18 = new javax.swing.JLabel();
+        txtPrice = new javax.swing.JTextField();
+        txtPrice1 = new javax.swing.JTextField();
+        jLabel19 = new javax.swing.JLabel();
+        txtModel = new javax.swing.JTextField();
         cmbSorting = new javax.swing.JComboBox<>();
         txtSearch = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
@@ -281,6 +299,7 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
         stockMenu = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
         mnOpenOrderForm = new javax.swing.JMenuItem();
+        orderStockMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -407,22 +426,64 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
         cmbCategory.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
         cmbCategory.setName("cmbCategory"); // NOI18N
 
+        jLabel18.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel18.setText("Price");
+
+        txtPrice.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        txtPrice.setName("txtUserName"); // NOI18N
+        txtPrice.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtPriceFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtPriceFocusLost(evt);
+            }
+        });
+
+        txtPrice1.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        txtPrice1.setName("txtUserName"); // NOI18N
+
+        jLabel19.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel19.setText("Model");
+
+        txtModel.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        txtModel.setName("txtUserName"); // NOI18N
+        txtModel.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtModelFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtModelFocusLost(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGap(23, 23, 23)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel15)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addGap(42, 42, 42)
+                        .addComponent(dobPicker, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel19)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtModel, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel11)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
                         .addComponent(txtStockID, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel12)
                             .addComponent(jLabel13))
@@ -432,17 +493,18 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
                                 .addComponent(cmbCategory, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(spStockCount, javax.swing.GroupLayout.DEFAULT_SIZE, 214, Short.MAX_VALUE)
-                                    .addComponent(txtItemName)))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel16)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel17)
-                        .addGap(48, 48, 48)
-                        .addComponent(dobPicker, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(txtItemName, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtStatus, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(spStockCount, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(28, 28, 28))
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(txtPrice1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -461,6 +523,14 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
                     .addComponent(txtItemName, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel18)
+                    .addComponent(txtPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel19)
+                    .addComponent(txtModel, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel16)
                     .addComponent(spStockCount, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -470,8 +540,12 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel17)
-                    .addComponent(dobPicker, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(31, Short.MAX_VALUE))
+                    .addComponent(dobPicker, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(txtPrice1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
 
         cmbSorting.setEditable(true);
@@ -546,7 +620,7 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
                                 .addComponent(btnUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
                                 .addComponent(btnDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(140, 140, 140)
+                        .addGap(126, 126, 126)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addComponent(cmbSorting, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -586,7 +660,7 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(76, 76, 76))
+                .addGap(29, 29, 29))
         );
 
         staffMenu.setText("Staff");
@@ -624,6 +698,11 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
 
         jMenuBar1.add(jMenu3);
 
+        orderStockMenu2.setText("Category");
+        orderStockMenu2.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        orderStockMenu2.setIconTextGap(10);
+        jMenuBar1.add(orderStockMenu2);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -648,11 +727,13 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
         Stock selectedStock;
         try {
             selectedStock = new Stock(Integer.valueOf(tblData.getValueAt(i, 0).toString()),
-                    Category.getCategory(tblData.getValueAt(i, 1).toString()),
+                    tblData.getValueAt(i, 1).toString(),
                     tblData.getValueAt(i, 2).toString(),
-                    new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(tblData.getValueAt(i, 3).toString()),
-                    Integer.valueOf(tblData.getValueAt(i, 4).toString()),
-                    tblData.getValueAt(i, 5).toString());
+                    Double.valueOf(tblData.getValueAt(i, 3).toString()),
+                    Category.getCategory(tblData.getValueAt(i, 4).toString()),
+                    new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(tblData.getValueAt(i, 5).toString()),
+                    Integer.valueOf(tblData.getValueAt(i, 6).toString()),
+                    tblData.getValueAt(i, 7).toString());
 
             txtStockID.setText(String.valueOf(selectedStock.getStockID()));
             txtItemName.setText(selectedStock.getItemName());
@@ -660,6 +741,8 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
             spStockCount.setValue(selectedStock.getStockCount());
             txtStatus.setText(selectedStock.getStatus());
             dobPicker.setDate(selectedStock.getDateAdded());
+            txtPrice.setText(Double.toString(selectedStock.getPrice()));
+            txtModel.setText(selectedStock.getModel());
         } catch (ParseException ex) {
             Logger.getLogger(StockForm.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -678,11 +761,17 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
             String itemName = null;
             int stockCount = 0;
             String status = null;
+            double price = 0.0;
+            String model = null;
 
             category = (cmbCategory.getItemCount() > 0) ? cmbCategory.getSelectedItem().toString() : "";
             itemName = txtItemName.getText();
             stockCount = (int) spStockCount.getValue();
             status = txtStatus.getText();
+            price = Double.valueOf(txtPrice.getText());
+            model = txtModel.getText();
+            
+            
 
             boolean check = true;
             if (Common.checkInput(category) != 1 || category.length() > 50) {
@@ -705,11 +794,22 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
                 txtStatus.setBackground(Color.red);
                 txtStatus.setToolTipText("Only alphabetical characters. Max 20 characters");
             }
+            if (Common.checkInput(String.valueOf(price)) != 2 || price == 0) {
+                check = false;
+                txtPrice.setBackground(Color.red);
+                txtPrice.setToolTipText("Only numerical value");
+            }
+            if (Common.checkInput(model) != 1 || model.length() > 20) {
+                check = false;
+                txtModel.setBackground(Color.red);
+                txtModel.setToolTipText("Only alphabetical characters. Max 20 characters");
+            }
+            
 
             if (check == true) {
                 int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to add this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 0) {
-                    new Stock(0, Category.getCategory(category), itemName, new Date(), stockCount, status).registerStock();
+                    new Stock(0, itemName,model,price,Category.getCategory(category), new Date(), stockCount, status).registerStock();
                     stocks = Stock.getStocks();
                     setModel();
                 }
@@ -745,12 +845,17 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
             String itemName = null;
             int stockCount = 0;
             String status = null;
+            double price = 0.0;
+            String model = null;
             
             stockID = txtStockID.getText();
             category = (cmbCategory.getItemCount() > 0) ? cmbCategory.getSelectedItem().toString() : "";
             itemName = txtItemName.getText();
             stockCount = (int) spStockCount.getValue();
             status = txtStatus.getText();
+            price = Double.valueOf(txtPrice.getText());
+            model = txtModel.getText();
+            
 
             boolean check = true;
             if (Common.checkInput(stockID) != 2 || Stock.getStock(Integer.parseInt(stockID)) == null) {
@@ -778,11 +883,21 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
                 txtStatus.setBackground(Color.red);
                 txtStatus.setToolTipText("Only alphabetical characters. Max 20 characters");
             }
+            if (Common.checkInput(String.valueOf(price)) != 2 || price == 0) {
+                check = false;
+                txtPrice.setBackground(Color.red);
+                txtPrice.setToolTipText("Only numerical value");
+            }
+            if (Common.checkInput(model) != 1 || model.length() > 20) {
+                check = false;
+                txtModel.setBackground(Color.red);
+                txtModel.setToolTipText("Only alphabetical characters. Max 20 characters");
+            }
 
             if (check == true) {
                 int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to update this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 0) {
-                    new Stock(Integer.valueOf(stockID), Category.getCategory(category), itemName, new Date(), stockCount, status).updateStock();
+                    new Stock(Integer.valueOf(stockID), itemName, model, price, Category.getCategory(category), new Date(), stockCount, status).updateStock();
                     stocks = Stock.getStocks();
                     setModel();
                 }
@@ -903,7 +1018,9 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
         if (Common.checkInput(txtStockID.getText()) == 2 && Stock.getStock(Integer.parseInt(txtStockID.getText())) != null) {
             int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to Delete this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
             if (option == 0) {
-                new Stock(Integer.valueOf(txtStockID.getText()), null, txtItemName.getText(), (Date) dobPicker.getDate(), (int) spStockCount.getValue(), txtStatus.getText()).deleteStock();
+                String category = (cmbCategory.getItemCount() > 0) ? cmbCategory.getSelectedItem().toString() : "";
+                new Stock(Integer.valueOf(txtStockID.getText()), txtItemName.getText(), txtModel.getText(),Double.parseDouble(txtPrice.getText()),Category.getCategory(category),
+                        (Date) dobPicker.getDate(),(int) spStockCount.getValue(), txtStatus.getText()).deleteStock();
                 clearAllFields();
                 stocks = Stock.getStocks();
                 setModel();
@@ -912,6 +1029,22 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
             JOptionPane.showMessageDialog(null, "No valid stock item selected");
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void txtPriceFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPriceFocusGained
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPriceFocusGained
+
+    private void txtPriceFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPriceFocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPriceFocusLost
+
+    private void txtModelFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtModelFocusGained
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtModelFocusGained
+
+    private void txtModelFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtModelFocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtModelFocusLost
 
     /**
      * @param args the command line arguments
@@ -965,6 +1098,8 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
@@ -973,11 +1108,15 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
     private javax.swing.JLabel lbLoginedInUser;
     private javax.swing.JMenuItem mnOpenOrderForm;
     private javax.swing.JMenuItem mnOpenStaffForm;
+    private javax.swing.JMenu orderStockMenu2;
     private javax.swing.JSpinner spStockCount;
     private javax.swing.JMenu staffMenu;
     private javax.swing.JMenu stockMenu;
     private javax.swing.JTable tblData;
     private javax.swing.JTextField txtItemName;
+    private javax.swing.JTextField txtModel;
+    private javax.swing.JTextField txtPrice;
+    private javax.swing.JTextField txtPrice1;
     private javax.swing.JTextField txtSearch;
     private javax.swing.JTextField txtStatus;
     private javax.swing.JTextField txtStockID;

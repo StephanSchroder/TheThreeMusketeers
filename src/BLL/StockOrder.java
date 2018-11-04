@@ -5,6 +5,7 @@
  */
 package BLL;
 
+import BLL.Interfaces.IStockOrder;
 import DAL.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +15,7 @@ import java.util.List;
  *
  * @author Stephan
  */
-public class StockOrder {
+public class StockOrder implements IStockOrder {
     private Stock stock;
     private int quantity;
 

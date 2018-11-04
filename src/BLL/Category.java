@@ -5,6 +5,7 @@
  */
 package BLL;
 
+import BLL.Interfaces.ICategory;
 import DAL.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +15,7 @@ import java.util.List;
  *
  * @author Stephan
  */
-public class Category {
+public class Category implements ICategory {
     private int categoryID;
     private String name;
     private String description;
@@ -171,4 +172,9 @@ public class Category {
         //Execute
         DataHandler.deleteRecords("Category", conditions);
     }
+    
+     public static List<Category> getCategorySearch(String itemName){
+        return DataHandler.<Category>readRecords(Category.class, Arrays.asList("CategoryID", "CategoryName", "Description"), Arrays.asList(new DataTablesCollection("Category")), Arrays.asList("CategoryName LIKE '%" + itemName + "%'"));
+    }
+    
 }

@@ -8,13 +8,13 @@ package PL;
 import BLL.Common;
 import BLL.User;
 import BLL.Exceptions.UserDoesNotExistException;
-import BLL.FormSetUp;
+import BLL.Interfaces.IFormSetUp;
 
 /**
  *
  * @author Stephan
  */
-public class OrderForm extends javax.swing.JFrame implements FormSetUp{
+public class OrderForm extends javax.swing.JFrame implements IFormSetUp{
 
     private User currentUser;
 
@@ -26,8 +26,9 @@ public class OrderForm extends javax.swing.JFrame implements FormSetUp{
         currentUser = null;
         lbLoginedInUser.setText(lbLoginedInUser.getText()+"No User Selected");
         this.setLocationRelativeTo(null);
-        Common.playMusic(2);
-
+        if (LoginForm.enableEasterEggs) {
+            Common.playMusic(2);
+        }
     }
 
     public OrderForm(User u) {
@@ -39,13 +40,15 @@ public class OrderForm extends javax.swing.JFrame implements FormSetUp{
             }
 
             currentUser = u;
-            lbLoginedInUser.setText(lbLoginedInUser.getText()+u.getFullname());
+            lbLoginedInUser.setText("Logged in as: " + u.getFullname() + ((u.getAccountType().equals(User.accountTypeState.ADMIN)) ? " with Admin privileges" : ""));
         } catch (UserDoesNotExistException ex) {
             ex.showMessage();
             
         }
         this.setLocationRelativeTo(null);
-        Common.playMusic(2);
+        if (LoginForm.enableEasterEggs) {
+            Common.playMusic(2);
+        }
     }
     
     @Override
@@ -110,6 +113,7 @@ public class OrderForm extends javax.swing.JFrame implements FormSetUp{
         stockMenu = new javax.swing.JMenu();
         mnOpenStockForm = new javax.swing.JMenuItem();
         orderStockMenu = new javax.swing.JMenu();
+        orderStockMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -631,6 +635,11 @@ public class OrderForm extends javax.swing.JFrame implements FormSetUp{
         orderStockMenu.setIconTextGap(10);
         jMenuBar1.add(orderStockMenu);
 
+        orderStockMenu2.setText("Category");
+        orderStockMenu2.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        orderStockMenu2.setIconTextGap(10);
+        jMenuBar1.add(orderStockMenu2);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -1151,6 +1160,7 @@ public class OrderForm extends javax.swing.JFrame implements FormSetUp{
     private javax.swing.JMenuItem mnOpenStaff;
     private javax.swing.JMenuItem mnOpenStockForm;
     private javax.swing.JMenu orderStockMenu;
+    private javax.swing.JMenu orderStockMenu2;
     private javax.swing.JSpinner spOrderQuantity;
     private javax.swing.JMenu staffMenu;
     private javax.swing.JMenu stockMenu;

@@ -5,19 +5,18 @@
  */
 package BLL;
 
+import BLL.Interfaces.IPerson;
 import DAL.*;
 import java.util.Date;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  *
  * @author Stephan
  */
-public abstract class Person {
+public abstract class Person implements IPerson {
     private String idNumber;
     private String firstName;
     private String lastName;

@@ -5,27 +5,25 @@
  */
 package BLL;
 
+import BLL.Interfaces.IUser;
 import DAL.*;
 import java.io.Serializable;
 import java.util.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  *
  * @author Stephan
  */
-public class User extends Person implements Serializable {
+public class User extends Person implements Serializable, IUser {
 
     private int userID;
     private String username;
     private String password;
-    private String accountType;
+    private accountTypeState accountType;
+    public enum accountTypeState { NORMAL, ADMIN, ADMIN_REQUESTED, ADMIN_REJECTED, ADMIN_NORMAL, BANNED, RESTRICTED, NOT_SET };
 
     public User(String firstName, String lastName, String title, Date dateOfBirth, String gender, String country, String province, String city, String street,
             String postalCode, String addressLine, String email, String cellNumber, String telNumber, Date dateAdded, int userID,
@@ -34,7 +32,41 @@ public class User extends Person implements Serializable {
         this.userID = userID;
         this.username = username;
         this.password = password;
-        this.accountType = accountType;
+        switch (accountType.toUpperCase()) {
+            case "NORMAL":
+                this.accountType = accountTypeState.NORMAL;
+                break;
+            case "ADMIN":
+                this.accountType = accountTypeState.ADMIN;
+                break;
+            case "ADMINREQUESTED":
+                this.accountType = accountTypeState.ADMIN_REQUESTED;
+                break;
+            case "ADMIN_REQUESTED":
+                this.accountType = accountTypeState.ADMIN_REQUESTED;
+                break;
+            case "ADMINREJECTED":
+                this.accountType = accountTypeState.ADMIN_REJECTED;
+                break;
+            case "ADMIN_REJECTED":
+                this.accountType = accountTypeState.ADMIN_REJECTED;
+                break;
+            case "ADMINNORMAL":
+                this.accountType = accountTypeState.ADMIN_NORMAL;
+                break;
+            case "ADMIN_NORMAL":
+                this.accountType = accountTypeState.ADMIN_NORMAL;
+                break;
+            case "BANNED":
+                this.accountType = accountTypeState.BANNED;
+                break;
+            case "RESTRICTED":
+                this.accountType = accountTypeState.RESTRICTED;
+                break;
+            default:
+                this.accountType = accountTypeState.NOT_SET;
+                break;
+        }
     }
 
     public User(int userID, String username, String password, String accountType, String idNumber, String firstName, String lastName, String title, Date dateOfBirth, String gender, String country, Date dateAdded) {
@@ -42,7 +74,41 @@ public class User extends Person implements Serializable {
         this.userID = userID;
         this.username = username;
         this.password = password;
-        this.accountType = accountType;
+        switch (accountType.toUpperCase()) {
+            case "NORMAL":
+                this.accountType = accountTypeState.NORMAL;
+                break;
+            case "ADMIN":
+                this.accountType = accountTypeState.ADMIN;
+                break;
+            case "ADMINREQUESTED":
+                this.accountType = accountTypeState.ADMIN_REQUESTED;
+                break;
+            case "ADMIN_REQUESTED":
+                this.accountType = accountTypeState.ADMIN_REQUESTED;
+                break;
+            case "ADMINREJECTED":
+                this.accountType = accountTypeState.ADMIN_REJECTED;
+                break;
+            case "ADMIN_REJECTED":
+                this.accountType = accountTypeState.ADMIN_REJECTED;
+                break;
+            case "ADMINNORMAL":
+                this.accountType = accountTypeState.ADMIN_NORMAL;
+                break;
+            case "ADMIN_NORMAL":
+                this.accountType = accountTypeState.ADMIN_NORMAL;
+                break;
+            case "BANNED":
+                this.accountType = accountTypeState.BANNED;
+                break;
+            case "RESTRICTED":
+                this.accountType = accountTypeState.RESTRICTED;
+                break;
+            default:
+                this.accountType = accountTypeState.NOT_SET;
+                break;
+        }
     }
 
     public int getUserID() {
@@ -69,13 +135,63 @@ public class User extends Person implements Serializable {
         this.password = password;
     }
 
-    public String getAccountType() {
+    public accountTypeState getAccountType() {
         return accountType;
     }
-
-    public void setAccountType(String accountType) {
+    
+    public void setAccountType(accountTypeState accountType) {
         this.accountType = accountType;
     }
+
+//    public String getAccountType() {
+//        switch (accountType) {
+//            case NORMAL:
+//                return "Normal";
+//            case ADMIN:
+//                return "Admin";
+//            case ADMIN_REQUESTED:
+//                return "AdminRequested";
+//            case ADMIN_REJECTED:
+//                return "AdminRejected";
+//            case ADMIN_NORMAL:
+//                return "AdminNormal";
+//            case BANNED:
+//                return "Banned";
+//            case RESTRICTED:
+//                return "Restricted";
+//            default:
+//                return "NotSet";
+//        }
+//    }
+
+//    public void setAccountType(String accountType) {
+//        switch (accountType) {
+//            case "Normal":
+//                this.accountType = accountTypeState.NORMAL;
+//                break;
+//            case "Admin":
+//                this.accountType = accountTypeState.ADMIN;
+//                break;
+//            case "AdminRequested":
+//                this.accountType = accountTypeState.ADMIN_REQUESTED;
+//                break;
+//            case "AdminRejected":
+//                this.accountType = accountTypeState.ADMIN_REJECTED;
+//                break;
+//            case "AdminNormal":
+//                this.accountType = accountTypeState.ADMIN_NORMAL;
+//                break;
+//            case "Banned":
+//                this.accountType = accountTypeState.BANNED;
+//                break;
+//            case "Restricted":
+//                this.accountType = accountTypeState.RESTRICTED;
+//                break;
+//            default:
+//                this.accountType = accountTypeState.NOT_SET;
+//                break;
+//        }
+//    }
 
     //METHODS
     //This method will return a integer code that will indicate the result of the authentication:
@@ -94,11 +210,11 @@ public class User extends Person implements Serializable {
             String[][] dbData = DataHandler.readRecords(Arrays.asList("UserID", "AccountType"), Arrays.<DataTablesCollection>asList(new DataTablesCollection("User")), Arrays.asList("Username='" + username + "'", "Password='" + password + "'"));
             if (dbData.length == 1) {
                 userAuthed = 3;
-                String AccountType = dbData[0][1];
-                if (AccountType.equals("Normal") || AccountType.equals("AdminRequested") || AccountType.equals("AdminRejected")) {
+                String AccountType = dbData[0][1].toUpperCase();
+                if (AccountType.equals("NORMAL") || AccountType.equals("ADMIN_REQUESTED") || AccountType.equals("ADMIN_REJECTED")) {
                     userAuthed = 4;
                 }
-                if (AccountType.equals("Admin")) {
+                if (AccountType.equals("ADMIN")) {
                     userAuthed = 5;
                 }
             }
@@ -115,6 +231,10 @@ public class User extends Person implements Serializable {
 
     public static List<User> getUsersByAccountType(String accountType) {
         return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("AccountType='" + accountType + "'"));
+    }
+
+    public static List<User> getNonAdminUsers() {
+        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("AccountType!='Admin'"));
     }
 
     public static User GetUser(String username) {
@@ -155,7 +275,7 @@ public class User extends Person implements Serializable {
         columns.add("PersonID");
         columns.add("Username");
         columns.add("Password");
-        if (!this.getAccountType().isEmpty()) {
+        if (this.getAccountType() != accountTypeState.NOT_SET) {
             columns.add("AccountType");
         }
 
@@ -164,7 +284,7 @@ public class User extends Person implements Serializable {
         values += "string#" + this.getIdNumber();
         values += ";string#" + this.getUsername();
         values += ";string#" + this.getPassword();
-        if (!this.getAccountType().isEmpty()) {
+        if (this.getAccountType() != accountTypeState.NOT_SET) {
             values += ";string#" + this.getAccountType();
         }
 
@@ -182,7 +302,7 @@ public class User extends Person implements Serializable {
         columns.add("PersonID");
         columns.add("Username");
         columns.add("Password");
-        if (!user.getAccountType().isEmpty()) {
+        if (user.getAccountType() != accountTypeState.NOT_SET) {
             columns.add("AccountType");
         }
 
@@ -191,7 +311,7 @@ public class User extends Person implements Serializable {
         values += "string#" + user.getIdNumber();
         values += ";string#" + user.getUsername();
         values += ";string#" + user.getPassword();
-        if (!user.getAccountType().isEmpty()) {
+        if (user.getAccountType() != accountTypeState.NOT_SET) {
             values += ";string#" + user.getAccountType();
         }
 
@@ -207,13 +327,17 @@ public class User extends Person implements Serializable {
         //Columns
         ArrayList<String> columns = new ArrayList<>();
         columns.add("Username");
-        columns.add("Password");
+        if (this.getPassword().length() > 0) {
+            columns.add("Password");
+        }
         columns.add("AccountType");
 
         //Values
         ArrayList<String> values = new ArrayList<>();
         values.add("string;" + this.getUsername());
-        values.add("string;" + this.getPassword());
+        if (this.getPassword().length() > 0) {
+            values.add("string;" + this.getPassword());
+        }
         values.add("string;" + this.getAccountType());
 
         //Conditions
@@ -296,53 +420,63 @@ public class User extends Person implements Serializable {
         DataHandler.deleteRecords("User", conditions);
     }
 
-    public static List<User> getUserByFirstName(String firstName) {
-        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("FirstName='" + firstName + "'"));
+    public static List<User> getUsersByParameterExplicit(String columnToSearch, String parameter) {
+        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList(columnToSearch + " = '" + parameter + "'"));
     }
 
-    public static List<User> getUserByLastName(String lastName) {
-        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("LastName='" + lastName + "'"));
+    public static List<User> getNonAdminUsersByParameterExplicit(String columnToSearch, String parameter) {
+        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("AccountType!='Admin'", columnToSearch + " = '" + parameter + "'"));
     }
 
-    public static List<User> getUserByFullName(String Fullname) {
-        String[] nameSurname = Fullname.split("\\s");
-        String name = null;
-        List<User> users = new ArrayList<>();
-        String surname = null;
-        if (nameSurname.length >= 2) {
-            name = nameSurname[0];
-            surname = nameSurname[1];
-
-            users = DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("FirstName= '" + name + "' AND  LastName= '" + surname + "'"));
-            return users;
-        } else {
-            return users;
-        }
-
+    public static List<User> getUsersByParameter(String columnToSearch, String parameter) {
+        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList(columnToSearch + " LIKE '%" + parameter + "%'"));
     }
 
-    public static List<User> getUserByCountry(String country) {
-        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("Country='" + country + "'"));
+    public static List<User> getNonAdminUsersByParameter(String columnToSearch, String parameter) {
+        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("AccountType!='Admin'", columnToSearch + " LIKE '%" + parameter + "%'"));
     }
 
-    public static List<User> getUserByCity(String city) {
-        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("City='" + city + "'"));
+    public static List<User> getUsersByParameter(String columnToSearch, int parameter) {
+        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList(columnToSearch + " = " + parameter));
     }
 
-    public static List<User> getUserByProvince(String province) {
-        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("Province='" + province + "'"));
+    public static List<User> getNonAdminUsersByParameter(String columnToSearch, int parameter) {
+        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("AccountType!='Admin'", columnToSearch + " = " + parameter));
     }
 
-    public static List<User> getUserByTelNumber(String telNum) {
-        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("TelNumber='" + telNum + "'"));
+    public static List<User> getUsersByFirstName(String firstName) {
+        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("FirstName LIKE '%" + firstName + "%'"));
     }
 
-    public static List<User> getUserByCellNumber(String celNum) {
-        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("CellNumber='" + celNum + "'"));
+    public static List<User> getUsersByLastName(String lastName) {
+        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("LastName LIKE '%" + lastName + "%'"));
     }
 
-    public static List<User> getUserByEmail(String email) {
-        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("Email='" + email + "'"));
+    public static List<User> getUsersByFullName(String Fullname) {
+        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("CONCAT(FirstName, ' ', LastName) LIKE '%" + Fullname + "%'"));
     }
 
+    public static List<User> getUsersByCountry(String country) {
+        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("Country LIKE '%" + country + "%'"));
+    }
+
+    public static List<User> getUsersByCity(String city) {
+        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("City LIKE '%" + city + "%'"));
+    }
+
+    public static List<User> getUsersByProvince(String province) {
+        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("Province LIKE '%" + province + "%'"));
+    }
+
+    public static List<User> getUsersByTelNumber(String telNum) {
+        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("TelNumber LIKE '%" + telNum + "%'"));
+    }
+
+    public static List<User> getUsersByCellNumber(String celNum) {
+        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("CellNumber LIKE '%" + celNum + "%'"));
+    }
+
+    public static List<User> getUsersByEmail(String email) {
+        return DataHandler.<User>readRecords(User.class, Arrays.asList("FirstName", "LastName", "Title", "DateOfBirth", "Gender", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Email", "CellNumber", "TelNumber", "DateAdded", "UserID", "Username", "Password", "AccountType", "PersonID"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("Email LIKE '%" + email + "%'"));
+    }
 }

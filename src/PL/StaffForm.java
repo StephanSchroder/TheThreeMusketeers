@@ -12,13 +12,7 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import BLL.Common;
-import BLL.Sorting.SortName;
-import BLL.Sorting.SortCategory;
-
-import BLL.Sorting.SortStockQuantity;
-import BLL.Sorting.SortSurname;
 import BLL.Exceptions.UserDoesNotExistException;
-import BLL.FormSetUp;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.ParseException;
@@ -27,18 +21,18 @@ import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import org.jdesktop.swingx.JXTextField;
+import BLL.Interfaces.IFormSetUp;
+import BLL.Sorting.User.*;
 
 /**
  *
  * @author Stephan
  */
-public class StaffForm extends javax.swing.JFrame implements FormSetUp{
+public class StaffForm extends javax.swing.JFrame implements IFormSetUp{
 
     private User currentUser = null;
+    private List<User> baseUsers = new ArrayList<>();
     private List<User> users = new ArrayList<>();
     private int insertClick = 0;
     private int updateClick = 0;
@@ -48,15 +42,17 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
      */
     public StaffForm() {
         initComponents();
-        users = User.getUsers();
-        initModel();
-
         currentUser = null;
-        lbLoginedInUser.setText("New user registration");
+        
+        resetBaseUsers();
+        initModel();
+        lblLoggedInUser.setText("New user registration");
         cmbSortingChangeListener changeListener = new cmbSortingChangeListener();
-        cmbSorting1.addItemListener(changeListener);
+        cmbSortBy.addItemListener(changeListener);
         this.setLocationRelativeTo(null);
-        Common.playMusic(2);
+        if (LoginForm.enableEasterEggs) {
+            Common.playMusic(2);
+        }
     }
 
     public StaffForm(User u) {
@@ -66,27 +62,29 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                 currentUser = null;
                 throw new UserDoesNotExistException(this);
             }
-            users = User.getUsers();
-            initModel();
 
             currentUser = u;
-            lbLoginedInUser.setText(lbLoginedInUser.getText() + u.getFullname());
-
+            lblLoggedInUser.setText("Logged in as: " + u.getFullname() + ((u.getAccountType().equals(User.accountTypeState.ADMIN)) ? " with Admin privileges" : ""));
+            
+            resetBaseUsers();
+            initModel();
             cmbSortingChangeListener changeListener = new cmbSortingChangeListener();
-            cmbSorting1.addItemListener(changeListener);
+            cmbSortBy.addItemListener(changeListener);
         } catch (UserDoesNotExistException ex) {
             ex.showMessage();
 
         }
         this.setLocationRelativeTo(null);
-        Common.playMusic(2);
+        if (LoginForm.enableEasterEggs) {
+            Common.playMusic(2);
+        }
     }
 
     private void initModel() {
         disableAllFields();
         setModel();
         clearAllFields();
-
+        setUIAccess(true);
     }
     
     @Override
@@ -106,53 +104,70 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
     @SuppressWarnings("unchecked")
 
     public void setModel() {
-        DefaultTableModel model = (DefaultTableModel) tblData.getModel();
-        model.setNumRows(0);
-        Object rowData[] = new Object[20];
-        Object columnData[] = new Object[20];
-        columnData[0] = "IDNumber";
-        columnData[1] = "FirstName";
-        columnData[2] = "LastName";
-        columnData[3] = "Title";
-        columnData[4] = "DateOfBirth";
-        columnData[5] = "Gender";
-        columnData[6] = "Country";
-        columnData[7] = "Province";
-        columnData[8] = "City";
-        columnData[9] = "Street";
-        columnData[10] = "PostalCode";
-        columnData[11] = "AddressLine";
-        columnData[12] = "Email";
-        columnData[13] = "CellNumber";
-        columnData[14] = "TelNumber";
-        columnData[15] = "DateAdded";
-        columnData[16] = "UserID";
-        columnData[17] = "Username";
-        columnData[18] = "Password";
-        columnData[19] = "AccountType";
-        model.setColumnCount(20);
-        model.setColumnIdentifiers(columnData);
-        for (int i = 0; i < users.size(); i++) {
-            rowData[0] = users.get(i).getIdNumber();
-            rowData[1] = users.get(i).getFirstName();
-            rowData[2] = users.get(i).getLastName();
-            rowData[3] = users.get(i).getTitle();
-            rowData[4] = new SimpleDateFormat("yyyy-MM-dd").format(users.get(i).getDateOfBirth());
-            rowData[5] = users.get(i).getGender();
-            rowData[6] = users.get(i).getCountry();
-            rowData[7] = users.get(i).getProvince();
-            rowData[8] = users.get(i).getCity();
-            rowData[9] = users.get(i).getStreet();
-            rowData[10] = users.get(i).getPostalCode();
-            rowData[11] = users.get(i).getAddressLine();
-            rowData[12] = users.get(i).getEmail();
-            rowData[13] = users.get(i).getCellNumber();
-            rowData[14] = users.get(i).getTelNumber();
-            rowData[15] = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").format(users.get(i).getDateAdded());
-            rowData[16] = users.get(i).getUserID();
-            rowData[17] = users.get(i).getUsername();
-            rowData[18] = users.get(i).getPassword();
-            rowData[19] = users.get(i).getAccountType();
+        if (currentUser != null) {
+            if (currentUser.getAccountType() != User.accountTypeState.ADMIN) {
+                cmbAccountType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NORMAL", "BANNED", "RESTRICTED" }));
+            }
+            setViewingOptions();
+            DefaultTableModel model = (DefaultTableModel) tblData.getModel();
+            model.setNumRows(0);
+            Object rowData[] = new Object[19];
+            Object columnData[] = new Object[19];
+            columnData[0] = "Date added";
+            columnData[1] = "ID number";
+            columnData[2] = "Title";
+            columnData[3] = "First name";
+            columnData[4] = "Last name";
+            columnData[5] = "User ID";
+            columnData[6] = "Username";
+            columnData[7] = "Account type";
+            columnData[8] = "Date of birth";
+            columnData[9] = "Gender";
+            columnData[10] = "Country";
+            columnData[11] = "Province";
+            columnData[12] = "City";
+            columnData[13] = "Street";
+            columnData[14] = "Postal code";
+            columnData[15] = "Address line";
+            columnData[16] = "Email";
+            columnData[17] = "Cell number";
+            columnData[18] = "Tel number";
+            model.setColumnCount(19);
+            model.setColumnIdentifiers(columnData);
+            for (int i = 0; i < users.size(); i++) {
+                rowData[0] = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").format(users.get(i).getDateAdded());
+                rowData[1] = users.get(i).getIdNumber();
+                rowData[2] = users.get(i).getTitle();
+                rowData[3] = users.get(i).getFirstName();
+                rowData[4] = users.get(i).getLastName();
+                rowData[5] = users.get(i).getUserID();
+                rowData[6] = users.get(i).getUsername();
+                rowData[7] = users.get(i).getAccountType();
+                rowData[8] = new SimpleDateFormat("yyyy-MM-dd").format(users.get(i).getDateOfBirth());
+                rowData[9] = users.get(i).getGender();
+                rowData[10] = users.get(i).getCountry();
+                rowData[11] = users.get(i).getProvince();
+                rowData[12] = users.get(i).getCity();
+                rowData[13] = users.get(i).getStreet();
+                rowData[14] = users.get(i).getPostalCode();
+                rowData[15] = users.get(i).getAddressLine();
+                rowData[16] = users.get(i).getEmail();
+                rowData[17] = users.get(i).getCellNumber();
+                rowData[18] = users.get(i).getTelNumber();
+                model.addRow(rowData);
+            }
+        }
+        else {
+            btnLogOff.setText("Login");
+            cmbAccountType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "RESTRICTED" }));
+            DefaultTableModel model = (DefaultTableModel) tblData.getModel();
+            model.setNumRows(0);
+            Object rowData[] = new Object[1];
+            Object columnData[] = new Object[1];
+            columnData[0] = "STATUS";
+            model.setColumnCount(1);
+            model.setColumnIdentifiers(columnData);
+            rowData[0] = "NOT LOGGED IN";
             model.addRow(rowData);
         }
     }
@@ -166,19 +181,49 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
             Object item = e.getItem();
 
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                String txt = cmbSorting1.getSelectedItem().toString();
+                String txt = cmbSortBy.getSelectedItem().toString();
                 switch (txt) {
-                    case "Category":
-                        Collections.sort(users, new SortCategory());
+                    case "ID number":
+                        users.sort(new IDNumberComparator());
                         break;
-                    case "Stock Quantity":
-                        Collections.sort(users, new SortStockQuantity());
+                    case "First name":
+                        users.sort(new FirstNameComparator());
                         break;
-                    case "Name":
-                        Collections.sort(users, new SortName());
+                    case "Last name":
+                        users.sort(new LastNameComparator());
                         break;
-                    case "Surname":
-                        Collections.sort(users, new SortSurname());
+                    case "Title":
+                        users.sort(new TitleComparator());
+                        break;
+                    case "Gender":
+                        users.sort(new GenderComparator());
+                        break;
+                    case "Country":
+                        users.sort(new CountryComparator());
+                        break;
+                    case "Province":
+                        users.sort(new ProvinceComparator());
+                        break;
+                    case "City":
+                        users.sort(new CityComparator());
+                        break;
+                    case "Street":
+                        users.sort(new StreetComparator());
+                        break;
+                    case "Postal code":
+                        users.sort(new PostalCodeComparator());
+                        break;
+                    case "Address line":
+                        users.sort(new AddressLineComparator());
+                        break;
+                    case "User ID":
+                        users.sort(new UserIDComparator());
+                        break;
+                    case "Username":
+                        users.sort(new UsernameComparator());
+                        break;
+                    case "Account type":
+                        users.sort(new AccountTypeComparator());
                         break;
                 }
             }
@@ -316,27 +361,108 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         txtPassword.setBackground(Color.white);
         cmbAccountType.setBackground(Color.white);
     }
+    
+    public void setViewingOptions() {
+        users = new ArrayList<>();
+        switch (cmbViewOptions.getSelectedItem().toString()) {
+            case "All":
+                users = baseUsers;
+                break;
+            case "Normal accounts":
+                for (User user : baseUsers) {
+                    if (user.getAccountType() == User.accountTypeState.NORMAL) {
+                        users.add(user);
+                    }
+                }
+                break;
+            case "Admin accounts":
+                for (User user : baseUsers) {
+                    if (user.getAccountType() == User.accountTypeState.ADMIN || user.getAccountType() == User.accountTypeState.ADMIN_NORMAL) {
+                        users.add(user);
+                    }
+                }
+                break;
+            case "Admin access requested":
+                for (User user : baseUsers) {
+                    if (user.getAccountType() == User.accountTypeState.ADMIN_REQUESTED) {
+                        users.add(user);
+                    }
+                }
+                break;
+            case "Admin rejected accounts":
+                for (User user : baseUsers) {
+                    if (user.getAccountType() == User.accountTypeState.ADMIN_REJECTED) {
+                        users.add(user);
+                    }
+                }
+                break;
+            case "Banned users":
+                for (User user : baseUsers) {
+                    if (user.getAccountType() == User.accountTypeState.BANNED) {
+                        users.add(user);
+                    }
+                }
+                break;
+            case "Restricted users":
+                for (User user : baseUsers) {
+                    if (user.getAccountType() == User.accountTypeState.RESTRICTED) {
+                        users.add(user);
+                    }
+                }
+                break;
+            default:
+                users = baseUsers;
+                break;
+        }
+    }
+    
+    public void resetBaseUsers() {
+        baseUsers = (currentUser != null && currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsers() : User.getNonAdminUsers();
+        setViewingOptions();
+    }
+    
+    public void resetBaseUsers(List<User> newBase) {
+        baseUsers = newBase;
+        setViewingOptions();
+    }
+
+    public void setViewingOptions(boolean value) {
+        cmbViewOptions.setEnabled(((currentUser != null) ? value : false));
+    }
 
     public void setSorting(boolean value) {
-        cmbSorting1.setEnabled(value);
+        cmbSortBy.setEnabled(((currentUser != null) ? value : false));
     }
 
     public void setSearching(boolean value) {
-        cmbSearchParam.setEnabled(value);
-        txtSearch.setEnabled(value);
-        btnSearch.setEnabled(value);
+        cmbSearchBy.setEnabled(((currentUser != null) ? value : false));
+        txtSearch.setEnabled(((currentUser != null) ? value : false));
+        btnSearch.setEnabled(((currentUser != null) ? value : false));
+    }
+
+    public void setUserButtons(boolean value) {
+        btnApprove.setEnabled(((currentUser != null) ? value : false));
+        btnReject.setEnabled(((currentUser != null) ? value : false));
+        btnBan.setEnabled(((currentUser != null) ? value : false));
+        
+        btnApprove.setVisible(((currentUser != null) ? value : false));
+        btnReject.setVisible(((currentUser != null) ? value : false));
+        btnBan.setVisible(((currentUser != null) ? value : false));
     }
 
     public void setCRUDOperations(boolean value) {
-        btnAddRecord.setEnabled(value);
-        btnUpdate.setEnabled(value);
-        btnDelete.setEnabled(value);
+        btnInsert.setEnabled(value);
+        btnUpdate.setEnabled(((currentUser != null) ? value : false));
+        btnDelete.setEnabled(((currentUser != null && currentUser.getAccountType() == User.accountTypeState.ADMIN) ? value : false));
     }
 
     public void setUIAccess(boolean value) {
+        setViewingOptions(value);
         setSorting(value);
         setSearching(value);
+        setUserButtons(false);
         setCRUDOperations(value);
+        setNavigation(((currentUser != null) ? value : false));
     }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -393,19 +519,28 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         txtPassword = new javax.swing.JTextField();
         jLabel27 = new javax.swing.JLabel();
         cmbAccountType = new javax.swing.JComboBox<>();
-        btnAddRecord = new javax.swing.JButton();
-        cmbSearchParam = new javax.swing.JComboBox<>();
+        btnInsert = new javax.swing.JButton();
+        cmbSearchBy = new javax.swing.JComboBox<>();
         txtSearch = new javax.swing.JTextField();
-        btnLogOff1 = new javax.swing.JButton();
-        lbLoginedInUser = new javax.swing.JLabel();
-        cmbSorting1 = new javax.swing.JComboBox<>();
-        jLabel14 = new javax.swing.JLabel();
+        btnLogOff = new javax.swing.JButton();
+        lblLoggedInUser = new javax.swing.JLabel();
+        cmbSortBy = new javax.swing.JComboBox<>();
+        lblTitle = new javax.swing.JLabel();
+        lbLabel1 = new javax.swing.JLabel();
+        cmbViewOptions = new javax.swing.JComboBox<>();
+        lbLabel2 = new javax.swing.JLabel();
+        lbLabel3 = new javax.swing.JLabel();
+        lbLabel4 = new javax.swing.JLabel();
+        btnApprove = new javax.swing.JButton();
+        btnReject = new javax.swing.JButton();
+        btnBan = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
-        staffMenu = new javax.swing.JMenu();
-        stockMenu = new javax.swing.JMenu();
+        miStaffMenu = new javax.swing.JMenu();
+        miStockMenu = new javax.swing.JMenu();
         mnOpenStockForm = new javax.swing.JMenuItem();
-        orderStockMenu = new javax.swing.JMenu();
+        miOrderMenu = new javax.swing.JMenu();
         mnOpenOrderForm = new javax.swing.JMenuItem();
+        orderStockMenu2 = new javax.swing.JMenu();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -730,7 +865,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel25)
                     .addComponent(txtTel, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         btnSearch.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
@@ -827,7 +962,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         jLabel27.setText("Account Type:");
 
         cmbAccountType.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
-        cmbAccountType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Normal", "Admin" }));
+        cmbAccountType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NORMAL", "ADMIN", "BANNED", "RESTRICTED" }));
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -868,17 +1003,17 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                 .addContainerGap(34, Short.MAX_VALUE))
         );
 
-        btnAddRecord.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        btnAddRecord.setText("Insert Record");
-        btnAddRecord.setName("btnInsertRecord"); // NOI18N
-        btnAddRecord.addActionListener(new java.awt.event.ActionListener() {
+        btnInsert.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        btnInsert.setText("Insert Record");
+        btnInsert.setName("btnInsertRecord"); // NOI18N
+        btnInsert.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddRecordActionPerformed(evt);
+                btnInsertActionPerformed(evt);
             }
         });
 
-        cmbSearchParam.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        cmbSearchParam.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "First Name", "Last Name", "FullName", "Country", "City", "Province", "Tel number", "Cell number", "Email" }));
+        cmbSearchBy.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        cmbSearchBy.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID number", "First name", "Last name", "Full name", "Title", "Date of birth", "Gender", "Country", "Province", "City", "Street", "Postal code", "Address line", "Email", "Cell number", "Tel number", "Date added", "User ID", "Username", "Account type" }));
 
         txtSearch.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
         txtSearch.setName("txtUserName"); // NOI18N
@@ -891,23 +1026,73 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
             }
         });
 
-        btnLogOff1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        btnLogOff1.setText("Log Off");
-        btnLogOff1.setName("btnInsertRecord"); // NOI18N
-        btnLogOff1.addActionListener(new java.awt.event.ActionListener() {
+        btnLogOff.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        btnLogOff.setText("Log Off");
+        btnLogOff.setName("btnInsertRecord"); // NOI18N
+        btnLogOff.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLogOff1ActionPerformed(evt);
+                btnLogOffActionPerformed(evt);
             }
         });
 
-        lbLoginedInUser.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        lbLoginedInUser.setText("Logged In User");
+        lblLoggedInUser.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        lblLoggedInUser.setText("Logged In User");
 
-        cmbSorting1.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        cmbSorting1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sorting...", "Name", "Surname", " ", " " }));
+        cmbSortBy.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        cmbSortBy.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID number", "First name", "Last name", "Title", "Date of birth", "Gender", "Country", "Province", "City", "Street", "Postal code", "Address line", "Email", "Cell number", "Tel number", "Date added", "User ID", "Username", "Account type" }));
 
-        jLabel14.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
-        jLabel14.setText("Staff Form:");
+        lblTitle.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
+        lblTitle.setText("Staff Form:");
+
+        lbLabel1.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        lbLabel1.setText("View Options");
+
+        cmbViewOptions.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        cmbViewOptions.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All", "Normal accounts", "Admin accounts", "Admin access requested", "Admin rejected accounts", "Banned users", "Restricted users" }));
+        cmbViewOptions.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cmbViewOptionsItemStateChanged(evt);
+            }
+        });
+
+        lbLabel2.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        lbLabel2.setText("Sort By");
+
+        lbLabel3.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        lbLabel3.setText("Search By");
+
+        lbLabel4.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        lbLabel4.setText("Search");
+
+        btnApprove.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        btnApprove.setText("Approve User");
+        btnApprove.setToolTipText("");
+        btnApprove.setName("btnDeleteRecord"); // NOI18N
+        btnApprove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnApproveActionPerformed(evt);
+            }
+        });
+
+        btnReject.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        btnReject.setText("Reject User");
+        btnReject.setToolTipText("");
+        btnReject.setName("btnDeleteRecord"); // NOI18N
+        btnReject.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRejectActionPerformed(evt);
+            }
+        });
+
+        btnBan.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        btnBan.setText("Ban User");
+        btnBan.setToolTipText("");
+        btnBan.setName("btnDeleteRecord"); // NOI18N
+        btnBan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBanActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -917,13 +1102,26 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                 .addGap(49, 49, 49)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(52, 52, 52)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnInsert, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnApprove, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnReject, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnBan, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(83, 83, 83)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(jLabel6)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(txtFirstName, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel5)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txtIDNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel7)
@@ -935,64 +1133,73 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                                             .addComponent(txtLastName)
                                             .addComponent(cmbTitle, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                             .addComponent(dobPicker, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(cmbGender, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel5)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(txtIDNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addComponent(cmbGender, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(btnDelete, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
-                                    .addComponent(btnAddRecord, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(30, 30, 30)))
+                                .addGap(18, 18, 18)))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(216, 216, 216))
+                        .addGap(91, 91, 91))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblLoggedInUser)
+                                    .addComponent(lblTitle))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnLogOff))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cmbViewOptions, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lbLabel1))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cmbSortBy, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lbLabel2))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtSearch)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(cmbSorting1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(txtSearch, javax.swing.GroupLayout.DEFAULT_SIZE, 544, Short.MAX_VALUE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(cmbSearchParam, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(32, 32, 32))
+                                        .addComponent(lbLabel4)
+                                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(lbLoginedInUser)
-                                            .addComponent(jLabel14))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                .addComponent(btnLogOff1))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1209, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(30, Short.MAX_VALUE))))
+                                        .addComponent(cmbSearchBy, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(lbLabel3))))
+                        .addGap(20, 20, 20))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jLabel14)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(lbLoginedInUser)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(cmbSorting1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cmbSearchParam, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(btnLogOff1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lblTitle)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblLoggedInUser)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lbLabel1)
+                            .addComponent(lbLabel2)
+                            .addComponent(lbLabel3)
+                            .addComponent(lbLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbSortBy, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbViewOptions, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbSearchBy, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(btnLogOff, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1023,33 +1230,41 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                             .addComponent(jLabel10)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnInsert, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnApprove, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(2, 2, 2))
+                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 54, Short.MAX_VALUE))
+                        .addGap(5, 5, 5)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnAddRecord, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(27, Short.MAX_VALUE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnReject, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnBan, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 11, Short.MAX_VALUE))
         );
 
-        staffMenu.setText("Staff");
-        staffMenu.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        staffMenu.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        staffMenu.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        staffMenu.setIconTextGap(20);
-        jMenuBar1.add(staffMenu);
+        miStaffMenu.setText("Staff");
+        miStaffMenu.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        miStaffMenu.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        miStaffMenu.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        miStaffMenu.setIconTextGap(20);
+        jMenuBar1.add(miStaffMenu);
 
-        stockMenu.setText("Stock");
-        stockMenu.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        stockMenu.setIconTextGap(10);
+        miStockMenu.setText("Stock");
+        miStockMenu.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        miStockMenu.setIconTextGap(10);
 
         mnOpenStockForm.setText("Open Stock Form");
         mnOpenStockForm.addActionListener(new java.awt.event.ActionListener() {
@@ -1057,13 +1272,13 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                 mnOpenStockFormActionPerformed(evt);
             }
         });
-        stockMenu.add(mnOpenStockForm);
+        miStockMenu.add(mnOpenStockForm);
 
-        jMenuBar1.add(stockMenu);
+        jMenuBar1.add(miStockMenu);
 
-        orderStockMenu.setText("Order Stock");
-        orderStockMenu.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        orderStockMenu.setIconTextGap(10);
+        miOrderMenu.setText("Order Stock");
+        miOrderMenu.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        miOrderMenu.setIconTextGap(10);
 
         mnOpenOrderForm.setText("Open Order Form");
         mnOpenOrderForm.addActionListener(new java.awt.event.ActionListener() {
@@ -1071,9 +1286,14 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                 mnOpenOrderFormActionPerformed(evt);
             }
         });
-        orderStockMenu.add(mnOpenOrderForm);
+        miOrderMenu.add(mnOpenOrderForm);
 
-        jMenuBar1.add(orderStockMenu);
+        jMenuBar1.add(miOrderMenu);
+
+        orderStockMenu2.setText("Category");
+        orderStockMenu2.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        orderStockMenu2.setIconTextGap(10);
+        jMenuBar1.add(orderStockMenu2);
 
         setJMenuBar(jMenuBar1);
 
@@ -1081,7 +1301,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1091,433 +1311,262 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtFirstNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtFirstNameFocusGained
+
+    private void mnOpenOrderFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenOrderFormActionPerformed
         // TODO add your handling code here:
-        Common.focusGain("First Name", txtFirstName);
+        OrderForm orderForm = new OrderForm(currentUser);
+        orderForm.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_mnOpenOrderFormActionPerformed
 
-    }//GEN-LAST:event_txtFirstNameFocusGained
-
-    private void txtFirstNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtFirstNameFocusLost
+    private void mnOpenStockFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenStockFormActionPerformed
         // TODO add your handling code here:
-        Common.focusLost("First Name", txtFirstName);
+        StockForm stockForm = new StockForm(currentUser);
+        stockForm.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_mnOpenStockFormActionPerformed
 
-    }//GEN-LAST:event_txtFirstNameFocusLost
-
-    private void txtIDNumberFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIDNumberFocusGained
-        // TODO add your handling code here:
-        Common.focusGain("ID Number", txtIDNumber);
-
-    }//GEN-LAST:event_txtIDNumberFocusGained
-
-    private void txtIDNumberFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIDNumberFocusLost
-        // TODO add your handling code here:
-
-        Common.focusLost("ID Number", txtIDNumber);
-
-    }//GEN-LAST:event_txtIDNumberFocusLost
-
-    private void txtLastNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLastNameFocusGained
-        // TODO add your handling code here:
-        Common.focusGain("Last Name", txtLastName);
-
-    }//GEN-LAST:event_txtLastNameFocusGained
-
-    private void txtLastNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLastNameFocusLost
-        // TODO add your handling code here:
-        Common.focusLost("Last Name", txtLastName);
-
-    }//GEN-LAST:event_txtLastNameFocusLost
-
-    private void txtCountryFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCountryFocusGained
-        // TODO add your handling code here:
-        Common.focusGain("Country", txtCountry);
-
-    }//GEN-LAST:event_txtCountryFocusGained
-
-    private void txtCountryFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCountryFocusLost
-        // TODO add your handling code here:
-        Common.focusLost("Country", txtCountry);
-
-    }//GEN-LAST:event_txtCountryFocusLost
-
-    private void txtProvinceFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtProvinceFocusGained
-        // TODO add your handling code here:
-
-        Common.focusGain("Province", txtProvince);
-
-    }//GEN-LAST:event_txtProvinceFocusGained
-
-    private void txtProvinceFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtProvinceFocusLost
-        // TODO add your handling code here:
-        Common.focusLost("Province", txtProvince);
-
-    }//GEN-LAST:event_txtProvinceFocusLost
-
-    private void txtCityFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCityFocusGained
-        // TODO add your handling code here:
-        Common.focusGain("City", txtCity);
-
-    }//GEN-LAST:event_txtCityFocusGained
-
-    private void txtCityFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCityFocusLost
-        // TODO add your handling code here:
-        Common.focusLost("City", txtCity);
-
-    }//GEN-LAST:event_txtCityFocusLost
-
-    private void txtPostalCodeFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPostalCodeFocusGained
-        // TODO add your handling code here:
-        Common.focusGain("Postal Code", txtPostalCode);
-
-    }//GEN-LAST:event_txtPostalCodeFocusGained
-
-    private void txtPostalCodeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPostalCodeFocusLost
-        // TODO add your handling code here:
-        Common.focusLost("Postal Code", txtPostalCode);
-
-    }//GEN-LAST:event_txtPostalCodeFocusLost
-
-    private void txtStreetFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStreetFocusGained
-        // TODO add your handling code here:
-        Common.focusGain("Street Address", txtStreet);
-
-    }//GEN-LAST:event_txtStreetFocusGained
-
-    private void txtStreetFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStreetFocusLost
-        // TODO add your handling code here:
-        Common.focusLost("Street Address", txtStreet);
-
-    }//GEN-LAST:event_txtStreetFocusLost
-
-    private void txtAddressLineFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAddressLineFocusGained
-        // TODO add your handling code here:
-        Common.focusGain("Address Line", txtAddressLine);
-
-    }//GEN-LAST:event_txtAddressLineFocusGained
-
-    private void txtAddressLineFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAddressLineFocusLost
-        // TODO add your handling code here:
-        Common.focusLost("Address Line", txtAddressLine);
-
-    }//GEN-LAST:event_txtAddressLineFocusLost
-
-    private void txtEmailFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtEmailFocusGained
-        // TODO add your handling code here:
-        Common.focusGain("Email Address", txtEmail);
-
-    }//GEN-LAST:event_txtEmailFocusGained
-
-    private void txtEmailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtEmailFocusLost
-        // TODO add your handling code here:
-        Common.focusLost("Email Address", txtEmail);
-    }//GEN-LAST:event_txtEmailFocusLost
-
-    private void txtCellFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCellFocusGained
-        // TODO add your handling code here:
-        Common.focusGain("Cellphone number", txtCell);
-
-    }//GEN-LAST:event_txtCellFocusGained
-
-    private void txtCellFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCellFocusLost
-        // TODO add your handling code here:
-        Common.focusLost("Cellphone number", txtCell);
-    }//GEN-LAST:event_txtCellFocusLost
-
-    private void txtTelFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTelFocusGained
-        // TODO add your handling code here:
-        Common.focusGain("Tellphone number", txtTel);
-    }//GEN-LAST:event_txtTelFocusGained
-
-    private void txtTelFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTelFocusLost
-        // TODO add your handling code here:
-        Common.focusLost("Tellphone number", txtTel);
-    }//GEN-LAST:event_txtTelFocusLost
-
-
-    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        String parameter = cmbSearchParam.getSelectedItem().toString();
-        String searchKeyword = txtSearch.getText();
-        switch (parameter) {
-            case "First Name":
-                users = User.getUserByFirstName(searchKeyword);
-                break;
-            case "Last Name":
-                users = User.getUserByLastName(searchKeyword);
-                break;
-            case "FullName":
-                users = User.getUserByFullName(searchKeyword);
-                break;
-            case "Country":
-                users = User.getUserByCountry(searchKeyword);
-                break;
-            case "City":
-                users = User.getUserByCity(searchKeyword);
-                break;
-            case "Province":
-                users = User.getUserByProvince(searchKeyword);
-                break;
-            case "Tel number":
-                users = User.getUserByTelNumber(searchKeyword);
-                break;
-            case "Cell number":
-                users = User.getUserByCellNumber(searchKeyword);
-                break;
-            case "Email":
-                users = User.getUserByEmail(searchKeyword);
-                break;
-        }
-        setModel();
-
-    }//GEN-LAST:event_btnSearchActionPerformed
-
-    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        //Update record
-        if (updateClick == 0) {
-            updateClick++;
-            setUIAccess(false);
-            btnUpdate.setEnabled(true);
-            prepareUpdate();
-        } else {
-            resetColor();
-            String idNumber;
-            String firstName;
-            String lastName;
-            String title;
-            Date dateOfBirth;
-            String gender;
-            String country;
-            String province;
-            String city;
-            String street;
-            String postalCode;
-            String addressLine;
-            String email;
-            String cellNumber;
-            String telNumber;
-            String username;
-            String password;
-            String accountType;
-
-            idNumber = txtIDNumber.getText();
-            firstName = txtFirstName.getText();
-            lastName = txtLastName.getText();
-            title = cmbTitle.getSelectedItem().toString();
-            dateOfBirth = dobPicker.getDate();
-            gender = cmbGender.getSelectedItem().toString();
-            country = txtCountry.getText();
-            province = (txtProvince.getText() != null) ? txtProvince.getText() : "";
-            city = (txtCity.getText() != null) ? txtCity.getText() : "";
-            street = (txtStreet.getText() != null) ? txtStreet.getText() : "";
-            postalCode = (txtPostalCode.getText() != null) ? txtPostalCode.getText() : "";
-            addressLine = (txtAddressLine.getText() != null) ? txtAddressLine.getText() : "";
-            email = (txtEmail.getText() != null) ? txtEmail.getText() : "";
-            cellNumber = (txtCell.getText() != null) ? txtCell.getText() : "";
-            telNumber = (txtTel.getText() != null) ? txtTel.getText() : "";
-            username = txtUsername.getText();
-            password = txtPassword.getText();
-            accountType = cmbAccountType.getSelectedItem().toString();
-
-            boolean check = true;
-            if (Common.checkInput(idNumber) != 10 || idNumber.length() != 13) {
-                check = false;
-                txtIDNumber.setBackground(Color.red);
-                txtIDNumber.setToolTipText("Only numerical values. Must be 13 characters. Must be valid RSA ID Number");
-            }
-            if (Common.checkInput(firstName) != 1 || firstName.length() > 20) {
-                check = false;
-                txtFirstName.setBackground(Color.red);
-                txtFirstName.setToolTipText("Only alphabetical characters. Max 20 characters");
-            }
-            if (Common.checkInput(lastName) != 1 || lastName.length() > 20) {
-                check = false;
-                txtLastName.setBackground(Color.red);
-                txtLastName.setToolTipText("Only alphabetical characters. Max 20 characters");
-            }
-            if (!(Common.checkInput(title) == 1 || Common.checkInput(title) == 5) || title.length() > 4) {
-                check = false;
-                cmbTitle.setBackground(Color.red);
-                cmbTitle.setToolTipText("Only alphabetical characters. Max 4 characters");
-            }
-            //DATE OF BIRTH CHECK NOT INCLUDED
-            if (Common.checkInput(gender) != 1 || gender.length() > 6) {
-                check = false;
-                cmbGender.setBackground(Color.red);
-                cmbGender.setToolTipText("Only alphabetical characters. Max 6 characters");
-            }
-            if (Common.checkInput(country) != 1 || country.length() > 20) {
-                check = false;
-                txtCountry.setBackground(Color.red);
-                txtCountry.setToolTipText("Only alphabetical characters. Max 20 characters");
-            }
-            if (!(Common.checkInput(province) == 0 || Common.checkInput(province) == 1 || Common.checkInput(province) == 5) || province.length() > 20) {
-                check = false;
-                txtProvince.setBackground(Color.orange);
-                txtProvince.setToolTipText("(Optional Field) Only alphabetical characters and optional special characters. Max 20 characters");
-            }
-            if (!(Common.checkInput(city) == 0 || Common.checkInput(city) == 1) || city.length() > 30) {
-                check = false;
-                txtCity.setBackground(Color.orange);
-                txtCity.setToolTipText("(Optional Field) Only alphabetical characters. Max 30 characters");
-            }
-            if (!(Common.checkInput(street) == 0 || Common.checkInput(street) == 1 || Common.checkInput(street) == 4) || street.length() > 30) {
-                check = false;
-                txtStreet.setBackground(Color.orange);
-                txtStreet.setToolTipText("(Optional Field) Only alphabetical characters and optional numerical values. Max 30 characters");
-            }
-            if (!(Common.checkInput(postalCode) == 0 || Common.checkInput(postalCode) == 2) || postalCode.length() > 10) {
-                check = false;
-                txtPostalCode.setBackground(Color.orange);
-                txtPostalCode.setToolTipText("(Optional Field) Only numerical values. Max 10 characters");
-            }
-            if (addressLine.length() > 50) {
-                check = false;
-                txtAddressLine.setBackground(Color.orange);
-                txtAddressLine.setToolTipText("(Optional Field) Any characters. Max 50 characters");
-            }
-            if (!(Common.checkInput(email) == 0 || Common.checkInput(email) == 9) || email.length() > 30) {
-                check = false;
-                txtEmail.setBackground(Color.orange);
-                txtEmail.setToolTipText("(Optional Field) Only valid email address. Max 30 characters");
-            }
-            if (!(Common.checkInput(cellNumber) == 0 || (Common.checkInput(cellNumber) == 2 && cellNumber.length() == 10))) {
-                check = false;
-                txtCell.setBackground(Color.orange);
-                txtCell.setToolTipText("(Optional Field) Only numerical values. Must be 10 characters");
-            }
-            if (!(Common.checkInput(telNumber) == 0 || (Common.checkInput(telNumber) == 2 && telNumber.length() == 10))) {
-                check = false;
-                txtTel.setBackground(Color.orange);
-                txtTel.setToolTipText("(Optional Field) Only numerical values. Must be 10 characters");
-            }
-            if (Common.checkInput(username) != 1 || username.length() > 20) {
-                check = false;
-                txtUsername.setBackground(Color.red);
-                txtUsername.setToolTipText("Only alphabetical characters. Max 20 characters");
-            }
-            if (Common.checkInput(password) != 7 || password.length() < 4 || password.length() > 20) {
-                check = false;
-                txtPassword.setBackground(Color.red);
-                txtPassword.setToolTipText("Must contain alphabetical characters and at least one numerical value and at least one special character. Min 4 characters. Max 20 characters");
-            }
-            if (Common.checkInput(accountType) != 1 || accountType.length() > 50) {
-                check = false;
-                cmbAccountType.setBackground(Color.red);
-                cmbAccountType.setToolTipText("Only alphabetical characters. Max 50 characters");
-            }
-
-            if (check == true) {
-                int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to update this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
-                if (option == 0) {
-                    new User(firstName, lastName, title, dateOfBirth, gender, country, province, city, street, postalCode, addressLine, email, cellNumber, telNumber, new Date(), User.GetUserByIdNumber(idNumber).getUserID(), username, password, accountType, idNumber).updateUser();
-                    setModel();
-                }
-                clearAllFields();
-                disableAllFields();
-                resetColor();
-                updateClick = 0;
-                setUIAccess(true);
-            } else {
-                int option = JOptionPane.showConfirmDialog(this, "There were some errors, would you like to fix them?", "Confirmation.", JOptionPane.YES_NO_OPTION);
-                if (option == 1) {
-                    clearAllFields();
-                    disableAllFields();
-                    resetColor();
-                    updateClick = 0;
-                    setUIAccess(true);
-                }
-            }
-        }
-    }//GEN-LAST:event_btnUpdateActionPerformed
-
-    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        // Delete Record
-        if (Common.checkInput(txtIDNumber.getText()) == 10 && User.GetUserByIdNumber(txtIDNumber.getText()) != null) {
-            int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to Delete this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
-            if (option == 0) {
-                User.deleteUser(txtIDNumber.getText(), User.GetUserByIdNumber(txtIDNumber.getText()).getUserID());
-                clearAllFields();
-                setModel();
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "No valid user selected");
-        }
-    }//GEN-LAST:event_btnDeleteActionPerformed
-
-    private void tblDataMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDataMouseClicked
+    private void btnBanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBanActionPerformed
         int i = tblData.getSelectedRow();
 
-        User selectedUser;
+        User selectedUser = null;
         try {
-            selectedUser = new User(tblData.getValueAt(i, 1).toString(),
-                    tblData.getValueAt(i, 2).toString(),
-                    tblData.getValueAt(i, 3).toString(),
-                    new SimpleDateFormat("yyyy-MM-dd").parse(tblData.getValueAt(i, 4).toString()),
-                    tblData.getValueAt(i, 5).toString(),
-                    tblData.getValueAt(i, 6).toString(),
-                    (tblData.getValueAt(i, 7) != null) ? tblData.getValueAt(i, 7).toString() : "",
-                    (tblData.getValueAt(i, 8) != null) ? tblData.getValueAt(i, 8).toString() : "",
-                    (tblData.getValueAt(i, 9) != null) ? tblData.getValueAt(i, 9).toString() : "",
-                    (tblData.getValueAt(i, 10) != null) ? tblData.getValueAt(i, 10).toString() : "",
-                    (tblData.getValueAt(i, 11) != null) ? tblData.getValueAt(i, 11).toString() : "",
-                    (tblData.getValueAt(i, 12) != null) ? tblData.getValueAt(i, 12).toString() : "",
-                    (tblData.getValueAt(i, 13) != null) ? tblData.getValueAt(i, 13).toString() : "",
-                    (tblData.getValueAt(i, 14) != null) ? tblData.getValueAt(i, 14).toString() : "",
-                    new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(tblData.getValueAt(i, 15).toString()),
-                    Integer.valueOf(tblData.getValueAt(i, 16).toString()),
-                    tblData.getValueAt(i, 17).toString(),
-                    tblData.getValueAt(i, 18).toString(),
-                    tblData.getValueAt(i, 19).toString(),
-                    tblData.getValueAt(i, 0).toString());
+            selectedUser = new User(tblData.getValueAt(i, 3).toString(),
+                tblData.getValueAt(i, 4).toString(),
+                tblData.getValueAt(i, 2).toString(),
+                new SimpleDateFormat("yyyy-MM-dd").parse(tblData.getValueAt(i, 8).toString()),
+                tblData.getValueAt(i, 9).toString(),
+                tblData.getValueAt(i, 10).toString(),
+                (tblData.getValueAt(i, 11) != null) ? tblData.getValueAt(i, 7).toString() : "",
+                (tblData.getValueAt(i, 12) != null) ? tblData.getValueAt(i, 8).toString() : "",
+                (tblData.getValueAt(i, 13) != null) ? tblData.getValueAt(i, 9).toString() : "",
+                (tblData.getValueAt(i, 14) != null) ? tblData.getValueAt(i, 10).toString() : "",
+                (tblData.getValueAt(i, 15) != null) ? tblData.getValueAt(i, 11).toString() : "",
+                (tblData.getValueAt(i, 16) != null) ? tblData.getValueAt(i, 12).toString() : "",
+                (tblData.getValueAt(i, 17) != null) ? tblData.getValueAt(i, 13).toString() : "",
+                (tblData.getValueAt(i, 18) != null) ? tblData.getValueAt(i, 14).toString() : "",
+                new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(tblData.getValueAt(i, 0).toString()),
+                Integer.valueOf(tblData.getValueAt(i, 5).toString()),
+                tblData.getValueAt(i, 6).toString(),
+                "",
+                tblData.getValueAt(i, 7).toString(),
+                tblData.getValueAt(i, 1).toString());
 
-            txtIDNumber.setText(selectedUser.getIdNumber());
-            txtFirstName.setText(selectedUser.getFirstName());
-            txtLastName.setText(selectedUser.getLastName());
-            cmbTitle.setSelectedItem(selectedUser.getTitle());
-            dobPicker.setDate(selectedUser.getDateOfBirth());
-            cmbGender.setSelectedItem(selectedUser.getGender());
-            txtCountry.setText(selectedUser.getCountry());
-            txtProvince.setText(selectedUser.getProvince());
-            txtCity.setText(selectedUser.getCity());
-            txtStreet.setText(selectedUser.getStreet());
-            txtPostalCode.setText(selectedUser.getPostalCode());
-            txtAddressLine.setText(selectedUser.getAddressLine());
-            txtEmail.setText(selectedUser.getEmail());
-            txtCell.setText(selectedUser.getCellNumber());
-            txtTel.setText(selectedUser.getTelNumber());
-            txtUsername.setText(selectedUser.getUsername());
-            txtPassword.setText(selectedUser.getPassword());
-            cmbAccountType.setSelectedItem(selectedUser.getAccountType());
+            switch (selectedUser.getAccountType()) {
+                case ADMIN:
+                //btnBan.setText("Ban Admin");
+                selectedUser.setAccountType(User.accountTypeState.BANNED);
+                selectedUser.updateUser();
+                break;
+                case ADMIN_REJECTED:
+                //btnBan.setText("Ban User");
+                selectedUser.setAccountType(User.accountTypeState.BANNED);
+                selectedUser.updateUser();
+                break;
+                case ADMIN_REQUESTED:
+                //btnBan.setText("Ban User");
+                selectedUser.setAccountType(User.accountTypeState.BANNED);
+                selectedUser.updateUser();
+                break;
+                case NORMAL:
+                //btnBan.setText("Ban User");
+                selectedUser.setAccountType(User.accountTypeState.BANNED);
+                selectedUser.updateUser();
+                break;
+                case RESTRICTED:
+                //btnBan.setText("Ban User");
+                selectedUser.setAccountType(User.accountTypeState.BANNED);
+                selectedUser.updateUser();
+                break;
+                case NOT_SET:
+                btnApprove.setEnabled(false);
+                btnApprove.setVisible(false);
+                btnApprove.setText("Approve");
+                btnReject.setEnabled(false);
+                btnReject.setVisible(false);
+                btnReject.setText("Reject");
+                btnBan.setEnabled(false);
+                btnBan.setVisible(false);
+                btnBan.setText("Ban");
+                break;
+            }
+            resetBaseUsers();
+            setModel();
+            setUserButtons(false);
         } catch (ParseException ex) {
             Logger.getLogger(StaffForm.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_tblDataMouseClicked
+    }//GEN-LAST:event_btnBanActionPerformed
 
-    private void txtUsernameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUsernameFocusGained
+    private void btnRejectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRejectActionPerformed
+        int i = tblData.getSelectedRow();
+
+        User selectedUser = null;
+        try {
+            selectedUser = new User(tblData.getValueAt(i, 3).toString(),
+                tblData.getValueAt(i, 4).toString(),
+                tblData.getValueAt(i, 2).toString(),
+                new SimpleDateFormat("yyyy-MM-dd").parse(tblData.getValueAt(i, 8).toString()),
+                tblData.getValueAt(i, 9).toString(),
+                tblData.getValueAt(i, 10).toString(),
+                (tblData.getValueAt(i, 11) != null) ? tblData.getValueAt(i, 7).toString() : "",
+                (tblData.getValueAt(i, 12) != null) ? tblData.getValueAt(i, 8).toString() : "",
+                (tblData.getValueAt(i, 13) != null) ? tblData.getValueAt(i, 9).toString() : "",
+                (tblData.getValueAt(i, 14) != null) ? tblData.getValueAt(i, 10).toString() : "",
+                (tblData.getValueAt(i, 15) != null) ? tblData.getValueAt(i, 11).toString() : "",
+                (tblData.getValueAt(i, 16) != null) ? tblData.getValueAt(i, 12).toString() : "",
+                (tblData.getValueAt(i, 17) != null) ? tblData.getValueAt(i, 13).toString() : "",
+                (tblData.getValueAt(i, 18) != null) ? tblData.getValueAt(i, 14).toString() : "",
+                new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(tblData.getValueAt(i, 0).toString()),
+                Integer.valueOf(tblData.getValueAt(i, 5).toString()),
+                tblData.getValueAt(i, 6).toString(),
+                "",
+                tblData.getValueAt(i, 7).toString(),
+                tblData.getValueAt(i, 1).toString());
+
+            switch (selectedUser.getAccountType()) {
+                case ADMIN:
+                //btnReject.setText("Remove Admin");
+                selectedUser.setAccountType(User.accountTypeState.NORMAL);
+                selectedUser.updateUser();
+                break;
+                case ADMIN_REQUESTED:
+                //btnReject.setText("Reject Admin");
+                selectedUser.setAccountType(User.accountTypeState.ADMIN_REJECTED);
+                selectedUser.updateUser();
+                break;
+                case NORMAL:
+                //btnReject.setText("Restrict User");
+                selectedUser.setAccountType(User.accountTypeState.RESTRICTED);
+                selectedUser.updateUser();
+                break;
+                case NOT_SET:
+                btnApprove.setEnabled(false);
+                btnApprove.setVisible(false);
+                btnApprove.setText("Approve");
+                btnReject.setEnabled(false);
+                btnReject.setVisible(false);
+                btnReject.setText("Reject");
+                btnBan.setEnabled(false);
+                btnBan.setVisible(false);
+                btnBan.setText("Ban");
+                break;
+            }
+            resetBaseUsers();
+            setModel();
+            setUserButtons(false);
+        } catch (ParseException ex) {
+            Logger.getLogger(StaffForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnRejectActionPerformed
+
+    private void btnApproveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApproveActionPerformed
+        int i = tblData.getSelectedRow();
+
+        if (i > -1) {
+            User selectedUser = null;
+            try {
+                selectedUser = new User(tblData.getValueAt(i, 3).toString(),
+                    tblData.getValueAt(i, 4).toString(),
+                    tblData.getValueAt(i, 2).toString(),
+                    new SimpleDateFormat("yyyy-MM-dd").parse(tblData.getValueAt(i, 8).toString()),
+                    tblData.getValueAt(i, 9).toString(),
+                    tblData.getValueAt(i, 10).toString(),
+                    (tblData.getValueAt(i, 11) != null) ? tblData.getValueAt(i, 7).toString() : "",
+                    (tblData.getValueAt(i, 12) != null) ? tblData.getValueAt(i, 8).toString() : "",
+                    (tblData.getValueAt(i, 13) != null) ? tblData.getValueAt(i, 9).toString() : "",
+                    (tblData.getValueAt(i, 14) != null) ? tblData.getValueAt(i, 10).toString() : "",
+                    (tblData.getValueAt(i, 15) != null) ? tblData.getValueAt(i, 11).toString() : "",
+                    (tblData.getValueAt(i, 16) != null) ? tblData.getValueAt(i, 12).toString() : "",
+                    (tblData.getValueAt(i, 17) != null) ? tblData.getValueAt(i, 13).toString() : "",
+                    (tblData.getValueAt(i, 18) != null) ? tblData.getValueAt(i, 14).toString() : "",
+                    new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(tblData.getValueAt(i, 0).toString()),
+                    Integer.valueOf(tblData.getValueAt(i, 5).toString()),
+                    tblData.getValueAt(i, 6).toString(),
+                    "",
+                    tblData.getValueAt(i, 7).toString(),
+                    tblData.getValueAt(i, 1).toString());
+
+                switch (selectedUser.getAccountType()) {
+                    case ADMIN_REQUESTED:
+                    //btnApprove.setText("Approve Admin");
+                    selectedUser.setAccountType(User.accountTypeState.ADMIN);
+                    selectedUser.updateUser();
+                    break;
+                    case NORMAL:
+                    //btnApprove.setText("Make Admin");
+                    selectedUser.setAccountType(User.accountTypeState.ADMIN);
+                    selectedUser.updateUser();
+                    break;
+                    case RESTRICTED:
+                    //btnApprove.setText("Approve User");
+                    selectedUser.setAccountType(User.accountTypeState.NORMAL);
+                    selectedUser.updateUser();
+                    break;
+                    case BANNED:
+                    //btnApprove.setText("Revoke Ban");
+                    selectedUser.setAccountType(User.accountTypeState.RESTRICTED);
+                    selectedUser.updateUser();
+                    break;
+                    case NOT_SET:
+                    btnApprove.setEnabled(false);
+                    btnApprove.setVisible(false);
+                    btnApprove.setText("Approve");
+                    btnReject.setEnabled(false);
+                    btnReject.setVisible(false);
+                    btnReject.setText("Reject");
+                    btnBan.setEnabled(false);
+                    btnBan.setVisible(false);
+                    btnBan.setText("Ban");
+                    break;
+                }
+                resetBaseUsers();
+                setModel();
+                setUserButtons(false);
+            } catch (ParseException ex) {
+                Logger.getLogger(StaffForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        else {
+            setUIAccess(true);
+            JOptionPane.showMessageDialog(null, "No valid user selected");
+        }
+    }//GEN-LAST:event_btnApproveActionPerformed
+
+    private void cmbViewOptionsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbViewOptionsItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            setViewingOptions();
+            setModel();
+        }
+    }//GEN-LAST:event_cmbViewOptionsItemStateChanged
+
+    private void btnLogOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOffActionPerformed
         // TODO add your handling code here:
-        Common.focusGain("Username", txtUsername);
-    }//GEN-LAST:event_txtUsernameFocusGained
+        if (currentUser != null) {
+            Common.logOff(this);
+        }
+        else {
+            new LoginForm().setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_btnLogOffActionPerformed
 
-    private void txtUsernameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUsernameFocusLost
+    private void txtSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusLost
         // TODO add your handling code here:
-        Common.focusLost("Username", txtUsername);
-    }//GEN-LAST:event_txtUsernameFocusLost
+        Common.focusGain("Search data", txtSearch);
+    }//GEN-LAST:event_txtSearchFocusLost
 
-    private void txtPasswordFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPasswordFocusGained
+    private void txtSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusGained
         // TODO add your handling code here:
-        Common.focusGain("Password", txtPassword);
-    }//GEN-LAST:event_txtPasswordFocusGained
+        Common.focusGain("Search data", txtSearch);
+    }//GEN-LAST:event_txtSearchFocusGained
 
-    private void txtPasswordFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPasswordFocusLost
-        // TODO add your handling code here:
-        Common.focusLost("Password", txtPassword);
-    }//GEN-LAST:event_txtPasswordFocusLost
-
-    private void btnAddRecordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddRecordActionPerformed
+    private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
         // TODO add your handling code here:
         if (insertClick == 0) {
             insertClick++;
             setUIAccess(false);
-            btnAddRecord.setEnabled(true);
+            btnInsert.setEnabled(true);
             clearAllFields();
             prepareInsert();
         } else {
@@ -1652,6 +1701,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                 int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to add this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 0) {
                     new User(firstName, lastName, title, dateOfBirth, gender, country, province, city, street, postalCode, addressLine, email, cellNumber, telNumber, new Date(), 0, username, password, accountType, idNumber).registerUser();
+                    resetBaseUsers();
                     setModel();
                 }
                 clearAllFields();
@@ -1670,54 +1720,504 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                 }
             }
         }
-    }//GEN-LAST:event_btnAddRecordActionPerformed
+    }//GEN-LAST:event_btnInsertActionPerformed
 
-    private void txtSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusGained
+    private void txtPasswordFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPasswordFocusLost
         // TODO add your handling code here:
-        Common.focusGain("Search data", txtSearch);
-    }//GEN-LAST:event_txtSearchFocusGained
+        Common.focusLost("Password", txtPassword);
+    }//GEN-LAST:event_txtPasswordFocusLost
 
-    private void txtSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusLost
+    private void txtPasswordFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPasswordFocusGained
         // TODO add your handling code here:
-        Common.focusGain("Search data", txtSearch);
-    }//GEN-LAST:event_txtSearchFocusLost
+        Common.focusGain("Password", txtPassword);
+    }//GEN-LAST:event_txtPasswordFocusGained
 
-    private void btnLogOff1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOff1ActionPerformed
+    private void txtUsernameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUsernameFocusLost
         // TODO add your handling code here:
-        Common.logOff(this);
+        Common.focusLost("Username", txtUsername);
+    }//GEN-LAST:event_txtUsernameFocusLost
 
-
-    }//GEN-LAST:event_btnLogOff1ActionPerformed
-
-    private void mnOpenOrderFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenOrderFormActionPerformed
+    private void txtUsernameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUsernameFocusGained
         // TODO add your handling code here:
-        OrderForm orderForm = new OrderForm(currentUser);
-        orderForm.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_mnOpenOrderFormActionPerformed
+        Common.focusGain("Username", txtUsername);
+    }//GEN-LAST:event_txtUsernameFocusGained
 
-    private void mnOpenStockFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenStockFormActionPerformed
-        // TODO add your handling code here:
-        StockForm stockForm = new StockForm(currentUser);
-        stockForm.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_mnOpenStockFormActionPerformed
+    private void tblDataMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDataMouseClicked
+        if (currentUser != null) {
+            int i = tblData.getSelectedRow();
 
-    private void txtProvinceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtProvinceActionPerformed
+            User selectedUser = null;
+            try {
+                selectedUser = new User(tblData.getValueAt(i, 3).toString(),
+                    tblData.getValueAt(i, 4).toString(),
+                    tblData.getValueAt(i, 2).toString(),
+                    new SimpleDateFormat("yyyy-MM-dd").parse(tblData.getValueAt(i, 8).toString()),
+                    tblData.getValueAt(i, 9).toString(),
+                    tblData.getValueAt(i, 10).toString(),
+                    (tblData.getValueAt(i, 11) != null) ? tblData.getValueAt(i, 7).toString() : "",
+                    (tblData.getValueAt(i, 12) != null) ? tblData.getValueAt(i, 8).toString() : "",
+                    (tblData.getValueAt(i, 13) != null) ? tblData.getValueAt(i, 9).toString() : "",
+                    (tblData.getValueAt(i, 14) != null) ? tblData.getValueAt(i, 10).toString() : "",
+                    (tblData.getValueAt(i, 15) != null) ? tblData.getValueAt(i, 11).toString() : "",
+                    (tblData.getValueAt(i, 16) != null) ? tblData.getValueAt(i, 12).toString() : "",
+                    (tblData.getValueAt(i, 17) != null) ? tblData.getValueAt(i, 13).toString() : "",
+                    (tblData.getValueAt(i, 18) != null) ? tblData.getValueAt(i, 14).toString() : "",
+                    new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(tblData.getValueAt(i, 0).toString()),
+                    Integer.valueOf(tblData.getValueAt(i, 5).toString()),
+                    tblData.getValueAt(i, 6).toString(),
+                    "",
+                    tblData.getValueAt(i, 7).toString(),
+                    tblData.getValueAt(i, 1).toString());
+
+                txtIDNumber.setText(selectedUser.getIdNumber());
+                txtFirstName.setText(selectedUser.getFirstName());
+                txtLastName.setText(selectedUser.getLastName());
+                cmbTitle.setSelectedItem(selectedUser.getTitle());
+                dobPicker.setDate(selectedUser.getDateOfBirth());
+                cmbGender.setSelectedItem(selectedUser.getGender());
+                txtCountry.setText(selectedUser.getCountry());
+                txtProvince.setText(selectedUser.getProvince());
+                txtCity.setText(selectedUser.getCity());
+                txtStreet.setText(selectedUser.getStreet());
+                txtPostalCode.setText(selectedUser.getPostalCode());
+                txtAddressLine.setText(selectedUser.getAddressLine());
+                txtEmail.setText(selectedUser.getEmail());
+                txtCell.setText(selectedUser.getCellNumber());
+                txtTel.setText(selectedUser.getTelNumber());
+                txtUsername.setText(selectedUser.getUsername());
+                txtPassword.setText(selectedUser.getPassword());
+                cmbAccountType.setSelectedItem(selectedUser.getAccountType().toString());
+            } catch (ParseException ex) {
+                Logger.getLogger(StaffForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            setUserButtons(true);
+            switch (selectedUser.getAccountType()) {
+                case ADMIN:
+                btnApprove.setEnabled(false);
+                btnApprove.setText("Approve");
+                btnReject.setText("Remove Admin");
+                btnBan.setText("Ban Admin");
+                break;
+                case ADMIN_REJECTED:
+                btnApprove.setEnabled(false);
+                btnApprove.setText("Make Admin");
+                btnReject.setEnabled(false);
+                btnReject.setText("Reject");
+                btnBan.setText("Ban User");
+                break;
+                case ADMIN_REQUESTED:
+                btnApprove.setText("Approve Admin");
+                btnReject.setText("Reject Admin");
+                btnBan.setText("Ban User");
+                break;
+                case NORMAL:
+                btnApprove.setText("Make Admin");
+                btnReject.setText("Restrict User");
+                btnBan.setText("Ban User");
+                break;
+                case RESTRICTED:
+                btnApprove.setText("Approve User");
+                btnReject.setEnabled(false);
+                btnReject.setText("Reject");
+                btnBan.setText("Ban User");
+                break;
+                case BANNED:
+                btnApprove.setText("Revoke Ban");
+                btnReject.setEnabled(false);
+                btnReject.setText("Reject");
+                btnBan.setEnabled(false);
+                btnBan.setText("Ban");
+                break;
+                case NOT_SET:
+                btnApprove.setEnabled(false);
+                btnApprove.setVisible(false);
+                btnApprove.setText("Approve");
+                btnReject.setEnabled(false);
+                btnReject.setVisible(false);
+                btnReject.setText("Reject");
+                btnBan.setEnabled(false);
+                btnBan.setVisible(false);
+                btnBan.setText("Ban");
+                break;
+            }
+        }
+    }//GEN-LAST:event_tblDataMouseClicked
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // Delete Record
+        if (Common.checkInput(txtIDNumber.getText()) == 10 && User.GetUserByIdNumber(txtIDNumber.getText()) != null) {
+            int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to Delete this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
+            if (option == 0) {
+                User.deleteUser(txtIDNumber.getText(), User.GetUserByIdNumber(txtIDNumber.getText()).getUserID());
+                clearAllFields();
+                resetBaseUsers();
+                setModel();
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No valid user selected");
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        //Update record
+        if (updateClick == 0) {
+            updateClick++;
+            setUIAccess(false);
+            btnUpdate.setEnabled(true);
+            prepareUpdate();
+        } else {
+            resetColor();
+            String idNumber;
+            String firstName;
+            String lastName;
+            String title;
+            Date dateOfBirth;
+            String gender;
+            String country;
+            String province;
+            String city;
+            String street;
+            String postalCode;
+            String addressLine;
+            String email;
+            String cellNumber;
+            String telNumber;
+            String username;
+            String password;
+            String accountType;
+
+            idNumber = txtIDNumber.getText();
+            firstName = txtFirstName.getText();
+            lastName = txtLastName.getText();
+            title = cmbTitle.getSelectedItem().toString();
+            dateOfBirth = dobPicker.getDate();
+            gender = cmbGender.getSelectedItem().toString();
+            country = txtCountry.getText();
+            province = (txtProvince.getText() != null) ? txtProvince.getText() : "";
+            city = (txtCity.getText() != null) ? txtCity.getText() : "";
+            street = (txtStreet.getText() != null) ? txtStreet.getText() : "";
+            postalCode = (txtPostalCode.getText() != null) ? txtPostalCode.getText() : "";
+            addressLine = (txtAddressLine.getText() != null) ? txtAddressLine.getText() : "";
+            email = (txtEmail.getText() != null) ? txtEmail.getText() : "";
+            cellNumber = (txtCell.getText() != null) ? txtCell.getText() : "";
+            telNumber = (txtTel.getText() != null) ? txtTel.getText() : "";
+            username = txtUsername.getText();
+            password = txtPassword.getText();
+            accountType = cmbAccountType.getSelectedItem().toString();
+
+            boolean check = true;
+            if (Common.checkInput(idNumber) != 10 || idNumber.length() != 13) {
+                check = false;
+                txtIDNumber.setBackground(Color.red);
+                txtIDNumber.setToolTipText("Only numerical values. Must be 13 characters. Must be valid RSA ID Number");
+            }
+            if (Common.checkInput(firstName) != 1 || firstName.length() > 20) {
+                check = false;
+                txtFirstName.setBackground(Color.red);
+                txtFirstName.setToolTipText("Only alphabetical characters. Max 20 characters");
+            }
+            if (Common.checkInput(lastName) != 1 || lastName.length() > 20) {
+                check = false;
+                txtLastName.setBackground(Color.red);
+                txtLastName.setToolTipText("Only alphabetical characters. Max 20 characters");
+            }
+            if (!(Common.checkInput(title) == 1 || Common.checkInput(title) == 5) || title.length() > 4) {
+                check = false;
+                cmbTitle.setBackground(Color.red);
+                cmbTitle.setToolTipText("Only alphabetical characters. Max 4 characters");
+            }
+            //DATE OF BIRTH CHECK NOT INCLUDED
+            if (Common.checkInput(gender) != 1 || gender.length() > 6) {
+                check = false;
+                cmbGender.setBackground(Color.red);
+                cmbGender.setToolTipText("Only alphabetical characters. Max 6 characters");
+            }
+            if (Common.checkInput(country) != 1 || country.length() > 20) {
+                check = false;
+                txtCountry.setBackground(Color.red);
+                txtCountry.setToolTipText("Only alphabetical characters. Max 20 characters");
+            }
+            if (!(Common.checkInput(province) == 0 || Common.checkInput(province) == 1 || Common.checkInput(province) == 5) || province.length() > 20) {
+                check = false;
+                txtProvince.setBackground(Color.orange);
+                txtProvince.setToolTipText("(Optional Field) Only alphabetical characters and optional special characters. Max 20 characters");
+            }
+            if (!(Common.checkInput(city) == 0 || Common.checkInput(city) == 1) || city.length() > 30) {
+                check = false;
+                txtCity.setBackground(Color.orange);
+                txtCity.setToolTipText("(Optional Field) Only alphabetical characters. Max 30 characters");
+            }
+            if (!(Common.checkInput(street) == 0 || Common.checkInput(street) == 1 || Common.checkInput(street) == 4) || street.length() > 30) {
+                check = false;
+                txtStreet.setBackground(Color.orange);
+                txtStreet.setToolTipText("(Optional Field) Only alphabetical characters and optional numerical values. Max 30 characters");
+            }
+            if (!(Common.checkInput(postalCode) == 0 || Common.checkInput(postalCode) == 2) || postalCode.length() > 10) {
+                check = false;
+                txtPostalCode.setBackground(Color.orange);
+                txtPostalCode.setToolTipText("(Optional Field) Only numerical values. Max 10 characters");
+            }
+            if (addressLine.length() > 50) {
+                check = false;
+                txtAddressLine.setBackground(Color.orange);
+                txtAddressLine.setToolTipText("(Optional Field) Any characters. Max 50 characters");
+            }
+            if (!(Common.checkInput(email) == 0 || Common.checkInput(email) == 9) || email.length() > 30) {
+                check = false;
+                txtEmail.setBackground(Color.orange);
+                txtEmail.setToolTipText("(Optional Field) Only valid email address. Max 30 characters");
+            }
+            if (!(Common.checkInput(cellNumber) == 0 || (Common.checkInput(cellNumber) == 2 && cellNumber.length() == 10))) {
+                check = false;
+                txtCell.setBackground(Color.orange);
+                txtCell.setToolTipText("(Optional Field) Only numerical values. Must be 10 characters");
+            }
+            if (!(Common.checkInput(telNumber) == 0 || (Common.checkInput(telNumber) == 2 && telNumber.length() == 10))) {
+                check = false;
+                txtTel.setBackground(Color.orange);
+                txtTel.setToolTipText("(Optional Field) Only numerical values. Must be 10 characters");
+            }
+            if (Common.checkInput(username) != 1 || username.length() > 20) {
+                check = false;
+                txtUsername.setBackground(Color.red);
+                txtUsername.setToolTipText("Only alphabetical characters. Max 20 characters");
+            }
+            if (password.length() > 0 && (Common.checkInput(password) != 7 || password.length() < 4 || password.length() > 20)) {
+                check = false;
+                txtPassword.setBackground(Color.red);
+                txtPassword.setToolTipText("Must contain alphabetical characters and at least one numerical value and at least one special character. Min 4 characters. Max 20 characters");
+            }
+            if (Common.checkInput(accountType) != 1 || accountType.length() > 50) {
+                check = false;
+                cmbAccountType.setBackground(Color.red);
+                cmbAccountType.setToolTipText("Only alphabetical characters. Max 50 characters");
+            }
+
+            if (check == true) {
+                int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to update this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
+                if (option == 0) {
+                    new User(firstName, lastName, title, dateOfBirth, gender, country, province, city, street, postalCode, addressLine, email, cellNumber, telNumber, new Date(), User.GetUserByIdNumber(idNumber).getUserID(), username, password, accountType, idNumber).updateUser();
+                    resetBaseUsers();
+                    setModel();
+                }
+                clearAllFields();
+                disableAllFields();
+                resetColor();
+                updateClick = 0;
+                setUIAccess(true);
+            } else {
+                int option = JOptionPane.showConfirmDialog(this, "There were some errors, would you like to fix them?", "Confirmation.", JOptionPane.YES_NO_OPTION);
+                if (option == 1) {
+                    clearAllFields();
+                    disableAllFields();
+                    resetColor();
+                    updateClick = 0;
+                    setUIAccess(true);
+                }
+            }
+        }
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        String parameter = cmbSearchBy.getSelectedItem().toString();
+        String searchKeyword = txtSearch.getText();
+        switch (parameter) {
+            case "ID number":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("IDNumber", searchKeyword) : User.getNonAdminUsersByParameter("IDNumber", searchKeyword));
+            break;
+            case "First name":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("FirstName", searchKeyword) : User.getNonAdminUsersByParameter("FirstName", searchKeyword));
+            break;
+            case "Last name":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("LastName", searchKeyword) : User.getNonAdminUsersByParameter("LastName", searchKeyword));
+            break;
+            case "Full name":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("CONCAT(FirstName, ' ', LastName)", searchKeyword) : User.getNonAdminUsersByParameter("CONCAT(FirstName, ' ', LastName)", searchKeyword));
+            break;
+            case "Title":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("Title", searchKeyword) : User.getNonAdminUsersByParameter("Title", searchKeyword));
+            break;
+            case "Gender":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("Gender", searchKeyword) : User.getNonAdminUsersByParameter("Gender", searchKeyword));
+            break;
+            case "Country":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("Country", searchKeyword) : User.getNonAdminUsersByParameter("Country", searchKeyword));
+            break;
+            case "Province":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("Province", searchKeyword) : User.getNonAdminUsersByParameter("Province", searchKeyword));
+            break;
+            case "City":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("City", searchKeyword) : User.getNonAdminUsersByParameter("City", searchKeyword));
+            break;
+            case "Street":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("Street", searchKeyword) : User.getNonAdminUsersByParameter("Street", searchKeyword));
+            break;
+            case "Postal code":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("PostalCode", searchKeyword) : User.getNonAdminUsersByParameter("PostalCode", searchKeyword));
+            break;
+            case "Address line":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("AddressLine", searchKeyword) : User.getNonAdminUsersByParameter("AddressLine", searchKeyword));
+            break;
+            case "Email":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("Email", searchKeyword) : User.getNonAdminUsersByParameter("Email", searchKeyword));
+            break;
+            case "Cell number":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("CellNumber", searchKeyword) : User.getNonAdminUsersByParameter("CellNumber", searchKeyword));
+            break;
+            case "Tel number":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("TelNumber", searchKeyword) : User.getNonAdminUsersByParameter("TelNumber", searchKeyword));
+            break;
+            case "User ID":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("UserID", searchKeyword) : User.getNonAdminUsersByParameter("UserID", searchKeyword));
+            break;
+            case "Username":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("Username", searchKeyword) : User.getNonAdminUsersByParameter("Username", searchKeyword));
+            break;
+            case "Account type":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("AccountType", searchKeyword) : User.getNonAdminUsersByParameter("AccountType", searchKeyword));
+            break;
+        }
+        setModel();
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void txtTelFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTelFocusLost
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtProvinceActionPerformed
+        Common.focusLost("Tel number", txtTel);
+    }//GEN-LAST:event_txtTelFocusLost
+
+    private void txtTelFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTelFocusGained
+        // TODO add your handling code here:
+        Common.focusGain("Tel number", txtTel);
+    }//GEN-LAST:event_txtTelFocusGained
+
+    private void txtCellFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCellFocusLost
+        // TODO add your handling code here:
+        Common.focusLost("Cell number", txtCell);
+    }//GEN-LAST:event_txtCellFocusLost
+
+    private void txtCellFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCellFocusGained
+        // TODO add your handling code here:
+        Common.focusGain("Cell number", txtCell);
+    }//GEN-LAST:event_txtCellFocusGained
+
+    private void txtEmailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtEmailFocusLost
+        // TODO add your handling code here:
+        Common.focusLost("Email", txtEmail);
+    }//GEN-LAST:event_txtEmailFocusLost
+
+    private void txtEmailFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtEmailFocusGained
+        // TODO add your handling code here:
+        Common.focusGain("Email", txtEmail);
+    }//GEN-LAST:event_txtEmailFocusGained
+
+    private void txtAddressLineFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAddressLineFocusLost
+        // TODO add your handling code here:
+        Common.focusLost("Address line", txtAddressLine);
+    }//GEN-LAST:event_txtAddressLineFocusLost
+
+    private void txtAddressLineFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAddressLineFocusGained
+        // TODO add your handling code here:
+        Common.focusGain("Address line", txtAddressLine);
+    }//GEN-LAST:event_txtAddressLineFocusGained
+
+    private void txtStreetFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStreetFocusLost
+        // TODO add your handling code here:
+        Common.focusLost("Street", txtStreet);
+    }//GEN-LAST:event_txtStreetFocusLost
+
+    private void txtStreetFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStreetFocusGained
+        // TODO add your handling code here:
+        Common.focusGain("Street", txtStreet);
+    }//GEN-LAST:event_txtStreetFocusGained
 
     private void txtPostalCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPostalCodeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPostalCodeActionPerformed
 
-    private void txtLastNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLastNameActionPerformed
+    private void txtPostalCodeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPostalCodeFocusLost
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtLastNameActionPerformed
+        Common.focusLost("Postal code", txtPostalCode);
+    }//GEN-LAST:event_txtPostalCodeFocusLost
+
+    private void txtPostalCodeFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPostalCodeFocusGained
+        // TODO add your handling code here:
+        Common.focusGain("Postal code", txtPostalCode);
+    }//GEN-LAST:event_txtPostalCodeFocusGained
+
+    private void txtCityFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCityFocusLost
+        // TODO add your handling code here:
+        Common.focusLost("City", txtCity);
+    }//GEN-LAST:event_txtCityFocusLost
+
+    private void txtCityFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCityFocusGained
+        // TODO add your handling code here:
+        Common.focusGain("City", txtCity);
+    }//GEN-LAST:event_txtCityFocusGained
+
+    private void txtProvinceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtProvinceActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtProvinceActionPerformed
+
+    private void txtProvinceFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtProvinceFocusLost
+        // TODO add your handling code here:
+        Common.focusLost("Province", txtProvince);
+    }//GEN-LAST:event_txtProvinceFocusLost
+
+    private void txtProvinceFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtProvinceFocusGained
+        // TODO add your handling code here:
+
+        Common.focusGain("Province", txtProvince);
+    }//GEN-LAST:event_txtProvinceFocusGained
 
     private void txtCountryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCountryActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCountryActionPerformed
+
+    private void txtCountryFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCountryFocusLost
+        // TODO add your handling code here:
+        Common.focusLost("Country", txtCountry);
+    }//GEN-LAST:event_txtCountryFocusLost
+
+    private void txtCountryFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCountryFocusGained
+        // TODO add your handling code here:
+        Common.focusGain("Country", txtCountry);
+    }//GEN-LAST:event_txtCountryFocusGained
+
+    private void txtLastNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLastNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtLastNameActionPerformed
+
+    private void txtLastNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLastNameFocusLost
+        // TODO add your handling code here:
+        Common.focusLost("Last name", txtLastName);
+    }//GEN-LAST:event_txtLastNameFocusLost
+
+    private void txtLastNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLastNameFocusGained
+        // TODO add your handling code here:
+        Common.focusGain("Last name", txtLastName);
+    }//GEN-LAST:event_txtLastNameFocusGained
+
+    private void txtIDNumberFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIDNumberFocusLost
+        // TODO add your handling code here:
+
+        Common.focusLost("ID number", txtIDNumber);
+    }//GEN-LAST:event_txtIDNumberFocusLost
+
+    private void txtIDNumberFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIDNumberFocusGained
+        // TODO add your handling code here:
+        Common.focusGain("ID number", txtIDNumber);
+    }//GEN-LAST:event_txtIDNumberFocusGained
+
+    private void txtFirstNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtFirstNameFocusLost
+        // TODO add your handling code here:
+        Common.focusLost("First name", txtFirstName);
+    }//GEN-LAST:event_txtFirstNameFocusLost
+
+    private void txtFirstNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtFirstNameFocusGained
+        // TODO add your handling code here:
+        Common.focusGain("First name", txtFirstName);
+    }//GEN-LAST:event_txtFirstNameFocusGained
 
     /**
      * @param args the command line arguments
@@ -1755,22 +2255,25 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAddRecord;
+    private javax.swing.JButton btnApprove;
+    private javax.swing.JButton btnBan;
     private javax.swing.JButton btnDelete;
-    private javax.swing.JButton btnLogOff1;
+    private javax.swing.JButton btnInsert;
+    private javax.swing.JButton btnLogOff;
+    private javax.swing.JButton btnReject;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox<String> cmbAccountType;
     private javax.swing.JComboBox<String> cmbGender;
-    private javax.swing.JComboBox<String> cmbSearchParam;
-    private javax.swing.JComboBox<String> cmbSorting1;
+    private javax.swing.JComboBox<String> cmbSearchBy;
+    private javax.swing.JComboBox<String> cmbSortBy;
     private javax.swing.JComboBox<String> cmbTitle;
+    private javax.swing.JComboBox<String> cmbViewOptions;
     private org.jdesktop.swingx.JXDatePicker dobPicker;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
@@ -1797,12 +2300,18 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
     private javax.swing.JPanel jPanel4;
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lbLoginedInUser;
+    private javax.swing.JLabel lbLabel1;
+    private javax.swing.JLabel lbLabel2;
+    private javax.swing.JLabel lbLabel3;
+    private javax.swing.JLabel lbLabel4;
+    private javax.swing.JLabel lblLoggedInUser;
+    private javax.swing.JLabel lblTitle;
+    private javax.swing.JMenu miOrderMenu;
+    private javax.swing.JMenu miStaffMenu;
+    private javax.swing.JMenu miStockMenu;
     private javax.swing.JMenuItem mnOpenOrderForm;
     private javax.swing.JMenuItem mnOpenStockForm;
-    private javax.swing.JMenu orderStockMenu;
-    private javax.swing.JMenu staffMenu;
-    private javax.swing.JMenu stockMenu;
+    private javax.swing.JMenu orderStockMenu2;
     private javax.swing.JTable tblData;
     private javax.swing.JTextField txtAddressLine;
     private javax.swing.JTextField txtCell;

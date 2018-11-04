@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package BLL.Sorting;
+package BLL.Sorting.User;
 
 import BLL.User;
 import java.util.Comparator;
@@ -12,12 +12,11 @@ import java.util.Comparator;
  *
  * @author Stephan
  */
-public class SortSurname implements Comparator {
-    
+public class AccountTypeComparator implements Comparator {
     @Override
     public int compare(Object o1, Object o2) {
-       User user1 = (User) o1;
-            User user2 = (User) o2;
-            return user1.getLastName().toLowerCase().compareTo(user2.getLastName().toLowerCase());
+        User user1 = (User) o1;
+        User user2 = (User) o2;
+        return user1.getAccountType().toString().compareTo(user2.getAccountType().toString());
     }
 }

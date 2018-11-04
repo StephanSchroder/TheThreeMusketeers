@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package BLL;
+package BLL.Interfaces;
 
 /**
  *
  * @author ouPietMan
  */
-public interface FormSetUp {
+public interface IFormSetUp {
     abstract void setNavigation(boolean flag);
 }
