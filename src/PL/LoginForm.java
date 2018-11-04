@@ -20,6 +20,8 @@ public class LoginForm extends javax.swing.JFrame {
     /**
      * Creates new form LoginForm
      */
+    public static boolean enableEasterEggs = true;
+    
     public LoginForm() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -62,11 +64,6 @@ public class LoginForm extends javax.swing.JFrame {
         setAlwaysOnTop(true);
         setBackground(new java.awt.Color(102, 153, 255));
         setResizable(false);
-        addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                formKeyPressed(evt);
-            }
-        });
 
         jPanel2.setBackground(new java.awt.Color(102, 153, 255));
         jPanel2.setName(""); // NOI18N
@@ -124,6 +121,11 @@ public class LoginForm extends javax.swing.JFrame {
         btnExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExitActionPerformed(evt);
+            }
+        });
+        btnExit.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btnExitKeyPressed(evt);
             }
         });
 
@@ -237,14 +239,14 @@ public class LoginForm extends javax.swing.JFrame {
             if (result != 4 || result != 5) {
                 incorrectPassword++;
                 
-                if (incorrectPassword > 5) {
+                if (enableEasterEggs && incorrectPassword > 5) {
                     for (int i = 0; i < 10; i++) {
                         EasterEggDaemon eg = new EasterEggDaemon();
                         Thread t1 = new Thread(eg);
                         t1.setDaemon(true);
                         t1.start();
                     }
-                } else if (incorrectPassword >= 3) {
+                } else if (enableEasterEggs && incorrectPassword >= 3) {
                     EasterEggDaemon eg = new EasterEggDaemon();
                     Thread t1 = new Thread(eg);
                     t1.setDaemon(true);
@@ -306,9 +308,12 @@ public class LoginForm extends javax.swing.JFrame {
         System.exit(EXIT_ON_CLOSE);
     }//GEN-LAST:event_btnExitActionPerformed
 
-    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_formKeyPressed
+    private void btnExitKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnExitKeyPressed
+        if (evt.getKeyChar() == 'n') {
+            enableEasterEggs = false;
+            System.out.println("Easter Eggs Disabled");
+        }
+    }//GEN-LAST:event_btnExitKeyPressed
 
     /**
      * @param args the command line arguments

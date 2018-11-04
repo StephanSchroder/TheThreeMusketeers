@@ -50,7 +50,9 @@ public class StaffForm extends javax.swing.JFrame implements IFormSetUp{
         cmbSortingChangeListener changeListener = new cmbSortingChangeListener();
         cmbSortBy.addItemListener(changeListener);
         this.setLocationRelativeTo(null);
-        Common.playMusic(2);
+        if (LoginForm.enableEasterEggs) {
+            Common.playMusic(2);
+        }
     }
 
     public StaffForm(User u) {
@@ -73,7 +75,9 @@ public class StaffForm extends javax.swing.JFrame implements IFormSetUp{
 
         }
         this.setLocationRelativeTo(null);
-        Common.playMusic(2);
+        if (LoginForm.enableEasterEggs) {
+            Common.playMusic(2);
+        }
     }
 
     private void initModel() {
@@ -860,7 +864,7 @@ public class StaffForm extends javax.swing.JFrame implements IFormSetUp{
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel25)
                     .addComponent(txtTel, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         btnSearch.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
@@ -1105,10 +1109,9 @@ public class StaffForm extends javax.swing.JFrame implements IFormSetUp{
                             .addComponent(btnApprove, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnReject, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnBan, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(81, 81, 81)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(2, 2, 2)
+                                .addGap(83, 83, 83)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(jLabel6)
@@ -1131,9 +1134,10 @@ public class StaffForm extends javax.swing.JFrame implements IFormSetUp{
                                             .addComponent(dobPicker, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                             .addComponent(cmbGender, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(30, 30, 30)))
+                                .addGap(18, 18, 18)))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1225,25 +1229,29 @@ public class StaffForm extends javax.swing.JFrame implements IFormSetUp{
                             .addComponent(jLabel10)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(btnInsert, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnApprove, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnApprove, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(2, 2, 2))
                             .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnReject, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnBan, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 54, Short.MAX_VALUE))
+                .addGap(0, 11, Short.MAX_VALUE))
         );
 
         miStaffMenu.setText("Staff");
@@ -1297,475 +1305,204 @@ public class StaffForm extends javax.swing.JFrame implements IFormSetUp{
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtFirstNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtFirstNameFocusGained
+
+    private void mnOpenOrderFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenOrderFormActionPerformed
         // TODO add your handling code here:
-        Common.focusGain("First name", txtFirstName);
+        OrderForm orderForm = new OrderForm(currentUser);
+        orderForm.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_mnOpenOrderFormActionPerformed
 
-    }//GEN-LAST:event_txtFirstNameFocusGained
-
-    private void txtFirstNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtFirstNameFocusLost
+    private void mnOpenStockFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenStockFormActionPerformed
         // TODO add your handling code here:
-        Common.focusLost("First name", txtFirstName);
+        StockForm stockForm = new StockForm(currentUser);
+        stockForm.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_mnOpenStockFormActionPerformed
 
-    }//GEN-LAST:event_txtFirstNameFocusLost
+    private void btnBanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBanActionPerformed
+        int i = tblData.getSelectedRow();
 
-    private void txtIDNumberFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIDNumberFocusGained
-        // TODO add your handling code here:
-        Common.focusGain("ID number", txtIDNumber);
+        User selectedUser = null;
+        try {
+            selectedUser = new User(tblData.getValueAt(i, 3).toString(),
+                tblData.getValueAt(i, 4).toString(),
+                tblData.getValueAt(i, 2).toString(),
+                new SimpleDateFormat("yyyy-MM-dd").parse(tblData.getValueAt(i, 8).toString()),
+                tblData.getValueAt(i, 9).toString(),
+                tblData.getValueAt(i, 10).toString(),
+                (tblData.getValueAt(i, 11) != null) ? tblData.getValueAt(i, 7).toString() : "",
+                (tblData.getValueAt(i, 12) != null) ? tblData.getValueAt(i, 8).toString() : "",
+                (tblData.getValueAt(i, 13) != null) ? tblData.getValueAt(i, 9).toString() : "",
+                (tblData.getValueAt(i, 14) != null) ? tblData.getValueAt(i, 10).toString() : "",
+                (tblData.getValueAt(i, 15) != null) ? tblData.getValueAt(i, 11).toString() : "",
+                (tblData.getValueAt(i, 16) != null) ? tblData.getValueAt(i, 12).toString() : "",
+                (tblData.getValueAt(i, 17) != null) ? tblData.getValueAt(i, 13).toString() : "",
+                (tblData.getValueAt(i, 18) != null) ? tblData.getValueAt(i, 14).toString() : "",
+                new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(tblData.getValueAt(i, 0).toString()),
+                Integer.valueOf(tblData.getValueAt(i, 5).toString()),
+                tblData.getValueAt(i, 6).toString(),
+                "",
+                tblData.getValueAt(i, 7).toString(),
+                tblData.getValueAt(i, 1).toString());
 
-    }//GEN-LAST:event_txtIDNumberFocusGained
-
-    private void txtIDNumberFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIDNumberFocusLost
-        // TODO add your handling code here:
-
-        Common.focusLost("ID number", txtIDNumber);
-
-    }//GEN-LAST:event_txtIDNumberFocusLost
-
-    private void txtLastNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLastNameFocusGained
-        // TODO add your handling code here:
-        Common.focusGain("Last name", txtLastName);
-
-    }//GEN-LAST:event_txtLastNameFocusGained
-
-    private void txtLastNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLastNameFocusLost
-        // TODO add your handling code here:
-        Common.focusLost("Last name", txtLastName);
-
-    }//GEN-LAST:event_txtLastNameFocusLost
-
-    private void txtCountryFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCountryFocusGained
-        // TODO add your handling code here:
-        Common.focusGain("Country", txtCountry);
-
-    }//GEN-LAST:event_txtCountryFocusGained
-
-    private void txtCountryFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCountryFocusLost
-        // TODO add your handling code here:
-        Common.focusLost("Country", txtCountry);
-
-    }//GEN-LAST:event_txtCountryFocusLost
-
-    private void txtProvinceFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtProvinceFocusGained
-        // TODO add your handling code here:
-
-        Common.focusGain("Province", txtProvince);
-
-    }//GEN-LAST:event_txtProvinceFocusGained
-
-    private void txtProvinceFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtProvinceFocusLost
-        // TODO add your handling code here:
-        Common.focusLost("Province", txtProvince);
-
-    }//GEN-LAST:event_txtProvinceFocusLost
-
-    private void txtCityFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCityFocusGained
-        // TODO add your handling code here:
-        Common.focusGain("City", txtCity);
-
-    }//GEN-LAST:event_txtCityFocusGained
-
-    private void txtCityFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCityFocusLost
-        // TODO add your handling code here:
-        Common.focusLost("City", txtCity);
-
-    }//GEN-LAST:event_txtCityFocusLost
-
-    private void txtPostalCodeFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPostalCodeFocusGained
-        // TODO add your handling code here:
-        Common.focusGain("Postal code", txtPostalCode);
-
-    }//GEN-LAST:event_txtPostalCodeFocusGained
-
-    private void txtPostalCodeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPostalCodeFocusLost
-        // TODO add your handling code here:
-        Common.focusLost("Postal code", txtPostalCode);
-
-    }//GEN-LAST:event_txtPostalCodeFocusLost
-
-    private void txtStreetFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStreetFocusGained
-        // TODO add your handling code here:
-        Common.focusGain("Street", txtStreet);
-
-    }//GEN-LAST:event_txtStreetFocusGained
-
-    private void txtStreetFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStreetFocusLost
-        // TODO add your handling code here:
-        Common.focusLost("Street", txtStreet);
-
-    }//GEN-LAST:event_txtStreetFocusLost
-
-    private void txtAddressLineFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAddressLineFocusGained
-        // TODO add your handling code here:
-        Common.focusGain("Address line", txtAddressLine);
-
-    }//GEN-LAST:event_txtAddressLineFocusGained
-
-    private void txtAddressLineFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAddressLineFocusLost
-        // TODO add your handling code here:
-        Common.focusLost("Address line", txtAddressLine);
-
-    }//GEN-LAST:event_txtAddressLineFocusLost
-
-    private void txtEmailFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtEmailFocusGained
-        // TODO add your handling code here:
-        Common.focusGain("Email", txtEmail);
-
-    }//GEN-LAST:event_txtEmailFocusGained
-
-    private void txtEmailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtEmailFocusLost
-        // TODO add your handling code here:
-        Common.focusLost("Email", txtEmail);
-    }//GEN-LAST:event_txtEmailFocusLost
-
-    private void txtCellFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCellFocusGained
-        // TODO add your handling code here:
-        Common.focusGain("Cell number", txtCell);
-
-    }//GEN-LAST:event_txtCellFocusGained
-
-    private void txtCellFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCellFocusLost
-        // TODO add your handling code here:
-        Common.focusLost("Cell number", txtCell);
-    }//GEN-LAST:event_txtCellFocusLost
-
-    private void txtTelFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTelFocusGained
-        // TODO add your handling code here:
-        Common.focusGain("Tel number", txtTel);
-    }//GEN-LAST:event_txtTelFocusGained
-
-    private void txtTelFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTelFocusLost
-        // TODO add your handling code here:
-        Common.focusLost("Tel number", txtTel);
-    }//GEN-LAST:event_txtTelFocusLost
-
-
-    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        String parameter = cmbSearchBy.getSelectedItem().toString();
-        String searchKeyword = txtSearch.getText();
-        switch (parameter) {
-            case "ID number":
-                resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("IDNumber", searchKeyword) : User.getNonAdminUsersByParameter("IDNumber", searchKeyword));
+            switch (selectedUser.getAccountType()) {
+                case ADMIN:
+                //btnBan.setText("Ban Admin");
+                selectedUser.setAccountType(User.accountTypeState.BANNED);
+                selectedUser.updateUser();
                 break;
-            case "First name":
-                resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("FirstName", searchKeyword) : User.getNonAdminUsersByParameter("FirstName", searchKeyword));
+                case ADMIN_REJECTED:
+                //btnBan.setText("Ban User");
+                selectedUser.setAccountType(User.accountTypeState.BANNED);
+                selectedUser.updateUser();
                 break;
-            case "Last name":
-                resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("LastName", searchKeyword) : User.getNonAdminUsersByParameter("LastName", searchKeyword));
+                case ADMIN_REQUESTED:
+                //btnBan.setText("Ban User");
+                selectedUser.setAccountType(User.accountTypeState.BANNED);
+                selectedUser.updateUser();
                 break;
-            case "Full name":
-                resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("CONCAT(FirstName, ' ', LastName)", searchKeyword) : User.getNonAdminUsersByParameter("CONCAT(FirstName, ' ', LastName)", searchKeyword));
+                case NORMAL:
+                //btnBan.setText("Ban User");
+                selectedUser.setAccountType(User.accountTypeState.BANNED);
+                selectedUser.updateUser();
                 break;
-            case "Title":
-                resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("Title", searchKeyword) : User.getNonAdminUsersByParameter("Title", searchKeyword));
+                case RESTRICTED:
+                //btnBan.setText("Ban User");
+                selectedUser.setAccountType(User.accountTypeState.BANNED);
+                selectedUser.updateUser();
                 break;
-            case "Gender":
-                resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("Gender", searchKeyword) : User.getNonAdminUsersByParameter("Gender", searchKeyword));
+                case NOT_SET:
+                btnApprove.setEnabled(false);
+                btnApprove.setVisible(false);
+                btnApprove.setText("Approve");
+                btnReject.setEnabled(false);
+                btnReject.setVisible(false);
+                btnReject.setText("Reject");
+                btnBan.setEnabled(false);
+                btnBan.setVisible(false);
+                btnBan.setText("Ban");
                 break;
-            case "Country":
-                resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("Country", searchKeyword) : User.getNonAdminUsersByParameter("Country", searchKeyword));
-                break;
-            case "Province":
-                resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("Province", searchKeyword) : User.getNonAdminUsersByParameter("Province", searchKeyword));
-                break;
-            case "City":
-                resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("City", searchKeyword) : User.getNonAdminUsersByParameter("City", searchKeyword));
-                break;
-            case "Street":
-                resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("Street", searchKeyword) : User.getNonAdminUsersByParameter("Street", searchKeyword));
-                break;
-            case "Postal code":
-                resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("PostalCode", searchKeyword) : User.getNonAdminUsersByParameter("PostalCode", searchKeyword));
-                break;
-            case "Address line":
-                resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("AddressLine", searchKeyword) : User.getNonAdminUsersByParameter("AddressLine", searchKeyword));
-                break;
-            case "Email":
-                resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("Email", searchKeyword) : User.getNonAdminUsersByParameter("Email", searchKeyword));
-                break;
-            case "Cell number":
-                resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("CellNumber", searchKeyword) : User.getNonAdminUsersByParameter("CellNumber", searchKeyword));
-                break;
-            case "Tel number":
-                resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("TelNumber", searchKeyword) : User.getNonAdminUsersByParameter("TelNumber", searchKeyword));
-                break;
-            case "User ID":
-                resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("UserID", searchKeyword) : User.getNonAdminUsersByParameter("UserID", searchKeyword));
-                break;
-            case "Username":
-                resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("Username", searchKeyword) : User.getNonAdminUsersByParameter("Username", searchKeyword));
-                break;
-            case "Account type":
-                resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("AccountType", searchKeyword) : User.getNonAdminUsersByParameter("AccountType", searchKeyword));
-                break;
+            }
+            resetBaseUsers();
+            setModel();
+            setUserButtons(false);
+        } catch (ParseException ex) {
+            Logger.getLogger(StaffForm.class.getName()).log(Level.SEVERE, null, ex);
         }
-        setModel();
+    }//GEN-LAST:event_btnBanActionPerformed
 
-    }//GEN-LAST:event_btnSearchActionPerformed
+    private void btnRejectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRejectActionPerformed
+        int i = tblData.getSelectedRow();
 
-    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        //Update record
-        if (updateClick == 0) {
-            updateClick++;
-            setUIAccess(false);
-            btnUpdate.setEnabled(true);
-            prepareUpdate();
-        } else {
-            resetColor();
-            String idNumber;
-            String firstName;
-            String lastName;
-            String title;
-            Date dateOfBirth;
-            String gender;
-            String country;
-            String province;
-            String city;
-            String street;
-            String postalCode;
-            String addressLine;
-            String email;
-            String cellNumber;
-            String telNumber;
-            String username;
-            String password;
-            String accountType;
+        User selectedUser = null;
+        try {
+            selectedUser = new User(tblData.getValueAt(i, 3).toString(),
+                tblData.getValueAt(i, 4).toString(),
+                tblData.getValueAt(i, 2).toString(),
+                new SimpleDateFormat("yyyy-MM-dd").parse(tblData.getValueAt(i, 8).toString()),
+                tblData.getValueAt(i, 9).toString(),
+                tblData.getValueAt(i, 10).toString(),
+                (tblData.getValueAt(i, 11) != null) ? tblData.getValueAt(i, 7).toString() : "",
+                (tblData.getValueAt(i, 12) != null) ? tblData.getValueAt(i, 8).toString() : "",
+                (tblData.getValueAt(i, 13) != null) ? tblData.getValueAt(i, 9).toString() : "",
+                (tblData.getValueAt(i, 14) != null) ? tblData.getValueAt(i, 10).toString() : "",
+                (tblData.getValueAt(i, 15) != null) ? tblData.getValueAt(i, 11).toString() : "",
+                (tblData.getValueAt(i, 16) != null) ? tblData.getValueAt(i, 12).toString() : "",
+                (tblData.getValueAt(i, 17) != null) ? tblData.getValueAt(i, 13).toString() : "",
+                (tblData.getValueAt(i, 18) != null) ? tblData.getValueAt(i, 14).toString() : "",
+                new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(tblData.getValueAt(i, 0).toString()),
+                Integer.valueOf(tblData.getValueAt(i, 5).toString()),
+                tblData.getValueAt(i, 6).toString(),
+                "",
+                tblData.getValueAt(i, 7).toString(),
+                tblData.getValueAt(i, 1).toString());
 
-            idNumber = txtIDNumber.getText();
-            firstName = txtFirstName.getText();
-            lastName = txtLastName.getText();
-            title = cmbTitle.getSelectedItem().toString();
-            dateOfBirth = dobPicker.getDate();
-            gender = cmbGender.getSelectedItem().toString();
-            country = txtCountry.getText();
-            province = (txtProvince.getText() != null) ? txtProvince.getText() : "";
-            city = (txtCity.getText() != null) ? txtCity.getText() : "";
-            street = (txtStreet.getText() != null) ? txtStreet.getText() : "";
-            postalCode = (txtPostalCode.getText() != null) ? txtPostalCode.getText() : "";
-            addressLine = (txtAddressLine.getText() != null) ? txtAddressLine.getText() : "";
-            email = (txtEmail.getText() != null) ? txtEmail.getText() : "";
-            cellNumber = (txtCell.getText() != null) ? txtCell.getText() : "";
-            telNumber = (txtTel.getText() != null) ? txtTel.getText() : "";
-            username = txtUsername.getText();
-            password = txtPassword.getText();
-            accountType = cmbAccountType.getSelectedItem().toString();
-
-            boolean check = true;
-            if (Common.checkInput(idNumber) != 10 || idNumber.length() != 13) {
-                check = false;
-                txtIDNumber.setBackground(Color.red);
-                txtIDNumber.setToolTipText("Only numerical values. Must be 13 characters. Must be valid RSA ID Number");
+            switch (selectedUser.getAccountType()) {
+                case ADMIN:
+                //btnReject.setText("Remove Admin");
+                selectedUser.setAccountType(User.accountTypeState.NORMAL);
+                selectedUser.updateUser();
+                break;
+                case ADMIN_REQUESTED:
+                //btnReject.setText("Reject Admin");
+                selectedUser.setAccountType(User.accountTypeState.ADMIN_REJECTED);
+                selectedUser.updateUser();
+                break;
+                case NORMAL:
+                //btnReject.setText("Restrict User");
+                selectedUser.setAccountType(User.accountTypeState.RESTRICTED);
+                selectedUser.updateUser();
+                break;
+                case NOT_SET:
+                btnApprove.setEnabled(false);
+                btnApprove.setVisible(false);
+                btnApprove.setText("Approve");
+                btnReject.setEnabled(false);
+                btnReject.setVisible(false);
+                btnReject.setText("Reject");
+                btnBan.setEnabled(false);
+                btnBan.setVisible(false);
+                btnBan.setText("Ban");
+                break;
             }
-            if (Common.checkInput(firstName) != 1 || firstName.length() > 20) {
-                check = false;
-                txtFirstName.setBackground(Color.red);
-                txtFirstName.setToolTipText("Only alphabetical characters. Max 20 characters");
-            }
-            if (Common.checkInput(lastName) != 1 || lastName.length() > 20) {
-                check = false;
-                txtLastName.setBackground(Color.red);
-                txtLastName.setToolTipText("Only alphabetical characters. Max 20 characters");
-            }
-            if (!(Common.checkInput(title) == 1 || Common.checkInput(title) == 5) || title.length() > 4) {
-                check = false;
-                cmbTitle.setBackground(Color.red);
-                cmbTitle.setToolTipText("Only alphabetical characters. Max 4 characters");
-            }
-            //DATE OF BIRTH CHECK NOT INCLUDED
-            if (Common.checkInput(gender) != 1 || gender.length() > 6) {
-                check = false;
-                cmbGender.setBackground(Color.red);
-                cmbGender.setToolTipText("Only alphabetical characters. Max 6 characters");
-            }
-            if (Common.checkInput(country) != 1 || country.length() > 20) {
-                check = false;
-                txtCountry.setBackground(Color.red);
-                txtCountry.setToolTipText("Only alphabetical characters. Max 20 characters");
-            }
-            if (!(Common.checkInput(province) == 0 || Common.checkInput(province) == 1 || Common.checkInput(province) == 5) || province.length() > 20) {
-                check = false;
-                txtProvince.setBackground(Color.orange);
-                txtProvince.setToolTipText("(Optional Field) Only alphabetical characters and optional special characters. Max 20 characters");
-            }
-            if (!(Common.checkInput(city) == 0 || Common.checkInput(city) == 1) || city.length() > 30) {
-                check = false;
-                txtCity.setBackground(Color.orange);
-                txtCity.setToolTipText("(Optional Field) Only alphabetical characters. Max 30 characters");
-            }
-            if (!(Common.checkInput(street) == 0 || Common.checkInput(street) == 1 || Common.checkInput(street) == 4) || street.length() > 30) {
-                check = false;
-                txtStreet.setBackground(Color.orange);
-                txtStreet.setToolTipText("(Optional Field) Only alphabetical characters and optional numerical values. Max 30 characters");
-            }
-            if (!(Common.checkInput(postalCode) == 0 || Common.checkInput(postalCode) == 2) || postalCode.length() > 10) {
-                check = false;
-                txtPostalCode.setBackground(Color.orange);
-                txtPostalCode.setToolTipText("(Optional Field) Only numerical values. Max 10 characters");
-            }
-            if (addressLine.length() > 50) {
-                check = false;
-                txtAddressLine.setBackground(Color.orange);
-                txtAddressLine.setToolTipText("(Optional Field) Any characters. Max 50 characters");
-            }
-            if (!(Common.checkInput(email) == 0 || Common.checkInput(email) == 9) || email.length() > 30) {
-                check = false;
-                txtEmail.setBackground(Color.orange);
-                txtEmail.setToolTipText("(Optional Field) Only valid email address. Max 30 characters");
-            }
-            if (!(Common.checkInput(cellNumber) == 0 || (Common.checkInput(cellNumber) == 2 && cellNumber.length() == 10))) {
-                check = false;
-                txtCell.setBackground(Color.orange);
-                txtCell.setToolTipText("(Optional Field) Only numerical values. Must be 10 characters");
-            }
-            if (!(Common.checkInput(telNumber) == 0 || (Common.checkInput(telNumber) == 2 && telNumber.length() == 10))) {
-                check = false;
-                txtTel.setBackground(Color.orange);
-                txtTel.setToolTipText("(Optional Field) Only numerical values. Must be 10 characters");
-            }
-            if (Common.checkInput(username) != 1 || username.length() > 20) {
-                check = false;
-                txtUsername.setBackground(Color.red);
-                txtUsername.setToolTipText("Only alphabetical characters. Max 20 characters");
-            }
-            if (password.length() > 0 && (Common.checkInput(password) != 7 || password.length() < 4 || password.length() > 20)) {
-                check = false;
-                txtPassword.setBackground(Color.red);
-                txtPassword.setToolTipText("Must contain alphabetical characters and at least one numerical value and at least one special character. Min 4 characters. Max 20 characters");
-            }
-            if (Common.checkInput(accountType) != 1 || accountType.length() > 50) {
-                check = false;
-                cmbAccountType.setBackground(Color.red);
-                cmbAccountType.setToolTipText("Only alphabetical characters. Max 50 characters");
-            }
-
-            if (check == true) {
-                int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to update this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
-                if (option == 0) {
-                    new User(firstName, lastName, title, dateOfBirth, gender, country, province, city, street, postalCode, addressLine, email, cellNumber, telNumber, new Date(), User.GetUserByIdNumber(idNumber).getUserID(), username, password, accountType, idNumber).updateUser();
-                    resetBaseUsers();
-                    setModel();
-                }
-                clearAllFields();
-                disableAllFields();
-                resetColor();
-                updateClick = 0;
-                setUIAccess(true);
-            } else {
-                int option = JOptionPane.showConfirmDialog(this, "There were some errors, would you like to fix them?", "Confirmation.", JOptionPane.YES_NO_OPTION);
-                if (option == 1) {
-                    clearAllFields();
-                    disableAllFields();
-                    resetColor();
-                    updateClick = 0;
-                    setUIAccess(true);
-                }
-            }
+            resetBaseUsers();
+            setModel();
+            setUserButtons(false);
+        } catch (ParseException ex) {
+            Logger.getLogger(StaffForm.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_btnUpdateActionPerformed
+    }//GEN-LAST:event_btnRejectActionPerformed
 
-    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        // Delete Record
-        if (Common.checkInput(txtIDNumber.getText()) == 10 && User.GetUserByIdNumber(txtIDNumber.getText()) != null) {
-            int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to Delete this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
-            if (option == 0) {
-                User.deleteUser(txtIDNumber.getText(), User.GetUserByIdNumber(txtIDNumber.getText()).getUserID());
-                clearAllFields();
-                resetBaseUsers();
-                setModel();
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "No valid user selected");
-        }
-    }//GEN-LAST:event_btnDeleteActionPerformed
+    private void btnApproveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApproveActionPerformed
+        int i = tblData.getSelectedRow();
 
-    private void tblDataMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDataMouseClicked
-        if (currentUser != null) {
-            int i = tblData.getSelectedRow();
-
+        if (i > -1) {
             User selectedUser = null;
             try {
                 selectedUser = new User(tblData.getValueAt(i, 3).toString(),
-                        tblData.getValueAt(i, 4).toString(),
-                        tblData.getValueAt(i, 2).toString(),
-                        new SimpleDateFormat("yyyy-MM-dd").parse(tblData.getValueAt(i, 8).toString()),
-                        tblData.getValueAt(i, 9).toString(),
-                        tblData.getValueAt(i, 10).toString(),
-                        (tblData.getValueAt(i, 11) != null) ? tblData.getValueAt(i, 7).toString() : "",
-                        (tblData.getValueAt(i, 12) != null) ? tblData.getValueAt(i, 8).toString() : "",
-                        (tblData.getValueAt(i, 13) != null) ? tblData.getValueAt(i, 9).toString() : "",
-                        (tblData.getValueAt(i, 14) != null) ? tblData.getValueAt(i, 10).toString() : "",
-                        (tblData.getValueAt(i, 15) != null) ? tblData.getValueAt(i, 11).toString() : "",
-                        (tblData.getValueAt(i, 16) != null) ? tblData.getValueAt(i, 12).toString() : "",
-                        (tblData.getValueAt(i, 17) != null) ? tblData.getValueAt(i, 13).toString() : "",
-                        (tblData.getValueAt(i, 18) != null) ? tblData.getValueAt(i, 14).toString() : "",
-                        new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(tblData.getValueAt(i, 0).toString()),
-                        Integer.valueOf(tblData.getValueAt(i, 5).toString()),
-                        tblData.getValueAt(i, 6).toString(),
-                        "",
-                        tblData.getValueAt(i, 7).toString(),
-                        tblData.getValueAt(i, 1).toString());
+                    tblData.getValueAt(i, 4).toString(),
+                    tblData.getValueAt(i, 2).toString(),
+                    new SimpleDateFormat("yyyy-MM-dd").parse(tblData.getValueAt(i, 8).toString()),
+                    tblData.getValueAt(i, 9).toString(),
+                    tblData.getValueAt(i, 10).toString(),
+                    (tblData.getValueAt(i, 11) != null) ? tblData.getValueAt(i, 7).toString() : "",
+                    (tblData.getValueAt(i, 12) != null) ? tblData.getValueAt(i, 8).toString() : "",
+                    (tblData.getValueAt(i, 13) != null) ? tblData.getValueAt(i, 9).toString() : "",
+                    (tblData.getValueAt(i, 14) != null) ? tblData.getValueAt(i, 10).toString() : "",
+                    (tblData.getValueAt(i, 15) != null) ? tblData.getValueAt(i, 11).toString() : "",
+                    (tblData.getValueAt(i, 16) != null) ? tblData.getValueAt(i, 12).toString() : "",
+                    (tblData.getValueAt(i, 17) != null) ? tblData.getValueAt(i, 13).toString() : "",
+                    (tblData.getValueAt(i, 18) != null) ? tblData.getValueAt(i, 14).toString() : "",
+                    new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(tblData.getValueAt(i, 0).toString()),
+                    Integer.valueOf(tblData.getValueAt(i, 5).toString()),
+                    tblData.getValueAt(i, 6).toString(),
+                    "",
+                    tblData.getValueAt(i, 7).toString(),
+                    tblData.getValueAt(i, 1).toString());
 
-                txtIDNumber.setText(selectedUser.getIdNumber());
-                txtFirstName.setText(selectedUser.getFirstName());
-                txtLastName.setText(selectedUser.getLastName());
-                cmbTitle.setSelectedItem(selectedUser.getTitle());
-                dobPicker.setDate(selectedUser.getDateOfBirth());
-                cmbGender.setSelectedItem(selectedUser.getGender());
-                txtCountry.setText(selectedUser.getCountry());
-                txtProvince.setText(selectedUser.getProvince());
-                txtCity.setText(selectedUser.getCity());
-                txtStreet.setText(selectedUser.getStreet());
-                txtPostalCode.setText(selectedUser.getPostalCode());
-                txtAddressLine.setText(selectedUser.getAddressLine());
-                txtEmail.setText(selectedUser.getEmail());
-                txtCell.setText(selectedUser.getCellNumber());
-                txtTel.setText(selectedUser.getTelNumber());
-                txtUsername.setText(selectedUser.getUsername());
-                txtPassword.setText(selectedUser.getPassword());
-                cmbAccountType.setSelectedItem(selectedUser.getAccountType().toString());
-            } catch (ParseException ex) {
-                Logger.getLogger(StaffForm.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            setUserButtons(true);
-            switch (selectedUser.getAccountType()) {
-                case ADMIN:
-                    btnApprove.setEnabled(false);
-                    btnApprove.setText("Approve");
-                    btnReject.setText("Remove Admin");
-                    btnBan.setText("Ban Admin");
+                switch (selectedUser.getAccountType()) {
+                    case ADMIN_REQUESTED:
+                    //btnApprove.setText("Approve Admin");
+                    selectedUser.setAccountType(User.accountTypeState.ADMIN);
+                    selectedUser.updateUser();
                     break;
-                case ADMIN_REJECTED:
-                    btnApprove.setEnabled(false);
-                    btnApprove.setText("Make Admin");
-                    btnReject.setEnabled(false);
-                    btnReject.setText("Reject");
-                    btnBan.setText("Ban User");
+                    case NORMAL:
+                    //btnApprove.setText("Make Admin");
+                    selectedUser.setAccountType(User.accountTypeState.ADMIN);
+                    selectedUser.updateUser();
                     break;
-                case ADMIN_REQUESTED:
-                    btnApprove.setText("Approve Admin");
-                    btnReject.setText("Reject Admin");
-                    btnBan.setText("Ban User");
+                    case RESTRICTED:
+                    //btnApprove.setText("Approve User");
+                    selectedUser.setAccountType(User.accountTypeState.NORMAL);
+                    selectedUser.updateUser();
                     break;
-                case NORMAL:
-                    btnApprove.setText("Make Admin");
-                    btnReject.setText("Restrict User");
-                    btnBan.setText("Ban User");
+                    case BANNED:
+                    //btnApprove.setText("Revoke Ban");
+                    selectedUser.setAccountType(User.accountTypeState.RESTRICTED);
+                    selectedUser.updateUser();
                     break;
-                case RESTRICTED:
-                    btnApprove.setText("Approve User");
-                    btnReject.setEnabled(false);
-                    btnReject.setText("Reject");
-                    btnBan.setText("Ban User");
-                    break;
-                case BANNED:
-                    btnApprove.setText("Revoke Ban");
-                    btnReject.setEnabled(false);
-                    btnReject.setText("Reject");
-                    btnBan.setEnabled(false);
-                    btnBan.setText("Ban");
-                    break;
-                case NOT_SET:
+                    case NOT_SET:
                     btnApprove.setEnabled(false);
                     btnApprove.setVisible(false);
                     btnApprove.setText("Approve");
@@ -1776,29 +1513,47 @@ public class StaffForm extends javax.swing.JFrame implements IFormSetUp{
                     btnBan.setVisible(false);
                     btnBan.setText("Ban");
                     break;
+                }
+                resetBaseUsers();
+                setModel();
+                setUserButtons(false);
+            } catch (ParseException ex) {
+                Logger.getLogger(StaffForm.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }//GEN-LAST:event_tblDataMouseClicked
+        else {
+            setUIAccess(true);
+            JOptionPane.showMessageDialog(null, "No valid user selected");
+        }
+    }//GEN-LAST:event_btnApproveActionPerformed
 
-    private void txtUsernameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUsernameFocusGained
-        // TODO add your handling code here:
-        Common.focusGain("Username", txtUsername);
-    }//GEN-LAST:event_txtUsernameFocusGained
+    private void cmbViewOptionsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbViewOptionsItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            setViewingOptions();
+            setModel();
+        }
+    }//GEN-LAST:event_cmbViewOptionsItemStateChanged
 
-    private void txtUsernameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUsernameFocusLost
+    private void btnLogOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOffActionPerformed
         // TODO add your handling code here:
-        Common.focusLost("Username", txtUsername);
-    }//GEN-LAST:event_txtUsernameFocusLost
+        if (currentUser != null) {
+            Common.logOff(this);
+        }
+        else {
+            new LoginForm().setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_btnLogOffActionPerformed
 
-    private void txtPasswordFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPasswordFocusGained
+    private void txtSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusLost
         // TODO add your handling code here:
-        Common.focusGain("Password", txtPassword);
-    }//GEN-LAST:event_txtPasswordFocusGained
+        Common.focusGain("Search data", txtSearch);
+    }//GEN-LAST:event_txtSearchFocusLost
 
-    private void txtPasswordFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPasswordFocusLost
+    private void txtSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusGained
         // TODO add your handling code here:
-        Common.focusLost("Password", txtPassword);
-    }//GEN-LAST:event_txtPasswordFocusLost
+        Common.focusGain("Search data", txtSearch);
+    }//GEN-LAST:event_txtSearchFocusGained
 
     private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
         // TODO add your handling code here:
@@ -1961,264 +1716,502 @@ public class StaffForm extends javax.swing.JFrame implements IFormSetUp{
         }
     }//GEN-LAST:event_btnInsertActionPerformed
 
-    private void txtSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusGained
+    private void txtPasswordFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPasswordFocusLost
         // TODO add your handling code here:
-        Common.focusGain("Search data", txtSearch);
-    }//GEN-LAST:event_txtSearchFocusGained
+        Common.focusLost("Password", txtPassword);
+    }//GEN-LAST:event_txtPasswordFocusLost
 
-    private void txtSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusLost
+    private void txtPasswordFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPasswordFocusGained
         // TODO add your handling code here:
-        Common.focusGain("Search data", txtSearch);
-    }//GEN-LAST:event_txtSearchFocusLost
+        Common.focusGain("Password", txtPassword);
+    }//GEN-LAST:event_txtPasswordFocusGained
 
-    private void btnLogOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOffActionPerformed
+    private void txtUsernameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUsernameFocusLost
         // TODO add your handling code here:
+        Common.focusLost("Username", txtUsername);
+    }//GEN-LAST:event_txtUsernameFocusLost
+
+    private void txtUsernameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUsernameFocusGained
+        // TODO add your handling code here:
+        Common.focusGain("Username", txtUsername);
+    }//GEN-LAST:event_txtUsernameFocusGained
+
+    private void tblDataMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDataMouseClicked
         if (currentUser != null) {
-            Common.logOff(this);
+            int i = tblData.getSelectedRow();
+
+            User selectedUser = null;
+            try {
+                selectedUser = new User(tblData.getValueAt(i, 3).toString(),
+                    tblData.getValueAt(i, 4).toString(),
+                    tblData.getValueAt(i, 2).toString(),
+                    new SimpleDateFormat("yyyy-MM-dd").parse(tblData.getValueAt(i, 8).toString()),
+                    tblData.getValueAt(i, 9).toString(),
+                    tblData.getValueAt(i, 10).toString(),
+                    (tblData.getValueAt(i, 11) != null) ? tblData.getValueAt(i, 7).toString() : "",
+                    (tblData.getValueAt(i, 12) != null) ? tblData.getValueAt(i, 8).toString() : "",
+                    (tblData.getValueAt(i, 13) != null) ? tblData.getValueAt(i, 9).toString() : "",
+                    (tblData.getValueAt(i, 14) != null) ? tblData.getValueAt(i, 10).toString() : "",
+                    (tblData.getValueAt(i, 15) != null) ? tblData.getValueAt(i, 11).toString() : "",
+                    (tblData.getValueAt(i, 16) != null) ? tblData.getValueAt(i, 12).toString() : "",
+                    (tblData.getValueAt(i, 17) != null) ? tblData.getValueAt(i, 13).toString() : "",
+                    (tblData.getValueAt(i, 18) != null) ? tblData.getValueAt(i, 14).toString() : "",
+                    new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(tblData.getValueAt(i, 0).toString()),
+                    Integer.valueOf(tblData.getValueAt(i, 5).toString()),
+                    tblData.getValueAt(i, 6).toString(),
+                    "",
+                    tblData.getValueAt(i, 7).toString(),
+                    tblData.getValueAt(i, 1).toString());
+
+                txtIDNumber.setText(selectedUser.getIdNumber());
+                txtFirstName.setText(selectedUser.getFirstName());
+                txtLastName.setText(selectedUser.getLastName());
+                cmbTitle.setSelectedItem(selectedUser.getTitle());
+                dobPicker.setDate(selectedUser.getDateOfBirth());
+                cmbGender.setSelectedItem(selectedUser.getGender());
+                txtCountry.setText(selectedUser.getCountry());
+                txtProvince.setText(selectedUser.getProvince());
+                txtCity.setText(selectedUser.getCity());
+                txtStreet.setText(selectedUser.getStreet());
+                txtPostalCode.setText(selectedUser.getPostalCode());
+                txtAddressLine.setText(selectedUser.getAddressLine());
+                txtEmail.setText(selectedUser.getEmail());
+                txtCell.setText(selectedUser.getCellNumber());
+                txtTel.setText(selectedUser.getTelNumber());
+                txtUsername.setText(selectedUser.getUsername());
+                txtPassword.setText(selectedUser.getPassword());
+                cmbAccountType.setSelectedItem(selectedUser.getAccountType().toString());
+            } catch (ParseException ex) {
+                Logger.getLogger(StaffForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            setUserButtons(true);
+            switch (selectedUser.getAccountType()) {
+                case ADMIN:
+                btnApprove.setEnabled(false);
+                btnApprove.setText("Approve");
+                btnReject.setText("Remove Admin");
+                btnBan.setText("Ban Admin");
+                break;
+                case ADMIN_REJECTED:
+                btnApprove.setEnabled(false);
+                btnApprove.setText("Make Admin");
+                btnReject.setEnabled(false);
+                btnReject.setText("Reject");
+                btnBan.setText("Ban User");
+                break;
+                case ADMIN_REQUESTED:
+                btnApprove.setText("Approve Admin");
+                btnReject.setText("Reject Admin");
+                btnBan.setText("Ban User");
+                break;
+                case NORMAL:
+                btnApprove.setText("Make Admin");
+                btnReject.setText("Restrict User");
+                btnBan.setText("Ban User");
+                break;
+                case RESTRICTED:
+                btnApprove.setText("Approve User");
+                btnReject.setEnabled(false);
+                btnReject.setText("Reject");
+                btnBan.setText("Ban User");
+                break;
+                case BANNED:
+                btnApprove.setText("Revoke Ban");
+                btnReject.setEnabled(false);
+                btnReject.setText("Reject");
+                btnBan.setEnabled(false);
+                btnBan.setText("Ban");
+                break;
+                case NOT_SET:
+                btnApprove.setEnabled(false);
+                btnApprove.setVisible(false);
+                btnApprove.setText("Approve");
+                btnReject.setEnabled(false);
+                btnReject.setVisible(false);
+                btnReject.setText("Reject");
+                btnBan.setEnabled(false);
+                btnBan.setVisible(false);
+                btnBan.setText("Ban");
+                break;
+            }
         }
-        else {
-            new LoginForm().setVisible(true);
-            this.dispose();
+    }//GEN-LAST:event_tblDataMouseClicked
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // Delete Record
+        if (Common.checkInput(txtIDNumber.getText()) == 10 && User.GetUserByIdNumber(txtIDNumber.getText()) != null) {
+            int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to Delete this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
+            if (option == 0) {
+                User.deleteUser(txtIDNumber.getText(), User.GetUserByIdNumber(txtIDNumber.getText()).getUserID());
+                clearAllFields();
+                resetBaseUsers();
+                setModel();
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No valid user selected");
         }
-    }//GEN-LAST:event_btnLogOffActionPerformed
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
-    private void mnOpenOrderFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenOrderFormActionPerformed
-        // TODO add your handling code here:
-        OrderForm orderForm = new OrderForm(currentUser);
-        orderForm.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_mnOpenOrderFormActionPerformed
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        //Update record
+        if (updateClick == 0) {
+            updateClick++;
+            setUIAccess(false);
+            btnUpdate.setEnabled(true);
+            prepareUpdate();
+        } else {
+            resetColor();
+            String idNumber;
+            String firstName;
+            String lastName;
+            String title;
+            Date dateOfBirth;
+            String gender;
+            String country;
+            String province;
+            String city;
+            String street;
+            String postalCode;
+            String addressLine;
+            String email;
+            String cellNumber;
+            String telNumber;
+            String username;
+            String password;
+            String accountType;
 
-    private void mnOpenStockFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenStockFormActionPerformed
-        // TODO add your handling code here:
-        StockForm stockForm = new StockForm(currentUser);
-        stockForm.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_mnOpenStockFormActionPerformed
+            idNumber = txtIDNumber.getText();
+            firstName = txtFirstName.getText();
+            lastName = txtLastName.getText();
+            title = cmbTitle.getSelectedItem().toString();
+            dateOfBirth = dobPicker.getDate();
+            gender = cmbGender.getSelectedItem().toString();
+            country = txtCountry.getText();
+            province = (txtProvince.getText() != null) ? txtProvince.getText() : "";
+            city = (txtCity.getText() != null) ? txtCity.getText() : "";
+            street = (txtStreet.getText() != null) ? txtStreet.getText() : "";
+            postalCode = (txtPostalCode.getText() != null) ? txtPostalCode.getText() : "";
+            addressLine = (txtAddressLine.getText() != null) ? txtAddressLine.getText() : "";
+            email = (txtEmail.getText() != null) ? txtEmail.getText() : "";
+            cellNumber = (txtCell.getText() != null) ? txtCell.getText() : "";
+            telNumber = (txtTel.getText() != null) ? txtTel.getText() : "";
+            username = txtUsername.getText();
+            password = txtPassword.getText();
+            accountType = cmbAccountType.getSelectedItem().toString();
 
-    private void txtProvinceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtProvinceActionPerformed
+            boolean check = true;
+            if (Common.checkInput(idNumber) != 10 || idNumber.length() != 13) {
+                check = false;
+                txtIDNumber.setBackground(Color.red);
+                txtIDNumber.setToolTipText("Only numerical values. Must be 13 characters. Must be valid RSA ID Number");
+            }
+            if (Common.checkInput(firstName) != 1 || firstName.length() > 20) {
+                check = false;
+                txtFirstName.setBackground(Color.red);
+                txtFirstName.setToolTipText("Only alphabetical characters. Max 20 characters");
+            }
+            if (Common.checkInput(lastName) != 1 || lastName.length() > 20) {
+                check = false;
+                txtLastName.setBackground(Color.red);
+                txtLastName.setToolTipText("Only alphabetical characters. Max 20 characters");
+            }
+            if (!(Common.checkInput(title) == 1 || Common.checkInput(title) == 5) || title.length() > 4) {
+                check = false;
+                cmbTitle.setBackground(Color.red);
+                cmbTitle.setToolTipText("Only alphabetical characters. Max 4 characters");
+            }
+            //DATE OF BIRTH CHECK NOT INCLUDED
+            if (Common.checkInput(gender) != 1 || gender.length() > 6) {
+                check = false;
+                cmbGender.setBackground(Color.red);
+                cmbGender.setToolTipText("Only alphabetical characters. Max 6 characters");
+            }
+            if (Common.checkInput(country) != 1 || country.length() > 20) {
+                check = false;
+                txtCountry.setBackground(Color.red);
+                txtCountry.setToolTipText("Only alphabetical characters. Max 20 characters");
+            }
+            if (!(Common.checkInput(province) == 0 || Common.checkInput(province) == 1 || Common.checkInput(province) == 5) || province.length() > 20) {
+                check = false;
+                txtProvince.setBackground(Color.orange);
+                txtProvince.setToolTipText("(Optional Field) Only alphabetical characters and optional special characters. Max 20 characters");
+            }
+            if (!(Common.checkInput(city) == 0 || Common.checkInput(city) == 1) || city.length() > 30) {
+                check = false;
+                txtCity.setBackground(Color.orange);
+                txtCity.setToolTipText("(Optional Field) Only alphabetical characters. Max 30 characters");
+            }
+            if (!(Common.checkInput(street) == 0 || Common.checkInput(street) == 1 || Common.checkInput(street) == 4) || street.length() > 30) {
+                check = false;
+                txtStreet.setBackground(Color.orange);
+                txtStreet.setToolTipText("(Optional Field) Only alphabetical characters and optional numerical values. Max 30 characters");
+            }
+            if (!(Common.checkInput(postalCode) == 0 || Common.checkInput(postalCode) == 2) || postalCode.length() > 10) {
+                check = false;
+                txtPostalCode.setBackground(Color.orange);
+                txtPostalCode.setToolTipText("(Optional Field) Only numerical values. Max 10 characters");
+            }
+            if (addressLine.length() > 50) {
+                check = false;
+                txtAddressLine.setBackground(Color.orange);
+                txtAddressLine.setToolTipText("(Optional Field) Any characters. Max 50 characters");
+            }
+            if (!(Common.checkInput(email) == 0 || Common.checkInput(email) == 9) || email.length() > 30) {
+                check = false;
+                txtEmail.setBackground(Color.orange);
+                txtEmail.setToolTipText("(Optional Field) Only valid email address. Max 30 characters");
+            }
+            if (!(Common.checkInput(cellNumber) == 0 || (Common.checkInput(cellNumber) == 2 && cellNumber.length() == 10))) {
+                check = false;
+                txtCell.setBackground(Color.orange);
+                txtCell.setToolTipText("(Optional Field) Only numerical values. Must be 10 characters");
+            }
+            if (!(Common.checkInput(telNumber) == 0 || (Common.checkInput(telNumber) == 2 && telNumber.length() == 10))) {
+                check = false;
+                txtTel.setBackground(Color.orange);
+                txtTel.setToolTipText("(Optional Field) Only numerical values. Must be 10 characters");
+            }
+            if (Common.checkInput(username) != 1 || username.length() > 20) {
+                check = false;
+                txtUsername.setBackground(Color.red);
+                txtUsername.setToolTipText("Only alphabetical characters. Max 20 characters");
+            }
+            if (password.length() > 0 && (Common.checkInput(password) != 7 || password.length() < 4 || password.length() > 20)) {
+                check = false;
+                txtPassword.setBackground(Color.red);
+                txtPassword.setToolTipText("Must contain alphabetical characters and at least one numerical value and at least one special character. Min 4 characters. Max 20 characters");
+            }
+            if (Common.checkInput(accountType) != 1 || accountType.length() > 50) {
+                check = false;
+                cmbAccountType.setBackground(Color.red);
+                cmbAccountType.setToolTipText("Only alphabetical characters. Max 50 characters");
+            }
+
+            if (check == true) {
+                int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to update this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
+                if (option == 0) {
+                    new User(firstName, lastName, title, dateOfBirth, gender, country, province, city, street, postalCode, addressLine, email, cellNumber, telNumber, new Date(), User.GetUserByIdNumber(idNumber).getUserID(), username, password, accountType, idNumber).updateUser();
+                    resetBaseUsers();
+                    setModel();
+                }
+                clearAllFields();
+                disableAllFields();
+                resetColor();
+                updateClick = 0;
+                setUIAccess(true);
+            } else {
+                int option = JOptionPane.showConfirmDialog(this, "There were some errors, would you like to fix them?", "Confirmation.", JOptionPane.YES_NO_OPTION);
+                if (option == 1) {
+                    clearAllFields();
+                    disableAllFields();
+                    resetColor();
+                    updateClick = 0;
+                    setUIAccess(true);
+                }
+            }
+        }
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        String parameter = cmbSearchBy.getSelectedItem().toString();
+        String searchKeyword = txtSearch.getText();
+        switch (parameter) {
+            case "ID number":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("IDNumber", searchKeyword) : User.getNonAdminUsersByParameter("IDNumber", searchKeyword));
+            break;
+            case "First name":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("FirstName", searchKeyword) : User.getNonAdminUsersByParameter("FirstName", searchKeyword));
+            break;
+            case "Last name":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("LastName", searchKeyword) : User.getNonAdminUsersByParameter("LastName", searchKeyword));
+            break;
+            case "Full name":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("CONCAT(FirstName, ' ', LastName)", searchKeyword) : User.getNonAdminUsersByParameter("CONCAT(FirstName, ' ', LastName)", searchKeyword));
+            break;
+            case "Title":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("Title", searchKeyword) : User.getNonAdminUsersByParameter("Title", searchKeyword));
+            break;
+            case "Gender":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("Gender", searchKeyword) : User.getNonAdminUsersByParameter("Gender", searchKeyword));
+            break;
+            case "Country":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("Country", searchKeyword) : User.getNonAdminUsersByParameter("Country", searchKeyword));
+            break;
+            case "Province":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("Province", searchKeyword) : User.getNonAdminUsersByParameter("Province", searchKeyword));
+            break;
+            case "City":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("City", searchKeyword) : User.getNonAdminUsersByParameter("City", searchKeyword));
+            break;
+            case "Street":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("Street", searchKeyword) : User.getNonAdminUsersByParameter("Street", searchKeyword));
+            break;
+            case "Postal code":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("PostalCode", searchKeyword) : User.getNonAdminUsersByParameter("PostalCode", searchKeyword));
+            break;
+            case "Address line":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("AddressLine", searchKeyword) : User.getNonAdminUsersByParameter("AddressLine", searchKeyword));
+            break;
+            case "Email":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("Email", searchKeyword) : User.getNonAdminUsersByParameter("Email", searchKeyword));
+            break;
+            case "Cell number":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("CellNumber", searchKeyword) : User.getNonAdminUsersByParameter("CellNumber", searchKeyword));
+            break;
+            case "Tel number":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("TelNumber", searchKeyword) : User.getNonAdminUsersByParameter("TelNumber", searchKeyword));
+            break;
+            case "User ID":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("UserID", searchKeyword) : User.getNonAdminUsersByParameter("UserID", searchKeyword));
+            break;
+            case "Username":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("Username", searchKeyword) : User.getNonAdminUsersByParameter("Username", searchKeyword));
+            break;
+            case "Account type":
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("AccountType", searchKeyword) : User.getNonAdminUsersByParameter("AccountType", searchKeyword));
+            break;
+        }
+        setModel();
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void txtTelFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTelFocusLost
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtProvinceActionPerformed
+        Common.focusLost("Tel number", txtTel);
+    }//GEN-LAST:event_txtTelFocusLost
+
+    private void txtTelFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTelFocusGained
+        // TODO add your handling code here:
+        Common.focusGain("Tel number", txtTel);
+    }//GEN-LAST:event_txtTelFocusGained
+
+    private void txtCellFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCellFocusLost
+        // TODO add your handling code here:
+        Common.focusLost("Cell number", txtCell);
+    }//GEN-LAST:event_txtCellFocusLost
+
+    private void txtCellFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCellFocusGained
+        // TODO add your handling code here:
+        Common.focusGain("Cell number", txtCell);
+    }//GEN-LAST:event_txtCellFocusGained
+
+    private void txtEmailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtEmailFocusLost
+        // TODO add your handling code here:
+        Common.focusLost("Email", txtEmail);
+    }//GEN-LAST:event_txtEmailFocusLost
+
+    private void txtEmailFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtEmailFocusGained
+        // TODO add your handling code here:
+        Common.focusGain("Email", txtEmail);
+    }//GEN-LAST:event_txtEmailFocusGained
+
+    private void txtAddressLineFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAddressLineFocusLost
+        // TODO add your handling code here:
+        Common.focusLost("Address line", txtAddressLine);
+    }//GEN-LAST:event_txtAddressLineFocusLost
+
+    private void txtAddressLineFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAddressLineFocusGained
+        // TODO add your handling code here:
+        Common.focusGain("Address line", txtAddressLine);
+    }//GEN-LAST:event_txtAddressLineFocusGained
+
+    private void txtStreetFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStreetFocusLost
+        // TODO add your handling code here:
+        Common.focusLost("Street", txtStreet);
+    }//GEN-LAST:event_txtStreetFocusLost
+
+    private void txtStreetFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStreetFocusGained
+        // TODO add your handling code here:
+        Common.focusGain("Street", txtStreet);
+    }//GEN-LAST:event_txtStreetFocusGained
 
     private void txtPostalCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPostalCodeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPostalCodeActionPerformed
 
-    private void txtLastNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLastNameActionPerformed
+    private void txtPostalCodeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPostalCodeFocusLost
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtLastNameActionPerformed
+        Common.focusLost("Postal code", txtPostalCode);
+    }//GEN-LAST:event_txtPostalCodeFocusLost
+
+    private void txtPostalCodeFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPostalCodeFocusGained
+        // TODO add your handling code here:
+        Common.focusGain("Postal code", txtPostalCode);
+    }//GEN-LAST:event_txtPostalCodeFocusGained
+
+    private void txtCityFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCityFocusLost
+        // TODO add your handling code here:
+        Common.focusLost("City", txtCity);
+    }//GEN-LAST:event_txtCityFocusLost
+
+    private void txtCityFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCityFocusGained
+        // TODO add your handling code here:
+        Common.focusGain("City", txtCity);
+    }//GEN-LAST:event_txtCityFocusGained
+
+    private void txtProvinceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtProvinceActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtProvinceActionPerformed
+
+    private void txtProvinceFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtProvinceFocusLost
+        // TODO add your handling code here:
+        Common.focusLost("Province", txtProvince);
+    }//GEN-LAST:event_txtProvinceFocusLost
+
+    private void txtProvinceFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtProvinceFocusGained
+        // TODO add your handling code here:
+
+        Common.focusGain("Province", txtProvince);
+    }//GEN-LAST:event_txtProvinceFocusGained
 
     private void txtCountryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCountryActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCountryActionPerformed
 
-    private void cmbViewOptionsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbViewOptionsItemStateChanged
-        if (evt.getStateChange() == ItemEvent.SELECTED) {
-            setViewingOptions();
-            setModel();
-        }
-    }//GEN-LAST:event_cmbViewOptionsItemStateChanged
+    private void txtCountryFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCountryFocusLost
+        // TODO add your handling code here:
+        Common.focusLost("Country", txtCountry);
+    }//GEN-LAST:event_txtCountryFocusLost
 
-    private void btnApproveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApproveActionPerformed
-        int i = tblData.getSelectedRow();
+    private void txtCountryFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCountryFocusGained
+        // TODO add your handling code here:
+        Common.focusGain("Country", txtCountry);
+    }//GEN-LAST:event_txtCountryFocusGained
 
-        User selectedUser = null;
-        try {
-            selectedUser = new User(tblData.getValueAt(i, 3).toString(),
-                    tblData.getValueAt(i, 4).toString(),
-                    tblData.getValueAt(i, 2).toString(),
-                    new SimpleDateFormat("yyyy-MM-dd").parse(tblData.getValueAt(i, 8).toString()),
-                    tblData.getValueAt(i, 9).toString(),
-                    tblData.getValueAt(i, 10).toString(),
-                    (tblData.getValueAt(i, 11) != null) ? tblData.getValueAt(i, 7).toString() : "",
-                    (tblData.getValueAt(i, 12) != null) ? tblData.getValueAt(i, 8).toString() : "",
-                    (tblData.getValueAt(i, 13) != null) ? tblData.getValueAt(i, 9).toString() : "",
-                    (tblData.getValueAt(i, 14) != null) ? tblData.getValueAt(i, 10).toString() : "",
-                    (tblData.getValueAt(i, 15) != null) ? tblData.getValueAt(i, 11).toString() : "",
-                    (tblData.getValueAt(i, 16) != null) ? tblData.getValueAt(i, 12).toString() : "",
-                    (tblData.getValueAt(i, 17) != null) ? tblData.getValueAt(i, 13).toString() : "",
-                    (tblData.getValueAt(i, 18) != null) ? tblData.getValueAt(i, 14).toString() : "",
-                    new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(tblData.getValueAt(i, 0).toString()),
-                    Integer.valueOf(tblData.getValueAt(i, 5).toString()),
-                    tblData.getValueAt(i, 6).toString(),
-                    "",
-                    tblData.getValueAt(i, 7).toString(),
-                    tblData.getValueAt(i, 1).toString());
-            
-            switch (selectedUser.getAccountType()) {
-                case ADMIN_REQUESTED:
-                    //btnApprove.setText("Approve Admin");
-                    selectedUser.setAccountType(User.accountTypeState.ADMIN);
-                    selectedUser.updateUser();
-                    break;
-                case NORMAL:
-                    //btnApprove.setText("Make Admin");
-                    selectedUser.setAccountType(User.accountTypeState.ADMIN);
-                    selectedUser.updateUser();
-                    break;
-                case RESTRICTED:
-                    //btnApprove.setText("Approve User");
-                    selectedUser.setAccountType(User.accountTypeState.NORMAL);
-                    selectedUser.updateUser();
-                    break;
-                case BANNED:
-                    //btnApprove.setText("Revoke Ban");
-                    selectedUser.setAccountType(User.accountTypeState.RESTRICTED);
-                    selectedUser.updateUser();
-                    break;
-                case NOT_SET:
-                    btnApprove.setEnabled(false);
-                    btnApprove.setVisible(false);
-                    btnApprove.setText("Approve");
-                    btnReject.setEnabled(false);
-                    btnReject.setVisible(false);
-                    btnReject.setText("Reject");
-                    btnBan.setEnabled(false);
-                    btnBan.setVisible(false);
-                    btnBan.setText("Ban");
-                    break;
-            }
-            resetBaseUsers();
-            setModel();
-            setUserButtons(false);
-        } catch (ParseException ex) {
-            Logger.getLogger(StaffForm.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_btnApproveActionPerformed
+    private void txtLastNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLastNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtLastNameActionPerformed
 
-    private void btnRejectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRejectActionPerformed
-        int i = tblData.getSelectedRow();
+    private void txtLastNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLastNameFocusLost
+        // TODO add your handling code here:
+        Common.focusLost("Last name", txtLastName);
+    }//GEN-LAST:event_txtLastNameFocusLost
 
-        User selectedUser = null;
-        try {
-            selectedUser = new User(tblData.getValueAt(i, 3).toString(),
-                    tblData.getValueAt(i, 4).toString(),
-                    tblData.getValueAt(i, 2).toString(),
-                    new SimpleDateFormat("yyyy-MM-dd").parse(tblData.getValueAt(i, 8).toString()),
-                    tblData.getValueAt(i, 9).toString(),
-                    tblData.getValueAt(i, 10).toString(),
-                    (tblData.getValueAt(i, 11) != null) ? tblData.getValueAt(i, 7).toString() : "",
-                    (tblData.getValueAt(i, 12) != null) ? tblData.getValueAt(i, 8).toString() : "",
-                    (tblData.getValueAt(i, 13) != null) ? tblData.getValueAt(i, 9).toString() : "",
-                    (tblData.getValueAt(i, 14) != null) ? tblData.getValueAt(i, 10).toString() : "",
-                    (tblData.getValueAt(i, 15) != null) ? tblData.getValueAt(i, 11).toString() : "",
-                    (tblData.getValueAt(i, 16) != null) ? tblData.getValueAt(i, 12).toString() : "",
-                    (tblData.getValueAt(i, 17) != null) ? tblData.getValueAt(i, 13).toString() : "",
-                    (tblData.getValueAt(i, 18) != null) ? tblData.getValueAt(i, 14).toString() : "",
-                    new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(tblData.getValueAt(i, 0).toString()),
-                    Integer.valueOf(tblData.getValueAt(i, 5).toString()),
-                    tblData.getValueAt(i, 6).toString(),
-                    "",
-                    tblData.getValueAt(i, 7).toString(),
-                    tblData.getValueAt(i, 1).toString());
-            
-            switch (selectedUser.getAccountType()) {
-                case ADMIN:
-                    //btnReject.setText("Remove Admin");
-                    selectedUser.setAccountType(User.accountTypeState.NORMAL);
-                    selectedUser.updateUser();
-                    break;
-                case ADMIN_REQUESTED:
-                    //btnReject.setText("Reject Admin");
-                    selectedUser.setAccountType(User.accountTypeState.ADMIN_REJECTED);
-                    selectedUser.updateUser();
-                    break;
-                case NORMAL:
-                    //btnReject.setText("Restrict User");
-                    selectedUser.setAccountType(User.accountTypeState.RESTRICTED);
-                    selectedUser.updateUser();
-                    break;
-                case NOT_SET:
-                    btnApprove.setEnabled(false);
-                    btnApprove.setVisible(false);
-                    btnApprove.setText("Approve");
-                    btnReject.setEnabled(false);
-                    btnReject.setVisible(false);
-                    btnReject.setText("Reject");
-                    btnBan.setEnabled(false);
-                    btnBan.setVisible(false);
-                    btnBan.setText("Ban");
-                    break;
-            }
-            resetBaseUsers();
-            setModel();
-            setUserButtons(false);
-        } catch (ParseException ex) {
-            Logger.getLogger(StaffForm.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_btnRejectActionPerformed
+    private void txtLastNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLastNameFocusGained
+        // TODO add your handling code here:
+        Common.focusGain("Last name", txtLastName);
+    }//GEN-LAST:event_txtLastNameFocusGained
 
-    private void btnBanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBanActionPerformed
-        int i = tblData.getSelectedRow();
+    private void txtIDNumberFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIDNumberFocusLost
+        // TODO add your handling code here:
 
-        User selectedUser = null;
-        try {
-            selectedUser = new User(tblData.getValueAt(i, 3).toString(),
-                    tblData.getValueAt(i, 4).toString(),
-                    tblData.getValueAt(i, 2).toString(),
-                    new SimpleDateFormat("yyyy-MM-dd").parse(tblData.getValueAt(i, 8).toString()),
-                    tblData.getValueAt(i, 9).toString(),
-                    tblData.getValueAt(i, 10).toString(),
-                    (tblData.getValueAt(i, 11) != null) ? tblData.getValueAt(i, 7).toString() : "",
-                    (tblData.getValueAt(i, 12) != null) ? tblData.getValueAt(i, 8).toString() : "",
-                    (tblData.getValueAt(i, 13) != null) ? tblData.getValueAt(i, 9).toString() : "",
-                    (tblData.getValueAt(i, 14) != null) ? tblData.getValueAt(i, 10).toString() : "",
-                    (tblData.getValueAt(i, 15) != null) ? tblData.getValueAt(i, 11).toString() : "",
-                    (tblData.getValueAt(i, 16) != null) ? tblData.getValueAt(i, 12).toString() : "",
-                    (tblData.getValueAt(i, 17) != null) ? tblData.getValueAt(i, 13).toString() : "",
-                    (tblData.getValueAt(i, 18) != null) ? tblData.getValueAt(i, 14).toString() : "",
-                    new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(tblData.getValueAt(i, 0).toString()),
-                    Integer.valueOf(tblData.getValueAt(i, 5).toString()),
-                    tblData.getValueAt(i, 6).toString(),
-                    "",
-                    tblData.getValueAt(i, 7).toString(),
-                    tblData.getValueAt(i, 1).toString());
-            
-            switch (selectedUser.getAccountType()) {
-                case ADMIN:
-                    //btnBan.setText("Ban Admin");
-                    selectedUser.setAccountType(User.accountTypeState.BANNED);
-                    selectedUser.updateUser();
-                    break;
-                case ADMIN_REJECTED:
-                    //btnBan.setText("Ban User");
-                    selectedUser.setAccountType(User.accountTypeState.BANNED);
-                    selectedUser.updateUser();
-                    break;
-                case ADMIN_REQUESTED:
-                    //btnBan.setText("Ban User");
-                    selectedUser.setAccountType(User.accountTypeState.BANNED);
-                    selectedUser.updateUser();
-                    break;
-                case NORMAL:
-                    //btnBan.setText("Ban User");
-                    selectedUser.setAccountType(User.accountTypeState.BANNED);
-                    selectedUser.updateUser();
-                    break;
-                case RESTRICTED:
-                    //btnBan.setText("Ban User");
-                    selectedUser.setAccountType(User.accountTypeState.BANNED);
-                    selectedUser.updateUser();
-                    break;
-                case NOT_SET:
-                    btnApprove.setEnabled(false);
-                    btnApprove.setVisible(false);
-                    btnApprove.setText("Approve");
-                    btnReject.setEnabled(false);
-                    btnReject.setVisible(false);
-                    btnReject.setText("Reject");
-                    btnBan.setEnabled(false);
-                    btnBan.setVisible(false);
-                    btnBan.setText("Ban");
-                    break;
-            }
-            resetBaseUsers();
-            setModel();
-            setUserButtons(false);
-        } catch (ParseException ex) {
-            Logger.getLogger(StaffForm.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_btnBanActionPerformed
+        Common.focusLost("ID number", txtIDNumber);
+    }//GEN-LAST:event_txtIDNumberFocusLost
+
+    private void txtIDNumberFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIDNumberFocusGained
+        // TODO add your handling code here:
+        Common.focusGain("ID number", txtIDNumber);
+    }//GEN-LAST:event_txtIDNumberFocusGained
+
+    private void txtFirstNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtFirstNameFocusLost
+        // TODO add your handling code here:
+        Common.focusLost("First name", txtFirstName);
+    }//GEN-LAST:event_txtFirstNameFocusLost
+
+    private void txtFirstNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtFirstNameFocusGained
+        // TODO add your handling code here:
+        Common.focusGain("First name", txtFirstName);
+    }//GEN-LAST:event_txtFirstNameFocusGained
 
     /**
      * @param args the command line arguments
