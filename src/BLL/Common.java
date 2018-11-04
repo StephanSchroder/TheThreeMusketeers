@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -149,7 +150,8 @@ public class Common {
         }
         tx.setForeground(Color.LIGHT_GRAY);
     }
-    
+    static AudioStream as = null;
+    static InputStream is = null;
     public enum sound {PASS,EGG,TRANSITION};
     public static void playMusic(int counter) {
         String name = "";
@@ -174,9 +176,12 @@ public class Common {
         
         try {
             is = new FileInputStream(new File(name));
-            AudioStream as = new AudioStream(is);
+            as = new AudioStream(is);
             AudioPlayer.player.start(as);
             
+            if(counter == 3){
+                
+            }
             
         } catch (FileNotFoundException ex) {
             Logger.getLogger(EasterEggDaemon.class.getName()).log(Level.SEVERE, null, ex);
@@ -184,5 +189,25 @@ public class Common {
             Logger.getLogger(EasterEggDaemon.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+    }
+    
+    
+    private static List<EasterEggDaemon> threads = new ArrayList<>();
+    public static void spam(int count){
+        for (int i = 0; i < count; i++) {
+                        EasterEggDaemon eg = new EasterEggDaemon();
+                        Thread t1 = new Thread(eg);
+                        threads.add(eg);
+                        t1.setDaemon(true);
+                        t1.start();
+                    }
+    }
+    
+    public synchronized static void killSpam(){
+        for(EasterEggDaemon t: threads){
+            t.dispose();
+        }
+        
+        AudioPlayer.player.stop(as);
     }
 }

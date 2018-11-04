@@ -5,6 +5,7 @@
  */
 package PL;
 
+import BLL.Common;
 import BLL.EasterEggDaemon;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -120,26 +121,15 @@ public class EasterEgg extends javax.swing.JFrame {
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         // TODO add your handling code here:
-        EasterEggDaemon eg = new EasterEggDaemon();
-                Thread t1 = new Thread(eg);
-                t1.setDaemon(true);
-                t1.start();
     }//GEN-LAST:event_formWindowClosed
 
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
         // TODO add your handling code here:
-        for (int i = 0; i < 10; i++) {
-                        EasterEggDaemon eg = new EasterEggDaemon();
-                        Thread t1 = new Thread(eg);
-                        t1.setDaemon(true);
-                        t1.start();
-                    }
+        Common.spam(10);
     }//GEN-LAST:event_formMouseClicked
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
         // TODO add your handling code here:
-        if(evt.getKeyChar()=='S')
-            this.dispose();
     }//GEN-LAST:event_formKeyPressed
 
     /**

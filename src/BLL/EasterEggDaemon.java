@@ -23,15 +23,19 @@ import sun.audio.AudioStream;
 public class EasterEggDaemon implements Runnable {
 
     static int counter = 0;
-
+    EasterEgg e;
     @Override
     public void run() {
-        EasterEgg e = new EasterEgg();
+        e = new EasterEgg();
         e.setVisible(true);
         
         if(counter==0 || counter==1)
             Common.playMusic(counter);
         counter++;
+    }
+    
+    public void dispose(){
+        e.dispose();
     }
 
     

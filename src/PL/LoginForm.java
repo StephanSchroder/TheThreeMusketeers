@@ -50,6 +50,7 @@ public class LoginForm extends javax.swing.JFrame {
         cbAdminCheck = new javax.swing.JCheckBox();
         btnRegister = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -126,6 +127,14 @@ public class LoginForm extends javax.swing.JFrame {
             }
         });
 
+        jButton1.setBackground(new java.awt.Color(102, 153, 255));
+        jButton1.setForeground(new java.awt.Color(102, 153, 255));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -133,7 +142,7 @@ public class LoginForm extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(47, 47, 47)
                 .addComponent(jLabel7)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(24, 159, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -156,11 +165,15 @@ public class LoginForm extends javax.swing.JFrame {
                     .addComponent(txtPassword)
                     .addComponent(txtUsername))
                 .addGap(37, 37, 37))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel7)
                 .addGap(23, 23, 23)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -237,19 +250,13 @@ public class LoginForm extends javax.swing.JFrame {
                 incorrectPassword++;
                 
                 if (incorrectPassword > 5) {
-                    for (int i = 0; i < 10; i++) {
-                        EasterEggDaemon eg = new EasterEggDaemon();
-                        Thread t1 = new Thread(eg);
-                        t1.setDaemon(true);
-                        t1.start();
-                    }
+                    Common.spam(10);
                 } else if (incorrectPassword >= 3) {
-                    EasterEggDaemon eg = new EasterEggDaemon();
-                    Thread t1 = new Thread(eg);
-                    t1.setDaemon(true);
-                    t1.start();
+                    Common.spam(1);
                 }
 
+            }else{
+                
             }
             switch (result) {
                 case 0:
@@ -303,6 +310,11 @@ public class LoginForm extends javax.swing.JFrame {
         System.exit(EXIT_ON_CLOSE);
     }//GEN-LAST:event_btnExitActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here
+        Common.killSpam();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -343,6 +355,7 @@ public class LoginForm extends javax.swing.JFrame {
     private javax.swing.JButton btnLogin;
     private javax.swing.JButton btnRegister;
     private javax.swing.JCheckBox cbAdminCheck;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
