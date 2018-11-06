@@ -5,75 +5,71 @@
  */
 package BLL;
 
-import BLL.Interfaces.IPerson;
+//<editor-fold defaultstate="collapsed" desc="imports">
+import BLL.Interfaces.DatabaseOperations;
 import DAL.*;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+//</editor-fold>
 
 /**
  *
  * @author Stephan
  */
-public abstract class Person implements IPerson {
+public abstract class Person implements DatabaseOperations {
+
+    //<editor-fold defaultstate="collapsed" desc="Fields">
     private String idNumber;
     private String firstName;
     private String lastName;
     private String title;
     private Date dateOfBirth;
     private String gender;
-    private String country;
-    private String province;
-    private String city;
-    private String street;
-    private String postalCode;
-    private String addressLine;
-    private String email;
-    private String cellNumber;
-    private String telNumber;
+    private Address address;
+    private Contact contact;
     private Date dateAdded;
+    //</editor-fold>
 
-    public Person(String idNumber, String firstName, String lastName, String title, Date dateOfBirth, String gender, String country, String province, String city, String street, String postalCode, String addressLine, String email, String cellNumber, String telNumber, Date dateAdded) {
+    //<editor-fold defaultstate="collapsed" desc="Constructors">
+    public Person(String idNumber, String firstName, String lastName, String title, Date dateOfBirth, String gender, Address address, Contact contact, Date dateAdded) {
         this.idNumber = idNumber;
         this.firstName = firstName;
         this.lastName = lastName;
         this.title = title;
         this.dateOfBirth = dateOfBirth;
         this.gender = gender;
-        this.country = country;
-        this.province = province;
-        this.city = city;
-        this.street = street;
-        this.postalCode = postalCode;
-        this.addressLine = addressLine;
-        this.email = email;
-        this.cellNumber = cellNumber;
-        this.telNumber = telNumber;
+        this.address = address;
+        this.contact = contact;
         this.dateAdded = dateAdded;
     }
 
-    public Person(String idNumber, String firstName, String lastName, String title, Date dateOfBirth, String gender, String country, Date dateAdded) {
+    public Person(String idNumber, String firstName, String lastName, String title, Date dateOfBirth, String gender, int address, int contact, Date dateAdded) {
         this.idNumber = idNumber;
         this.firstName = firstName;
         this.lastName = lastName;
         this.title = title;
         this.dateOfBirth = dateOfBirth;
         this.gender = gender;
-        this.country = country;
+        this.address = Address.read(address);
+        this.contact = Contact.read(contact);
         this.dateAdded = dateAdded;
     }
+    //</editor-fold>
 
-    public String getFullname(){
-        return firstName + " "+ lastName;
-    }
-    
+    //<editor-fold defaultstate="collapsed" desc="Properties">
     public String getIdNumber() {
         return idNumber;
     }
 
     public void setIdNumber(String idNumber) {
         this.idNumber = idNumber;
+    }
+
+    public String getFullName() {
+        return firstName + " " + lastName;
     }
 
     public String getFirstName() {
@@ -116,76 +112,20 @@ public abstract class Person implements IPerson {
         this.gender = gender;
     }
 
-    public String getCountry() {
-        return country;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
-    public String getProvince() {
-        return province;
+    public Contact getContact() {
+        return contact;
     }
 
-    public void setProvince(String province) {
-        this.province = province;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public String getPostalCode() {
-        return postalCode;
-    }
-
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
-    }
-
-    public String getAddressLine() {
-        return addressLine;
-    }
-
-    public void setAddressLine(String addressLine) {
-        this.addressLine = addressLine;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getCellNumber() {
-        return cellNumber;
-    }
-
-    public void setCellNumber(String cellNumber) {
-        this.cellNumber = cellNumber;
-    }
-
-    public String getTelNumber() {
-        return telNumber;
-    }
-
-    public void setTelNumber(String telNumber) {
-        this.telNumber = telNumber;
+    public void setContact(Contact contact) {
+        this.contact = contact;
     }
 
     public Date getDateAdded() {
@@ -195,8 +135,11 @@ public abstract class Person implements IPerson {
     public void setDateAdded(Date dateAdded) {
         this.dateAdded = dateAdded;
     }
-    
-    public void registerPerson() {
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="create Methods">
+    @Override
+    public void create() {
         //Person
         //Columns
         ArrayList<String> columns = new ArrayList<>();
@@ -206,16 +149,9 @@ public abstract class Person implements IPerson {
         columns.add("Title");
         columns.add("DateOfBirth");
         columns.add("Gender");
-        columns.add("Country");
-        if (!this.getProvince().isEmpty()) { columns.add("Province"); }
-        if (!this.getCity().isEmpty()) { columns.add("City"); }
-        if (!this.getStreet().isEmpty()) { columns.add("Street"); }
-        if (!this.getPostalCode().isEmpty()) { columns.add("PostalCode"); }
-        if (!this.getAddressLine().isEmpty()) { columns.add("AddressLine"); }
-        if (!this.getEmail().isEmpty()) { columns.add("Email"); }
-        if (!this.getCellNumber().isEmpty()) { columns.add("CellNumber"); }
-        if (!this.getTelNumber().isEmpty()) { columns.add("TelNumber"); }
-        
+        columns.add("AddressID");
+        columns.add("ContactID");
+
         //Values
         String values = "";
         values += "string#" + this.getIdNumber();
@@ -224,21 +160,14 @@ public abstract class Person implements IPerson {
         values += ";string#" + this.getTitle();
         values += ";string#" + new SimpleDateFormat("yyyy-MM-dd").format(this.getDateOfBirth());
         values += ";string#" + this.getGender();
-        values += ";string#" + this.getCountry();
-        if (!this.getProvince().isEmpty()) { values += ";string#" + this.getProvince(); }
-        if (!this.getCity().isEmpty()) { values += ";string#" + this.getCity(); }
-        if (!this.getStreet().isEmpty()) { values += ";string#" + this.getStreet(); }
-        if (!this.getPostalCode().isEmpty()) { values += ";string#" + this.getPostalCode(); }
-        if (!this.getAddressLine().isEmpty()) { values += ";string#" + this.getAddressLine(); }
-        if (!this.getEmail().isEmpty()) { values += ";string#" + this.getEmail(); }
-        if (!this.getCellNumber().isEmpty()) { values += ";string#" + this.getCellNumber(); }
-        if (!this.getTelNumber().isEmpty()) { values += ";string#" + this.getTelNumber(); }
-        
+        values += ";int#" + this.getAddress().getAddressID();
+        values += ";int#" + this.getContact().getContactID();
+
         //Execute
         DataHandler.createRecords(columns, "Person", Arrays.asList(values));
     }
-    
-    public static void registerPerson(Person person) {
+
+    public static void create(Person person) {
         //Person
         //Columns
         ArrayList<String> columns = new ArrayList<>();
@@ -248,173 +177,178 @@ public abstract class Person implements IPerson {
         columns.add("Title");
         columns.add("DateOfBirth");
         columns.add("Gender");
-        columns.add("Country");
-        if (!person.getProvince().isEmpty()) { columns.add("Province"); }
-        if (!person.getCity().isEmpty()) { columns.add("City"); }
-        if (!person.getStreet().isEmpty()) { columns.add("Street"); }
-        if (!person.getPostalCode().isEmpty()) { columns.add("PostalCode"); }
-        if (!person.getAddressLine().isEmpty()) { columns.add("AddressLine"); }
-        if (!person.getEmail().isEmpty()) { columns.add("Email"); }
-        if (!person.getCellNumber().isEmpty()) { columns.add("CellNumber"); }
-        if (!person.getTelNumber().isEmpty()) { columns.add("TelNumber"); }
-        
+        columns.add("AddressID");
+        columns.add("ContactID");
+
         //Values
         String values = "";
         values += "string#" + person.getIdNumber();
         values += ";string#" + person.getFirstName();
         values += ";string#" + person.getLastName();
         values += ";string#" + person.getTitle();
-        values += ";string#" + person.getDateOfBirth();
+        values += ";string#" + new SimpleDateFormat("yyyy-MM-dd").format(person.getDateOfBirth());
         values += ";string#" + person.getGender();
-        values += ";string#" + person.getCountry();
-        if (!person.getProvince().isEmpty()) { values += ";string#" + person.getProvince(); }
-        if (!person.getCity().isEmpty()) { values += ";string#" + person.getCity(); }
-        if (!person.getStreet().isEmpty()) { values += ";string#" + person.getStreet(); }
-        if (!person.getPostalCode().isEmpty()) { values += ";string#" + person.getPostalCode(); }
-        if (!person.getAddressLine().isEmpty()) { values += ";string#" + person.getAddressLine(); }
-        if (!person.getEmail().isEmpty()) { values += ";string#" + person.getEmail(); }
-        if (!person.getCellNumber().isEmpty()) { values += ";string#" + person.getCellNumber(); }
-        if (!person.getTelNumber().isEmpty()) { values += ";string#" + person.getTelNumber(); }
-        
+        values += ";int#" + person.getAddress().getAddressID();
+        values += ";int#" + person.getContact().getContactID();
+
         //Execute
         DataHandler.createRecords(columns, "Person", Arrays.asList(values));
     }
-    
-    public void updatePerson() {
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="update Methods">
+    @Override
+    public void update() {
         //Person
         //Columns
         ArrayList<String> columns = new ArrayList<>();
         columns.add("FirstName");
         columns.add("LastName");
         columns.add("Title");
-        columns.add("Country");
-        if (!this.getProvince().isEmpty()) { columns.add("Province"); }
-        if (!this.getCity().isEmpty()) { columns.add("City"); }
-        if (!this.getStreet().isEmpty()) { columns.add("Street"); }
-        if (!this.getPostalCode().isEmpty()) { columns.add("PostalCode"); }
-        if (!this.getAddressLine().isEmpty()) { columns.add("AddressLine"); }
-        if (!this.getEmail().isEmpty()) { columns.add("Email"); }
-        if (!this.getCellNumber().isEmpty()) { columns.add("CellNumber"); }
-        if (!this.getTelNumber().isEmpty()) { columns.add("TelNumber"); }
-        
+        columns.add("DateOfBirth");
+        columns.add("Gender");
+        columns.add("AddressID");
+        columns.add("ContactID");
+
         //Values
         ArrayList<String> values = new ArrayList<>();
         values.add("string;" + this.getFirstName());
         values.add("string;" + this.getLastName());
         values.add("string;" + this.getTitle());
-        values.add("string;" + this.getCountry());
-        if (!this.getProvince().isEmpty()) { values.add("string;" + this.getProvince()); }
-        if (!this.getCity().isEmpty()) { values.add("string;" + this.getCity()); }
-        if (!this.getStreet().isEmpty()) { values.add("string;" + this.getStreet()); }
-        if (!this.getPostalCode().isEmpty()) { values.add("string;" + this.getPostalCode()); }
-        if (!this.getAddressLine().isEmpty()) { values.add("string;" + this.getAddressLine()); }
-        if (!this.getEmail().isEmpty()) { values.add("string;" + this.getEmail()); }
-        if (!this.getCellNumber().isEmpty()) { values.add("string;" + this.getCellNumber()); }
-        if (!this.getTelNumber().isEmpty()) { values.add("string;" + this.getTelNumber()); }
-        
+        values.add("string;" + this.getDateOfBirth());
+        values.add("string;" + this.getGender());
+        values.add("int;" + this.getAddress().getAddressID());
+        values.add("int;" + this.getContact().getContactID());
+
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
         conditions.add("IDNumber='" + this.getIdNumber() + "'");
-        
+
         //Execute
         DataHandler.updateRecords("Person", columns, values, conditions);
     }
-    
-    public static void updatePerson(Person person) {
+
+    public static void update(Person person) {
         //Person
         //Columns
         ArrayList<String> columns = new ArrayList<>();
         columns.add("FirstName");
         columns.add("LastName");
         columns.add("Title");
-        columns.add("Country");
-        if (!person.getProvince().isEmpty()) { columns.add("Province"); }
-        if (!person.getCity().isEmpty()) { columns.add("City"); }
-        if (!person.getStreet().isEmpty()) { columns.add("Street"); }
-        if (!person.getPostalCode().isEmpty()) { columns.add("PostalCode"); }
-        if (!person.getAddressLine().isEmpty()) { columns.add("AddressLine"); }
-        if (!person.getEmail().isEmpty()) { columns.add("Email"); }
-        if (!person.getCellNumber().isEmpty()) { columns.add("CellNumber"); }
-        if (!person.getTelNumber().isEmpty()) { columns.add("TelNumber"); }
-        
+        columns.add("DateOfBirth");
+        columns.add("Gender");
+        columns.add("AddressID");
+        columns.add("ContactID");
+
         //Values
         ArrayList<String> values = new ArrayList<>();
         values.add("string;" + person.getFirstName());
         values.add("string;" + person.getLastName());
         values.add("string;" + person.getTitle());
-        values.add("string;" + person.getCountry());
-        if (!person.getProvince().isEmpty()) { values.add("string;" + person.getProvince()); }
-        if (!person.getCity().isEmpty()) { values.add("string;" + person.getCity()); }
-        if (!person.getStreet().isEmpty()) { values.add("string;" + person.getStreet()); }
-        if (!person.getPostalCode().isEmpty()) { values.add("string;" + person.getPostalCode()); }
-        if (!person.getAddressLine().isEmpty()) { values.add("string;" + person.getAddressLine()); }
-        if (!person.getEmail().isEmpty()) { values.add("string;" + person.getEmail()); }
-        if (!person.getCellNumber().isEmpty()) { values.add("string;" + person.getCellNumber()); }
-        if (!person.getTelNumber().isEmpty()) { values.add("string;" + person.getTelNumber()); }
-        
+        values.add("string;" + person.getDateOfBirth());
+        values.add("string;" + person.getGender());
+        values.add("int;" + person.getAddress().getAddressID());
+        values.add("int;" + person.getContact().getContactID());
+
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
         conditions.add("IDNumber='" + person.getIdNumber() + "'");
-        
+
         //Execute
         DataHandler.updateRecords("Person", columns, values, conditions);
     }
-    
-    public void deletePerson() {
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="delete Methods">
+    @Override
+    public void delete() {
         //Person
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
-        conditions.add("IDNumber='" + this.getIdNumber() + "'");
-        conditions.add("FirstName='" + this.getFirstName()+ "'");
-        conditions.add("LastName='" + this.getLastName()+ "'");
-        conditions.add("Title='" + this.getTitle()+ "'");
-        conditions.add("DateOfBirth='" + this.getDateOfBirth()+ "'");
-        conditions.add("Gender='" + this.getGender()+ "'");
-        conditions.add("Country='" + this.getCountry()+ "'");
-        if (!this.getProvince().isEmpty()) { conditions.add("Province='" + this.getProvince()+ "'"); }
-        if (!this.getCity().isEmpty()) { conditions.add("City='" + this.getCity()+ "'"); }
-        if (!this.getStreet().isEmpty()) { conditions.add("Street='" + this.getStreet()+ "'"); }
-        if (!this.getPostalCode().isEmpty()) { conditions.add("PostalCode='" + this.getPostalCode()+ "'"); }
-        if (!this.getAddressLine().isEmpty()) { conditions.add("AddressLine='" + this.getAddressLine()+ "'"); }
-        if (!this.getEmail().isEmpty()) { conditions.add("Email='" + this.getEmail()+ "'"); }
-        if (!this.getCellNumber().isEmpty()) { conditions.add("CellNumber='" + this.getCellNumber()+ "'"); }
-        if (!this.getTelNumber().isEmpty()) { conditions.add("TelNumber='" + this.getTelNumber() + "'"); }
-        
+        conditions.add("FirstName='" + this.getFirstName() + "'");
+        conditions.add("LastName='" + this.getLastName() + "'");
+        conditions.add("Title='" + this.getTitle() + "'");
+        conditions.add("DateOfBirth='" + this.getDateOfBirth() + "'");
+        conditions.add("Gender='" + this.getGender() + "'");
+        conditions.add("AddressID=" + this.getAddress().getAddressID());
+        conditions.add("ContactID=" + this.getContact().getContactID());
+
         //Execute
         DataHandler.deleteRecords("Person", conditions);
     }
-    
-    public static void deletePerson(Person person) {
+
+    public static void delete(Person person) {
         //Person       
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
-        conditions.add("IDNumber='" + person.getIdNumber() + "'");
-        conditions.add("FirstName='" + person.getFirstName()+ "'");
-        conditions.add("LastName='" + person.getLastName()+ "'");
-        conditions.add("Title='" + person.getTitle()+ "'");
-        conditions.add("DateOfBirth='" + person.getDateOfBirth()+ "'");
-        conditions.add("Gender='" + person.getGender()+ "'");
-        conditions.add("Country='" + person.getCountry()+ "'");
-        if (!person.getProvince().isEmpty()) { conditions.add("Province='" + person.getProvince()+ "'"); }
-        if (!person.getCity().isEmpty()) { conditions.add("City='" + person.getCity()+ "'"); }
-        if (!person.getStreet().isEmpty()) { conditions.add("Street='" + person.getStreet()+ "'"); }
-        if (!person.getPostalCode().isEmpty()) { conditions.add("PostalCode='" + person.getPostalCode()+ "'"); }
-        if (!person.getAddressLine().isEmpty()) { conditions.add("AddressLine='" + person.getAddressLine()+ "'"); }
-        if (!person.getEmail().isEmpty()) { conditions.add("Email='" + person.getEmail()+ "'"); }
-        if (!person.getCellNumber().isEmpty()) { conditions.add("CellNumber='" + person.getCellNumber()+ "'"); }
-        if (!person.getTelNumber().isEmpty()) { conditions.add("TelNumber='" + person.getTelNumber() + "'"); }
-        
+        conditions.add("FirstName='" + person.getFirstName() + "'");
+        conditions.add("LastName='" + person.getLastName() + "'");
+        conditions.add("Title='" + person.getTitle() + "'");
+        conditions.add("DateOfBirth='" + person.getDateOfBirth() + "'");
+        conditions.add("Gender='" + person.getGender() + "'");
+        conditions.add("AddressID=" + person.getAddress().getAddressID());
+        conditions.add("ContactID=" + person.getContact().getContactID());
+
         //Execute
         DataHandler.deleteRecords("Person", conditions);
     }
-    
-    public static void deletePerson(String idNumber) {
+
+    public static void delete(String idNumber) {
         //Person       
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
         conditions.add("IDNumber='" + idNumber + "'");
-        
+
         //Execute
         DataHandler.deleteRecords("Person", conditions);
     }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="synchronise Methods">
+    @Override
+    public boolean synchronise() {
+        //Campus
+        boolean foundInDatabase = false;
+
+        //Conditions
+        ArrayList<String> conditions = new ArrayList<>();
+        if (!this.getIdNumber().isEmpty()) {
+            conditions.add("IDNumber='" + this.getIdNumber() + "'");
+        } else {
+            conditions.add("FirstName='" + this.getFirstName() + "'");
+            conditions.add("LastName='" + this.getLastName() + "'");
+            conditions.add("Title='" + this.getTitle() + "'");
+            conditions.add("DateOfBirth='" + this.getDateOfBirth() + "'");
+            conditions.add("Gender='" + this.getGender() + "'");
+            conditions.add("AddressID=" + this.getAddress().getAddressID());
+            conditions.add("ContactID=" + this.getContact().getContactID());
+        }
+
+        //Retrieving new instance
+        List<Person> persons = DataHandler.<Person>readRecords(Person.class, Arrays.asList("IDNumber", "FirstName", "LastName", "Title", "DateOfBirth", "Gender", "AddressID", "ContactID", "DateAdded"), Arrays.asList(new DataTablesCollection("Person")), conditions);
+
+        //Synchronising
+        if (persons.size() == 1) {
+            foundInDatabase = true;
+            Person person = persons.get(0);
+
+            this.setIdNumber(person.getIdNumber());
+            this.setFirstName(person.getFirstName());
+            this.setLastName(person.getLastName());
+            this.setTitle(person.getTitle());
+            this.setDateOfBirth(person.getDateOfBirth());
+            this.setGender(person.getGender());
+            this.setAddress(person.getAddress());
+            this.setContact(person.getContact());
+            this.setDateAdded(person.getDateAdded());
+        }
+
+        return foundInDatabase;
+    }
+    //</editor-fold>
+
 }
+
+//NOTES:
+//MAKE SURE DATES USE 'new SimpleDateFormat("yyyy-MM-dd").format(date);' OR 'new SimpleDateFormat("yyyy-MM-dd").parse(date);'
+//MAKE SURE DATETIMES USE 'new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").format(dateTime);' OR 'new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(dateTime);'

@@ -5,21 +5,27 @@
  */
 package BLL;
 
-import BLL.Interfaces.ICategory;
+//<editor-fold defaultstate="collapsed" desc="imports">
+import BLL.Interfaces.DatabaseOperations;
 import DAL.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+//</editor-fold>
 
 /**
  *
  * @author Stephan
  */
-public class Category implements ICategory {
+public class Category implements DatabaseOperations {
+
+    //<editor-fold defaultstate="collapsed" desc="Fields">
     private int categoryID;
     private String name;
     private String description;
+    //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="Constructors">
     public Category(int categoryID, String name, String description) {
         this.categoryID = categoryID;
         this.name = name;
@@ -30,7 +36,9 @@ public class Category implements ICategory {
         this.categoryID = categoryID;
         this.name = name;
     }
+    //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="Properties">
     public int getCategoryID() {
         return categoryID;
     }
@@ -54,127 +62,195 @@ public class Category implements ICategory {
     public void setDescription(String description) {
         this.description = description;
     }
-    
-    public static List<Category> getCategories(){
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="read Methods">
+    public static List<Category> read() {
         return DataHandler.<Category>readRecords(Category.class, Arrays.asList("CategoryID", "CategoryName", "Description"), Arrays.asList(new DataTablesCollection("Category")), Arrays.asList());
     }
-    
-    public static Category getCategory(int categoryID){
+
+    public static Category read(int categoryID) {
         return DataHandler.<Category>readRecords(Category.class, Arrays.asList("CategoryID", "CategoryName", "Description"), Arrays.asList(new DataTablesCollection("Category")), Arrays.asList("CategoryID=" + categoryID)).get(0);
     }
-    
-    public static Category getCategory(String categoryName){
+
+    public static Category read(String categoryName) {
         return DataHandler.<Category>readRecords(Category.class, Arrays.asList("CategoryID", "CategoryName", "Description"), Arrays.asList(new DataTablesCollection("Category")), Arrays.asList("CategoryName='" + categoryName + "'")).get(0);
     }
-    
-    public void registerCategory() {
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="search Methods">
+    public static List<Category> search(String categoryName) {
+        return DataHandler.<Category>readRecords(Category.class, Arrays.asList("CategoryID", "CategoryName", "Description"), Arrays.asList(new DataTablesCollection("Category")), Arrays.asList("CategoryName LIKE '%" + categoryName + "%'"));
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="create Methods">
+    @Override
+    public void create() {
         //Category
         //Columns
         ArrayList<String> columns = new ArrayList<>();
-        columns.add("Name");
-        if (!this.getDescription().isEmpty()) { columns.add("Description"); }
-        
+        columns.add("CategoryName");
+        if (!this.getDescription().isEmpty()) {
+            columns.add("Description");
+        }
+
         //Values
         String values = "";
         values += "string#" + this.getName();
-        if (!this.getDescription().isEmpty()) { values += ";string#" + this.getDescription(); }
-        
+        if (!this.getDescription().isEmpty()) {
+            values += ";string#" + this.getDescription();
+        }
+
         //Execute
         DataHandler.createRecords(columns, "Category", Arrays.asList(values));
     }
-    
-    public static void registerCategory(Category category) {
+
+    public static void create(Category category) {
         //Category
         //Columns
         ArrayList<String> columns = new ArrayList<>();
-        columns.add("Name");
-        if (!category.getDescription().isEmpty()) { columns.add("Description"); }
-        
+        columns.add("CategoryName");
+        if (!category.getDescription().isEmpty()) {
+            columns.add("Description");
+        }
+
         //Values
         String values = "";
         values += "string#" + category.getName();
-        if (!category.getDescription().isEmpty()) { values += ";string#" + category.getDescription(); }
-        
+        if (!category.getDescription().isEmpty()) {
+            values += ";string#" + category.getDescription();
+        }
+
         //Execute
         DataHandler.createRecords(columns, "Category", Arrays.asList(values));
     }
-    
-    public void updateCategory() {
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="update Methods">
+    @Override
+    public void update() {
         //Category
         //Columns
         ArrayList<String> columns = new ArrayList<>();
         columns.add("CategoryName");
-        if (!this.getDescription().isEmpty()) { columns.add("Description"); }
-        
+        if (!this.getDescription().isEmpty()) {
+            columns.add("Description");
+        }
+
         //Values
         ArrayList<String> values = new ArrayList<>();
         values.add("string;" + this.getName());
-        if (!this.getDescription().isEmpty()) { values.add("string;" + this.getDescription()); }
-        
+        if (!this.getDescription().isEmpty()) {
+            values.add("string;" + this.getDescription());
+        }
+
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
         conditions.add("CategoryID=" + this.getCategoryID());
-        
+
         //Execute
         DataHandler.updateRecords("Category", columns, values, conditions);
     }
-    
-    public static void updateCategory(Category category) {
+
+    public static void update(Category category) {
         //Category
         //Columns
         ArrayList<String> columns = new ArrayList<>();
         columns.add("CategoryName");
-        if (!category.getDescription().isEmpty()) { columns.add("Description"); }
-        
+        if (!category.getDescription().isEmpty()) {
+            columns.add("Description");
+        }
+
         //Values
         ArrayList<String> values = new ArrayList<>();
         values.add("string;" + category.getName());
-        if (!category.getDescription().isEmpty()) { values.add("string;" + category.getDescription()); }
-        
+        if (!category.getDescription().isEmpty()) {
+            values.add("string;" + category.getDescription());
+        }
+
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
         conditions.add("CategoryID=" + category.getCategoryID());
-        
+
         //Execute
         DataHandler.updateRecords("Category", columns, values, conditions);
     }
-    
-    public void deleteCategory() {
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="delete Methods">
+    @Override
+    public void delete() {
         //Category
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
-        conditions.add("CategoryID=" + this.getCategoryID());
-        conditions.add("CategoryName='" + this.getName()+ "'");
-        if (!this.getDescription().isEmpty()) { conditions.add("Description='" + this.getDescription()+ "'"); }
-        
+        conditions.add("CategoryName='" + this.getName() + "'");
+        if (!this.getDescription().isEmpty()) {
+            conditions.add("Description='" + this.getDescription() + "'");
+        }
+
         //Execute
         DataHandler.deleteRecords("Category", conditions);
     }
-    
-    public static void deleteCategory(Category category) {
+
+    public static void delete(Category category) {
         //Category
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
-        conditions.add("CategoryID=" + category.getCategoryID());
-        conditions.add("CategoryName='" + category.getName()+ "'");
-        if (!category.getDescription().isEmpty()) { conditions.add("Description='" + category.getDescription()+ "'"); }
-        
+        conditions.add("CategoryName='" + category.getName() + "'");
+        if (!category.getDescription().isEmpty()) {
+            conditions.add("Description='" + category.getDescription() + "'");
+        }
+
         //Execute
         DataHandler.deleteRecords("Category", conditions);
     }
-    
-    public static void deleteCategory(int categoryID) {
+
+    public static void delete(int categoryID) {
         //Category
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
         conditions.add("CategoryID=" + categoryID);
-        
+
         //Execute
         DataHandler.deleteRecords("Category", conditions);
     }
-    
-     public static List<Category> getCategorySearch(String itemName){
-        return DataHandler.<Category>readRecords(Category.class, Arrays.asList("CategoryID", "CategoryName", "Description"), Arrays.asList(new DataTablesCollection("Category")), Arrays.asList("CategoryName LIKE '%" + itemName + "%'"));
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="synchronise Methods">
+    @Override
+    public boolean synchronise() {
+        //Campus
+        boolean foundInDatabase = false;
+
+        //Conditions
+        ArrayList<String> conditions = new ArrayList<>();
+        if (this.getCategoryID() > 0) {
+            conditions.add("CategoryID=" + this.getCategoryID());
+        } else {
+            conditions.add("CategoryName='" + this.getName() + "'");
+            if (!this.getDescription().isEmpty()) {
+                conditions.add("Description='" + this.getDescription() + "'");
+            }
+        }
+
+        //Retrieving new instance
+        List<Category> categories = DataHandler.<Category>readRecords(Category.class, Arrays.asList("CategoryID", "CategoryName", "Description"), Arrays.asList(new DataTablesCollection("Category")), conditions);
+
+        //Synchronising
+        if (categories.size() == 1) {
+            foundInDatabase = true;
+            Category category = categories.get(0);
+
+            this.setCategoryID(category.getCategoryID());
+            this.setName(category.getName());
+            if (!category.getDescription().isEmpty()) {
+                this.setDescription(category.getDescription());
+            }
+        }
+
+        return foundInDatabase;
     }
-    
+    //</editor-fold>
+
 }

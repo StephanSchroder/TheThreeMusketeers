@@ -14,15 +14,19 @@ import java.util.*;
  * @author Nico
  */
 public class DataHandler {
-    //TODO: Fix connection String
+    private static volatile DataHandler onlyInstance = new DataHandler();
     private static final String connectionString = "jdbc:mysql://localhost:3306/stationerymanagementdb?";
     
-    public DataHandler(){
+    private DataHandler(){
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         } catch (ClassNotFoundException cnfe) {
             System.out.println(cnfe.getMessage());
         }
+    }
+    
+    public static DataHandler getInstance() {
+        return onlyInstance;
     }
     
     //---INSERT QUERY:

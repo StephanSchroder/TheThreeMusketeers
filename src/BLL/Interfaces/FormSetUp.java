@@ -9,6 +9,6 @@ package BLL.Interfaces;
  *
  * @author ouPietMan
  */
-public interface IFormSetUp {
+public interface FormSetUp {
     abstract void setNavigation(boolean flag);
 }

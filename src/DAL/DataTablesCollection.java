@@ -9,6 +9,7 @@ package DAL;
  *
  * @author Nico
  */
+//TODO: Change joinType into enum
 public class DataTablesCollection {
     private String mainTable;
     private String joiningTable;

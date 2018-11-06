@@ -5,7 +5,7 @@
  */
 package BLL.Sorting.User;
 
-import BLL.User;
+import BLL.Address;
 import java.util.Comparator;
 
 /**
@@ -15,8 +15,8 @@ import java.util.Comparator;
 public class AddressLineComparator implements Comparator {
     @Override
     public int compare(Object o1, Object o2) {
-        User user1 = (User) o1;
-        User user2 = (User) o2;
-        return user1.getAddressLine().toLowerCase().compareTo(user2.getAddressLine().toLowerCase());
+        Address address1 = (Address) o1;
+        Address address2 = (Address) o2;
+        return address1.getAddressLine().toLowerCase().compareTo(address2.getAddressLine().toLowerCase());
     }
 }

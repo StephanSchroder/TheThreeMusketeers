@@ -5,51 +5,77 @@
  */
 package BLL;
 
-import BLL.Interfaces.IStock;
+//<editor-fold defaultstate="collapsed" desc="imports">
+import BLL.Interfaces.DatabaseOperations;
 import DAL.*;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+//</editor-fold>
 
 /**
  *
  * @author Stephan
  */
+public class Stock implements DatabaseOperations {
 
-public class Stock implements IStock {
+    //<editor-fold defaultstate="collapsed" desc="Fields">
     private int stockID;
-    private String itemName;
+    private Category category;
     private String model;
     private double price;
-    private Category category;
+    private String itemName;
     private Date dateAdded;
     private int stockCount;
     private String status;
-    
-    public Stock(int stockID, String itemName, String model, double price, Category category,  Date dateAdded, int stockCount, String status) {
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="Constructors">
+    public Stock(int stockID, Category category, String model, double price, String itemName, Date dateAdded, int stockCount, String status) {
         this.stockID = stockID;
         this.category = category;
-        this.itemName = itemName;
         this.model = model;
         this.price = price;
-        this.dateAdded = dateAdded;
-        this.stockCount = stockCount;
-        this.status = status;
-    }
-    
-    public Stock(int stockID, String itemName, String model, double price, int categoryId,  Date dateAdded, int stockCount, String status) {
-        this.stockID = stockID;
-        this.category = Category.getCategory(categoryId);
         this.itemName = itemName;
-        this.model = model;
-        this.price = price;
         this.dateAdded = dateAdded;
         this.stockCount = stockCount;
         this.status = status;
     }
 
-  
+    public Stock(int stockID, int categoryId, String model, double price, String itemName, Date dateAdded, int stockCount, String status) {
+        this.stockID = stockID;
+        this.category = Category.read(categoryId);
+        this.model = model;
+        this.price = price;
+        this.itemName = itemName;
+        this.dateAdded = dateAdded;
+        this.stockCount = stockCount;
+        this.status = status;
+    }
+
+    public Stock(int stockID, Category category, double price, String itemName, Date dateAdded, int stockCount, String status) {
+        this.stockID = stockID;
+        this.category = category;
+        this.price = price;
+        this.itemName = itemName;
+        this.dateAdded = dateAdded;
+        this.stockCount = stockCount;
+        this.status = status;
+    }
+
+    public Stock(int stockID, int categoryId, double price, String itemName, Date dateAdded, int stockCount, String status) {
+        this.stockID = stockID;
+        this.category = Category.read(categoryId);
+        this.price = price;
+        this.itemName = itemName;
+        this.dateAdded = dateAdded;
+        this.stockCount = stockCount;
+        this.status = status;
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="Properties">
     public int getStockID() {
         return stockID;
     }
@@ -113,193 +139,274 @@ public class Stock implements IStock {
     public void setStatus(String status) {
         this.status = status;
     }
-    
-    public static List<Stock> getStocksSearch(String itemName){
-        return DataHandler.<Stock>readRecords(Stock.class, Arrays.asList("StockID", "CategoryID", "Model", "Price", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("ItemName LIKE '%" + itemName + "%'"));
-    }
-    
-    public static List<Stock> getStocks(){
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="read Methods">
+    public static List<Stock> read() {
         return DataHandler.<Stock>readRecords(Stock.class, Arrays.asList("StockID", "CategoryID", "Model", "Price", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList());
     }
-    
-    public static List<Stock> getStocksByCategory(String categoryID){
-        return DataHandler.<Stock>readRecords(Stock.class, Arrays.asList("StockID", "CategoryID", "Model", "Price", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("CategoryID=" + categoryID));
-    }
-    
-    public static List<Stock> getStocksByModel(String model){
-        return DataHandler.<Stock>readRecords(Stock.class, Arrays.asList("StockID", "CategoryID", "Model", "Price", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("Model='" + model + "'"));
-    }
-    
-    public static List<Stock> getStocksByStatus(String status){
-        return DataHandler.<Stock>readRecords(Stock.class, Arrays.asList("StockID", "CategoryID", "Model", "Price", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("Status='" + status + "'"));
-    }
-    
-    public static Stock getStock(int stockID){
+
+    public static Stock read(int stockID) {
         return DataHandler.<Stock>readRecords(Stock.class, Arrays.asList("StockID", "CategoryID", "Model", "Price", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("StockID=" + stockID)).get(0);
     }
-    
-    public void registerStock() {
-        //Stock
-        //Columns
-        ArrayList<String> columns = new ArrayList<>();
-        columns.add("CategoryID");
-        if (!this.getModel().isEmpty()) { columns.add("Model"); }
-        columns.add("Price");
-        columns.add("ItemName");
-        columns.add("StockCount");
-        if (!this.getStatus().isEmpty()) { columns.add("Status"); }
-        
-        //Values
-        String values = "";
-        values += "int#" + this.getCategory().getCategoryID();
-        if (!this.getModel().isEmpty()) { values += ";string#" + this.getModel(); }
-        values += ";int#" + this.getPrice();
-        values += ";string#" + this.getItemName();
-        values += ";int#" + this.getStockCount();
-        if (!this.getStatus().isEmpty()) { values += ";string#" + this.getStatus(); }
-        
-        //Execute
-        DataHandler.createRecords(columns, "Stock", Arrays.asList(values));
+
+    public static List<Stock> readByCategory(String categoryID) {
+        return DataHandler.<Stock>readRecords(Stock.class, Arrays.asList("StockID", "CategoryID", "Model", "Price", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("CategoryID=" + categoryID));
     }
-    
-    public static void registerStock(Stock stock) {
-        //Stock
-        //Columns
-        ArrayList<String> columns = new ArrayList<>();
-        columns.add("CategoryID");
-        if (!stock.getModel().isEmpty()) { columns.add("Model"); }
-        columns.add("Price");
-        columns.add("ItemName");
-        columns.add("StockCount");
-        if (!stock.getStatus().isEmpty()) { columns.add("Status"); }
-        
-        //Values
-        String values = "";
-        values += "int#" + stock.getCategory().getCategoryID();
-        if (!stock.getModel().isEmpty()) { values += ";string#" + stock.getModel(); }
-        values += ";int#" + stock.getPrice();
-        values += ";string#" + stock.getItemName();
-        values += ";int#" + stock.getStockCount();
-        if (!stock.getStatus().isEmpty()) { values += ";string#" + stock.getStatus(); }
-        
-        //Execute
-        DataHandler.createRecords(columns, "Stock", Arrays.asList(values));
+
+    public static List<Stock> readByModel(String model) {
+        return DataHandler.<Stock>readRecords(Stock.class, Arrays.asList("StockID", "CategoryID", "Model", "Price", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("Model='" + model + "'"));
     }
-    
-    public void updateStock() {
+
+    public static List<Stock> readByItemName(String itemName) {
+        return DataHandler.<Stock>readRecords(Stock.class, Arrays.asList("StockID", "CategoryID", "Model", "Price", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("ItemName='" + itemName + "'"));
+    }
+
+    public static List<Stock> readByStatus(String status) {
+        return DataHandler.<Stock>readRecords(Stock.class, Arrays.asList("StockID", "CategoryID", "Model", "Price", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("Status='" + status + "'"));
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="search Methods">
+    public static List<Stock> search(String itemName) {
+        return DataHandler.<Stock>readRecords(Stock.class, Arrays.asList("StockID", "CategoryID", "Model", "Price", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList("ItemName LIKE '%" + itemName + "%'"));
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="create Methods">
+    @Override
+    public void create() {
         //Stock
         //Columns
         ArrayList<String> columns = new ArrayList<>();
         columns.add("CategoryID");
-        columns.add("Model");
+        if (!this.getModel().isEmpty()) {
+            columns.add("Model");
+        }
         columns.add("Price");
         columns.add("ItemName");
         columns.add("StockCount");
         columns.add("Status");
-        
+
+        //Values
+        String values = "";
+        values += "int#" + this.getCategory().getCategoryID();
+        if (!this.getModel().isEmpty()) {
+            values += ";string#" + this.getModel();
+        }
+        values += ";int#" + this.getPrice();
+        values += ";string#" + this.getItemName();
+        values += ";int#" + this.getStockCount();
+        values += ";string#" + this.getStatus();
+
+        //Execute
+        DataHandler.createRecords(columns, "Stock", Arrays.asList(values));
+    }
+
+    public static void create(Stock stock) {
+        //Stock
+        //Columns
+        ArrayList<String> columns = new ArrayList<>();
+        columns.add("CategoryID");
+        if (!stock.getModel().isEmpty()) {
+            columns.add("Model");
+        }
+        columns.add("Price");
+        columns.add("ItemName");
+        columns.add("StockCount");
+        columns.add("Status");
+
+        //Values
+        String values = "";
+        values += "int#" + stock.getCategory().getCategoryID();
+        if (!stock.getModel().isEmpty()) {
+            values += ";string#" + stock.getModel();
+        }
+        values += ";int#" + stock.getPrice();
+        values += ";string#" + stock.getItemName();
+        values += ";int#" + stock.getStockCount();
+        values += ";string#" + stock.getStatus();
+
+        //Execute
+        DataHandler.createRecords(columns, "Stock", Arrays.asList(values));
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="update Methods">
+    @Override
+    public void update() {
+        //Stock
+        //Columns
+        ArrayList<String> columns = new ArrayList<>();
+        columns.add("CategoryID");
+        if (!this.getModel().isEmpty()) {
+            columns.add("Model");
+        }
+        columns.add("Price");
+        columns.add("ItemName");
+        columns.add("StockCount");
+        columns.add("Status");
+
         //Values
         ArrayList<String> values = new ArrayList<>();
         values.add("int;" + this.getCategory().getCategoryID());
-        values.add("string;" + this.getModel());
+        if (!this.getModel().isEmpty()) {
+            values.add("string;" + this.getModel());
+        }
         values.add("int;" + this.getPrice());
         values.add("string;" + this.getItemName());
         values.add("int;" + this.getStockCount());
         values.add("string;" + this.getStatus());
-        
+
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
         conditions.add("StockID=" + this.getStockID());
-        
+
         //Execute
         DataHandler.updateRecords("Stock", columns, values, conditions);
     }
-    
-    public static void updateStock(Stock stock) {
+
+    public static void update(Stock stock) {
         //Stock
         //Columns
         ArrayList<String> columns = new ArrayList<>();
         columns.add("CategoryID");
-        columns.add("Model");
+        if (!stock.getModel().isEmpty()) {
+            columns.add("Model");
+        }
         columns.add("Price");
         columns.add("ItemName");
         columns.add("StockCount");
         columns.add("Status");
-        
+
         //Values
         ArrayList<String> values = new ArrayList<>();
         values.add("int;" + stock.getCategory().getCategoryID());
-        values.add("string;" + stock.getModel());
+        if (!stock.getModel().isEmpty()) {
+            values.add("string;" + stock.getModel());
+        }
         values.add("int;" + stock.getPrice());
         values.add("string;" + stock.getItemName());
         values.add("int;" + stock.getStockCount());
         values.add("string;" + stock.getStatus());
-        
+
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
         conditions.add("StockID=" + stock.getStockID());
-        
+
         //Execute
         DataHandler.updateRecords("Stock", columns, values, conditions);
     }
-    
-    public void deleteStock() {
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="delete Methods">
+    @Override
+    public void delete() {
         //Stock
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
-        conditions.add("StockID=" + this.getStockID());
         conditions.add("CategoryID=" + this.getCategory().getCategoryID());
-        conditions.add("Model='" + this.getModel()+ "'");
-        conditions.add("Price='" + this.getPrice()+ "'");
-        conditions.add("ItemName='" + this.getItemName()+ "'");
+        if (!this.getModel().isEmpty()) {
+            conditions.add("Model='" + this.getModel() + "'");
+        }
+        conditions.add("Price=" + this.getPrice());
+        conditions.add("ItemName='" + this.getItemName() + "'");
         conditions.add("StockCount=" + this.getStockCount());
-        conditions.add("Status='" + this.getStatus()+ "'");
-        
-        //Execute
-        DataHandler.deleteRecords("Stock", conditions);
-    }
-    
-    public static void deleteStock(Stock stock) {
-        //Stock
-        //Conditions
-        ArrayList<String> conditions = new ArrayList<>();
-        conditions.add("StockID=" + stock.getStockID());
-        conditions.add("CategoryID=" + stock.getCategory().getCategoryID());
-        conditions.add("Model='" + stock.getModel()+ "'");
-        conditions.add("Price='" + stock.getModel()+ "'");
-        conditions.add("ItemName='" + stock.getItemName()+ "'");
-        conditions.add("StockCount=" + stock.getStockCount());
-        conditions.add("Status='" + stock.getStatus()+ "'");
-        
-        //Execute
-        DataHandler.deleteRecords("Stock", conditions);
-    }
-    
-    public static void deleteStock(int stockID) {
-        //Stock
-        //Conditions
-        ArrayList<String> conditions = new ArrayList<>();
-        conditions.add("StockID=" + stockID);
-        
+        conditions.add("Status='" + this.getStatus() + "'");
+
         //Execute
         DataHandler.deleteRecords("Stock", conditions);
     }
 
-    @Override
-    public String toString() {
-        return "Stock{" + "stockID=" + stockID + ", itemName=" + itemName + ", model=" + model + ", price=" + price + ", category=" + category + ", dateAdded=" + dateAdded + ", stockCount=" + stockCount + ", status=" + status + '}';
+    public static void delete(Stock stock) {
+        //Stock
+        //Conditions
+        ArrayList<String> conditions = new ArrayList<>();
+        conditions.add("CategoryID=" + stock.getCategory().getCategoryID());
+        if (!stock.getModel().isEmpty()) {
+            conditions.add("Model='" + stock.getModel() + "'");
+        }
+        conditions.add("Price=" + stock.getPrice());
+        conditions.add("ItemName='" + stock.getItemName() + "'");
+        conditions.add("StockCount=" + stock.getStockCount());
+        conditions.add("Status='" + stock.getStatus() + "'");
+
+        //Execute
+        DataHandler.deleteRecords("Stock", conditions);
     }
-    
-     public static void generateReport(String filename, List<Stock> data )
-    {
+
+    public static void delete(int stockID) {
+        //Stock
+        //Conditions
+        ArrayList<String> conditions = new ArrayList<>();
+        conditions.add("StockID=" + stockID);
+
+        //Execute
+        DataHandler.deleteRecords("Stock", conditions);
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="synchronise Methods">
+    @Override
+    public boolean synchronise() {
+        //Campus
+        boolean foundInDatabase = false;
+
+        //Conditions
+        ArrayList<String> conditions = new ArrayList<>();
+        if (this.getStockID() > 0) {
+            conditions.add("StockID=" + this.getStockID());
+        } else {
+            conditions.add("CategoryID=" + this.getCategory().getCategoryID());
+            if (!this.getModel().isEmpty()) {
+                conditions.add("Model='" + this.getModel() + "'");
+            }
+            conditions.add("Price=" + this.getPrice());
+            conditions.add("ItemName='" + this.getItemName() + "'");
+            conditions.add("StockCount=" + this.getStockCount());
+            conditions.add("Status='" + this.getStatus() + "'");
+        }
+
+        //Retrieving new instance
+        List<Stock> stocks = DataHandler.<Stock>readRecords(Stock.class, Arrays.asList("StockID", "CategoryID", "Model", "Price", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), conditions);
+
+        //Synchronising
+        if (stocks.size() == 1) {
+            foundInDatabase = true;
+            Stock stock = stocks.get(0);
+
+            this.setStockID(stock.getStockID());
+            this.setCategory(stock.getCategory());
+            if (!stock.getModel().isEmpty()) {
+                this.setModel(stock.getModel());
+            }
+            this.setPrice(stock.getPrice());
+            this.setItemName(stock.getItemName());
+            this.setDateAdded(stock.getDateAdded());
+            this.setStockCount(stock.getStockCount());
+            this.setStatus(stock.getStatus());
+        }
+
+        return foundInDatabase;
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="other Methods">
+    public static void generateReport(String filename, List<Stock> data) {
         Reports report = new Reports();
         ArrayList<Stock> localData = (ArrayList<Stock>) data;
-        
-        report.createReport( (filename), localData);
+
+        report.createReport((filename), localData);
     }
-    
-    public String getReportFormat()
-    {
-        String format =String.format("Product Name: %1$5s  Quantity:  %2$5d", this.getItemName(),this.getStockCount());
+
+    public String getReportFormat() {
+        String format = String.format("Product Name: %1$5s  Quantity:  %2$5d", this.getItemName(), this.getStockCount());
         return format;
     }
+    //</editor-fold>
+
 }
+
+//NOTES:
+//MAKE SURE DATES USE 'new SimpleDateFormat("yyyy-MM-dd").format(date);' OR 'new SimpleDateFormat("yyyy-MM-dd").parse(date);'
+//MAKE SURE DATETIMES USE 'new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").format(dateTime);' OR 'new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(dateTime);'

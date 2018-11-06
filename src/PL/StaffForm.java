@@ -22,14 +22,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
-import BLL.Interfaces.IFormSetUp;
 import BLL.Sorting.User.*;
+import BLL.Interfaces.FormSetUp;
 
 /**
  *
  * @author Stephan
  */
-public class StaffForm extends javax.swing.JFrame implements IFormSetUp{
+public class StaffForm extends javax.swing.JFrame implements FormSetUp{
 
     private User currentUser = null;
     private List<User> baseUsers = new ArrayList<>();
@@ -64,7 +64,7 @@ public class StaffForm extends javax.swing.JFrame implements IFormSetUp{
             }
 
             currentUser = u;
-            lblLoggedInUser.setText("Logged in as: " + u.getFullname() + ((u.getAccountType().equals(User.accountTypeState.ADMIN)) ? " with Admin privileges" : ""));
+            lblLoggedInUser.setText("Logged in as: " + u.getFullName() + ((u.getAccountType().equals(User.accountTypeState.ADMIN)) ? " with Admin privileges" : ""));
             
             resetBaseUsers();
             initModel();

@@ -9,8 +9,9 @@ package BLL.Interfaces;
  *
  * @author Nico
  */
-public interface ICategory {
-    public void registerCategory();
-    public void updateCategory();
-    public void deleteCategory();
+public interface DatabaseOperations {
+    public void create();
+    public void update();
+    public void delete();
+    public boolean synchronise();
 }

@@ -27,13 +27,13 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import BLL.Interfaces.IFormSetUp;
+import BLL.Interfaces.FormSetUp;
 
 /**
  *
  * @author Stephan
  */
-public class StockForm extends javax.swing.JFrame implements IFormSetUp {
+public class StockForm extends javax.swing.JFrame implements FormSetUp {
 
     /**
      * Creates new form StockForm
@@ -45,7 +45,7 @@ public class StockForm extends javax.swing.JFrame implements IFormSetUp {
 
     public StockForm() {
         initComponents();
-        stocks = Stock.getStocks();
+        stocks = Stock.read();
         initModel();
 
         currentUser = null;
@@ -65,11 +65,11 @@ public class StockForm extends javax.swing.JFrame implements IFormSetUp {
                 currentUser = null;
                 throw new UserDoesNotExistException(this);
             }
-            stocks = Stock.getStocks();
+            stocks = Stock.read();
             initModel();
 
             currentUser = u;
-            lbLoginedInUser.setText("Logged in as: " + u.getFullname() + ((u.getAccountType().equals(User.accountTypeState.ADMIN)) ? " with Admin privileges" : ""));
+            lbLoginedInUser.setText("Logged in as: " + u.getFullName() + ((u.getAccountType().equals(User.accountTypeState.ADMIN)) ? " with Admin privileges" : ""));
 
             cmbChangeListener changeListener = new cmbChangeListener();
             cmbSorting.addItemListener(changeListener);
@@ -208,7 +208,7 @@ public class StockForm extends javax.swing.JFrame implements IFormSetUp {
     }
 
     public void populateCategoryCMB() {
-        List<Category> listCategories = Category.getCategories();
+        List<Category> listCategories = Category.read();
         List<String> cmbData = new ArrayList<String>();
         for (Category item : listCategories) {
             cmbData.add(item.getName());
@@ -730,7 +730,7 @@ public class StockForm extends javax.swing.JFrame implements IFormSetUp {
                     tblData.getValueAt(i, 1).toString(),
                     tblData.getValueAt(i, 2).toString(),
                     Double.valueOf(tblData.getValueAt(i, 3).toString()),
-                    Category.getCategory(tblData.getValueAt(i, 4).toString()),
+                    Category.read(tblData.getValueAt(i, 4).toString()),
                     new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(tblData.getValueAt(i, 5).toString()),
                     Integer.valueOf(tblData.getValueAt(i, 6).toString()),
                     tblData.getValueAt(i, 7).toString());
@@ -809,8 +809,8 @@ public class StockForm extends javax.swing.JFrame implements IFormSetUp {
             if (check == true) {
                 int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to add this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 0) {
-                    new Stock(0, itemName,model,price,Category.getCategory(category), new Date(), stockCount, status).registerStock();
-                    stocks = Stock.getStocks();
+                    new Stock(0, itemName,model,price,Category.read(category), new Date(), stockCount, status).registerStock();
+                    stocks = Stock.read();
                     setModel();
                 }
                 clearAllFields();
@@ -858,7 +858,7 @@ public class StockForm extends javax.swing.JFrame implements IFormSetUp {
             
 
             boolean check = true;
-            if (Common.checkInput(stockID) != 2 || Stock.getStock(Integer.parseInt(stockID)) == null) {
+            if (Common.checkInput(stockID) != 2 || Stock.read(Integer.parseInt(stockID)) == null) {
                 check = false;
                 txtStockID.setBackground(Color.red);
                 txtStockID.setToolTipText("Invalid Stock ID");
@@ -897,8 +897,8 @@ public class StockForm extends javax.swing.JFrame implements IFormSetUp {
             if (check == true) {
                 int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to update this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 0) {
-                    new Stock(Integer.valueOf(stockID), itemName, model, price, Category.getCategory(category), new Date(), stockCount, status).updateStock();
-                    stocks = Stock.getStocks();
+                    new Stock(Integer.valueOf(stockID), itemName, model, price, Category.read(category), new Date(), stockCount, status).updateStock();
+                    stocks = Stock.read();
                     setModel();
                 }
                 clearAllFields();
@@ -964,7 +964,7 @@ public class StockForm extends javax.swing.JFrame implements IFormSetUp {
     }//GEN-LAST:event_txtSearchFocusLost
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        stocks = Stock.getStocksSearch(txtSearch.getText());
+        stocks = Stock.search(txtSearch.getText());
         setModel();
     }//GEN-LAST:event_btnSearchActionPerformed
 
@@ -1015,14 +1015,14 @@ public class StockForm extends javax.swing.JFrame implements IFormSetUp {
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // Delete Record
-        if (Common.checkInput(txtStockID.getText()) == 2 && Stock.getStock(Integer.parseInt(txtStockID.getText())) != null) {
+        if (Common.checkInput(txtStockID.getText()) == 2 && Stock.read(Integer.parseInt(txtStockID.getText())) != null) {
             int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to Delete this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
             if (option == 0) {
                 String category = (cmbCategory.getItemCount() > 0) ? cmbCategory.getSelectedItem().toString() : "";
-                new Stock(Integer.valueOf(txtStockID.getText()), txtItemName.getText(), txtModel.getText(),Double.parseDouble(txtPrice.getText()),Category.getCategory(category),
+                new Stock(Integer.valueOf(txtStockID.getText()), txtItemName.getText(), txtModel.getText(),Double.parseDouble(txtPrice.getText()),Category.read(category),
                         (Date) dobPicker.getDate(),(int) spStockCount.getValue(), txtStatus.getText()).deleteStock();
                 clearAllFields();
-                stocks = Stock.getStocks();
+                stocks = Stock.read();
                 setModel();
             }
         } else {
