@@ -7,9 +7,6 @@ package PL;
 
 import BLL.Category;
 import BLL.Common;
-import BLL.Sorting.SortCategory;
-
-import BLL.Sorting.SortStockQuantity;
 import BLL.Stock;
 import BLL.User;
 import BLL.Exceptions.UserDoesNotExistException;
@@ -98,7 +95,6 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
         clearAllFields();
         
     }
-
     public void setModel() {
         DefaultTableModel model = (DefaultTableModel) tblData.getModel();
         model.setNumRows(0);
@@ -721,16 +717,18 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    
     private void tblDataMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDataMouseClicked
         int i = tblData.getSelectedRow();
 
         Stock selectedStock;
         try {
             selectedStock = new Stock(Integer.valueOf(tblData.getValueAt(i, 0).toString()),
-                    tblData.getValueAt(i, 1).toString(),
+                    Category.read(tblData.getValueAt(i, 1).toString()),
                     tblData.getValueAt(i, 2).toString(),
                     Double.valueOf(tblData.getValueAt(i, 3).toString()),
-                    Category.read(tblData.getValueAt(i, 4).toString()),
+                    tblData.getValueAt(i, 4).toString(),
                     new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(tblData.getValueAt(i, 5).toString()),
                     Integer.valueOf(tblData.getValueAt(i, 6).toString()),
                     tblData.getValueAt(i, 7).toString());
@@ -805,11 +803,11 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
                 txtModel.setToolTipText("Only alphabetical characters. Max 20 characters");
             }
             
-
+//enum tableColum {StockID, CategoryName, Model, Price, ItemName, DateAdded, StockCount, Status};
             if (check == true) {
                 int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to add this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 0) {
-                    new Stock(0, itemName,model,price,Category.read(category), new Date(), stockCount, status).registerStock();
+                    Stock.create(new Stock(0, Category.read(category),model,price,itemName,new Date(), stockCount, status));
                     stocks = Stock.read();
                     setModel();
                 }
@@ -897,7 +895,7 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
             if (check == true) {
                 int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to update this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 0) {
-                    new Stock(Integer.valueOf(stockID), itemName, model, price, Category.read(category), new Date(), stockCount, status).updateStock();
+                    Stock.update(new Stock(Integer.valueOf(stockID), Category.read(category),model, price ,itemName,  new Date(), stockCount, status));
                     stocks = Stock.read();
                     setModel();
                 }

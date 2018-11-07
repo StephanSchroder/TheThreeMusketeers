@@ -272,14 +272,14 @@ public class LoginForm extends javax.swing.JFrame {
                 case 4:
                     JOptionPane.showMessageDialog(this, "User Login", "Successfull Login", 1);
                     //User Login
-                    new StockForm(User.GetUserByLoginDetails(username, password)).setVisible(true);
+                    new StockForm(User.readByLoginDetails(username, password)).setVisible(true);
                     this.dispose();
                     break;
                 case 5:
                     if (!cbAdminCheck.isSelected()) {
                         JOptionPane.showMessageDialog(this, "User Login", "Successfull Login", 1);
                         //User Login
-                        User u = User.GetUserByLoginDetails(username, password);
+                        User u = User.readByLoginDetails(username, password);
                         u.setAccountType(User.accountTypeState.ADMIN_NORMAL);
                         new StockForm(u).setVisible(true);
                         this.dispose();
@@ -290,9 +290,9 @@ public class LoginForm extends javax.swing.JFrame {
                         String options[] = {"Staff Page", "Stocks Page"};
                         int option = JOptionPane.showOptionDialog(this, "Welcome " + username + " ! Please select an option to open", "Succesfull Login.", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
                         if (option == 0) {
-                            new StaffForm(User.GetUserByLoginDetails(username, password)).setVisible(true);
+                            new StaffForm(User.readByLoginDetails(username, password)).setVisible(true);
                         } else if (option == 1) {
-                            new StockForm(User.GetUserByLoginDetails(username, password)).setVisible(true);
+                            new StockForm(User.readByLoginDetails(username, password)).setVisible(true);
                         }
                     }
                     this.dispose();
