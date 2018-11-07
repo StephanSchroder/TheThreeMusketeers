@@ -8,13 +8,9 @@ package PL;
 import BLL.Category;
 import BLL.Common;
 import BLL.Exceptions.UserDoesNotExistException;
-import BLL.Stock;
 import BLL.User;
 import java.awt.Color;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -36,7 +32,7 @@ public class CategoryForm extends javax.swing.JFrame {
      */
     public CategoryForm() {
         initComponents();
-        categories =Category.getCategories();
+        categories =Category.read();
         initModel();
 
         currentUser = null;
@@ -52,11 +48,11 @@ public class CategoryForm extends javax.swing.JFrame {
                 currentUser = null;
                 throw new UserDoesNotExistException(this);
             }
-            categories = Category.getCategories();
+            categories = Category.read();
             initModel();
 
             currentUser = u;
-            lbLoginedInUser.setText("Logged in as: " + u.getFullname() + ((u.getAccountType().equals(User.accountTypeState.ADMIN)) ? " with Admin privileges" : ""));
+            lbLoginedInUser.setText("Logged in as: " + u.getFullName() + ((u.getAccountType().equals(User.accountTypeState.ADMIN)) ? " with Admin privileges" : ""));
 
             
         } catch (UserDoesNotExistException ex) {
@@ -551,7 +547,7 @@ public class CategoryForm extends javax.swing.JFrame {
     }//GEN-LAST:event_txtSearchFocusLost
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        categories = Category.getCategorySearch(txtSearch.getText());
+        categories = Category.search(txtSearch.getText());
         setModel();
     }//GEN-LAST:event_btnSearchActionPerformed
 
@@ -605,8 +601,8 @@ public class CategoryForm extends javax.swing.JFrame {
             if (check == true) {
                 int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to add this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 0) {
-                    new Category(0, itemName,description).registerCategory();
-                    categories = Category.getCategories();
+                    Category.create(new Category(0, itemName,description));
+                    categories = Category.read();
                     setModel();
                 }
                 clearAllFields();
@@ -647,7 +643,7 @@ public class CategoryForm extends javax.swing.JFrame {
             itemName = txtDescription.getText();
 
             boolean check = true;
-            if (Common.checkInput(catID) != 2 || Category.getCategory(Integer.parseInt(catID)) == null) {
+            if (Common.checkInput(catID) != 2 || Category.read(Integer.parseInt(catID)) == null) {
                 check = false;
                 txtCategoryID.setBackground(Color.red);
                 txtCategoryID.setToolTipText("Invalid Stock ID");
@@ -662,8 +658,8 @@ public class CategoryForm extends javax.swing.JFrame {
             if (check == true) {
                 int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to update this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 0) {
-                    new Category(Integer.valueOf(catID), itemName,description).updateCategory();
-                    categories = Category.getCategories();
+                    Category.update(new Category(Integer.valueOf(catID), itemName,description));
+                    categories = Category.read();
                     setModel();
                 }
                 clearAllFields();
@@ -686,12 +682,12 @@ public class CategoryForm extends javax.swing.JFrame {
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // Delete Record
-        if (Common.checkInput(txtCategoryID.getText()) == 2 && Category.getCategory(Integer.parseInt(txtCategoryID.getText())) != null) {
+        if (Common.checkInput(txtCategoryID.getText()) == 2 && Category.read(Integer.parseInt(txtCategoryID.getText())) != null) {
             int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to Delete this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
             if (option == 0) {
-                new Category(Integer.valueOf(txtCategoryID.getText()),txtCategoryName.getText(),txtDescription.getText() ).deleteCategory();
+                Category.delete(new Category(Integer.valueOf(txtCategoryID.getText()),txtCategoryName.getText(),txtDescription.getText() ));
                 clearAllFields();
-                categories = Category.getCategories();
+                categories = Category.read();
                 setModel();
             }
         } else {

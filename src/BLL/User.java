@@ -95,6 +95,8 @@ public class User extends Person implements Serializable, DatabaseOperations {
     public void setAccountType(accountTypeState accountType) {
         this.accountType = accountType;
     }
+    
+    
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="read Methods">

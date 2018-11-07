@@ -6,7 +6,6 @@
 package PL;
 
 import BLL.Common;
-import BLL.EasterEggDaemon;
 import BLL.User;
 import java.awt.Color;
 import javax.swing.JOptionPane;

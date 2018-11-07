@@ -803,7 +803,6 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
                 txtModel.setToolTipText("Only alphabetical characters. Max 20 characters");
             }
             
-//enum tableColum {StockID, CategoryName, Model, Price, ItemName, DateAdded, StockCount, Status};
             if (check == true) {
                 int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to add this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 0) {
@@ -1017,8 +1016,10 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
             int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to Delete this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
             if (option == 0) {
                 String category = (cmbCategory.getItemCount() > 0) ? cmbCategory.getSelectedItem().toString() : "";
-                new Stock(Integer.valueOf(txtStockID.getText()), txtItemName.getText(), txtModel.getText(),Double.parseDouble(txtPrice.getText()),Category.read(category),
-                        (Date) dobPicker.getDate(),(int) spStockCount.getValue(), txtStatus.getText()).deleteStock();
+                //enum tableColum {StockID, CategoryName, Model, Price, ItemName, DateAdded, StockCount, Status};
+
+                Stock.delete(new Stock(Integer.valueOf(txtStockID.getText()), Category.read(category),txtModel.getText(),Double.parseDouble(txtPrice.getText()),txtItemName.getText(), 
+                        (Date) dobPicker.getDate(),(int) spStockCount.getValue(), txtStatus.getText()));
                 clearAllFields();
                 stocks = Stock.read();
                 setModel();
