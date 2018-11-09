@@ -38,13 +38,13 @@ public class Reports<T> {
      Document doc = new Document( PageSize.A4,50,50,50,50);
         
         try {
-            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+            DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd");
         Date date = new Date();
-            PdfWriter writer= PdfWriter.getInstance(doc, new FileOutputStream(dateFormat.format(date)+ fileName+".pdf"));
+            PdfWriter writer= PdfWriter.getInstance(doc, new FileOutputStream(dateFormat.format(date)+" "+ fileName+".pdf"));
             doc.open();
             String anchorString=String .format("Created on: "+dateFormat.format(date));
             Anchor anchor= new Anchor(anchorString);
-            Paragraph title = new Paragraph("Report "+ dateFormat.format(date)+ " on Stocks",FontFactory.getFont(FontFactory.TIMES_ROMAN,20,Font.BOLD,new CMYKColor(0,102,153,255)));
+            Paragraph title = new Paragraph("Report "+ dateFormat.format(date)+ " on Stocks",FontFactory.getFont(FontFactory.TIMES_ROMAN,26,Font.BOLD,new CMYKColor(100,100,0,0)));
             Chapter chapter = new Chapter(title,0);
             chapter.setNumberDepth(0);
             chapter.add(anchor);
@@ -58,9 +58,10 @@ public class Reports<T> {
                     reportList.add(listItem);
  
                 }
-                chapter.add(reportList);
+              
             
             }
+            chapter.add(reportList);
             doc.add(chapter);
             doc.close();
             writer.close();
