@@ -400,7 +400,7 @@ public class Stock implements DatabaseOperations {
     }
 
     public String getReportFormat() {
-        String format = String.format("Product Name: %1$5s  Quantity:  %2$5d", this.getItemName(), this.getStockCount());
+        String format = String.format("||Product Name:|| %1$5s  ||Quantity:||  %2$5d", this.getItemName(), this.getStockCount());
         return format;
     }
     //</editor-fold>
