@@ -8,11 +8,13 @@ package BLL;
 //<editor-fold defaultstate="collapsed" desc="imports">
 import BLL.Interfaces.DatabaseOperations;
 import DAL.*;
+import java.text.ParseException;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 //</editor-fold>
 
 /**
@@ -100,6 +102,10 @@ public abstract class Person implements DatabaseOperations {
         return dateOfBirth;
     }
 
+    public String getDateOfBirthString() {
+        return new SimpleDateFormat("yyyy-MM-dd").format(dateOfBirth);
+    }
+
     public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
@@ -132,11 +138,79 @@ public abstract class Person implements DatabaseOperations {
         return dateAdded;
     }
 
+    public String getDateAddedString() {
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(dateAdded);
+    }
+
     public void setDateAdded(Date dateAdded) {
         this.dateAdded = dateAdded;
     }
     //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="Override Methods">
+    @Override    
+    public String toString() {
+        return "Person{" + "idNumber=" + idNumber + ", firstName=" + firstName + ", lastName=" + lastName + ", title=" + title + ", dateOfBirth=" + this.getDateOfBirthString() + ", gender=" + gender + ", address=" + address + ", contact=" + contact + ", dateAdded=" + this.getDateAddedString()+ '}';
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 29 * hash + Objects.hashCode(this.idNumber);
+        hash = 29 * hash + Objects.hashCode(this.firstName);
+        hash = 29 * hash + Objects.hashCode(this.lastName);
+        hash = 29 * hash + Objects.hashCode(this.title);
+        hash = 29 * hash + Objects.hashCode(this.dateOfBirth);
+        hash = 29 * hash + Objects.hashCode(this.gender);
+        hash = 29 * hash + Objects.hashCode(this.address);
+        hash = 29 * hash + Objects.hashCode(this.contact);
+        hash = 29 * hash + Objects.hashCode(this.dateAdded);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Person other = (Person) obj;
+        if (!Objects.equals(this.idNumber, other.idNumber)) {
+            return false;
+        }
+        if (!Objects.equals(this.firstName, other.firstName)) {
+            return false;
+        }
+        if (!Objects.equals(this.lastName, other.lastName)) {
+            return false;
+        }
+        if (!Objects.equals(this.title, other.title)) {
+            return false;
+        }
+        if (!Objects.equals(this.gender, other.gender)) {
+            return false;
+        }
+        if (!Objects.equals(this.dateOfBirth, other.dateOfBirth)) {
+            return false;
+        }
+        if (!Objects.equals(this.address, other.address)) {
+            return false;
+        }
+        if (!Objects.equals(this.contact, other.contact)) {
+            return false;
+        }
+        if (!Objects.equals(this.dateAdded, other.dateAdded)) {
+            return false;
+        }
+        return true;
+    }
+    //</editor-fold>
+    
     //<editor-fold defaultstate="collapsed" desc="create Methods">
     @Override
     public void create() {
@@ -158,7 +232,7 @@ public abstract class Person implements DatabaseOperations {
         values += ";string#" + this.getFirstName();
         values += ";string#" + this.getLastName();
         values += ";string#" + this.getTitle();
-        values += ";string#" + new SimpleDateFormat("yyyy-MM-dd").format(this.getDateOfBirth());
+        values += ";string#" + this.getDateOfBirthString();
         values += ";string#" + this.getGender();
         values += ";int#" + this.getAddress().getAddressID();
         values += ";int#" + this.getContact().getContactID();
@@ -186,7 +260,7 @@ public abstract class Person implements DatabaseOperations {
         values += ";string#" + person.getFirstName();
         values += ";string#" + person.getLastName();
         values += ";string#" + person.getTitle();
-        values += ";string#" + new SimpleDateFormat("yyyy-MM-dd").format(person.getDateOfBirth());
+        values += ";string#" + person.getDateOfBirthString();
         values += ";string#" + person.getGender();
         values += ";int#" + person.getAddress().getAddressID();
         values += ";int#" + person.getContact().getContactID();
@@ -205,7 +279,6 @@ public abstract class Person implements DatabaseOperations {
         columns.add("FirstName");
         columns.add("LastName");
         columns.add("Title");
-        columns.add("DateOfBirth");
         columns.add("Gender");
         columns.add("AddressID");
         columns.add("ContactID");
@@ -215,7 +288,6 @@ public abstract class Person implements DatabaseOperations {
         values.add("string;" + this.getFirstName());
         values.add("string;" + this.getLastName());
         values.add("string;" + this.getTitle());
-        values.add("string;" + this.getDateOfBirth());
         values.add("string;" + this.getGender());
         values.add("int;" + this.getAddress().getAddressID());
         values.add("int;" + this.getContact().getContactID());
@@ -235,7 +307,6 @@ public abstract class Person implements DatabaseOperations {
         columns.add("FirstName");
         columns.add("LastName");
         columns.add("Title");
-        columns.add("DateOfBirth");
         columns.add("Gender");
         columns.add("AddressID");
         columns.add("ContactID");
@@ -245,7 +316,6 @@ public abstract class Person implements DatabaseOperations {
         values.add("string;" + person.getFirstName());
         values.add("string;" + person.getLastName());
         values.add("string;" + person.getTitle());
-        values.add("string;" + person.getDateOfBirth());
         values.add("string;" + person.getGender());
         values.add("int;" + person.getAddress().getAddressID());
         values.add("int;" + person.getContact().getContactID());
@@ -268,7 +338,7 @@ public abstract class Person implements DatabaseOperations {
         conditions.add("FirstName='" + this.getFirstName() + "'");
         conditions.add("LastName='" + this.getLastName() + "'");
         conditions.add("Title='" + this.getTitle() + "'");
-        conditions.add("DateOfBirth='" + this.getDateOfBirth() + "'");
+        conditions.add("DateOfBirth='" + this.getDateOfBirthString() + "'");
         conditions.add("Gender='" + this.getGender() + "'");
         conditions.add("AddressID=" + this.getAddress().getAddressID());
         conditions.add("ContactID=" + this.getContact().getContactID());
@@ -284,7 +354,7 @@ public abstract class Person implements DatabaseOperations {
         conditions.add("FirstName='" + person.getFirstName() + "'");
         conditions.add("LastName='" + person.getLastName() + "'");
         conditions.add("Title='" + person.getTitle() + "'");
-        conditions.add("DateOfBirth='" + person.getDateOfBirth() + "'");
+        conditions.add("DateOfBirth='" + person.getDateOfBirthString() + "'");
         conditions.add("Gender='" + person.getGender() + "'");
         conditions.add("AddressID=" + person.getAddress().getAddressID());
         conditions.add("ContactID=" + person.getContact().getContactID());
@@ -307,7 +377,7 @@ public abstract class Person implements DatabaseOperations {
     //<editor-fold defaultstate="collapsed" desc="synchronise Methods">
     @Override
     public boolean synchronise() {
-        //Campus
+        //Person
         boolean foundInDatabase = false;
 
         //Conditions
@@ -318,7 +388,7 @@ public abstract class Person implements DatabaseOperations {
             conditions.add("FirstName='" + this.getFirstName() + "'");
             conditions.add("LastName='" + this.getLastName() + "'");
             conditions.add("Title='" + this.getTitle() + "'");
-            conditions.add("DateOfBirth='" + this.getDateOfBirth() + "'");
+            conditions.add("DateOfBirth='" + this.getDateOfBirthString() + "'");
             conditions.add("Gender='" + this.getGender() + "'");
             conditions.add("AddressID=" + this.getAddress().getAddressID());
             conditions.add("ContactID=" + this.getContact().getContactID());

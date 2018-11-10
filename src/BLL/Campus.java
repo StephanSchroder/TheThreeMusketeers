@@ -12,6 +12,7 @@ import DAL.DataTablesCollection;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 //</editor-fold>
 
 /**
@@ -102,6 +103,54 @@ public class Campus implements DatabaseOperations {
     }
     //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="Override Methods">
+    @Override
+    public String toString() {
+        return "Campus{" + "campusID=" + campusID + ", name=" + name + ", location=" + location + ", contactDetails=" + contactDetails + ", notes=" + notes + '}';
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 89 * hash + this.campusID;
+        hash = 89 * hash + Objects.hashCode(this.name);
+        hash = 89 * hash + Objects.hashCode(this.location);
+        hash = 89 * hash + Objects.hashCode(this.contactDetails);
+        hash = 89 * hash + Objects.hashCode(this.notes);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Campus other = (Campus) obj;
+        if (this.campusID != other.campusID) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.notes, other.notes)) {
+            return false;
+        }
+        if (!Objects.equals(this.location, other.location)) {
+            return false;
+        }
+        if (!Objects.equals(this.contactDetails, other.contactDetails)) {
+            return false;
+        }
+        return true;
+    }
+    //</editor-fold>
+    
     //<editor-fold defaultstate="collapsed" desc="read Methods">
     public static List<Campus> read() {
         return DataHandler.<Campus>readRecords(Campus.class, Arrays.asList("CampusID", "Name", "Location", "ContactDetails", "Notes"), Arrays.asList(new DataTablesCollection("Campus")), Arrays.asList());

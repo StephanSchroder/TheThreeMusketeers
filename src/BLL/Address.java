@@ -12,6 +12,7 @@ import DAL.DataTablesCollection;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 //</editor-fold>
 
 /**
@@ -115,6 +116,66 @@ public class Address implements DatabaseOperations {
     }
     //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="Override Methods">
+    @Override
+    public String toString() {
+        return "Address{" + "addressID=" + addressID + ", country=" + country + ", province=" + province + ", city=" + city + ", street=" + street + ", postalCode=" + postalCode + ", addressLine=" + addressLine + ", notes=" + notes + '}';
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 23 * hash + this.addressID;
+        hash = 23 * hash + Objects.hashCode(this.country);
+        hash = 23 * hash + Objects.hashCode(this.province);
+        hash = 23 * hash + Objects.hashCode(this.city);
+        hash = 23 * hash + Objects.hashCode(this.street);
+        hash = 23 * hash + Objects.hashCode(this.postalCode);
+        hash = 23 * hash + Objects.hashCode(this.addressLine);
+        hash = 23 * hash + Objects.hashCode(this.notes);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Address other = (Address) obj;
+        if (this.addressID != other.addressID) {
+            return false;
+        }
+        if (!Objects.equals(this.country, other.country)) {
+            return false;
+        }
+        if (!Objects.equals(this.province, other.province)) {
+            return false;
+        }
+        if (!Objects.equals(this.city, other.city)) {
+            return false;
+        }
+        if (!Objects.equals(this.street, other.street)) {
+            return false;
+        }
+        if (!Objects.equals(this.postalCode, other.postalCode)) {
+            return false;
+        }
+        if (!Objects.equals(this.addressLine, other.addressLine)) {
+            return false;
+        }
+        if (!Objects.equals(this.notes, other.notes)) {
+            return false;
+        }
+        return true;
+    }
+    //</editor-fold>
+    
     //<editor-fold defaultstate="collapsed" desc="read Methods">
     public static List<Address> read() {
         return DataHandler.<Address>readRecords(Address.class, Arrays.asList("AddressID", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Notes"), Arrays.asList(new DataTablesCollection("Address")), Arrays.asList());

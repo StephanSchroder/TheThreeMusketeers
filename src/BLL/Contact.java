@@ -12,6 +12,7 @@ import DAL.DataTablesCollection;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 //</editor-fold>
 
 /**
@@ -86,6 +87,54 @@ public class Contact implements DatabaseOperations {
     }
     //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="Override Methods">
+    @Override
+    public String toString() {
+        return "Contact{" + "contactID=" + contactID + ", email=" + email + ", cellNumber=" + cellNumber + ", telNumber=" + telNumber + ", notes=" + notes + '}';
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 61 * hash + this.contactID;
+        hash = 61 * hash + Objects.hashCode(this.email);
+        hash = 61 * hash + Objects.hashCode(this.cellNumber);
+        hash = 61 * hash + Objects.hashCode(this.telNumber);
+        hash = 61 * hash + Objects.hashCode(this.notes);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Contact other = (Contact) obj;
+        if (this.contactID != other.contactID) {
+            return false;
+        }
+        if (!Objects.equals(this.email, other.email)) {
+            return false;
+        }
+        if (!Objects.equals(this.cellNumber, other.cellNumber)) {
+            return false;
+        }
+        if (!Objects.equals(this.telNumber, other.telNumber)) {
+            return false;
+        }
+        if (!Objects.equals(this.notes, other.notes)) {
+            return false;
+        }
+        return true;
+    }
+    //</editor-fold>
+    
     //<editor-fold defaultstate="collapsed" desc="read Methods">
     public static List<Contact> read() {
         return DataHandler.<Contact>readRecords(Contact.class, Arrays.asList("ContactID", "Email", "CellNumber", "TelNumber", "Notes"), Arrays.asList(new DataTablesCollection("Contact")), Arrays.asList());

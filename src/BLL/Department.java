@@ -12,6 +12,7 @@ import DAL.DataTablesCollection;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 //</editor-fold>
 
 /**
@@ -66,6 +67,46 @@ public class Department implements DatabaseOperations {
     }
     //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="Override Methods">
+    @Override
+    public String toString() {
+        return "Department{" + "departmentID=" + departmentID + ", name=" + name + ", campus=" + campus + '}';
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 89 * hash + this.departmentID;
+        hash = 89 * hash + Objects.hashCode(this.name);
+        hash = 89 * hash + Objects.hashCode(this.campus);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Department other = (Department) obj;
+        if (this.departmentID != other.departmentID) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.campus, other.campus)) {
+            return false;
+        }
+        return true;
+    }
+    //</editor-fold>
+    
     //<editor-fold defaultstate="collapsed" desc="read Methods">
     public static List<Department> read() {
         return DataHandler.<Department>readRecords(Department.class, Arrays.asList("DepartmentID", "Name", "CampusID"), Arrays.asList(new DataTablesCollection("Department")), Arrays.asList());

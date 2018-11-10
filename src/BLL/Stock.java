@@ -8,10 +8,15 @@ package BLL;
 //<editor-fold defaultstate="collapsed" desc="imports">
 import BLL.Interfaces.DatabaseOperations;
 import DAL.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 //</editor-fold>
 
 /**
@@ -120,6 +125,10 @@ public class Stock implements DatabaseOperations {
         return dateAdded;
     }
 
+    public String getDateAddedString() {
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(dateAdded);
+    }
+
     public void setDateAdded(Date dateAdded) {
         this.dateAdded = dateAdded;
     }
@@ -141,6 +150,66 @@ public class Stock implements DatabaseOperations {
     }
     //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="Override Methods">
+    @Override
+    public String toString() {
+        return "Stock{" + "stockID=" + stockID + ", category=" + category + ", model=" + model + ", price=" + price + ", itemName=" + itemName + ", dateAdded=" + this.getDateAddedString() + ", stockCount=" + stockCount + ", status=" + status + '}';
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 61 * hash + this.stockID;
+        hash = 61 * hash + Objects.hashCode(this.category);
+        hash = 61 * hash + Objects.hashCode(this.model);
+        hash = 61 * hash + (int) (Double.doubleToLongBits(this.price) ^ (Double.doubleToLongBits(this.price) >>> 32));
+        hash = 61 * hash + Objects.hashCode(this.itemName);
+        hash = 61 * hash + Objects.hashCode(this.dateAdded);
+        hash = 61 * hash + this.stockCount;
+        hash = 61 * hash + Objects.hashCode(this.status);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Stock other = (Stock) obj;
+        if (this.stockID != other.stockID) {
+            return false;
+        }
+        if (Double.doubleToLongBits(this.price) != Double.doubleToLongBits(other.price)) {
+            return false;
+        }
+        if (this.stockCount != other.stockCount) {
+            return false;
+        }
+        if (!Objects.equals(this.model, other.model)) {
+            return false;
+        }
+        if (!Objects.equals(this.itemName, other.itemName)) {
+            return false;
+        }
+        if (!Objects.equals(this.status, other.status)) {
+            return false;
+        }
+        if (!Objects.equals(this.category, other.category)) {
+            return false;
+        }
+        if (!Objects.equals(this.dateAdded, other.dateAdded)) {
+            return false;
+        }
+        return true;
+    }
+    //</editor-fold>
+    
     //<editor-fold defaultstate="collapsed" desc="read Methods">
     public static List<Stock> read() {
         return DataHandler.<Stock>readRecords(Stock.class, Arrays.asList("StockID", "CategoryID", "Model", "Price", "ItemName", "DateAdded", "StockCount", "Status"), Arrays.asList(new DataTablesCollection("Stock")), Arrays.asList());

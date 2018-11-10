@@ -8,6 +8,7 @@ package BLL;
 //<editor-fold defaultstate="collapsed" desc="imports">
 import BLL.Interfaces.DatabaseOperations;
 import DAL.*;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.*;
 //</editor-fold>
@@ -74,12 +75,20 @@ public class Order implements DatabaseOperations {
         return orderDate;
     }
 
+    public String getOrderDateString() {
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(orderDate);
+    }
+
     public void setOrderDate(Date orderDate) {
         this.orderDate = orderDate;
     }
 
     public Date getReceiveDate() {
         return receiveDate;
+    }
+
+    public String getReceiveDateString() {
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(receiveDate);
     }
 
     public void setReceiveDate(Date receiveDate) {
@@ -111,6 +120,58 @@ public class Order implements DatabaseOperations {
     }
     //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="Override Methods">
+    @Override
+    public String toString() {
+        return "Order{" + "orderID=" + orderID + ", orderDate=" + this.getOrderDateString() + ", receiveDate=" + this.getReceiveDateString() + ", status=" + status + ", placedByEmployee=" + placedByEmployee + ", approvedByEmployee=" + approvedByEmployee + '}';
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 67 * hash + this.orderID;
+        hash = 67 * hash + Objects.hashCode(this.orderDate);
+        hash = 67 * hash + Objects.hashCode(this.receiveDate);
+        hash = 67 * hash + Objects.hashCode(this.status);
+        hash = 67 * hash + Objects.hashCode(this.placedByEmployee);
+        hash = 67 * hash + Objects.hashCode(this.approvedByEmployee);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Order other = (Order) obj;
+        if (this.orderID != other.orderID) {
+            return false;
+        }
+        if (!Objects.equals(this.status, other.status)) {
+            return false;
+        }
+        if (!Objects.equals(this.orderDate, other.orderDate)) {
+            return false;
+        }
+        if (!Objects.equals(this.receiveDate, other.receiveDate)) {
+            return false;
+        }
+        if (!Objects.equals(this.placedByEmployee, other.placedByEmployee)) {
+            return false;
+        }
+        if (!Objects.equals(this.approvedByEmployee, other.approvedByEmployee)) {
+            return false;
+        }
+        return true;
+    }
+    //</editor-fold>
+    
     //<editor-fold defaultstate="collapsed" desc="read Methods">
     public static List<Order> read() {
         return DataHandler.<Order>readRecords(Order.class, Arrays.asList("OrderID", "OrderDate", "ReceiveDate", "Status", "PlacedByEmployee", "ApprovedByEmployee"), Arrays.asList(new DataTablesCollection("Order")), Arrays.asList());
@@ -195,7 +256,7 @@ public class Order implements DatabaseOperations {
         //Values
         ArrayList<String> values = new ArrayList<>();
         if (this.getReceiveDate() != null) {
-            values.add("string;" + this.getReceiveDate());
+            values.add("string;" + this.getReceiveDateString());
         }
         if (!this.getStatus().isEmpty()) {
             values.add("string;" + this.getStatus());
@@ -229,7 +290,7 @@ public class Order implements DatabaseOperations {
         //Values
         ArrayList<String> values = new ArrayList<>();
         if (order.getReceiveDate() != null) {
-            values.add("string;" + order.getReceiveDate());
+            values.add("string;" + order.getReceiveDateString());
         }
         if (!order.getStatus().isEmpty()) {
             values.add("string;" + order.getStatus());
@@ -254,9 +315,9 @@ public class Order implements DatabaseOperations {
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
         conditions.add("OrderID=" + this.getOrderID());
-        conditions.add("OrderDate='" + this.getOrderDate() + "'");
+        conditions.add("OrderDate='" + this.getOrderDateString() + "'");
         if (this.getReceiveDate() != null) {
-            conditions.add("ReceiveDate='" + this.getReceiveDate() + "'");
+            conditions.add("ReceiveDate='" + this.getReceiveDateString() + "'");
         }
         if (!this.getStatus().isEmpty()) {
             conditions.add("Status='" + this.getStatus() + "'");
@@ -277,9 +338,9 @@ public class Order implements DatabaseOperations {
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
         conditions.add("OrderID=" + order.getOrderID());
-        conditions.add("OrderDate='" + order.getOrderDate() + "'");
+        conditions.add("OrderDate='" + order.getOrderDateString() + "'");
         if (order.getReceiveDate() != null) {
-            conditions.add("ReceiveDate='" + order.getReceiveDate() + "'");
+            conditions.add("ReceiveDate='" + order.getReceiveDateString() + "'");
         }
         if (!order.getStatus().isEmpty()) {
             conditions.add("Status='" + order.getStatus() + "'");
@@ -317,9 +378,9 @@ public class Order implements DatabaseOperations {
         if (this.getOrderID() > 0) {
             conditions.add("OrderID=" + this.getOrderID());
         } else {
-            conditions.add("OrderDate='" + this.getOrderDate() + "'");
+            conditions.add("OrderDate='" + this.getOrderDateString() + "'");
             if (this.getReceiveDate() != null) {
-                conditions.add("ReceiveDate='" + this.getReceiveDate() + "'");
+                conditions.add("ReceiveDate='" + this.getReceiveDateString() + "'");
             }
             conditions.add("Status='" + this.getStatus() + "'");
             conditions.add("PlacedByEmployee=" + this.getPlacedByEmployee().getUserID());

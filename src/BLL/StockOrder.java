@@ -11,6 +11,7 @@ import DAL.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 //</editor-fold>
 
 /**
@@ -65,7 +66,51 @@ public class StockOrder implements DatabaseOperations {
     }
     //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="Override Methods">
+    @Override
+    public String toString() {
+        return "StockOrder{" + "stock=" + stock + ", order=" + order + ", quantity=" + quantity + '}';
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 11 * hash + Objects.hashCode(this.stock);
+        hash = 11 * hash + Objects.hashCode(this.order);
+        hash = 11 * hash + this.quantity;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final StockOrder other = (StockOrder) obj;
+        if (this.quantity != other.quantity) {
+            return false;
+        }
+        if (!Objects.equals(this.stock, other.stock)) {
+            return false;
+        }
+        if (!Objects.equals(this.order, other.order)) {
+            return false;
+        }
+        return true;
+    }
+    //</editor-fold>
+    
     //<editor-fold defaultstate="collapsed" desc="read Methods">
+    public static List<StockOrder> read() {
+        return DataHandler.<StockOrder>readRecords(StockOrder.class, Arrays.asList("StockID", "OrderID", "Quantity"), Arrays.asList(new DataTablesCollection("StockOrder")), Arrays.asList());
+    }
+    
     public static List<StockOrder> read(int orderID) {
         return DataHandler.<StockOrder>readRecords(StockOrder.class, Arrays.asList("StockID", "OrderID", "Quantity"), Arrays.asList(new DataTablesCollection("StockOrder")), Arrays.asList("OrderID=" + orderID));
     }
