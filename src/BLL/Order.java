@@ -37,6 +37,14 @@ public class Order implements DatabaseOperations {
         this.placedByEmployee = placedByEmployee;
         this.approvedByEmployee = approvedByEmployee;
     }
+    
+    public Order(int orderID, Date orderDate, Date receiveDate, String status, User placedByEmployee) {
+        this.orderID = orderID;
+        this.orderDate = orderDate;
+        this.receiveDate = receiveDate;
+        this.status = status;
+        this.placedByEmployee = placedByEmployee;
+    }
 
     public Order(int orderID, Date orderDate, String status, User placedByEmployee) {
         this.orderID = orderID;
@@ -52,6 +60,14 @@ public class Order implements DatabaseOperations {
         this.status = status;
         this.placedByEmployee = User.read(placedByEmployee);
         this.approvedByEmployee = User.read(approvedByEmployee);
+    }
+
+    public Order(int orderID, Date orderDate, Date receiveDate, String status, int placedByEmployee) {
+        this.orderID = orderID;
+        this.orderDate = orderDate;
+        this.receiveDate = receiveDate;
+        this.status = status;
+        this.placedByEmployee = User.read(placedByEmployee);
     }
 
     public Order(int orderID, Date orderDate, String status, int placedByEmployee) {
@@ -88,7 +104,12 @@ public class Order implements DatabaseOperations {
     }
 
     public String getReceiveDateString() {
-        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(receiveDate);
+        if (receiveDate == null) {
+            return null;
+        }
+        else {
+            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(receiveDate);
+        }
     }
 
     public void setReceiveDate(Date receiveDate) {
