@@ -308,8 +308,6 @@ public class LoginForm extends javax.swing.JFrame {
                     Common.spam(1);
                 }
 
-            }else{
-                
             }
             switch (result) {
                 case 0:
@@ -336,18 +334,20 @@ public class LoginForm extends javax.swing.JFrame {
                         //User Login
                         User u = User.readByLoginDetails(username, password);
                         u.setAccountType(User.accountTypeState.ADMIN_NORMAL);
-                        new StockForm(u).setVisible(true);
+                        new OrderForm(u).setVisible(true);
                         this.dispose();
 
                     } else {
                         JOptionPane.showMessageDialog(this, "Admin Login", "Successfull Login", 1);
                         //Admin Login
-                        String options[] = {"Staff Page", "Stocks Page"};
+                        String options[] = {"Staff Page", "Stocks Page", "Order Page"};
                         int option = JOptionPane.showOptionDialog(this, "Welcome " + username + " ! Please select an option to open", "Succesfull Login.", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
                         if (option == 0) {
                             new StaffForm(User.readByLoginDetails(username, password)).setVisible(true);
                         } else if (option == 1) {
                             new StockForm(User.readByLoginDetails(username, password)).setVisible(true);
+                        } else if (option == 2) {
+                            new OrderForm(User.readByLoginDetails(username, password)).setVisible(true);
                         }
                     }
                     this.dispose();

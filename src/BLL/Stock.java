@@ -472,6 +472,21 @@ public class Stock implements DatabaseOperations {
         String format = String.format("||Product Name:|| %1$5s  ||Quantity:||  %2$5d", this.getItemName(), this.getStockCount());
         return format;
     }
+    
+    public void reduceStockCount(int quantityToReduceBy) {
+        if (getStockCount() <= quantityToReduceBy) {
+            setStockCount(0);
+        }
+        else {
+            setStockCount(getStockCount() - quantityToReduceBy);
+        }
+        update();
+    }
+    
+    public void addStockCount(int quantityToAdd) {
+        setStockCount(getStockCount() + quantityToAdd);
+        update();
+    }
     //</editor-fold>
 
 }
