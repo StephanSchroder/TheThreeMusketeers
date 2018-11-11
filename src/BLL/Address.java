@@ -43,6 +43,15 @@ public class Address implements DatabaseOperations {
         this.addressLine = addressLine;
         this.notes = notes;
     }
+    
+    public Address( String country, String province, String city, String street, String postalCode, String addressLine) {
+        this.country = country;
+        this.province = province;
+        this.city = city;
+        this.street = street;
+        this.postalCode = postalCode;
+        this.addressLine = addressLine;
+    }
 
     public Address(int addressID, String country) {
         this.addressID = addressID;

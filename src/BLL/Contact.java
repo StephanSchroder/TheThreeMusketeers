@@ -37,6 +37,12 @@ public class Contact implements DatabaseOperations {
         this.telNumber = telNumber;
         this.notes = notes;
     }
+    
+    public Contact(String email, String cellNumber, String telNumber) {
+        this.email = email;
+        this.cellNumber = cellNumber;
+        this.telNumber = telNumber;
+    }
 
     public Contact(int contactID, String email, String cellNumber) {
         this.contactID = contactID;

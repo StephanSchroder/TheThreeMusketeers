@@ -5,6 +5,7 @@
  */
 package PL;
 
+import BLL.Address;
 import BLL.User;
 import java.awt.Color;
 import java.text.SimpleDateFormat;
@@ -12,6 +13,8 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import BLL.Common;
+import BLL.Contact;
+import BLL.Department;
 import BLL.Exceptions.UserDoesNotExistException;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -145,16 +148,18 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                 rowData[7] = users.get(i).getAccountType();
                 rowData[8] = new SimpleDateFormat("yyyy-MM-dd").format(users.get(i).getDateOfBirth());
                 rowData[9] = users.get(i).getGender();
-                rowData[10] = users.get(i).getCountry();
-                rowData[11] = users.get(i).getProvince();
-                rowData[12] = users.get(i).getCity();
-                rowData[13] = users.get(i).getStreet();
-                rowData[14] = users.get(i).getPostalCode();
-                rowData[15] = users.get(i).getAddressLine();
-                rowData[16] = users.get(i).getEmail();
-                rowData[17] = users.get(i).getCellNumber();
-                rowData[18] = users.get(i).getTelNumber();
+                rowData[10] = users.get(i).getAddress().getCountry();
+                rowData[11] = users.get(i).getAddress().getProvince();
+                rowData[12] = users.get(i).getAddress().getCity();
+                rowData[13] = users.get(i).getAddress().getStreet();
+                rowData[14] = users.get(i).getAddress().getPostalCode();
+                rowData[15] = users.get(i).getAddress().getAddressLine();
+                rowData[16] = users.get(i).getContact().getEmail();
+                rowData[17] = users.get(i).getContact().getCellNumber();
+                rowData[18] = users.get(i).getContact().getTelNumber();
                 model.addRow(rowData);
+                
+                
             }
         }
         else {
@@ -1331,8 +1336,30 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
 
         User selectedUser = null;
         try {
+            //new Address(rowData[10],11,12,13,14,15)
+            Address address = new Address(
+            (tblData.getValueAt(i, 10) != null) ? tblData.getValueAt(i, 10).toString() : "",
+            (tblData.getValueAt(i, 11) != null) ? tblData.getValueAt(i, 11).toString() : "",
+            (tblData.getValueAt(i, 12) != null) ? tblData.getValueAt(i, 12).toString() : "",
+            (tblData.getValueAt(i, 13) != null) ? tblData.getValueAt(i, 13).toString() : "",
+            (tblData.getValueAt(i, 14) != null) ? tblData.getValueAt(i, 14).toString() : "",
+            (tblData.getValueAt(i, 15) != null) ? tblData.getValueAt(i, 15).toString() : "");
+            
+            Contact contact = new Contact(
+                    (tblData.getValueAt(i, 16) != null) ? tblData.getValueAt(i, 16).toString() : "",
+                    (tblData.getValueAt(i, 17) != null) ? tblData.getValueAt(i, 17).toString() : "",
+                    (tblData.getValueAt(i, 18) != null) ? tblData.getValueAt(i, 18).toString() : ""
+            );
+            
+            Department department = new Department(0, "IT", 1);
+            
+            /* public User(int userID, Department department, String username, String password, 
+            String accountType, String idNumber, String firstName, String lastName, String title, 
+            Date dateOfBirth, String gender, Address address, Contact contact, Date dateAdded) */
+    
             selectedUser = new User(tblData.getValueAt(i, 3).toString(),
-                tblData.getValueAt(i, 4).toString(),
+                    department,
+                tblData.getValueAt(i, 6).toString(),
                 tblData.getValueAt(i, 2).toString(),
                 new SimpleDateFormat("yyyy-MM-dd").parse(tblData.getValueAt(i, 8).toString()),
                 tblData.getValueAt(i, 9).toString(),
@@ -1356,27 +1383,27 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                 case ADMIN:
                 //btnBan.setText("Ban Admin");
                 selectedUser.setAccountType(User.accountTypeState.BANNED);
-                selectedUser.updateUser();
+                User.update(selectedUser);
                 break;
                 case ADMIN_REJECTED:
                 //btnBan.setText("Ban User");
                 selectedUser.setAccountType(User.accountTypeState.BANNED);
-                selectedUser.updateUser();
+                User.update(selectedUser);
                 break;
                 case ADMIN_REQUESTED:
                 //btnBan.setText("Ban User");
                 selectedUser.setAccountType(User.accountTypeState.BANNED);
-                selectedUser.updateUser();
+                User.update(selectedUser);
                 break;
                 case NORMAL:
                 //btnBan.setText("Ban User");
                 selectedUser.setAccountType(User.accountTypeState.BANNED);
-                selectedUser.updateUser();
+                User.update(selectedUser);
                 break;
                 case RESTRICTED:
                 //btnBan.setText("Ban User");
                 selectedUser.setAccountType(User.accountTypeState.BANNED);
-                selectedUser.updateUser();
+                User.update(selectedUser);
                 break;
                 case NOT_SET:
                 btnApprove.setEnabled(false);
@@ -1428,17 +1455,17 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                 case ADMIN:
                 //btnReject.setText("Remove Admin");
                 selectedUser.setAccountType(User.accountTypeState.NORMAL);
-                selectedUser.updateUser();
+                User.update(selectedUser);
                 break;
                 case ADMIN_REQUESTED:
                 //btnReject.setText("Reject Admin");
                 selectedUser.setAccountType(User.accountTypeState.ADMIN_REJECTED);
-                selectedUser.updateUser();
+                User.update(selectedUser);
                 break;
                 case NORMAL:
                 //btnReject.setText("Restrict User");
                 selectedUser.setAccountType(User.accountTypeState.RESTRICTED);
-                selectedUser.updateUser();
+                User.update(selectedUser);
                 break;
                 case NOT_SET:
                 btnApprove.setEnabled(false);
@@ -1491,22 +1518,22 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                     case ADMIN_REQUESTED:
                     //btnApprove.setText("Approve Admin");
                     selectedUser.setAccountType(User.accountTypeState.ADMIN);
-                    selectedUser.updateUser();
+                    User.update(selectedUser);
                     break;
                     case NORMAL:
                     //btnApprove.setText("Make Admin");
                     selectedUser.setAccountType(User.accountTypeState.ADMIN);
-                    selectedUser.updateUser();
+                    User.update(selectedUser);
                     break;
                     case RESTRICTED:
                     //btnApprove.setText("Approve User");
                     selectedUser.setAccountType(User.accountTypeState.NORMAL);
-                    selectedUser.updateUser();
+                    User.update(selectedUser);
                     break;
                     case BANNED:
                     //btnApprove.setText("Revoke Ban");
                     selectedUser.setAccountType(User.accountTypeState.RESTRICTED);
-                    selectedUser.updateUser();
+                    User.update(selectedUser);
                     break;
                     case NOT_SET:
                     btnApprove.setEnabled(false);
@@ -1775,15 +1802,15 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                 cmbTitle.setSelectedItem(selectedUser.getTitle());
                 dobPicker.setDate(selectedUser.getDateOfBirth());
                 cmbGender.setSelectedItem(selectedUser.getGender());
-                txtCountry.setText(selectedUser.getCountry());
-                txtProvince.setText(selectedUser.getProvince());
-                txtCity.setText(selectedUser.getCity());
-                txtStreet.setText(selectedUser.getStreet());
-                txtPostalCode.setText(selectedUser.getPostalCode());
-                txtAddressLine.setText(selectedUser.getAddressLine());
-                txtEmail.setText(selectedUser.getEmail());
-                txtCell.setText(selectedUser.getCellNumber());
-                txtTel.setText(selectedUser.getTelNumber());
+                txtCountry.setText(selectedUser.getAddress().getCountry());
+                txtProvince.setText(selectedUser.getAddress().getProvince());
+                txtCity.setText(selectedUser.getAddress().getCity());
+                txtStreet.setText(selectedUser.getAddress().getStreet());
+                txtPostalCode.setText(selectedUser.getAddress().getPostalCode());
+                txtAddressLine.setText(selectedUser.getAddress().getAddressLine());
+                txtEmail.setText(selectedUser.getContact().getEmail());
+                txtCell.setText(selectedUser.getContact().getCellNumber());
+                txtTel.setText(selectedUser.getContact().getTelNumber());
                 txtUsername.setText(selectedUser.getUsername());
                 txtPassword.setText(selectedUser.getPassword());
                 cmbAccountType.setSelectedItem(selectedUser.getAccountType().toString());
@@ -1846,10 +1873,10 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // Delete Record
-        if (Common.checkInput(txtIDNumber.getText()) == 10 && User.GetUserByIdNumber(txtIDNumber.getText()) != null) {
+        if (Common.checkInput(txtIDNumber.getText()) == 10 && User.read(Integer.parseInt(txtIDNumber.getText())) != null) {
             int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to Delete this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
             if (option == 0) {
-                User.deleteUser(txtIDNumber.getText(), User.GetUserByIdNumber(txtIDNumber.getText()).getUserID());
+                User.delete( User.read(Integer.parseInt(txtIDNumber.getText())).getUserID());
                 clearAllFields();
                 resetBaseUsers();
                 setModel();
@@ -2024,58 +2051,58 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         String searchKeyword = txtSearch.getText();
         switch (parameter) {
             case "ID number":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("IDNumber", searchKeyword) : User.getNonAdminUsersByParameter("IDNumber", searchKeyword));
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("IDNumber", searchKeyword) : User.getNonAdminUsersByParameter("IDNumber", searchKeyword));
             break;
             case "First name":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("FirstName", searchKeyword) : User.getNonAdminUsersByParameter("FirstName", searchKeyword));
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("FirstName", searchKeyword) : User.getNonAdminUsersByParameter("FirstName", searchKeyword));
             break;
             case "Last name":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("LastName", searchKeyword) : User.getNonAdminUsersByParameter("LastName", searchKeyword));
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("LastName", searchKeyword) : User.getNonAdminUsersByParameter("LastName", searchKeyword));
             break;
             case "Full name":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("CONCAT(FirstName, ' ', LastName)", searchKeyword) : User.getNonAdminUsersByParameter("CONCAT(FirstName, ' ', LastName)", searchKeyword));
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("CONCAT(FirstName, ' ', LastName)", searchKeyword) : User.getNonAdminUsersByParameter("CONCAT(FirstName, ' ', LastName)", searchKeyword));
             break;
             case "Title":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("Title", searchKeyword) : User.getNonAdminUsersByParameter("Title", searchKeyword));
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("Title", searchKeyword) : User.getNonAdminUsersByParameter("Title", searchKeyword));
             break;
             case "Gender":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("Gender", searchKeyword) : User.getNonAdminUsersByParameter("Gender", searchKeyword));
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("Gender", searchKeyword) : User.getNonAdminUsersByParameter("Gender", searchKeyword));
             break;
             case "Country":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("Country", searchKeyword) : User.getNonAdminUsersByParameter("Country", searchKeyword));
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("Country", searchKeyword) : User.getNonAdminUsersByParameter("Country", searchKeyword));
             break;
             case "Province":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("Province", searchKeyword) : User.getNonAdminUsersByParameter("Province", searchKeyword));
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("Province", searchKeyword) : User.getNonAdminUsersByParameter("Province", searchKeyword));
             break;
             case "City":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("City", searchKeyword) : User.getNonAdminUsersByParameter("City", searchKeyword));
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("City", searchKeyword) : User.getNonAdminUsersByParameter("City", searchKeyword));
             break;
             case "Street":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("Street", searchKeyword) : User.getNonAdminUsersByParameter("Street", searchKeyword));
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("Street", searchKeyword) : User.getNonAdminUsersByParameter("Street", searchKeyword));
             break;
             case "Postal code":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("PostalCode", searchKeyword) : User.getNonAdminUsersByParameter("PostalCode", searchKeyword));
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("PostalCode", searchKeyword) : User.getNonAdminUsersByParameter("PostalCode", searchKeyword));
             break;
             case "Address line":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("AddressLine", searchKeyword) : User.getNonAdminUsersByParameter("AddressLine", searchKeyword));
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("AddressLine", searchKeyword) : User.getNonAdminUsersByParameter("AddressLine", searchKeyword));
             break;
             case "Email":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("Email", searchKeyword) : User.getNonAdminUsersByParameter("Email", searchKeyword));
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("Email", searchKeyword) : User.getNonAdminUsersByParameter("Email", searchKeyword));
             break;
             case "Cell number":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("CellNumber", searchKeyword) : User.getNonAdminUsersByParameter("CellNumber", searchKeyword));
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("CellNumber", searchKeyword) : User.getNonAdminUsersByParameter("CellNumber", searchKeyword));
             break;
             case "Tel number":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("TelNumber", searchKeyword) : User.getNonAdminUsersByParameter("TelNumber", searchKeyword));
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("TelNumber", searchKeyword) : User.getNonAdminUsersByParameter("TelNumber", searchKeyword));
             break;
             case "User ID":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("UserID", searchKeyword) : User.getNonAdminUsersByParameter("UserID", searchKeyword));
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("UserID", searchKeyword) : User.getNonAdminUsersByParameter("UserID", searchKeyword));
             break;
             case "Username":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("Username", searchKeyword) : User.getNonAdminUsersByParameter("Username", searchKeyword));
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("Username", searchKeyword) : User.getNonAdminUsersByParameter("Username", searchKeyword));
             break;
             case "Account type":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsersByParameter("AccountType", searchKeyword) : User.getNonAdminUsersByParameter("AccountType", searchKeyword));
+            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("AccountType", searchKeyword) : User.getNonAdminUsersByParameter("AccountType", searchKeyword));
             break;
         }
         setModel();
