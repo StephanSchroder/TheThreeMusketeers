@@ -1126,6 +1126,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         txtIDNumber.setBackground(new java.awt.Color(19, 54, 57));
         txtIDNumber.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
         txtIDNumber.setBorder(null);
+        txtIDNumber.setMargin(new java.awt.Insets(8, 8, 8, 8));
         txtIDNumber.setName("txtUserName"); // NOI18N
         txtIDNumber.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -1157,6 +1158,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         txtFirstName.setBackground(new java.awt.Color(19, 54, 57));
         txtFirstName.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
         txtFirstName.setBorder(null);
+        txtFirstName.setMargin(new java.awt.Insets(8, 8, 8, 8));
         txtFirstName.setName("txtUserName"); // NOI18N
         txtFirstName.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {

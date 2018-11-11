@@ -5,33 +5,79 @@
  */
 package PL;
 
-<<<<<<< HEAD
+import BLL.Address;
+import BLL.Campus;
 import BLL.Common;
+import BLL.Contact;
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Date;
-=======
-import BLL.User;
-import BLL.Common;
->>>>>>> origin/master
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Stephan
  */
-public class Campus extends javax.swing.JFrame {
+public class CampusForm extends javax.swing.JFrame {
 
     private int insertClick = 0;
     private int updateClick = 0;
+    private List<Campus> campusList= new ArrayList<>();
     /**
      * Creates new form Campus
      */
-    public Campus() {
+    public CampusForm() {
         initComponents();
+        
+        campusList=Campus.read();
     }
     
-    public Campus(User u) {
-        initComponents();
-    }
+     public void setModel() {
+       
+            DefaultTableModel model = (DefaultTableModel) tblCampuses.getModel();
+            model.setNumRows(0);
+            Object rowData[] = new Object[19];
+            Object columnData[] = new Object[19];
+            columnData[0] = "CampusID";
+            columnData[1] = "Name";
+            columnData[2] = "Notes";
+            columnData[3] = "Country";
+            columnData[4] = "Province";
+            columnData[5] = "City";
+            columnData[6] = "Street";
+            columnData[7] = "Postal code";
+            columnData[8] = "Address line";
+            columnData[9] = "Address notes";
+            columnData[10] = "Email";
+            columnData[11] = "Cell number";
+            columnData[12] = "Tel number";
+            columnData[13] = "Contact notes";
+
+            model.setColumnCount(13);
+            model.setColumnIdentifiers(columnData);
+            for (int i = 0; i < campusList.size(); i++) {
+                rowData[0] = campusList.get(i).getCampusID();
+                rowData[1] = campusList.get(i).getName();
+                rowData[2] = campusList.get(i).getNotes();
+                rowData[3] = campusList.get(i).getLocation().getCountry();
+                rowData[4] = campusList.get(i).getLocation().getProvince();
+                rowData[5] = campusList.get(i).getLocation().getCity();
+                rowData[6] = campusList.get(i).getLocation().getStreet();
+                rowData[7] = campusList.get(i).getLocation().getPostalCode();
+                rowData[8] = campusList.get(i).getLocation().getAddressLine();
+                rowData[9] = campusList.get(i).getLocation().getNotes();
+                rowData[10] = campusList.get(i).getContactDetails().getEmail();
+                rowData[11] = campusList.get(i).getContactDetails().getCellNumber();
+                rowData[12] = campusList.get(i).getContactDetails().getTelNumber();
+                rowData[13] = campusList.get(i).getContactDetails().getNotes();
+
+                model.addRow(rowData);
+            }
+        }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -56,7 +102,7 @@ public class Campus extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JSeparator();
         jLabel28 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        txtAddressNotes = new javax.swing.JTextArea();
+        txtCampusNotes = new javax.swing.JTextArea();
         jSeparator3 = new javax.swing.JSeparator();
         jPanel3 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
@@ -91,11 +137,13 @@ public class Campus extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         txtContactNotes = new javax.swing.JTextArea();
         jScrollPane4 = new javax.swing.JScrollPane();
-        txtAddressNotes1 = new javax.swing.JTextArea();
+        txtAddressNotes = new javax.swing.JTextArea();
         jSeparator5 = new javax.swing.JSeparator();
-        btnAdd = new javax.swing.JButton();
+        btnInsert = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        tblCampuses = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -120,6 +168,7 @@ public class Campus extends javax.swing.JFrame {
         txtCampusID.setBackground(new java.awt.Color(19, 54, 57));
         txtCampusID.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
         txtCampusID.setBorder(null);
+        txtCampusID.setMargin(new java.awt.Insets(8, 8, 8, 8));
         txtCampusID.setName("txtUserName"); // NOI18N
         txtCampusID.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -138,6 +187,7 @@ public class Campus extends javax.swing.JFrame {
         txtCampusName.setBackground(new java.awt.Color(19, 54, 57));
         txtCampusName.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
         txtCampusName.setBorder(null);
+        txtCampusName.setMargin(new java.awt.Insets(8, 8, 8, 8));
         txtCampusName.setName("txtUserName"); // NOI18N
         txtCampusName.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -152,9 +202,9 @@ public class Campus extends javax.swing.JFrame {
         jLabel28.setForeground(new java.awt.Color(255, 255, 255));
         jLabel28.setText("Campus Notes:");
 
-        txtAddressNotes.setColumns(20);
-        txtAddressNotes.setRows(5);
-        jScrollPane3.setViewportView(txtAddressNotes);
+        txtCampusNotes.setColumns(20);
+        txtCampusNotes.setRows(5);
+        jScrollPane3.setViewportView(txtCampusNotes);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -220,6 +270,7 @@ public class Campus extends javax.swing.JFrame {
         txtCountry.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         txtCountry.setForeground(new java.awt.Color(255, 255, 255));
         txtCountry.setBorder(null);
+        txtCountry.setMargin(new java.awt.Insets(8, 8, 8, 8));
         txtCountry.setName("txtUserName"); // NOI18N
         txtCountry.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -243,6 +294,7 @@ public class Campus extends javax.swing.JFrame {
         txtProvince.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         txtProvince.setForeground(new java.awt.Color(255, 255, 255));
         txtProvince.setBorder(null);
+        txtProvince.setMargin(new java.awt.Insets(8, 8, 8, 8));
         txtProvince.setName("txtUserName"); // NOI18N
         txtProvince.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -266,6 +318,7 @@ public class Campus extends javax.swing.JFrame {
         txtCity.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         txtCity.setForeground(new java.awt.Color(255, 255, 255));
         txtCity.setBorder(null);
+        txtCity.setMargin(new java.awt.Insets(8, 8, 8, 8));
         txtCity.setName("txtUserName"); // NOI18N
         txtCity.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -284,6 +337,7 @@ public class Campus extends javax.swing.JFrame {
         txtStreet.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         txtStreet.setForeground(new java.awt.Color(255, 255, 255));
         txtStreet.setBorder(null);
+        txtStreet.setMargin(new java.awt.Insets(8, 8, 8, 8));
         txtStreet.setName("txtUserName"); // NOI18N
         txtStreet.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -302,6 +356,7 @@ public class Campus extends javax.swing.JFrame {
         txtPostalCode.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         txtPostalCode.setForeground(new java.awt.Color(255, 255, 255));
         txtPostalCode.setBorder(null);
+        txtPostalCode.setMargin(new java.awt.Insets(8, 8, 8, 8));
         txtPostalCode.setName("txtUserName"); // NOI18N
         txtPostalCode.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -325,6 +380,7 @@ public class Campus extends javax.swing.JFrame {
         txtAddressLine.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         txtAddressLine.setForeground(new java.awt.Color(255, 255, 255));
         txtAddressLine.setBorder(null);
+        txtAddressLine.setMargin(new java.awt.Insets(8, 8, 8, 8));
         txtAddressLine.setName("txtUserName"); // NOI18N
         txtAddressLine.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -343,6 +399,7 @@ public class Campus extends javax.swing.JFrame {
         txtEmail.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         txtEmail.setForeground(new java.awt.Color(255, 255, 255));
         txtEmail.setBorder(null);
+        txtEmail.setMargin(new java.awt.Insets(8, 8, 8, 8));
         txtEmail.setName("txtUserName"); // NOI18N
         txtEmail.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -361,6 +418,7 @@ public class Campus extends javax.swing.JFrame {
         txtCell.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         txtCell.setForeground(new java.awt.Color(255, 255, 255));
         txtCell.setBorder(null);
+        txtCell.setMargin(new java.awt.Insets(8, 8, 8, 8));
         txtCell.setName("txtUserName"); // NOI18N
         txtCell.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -379,6 +437,7 @@ public class Campus extends javax.swing.JFrame {
         txtTel.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         txtTel.setForeground(new java.awt.Color(255, 255, 255));
         txtTel.setBorder(null);
+        txtTel.setMargin(new java.awt.Insets(8, 8, 8, 8));
         txtTel.setName("txtUserName"); // NOI18N
         txtTel.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -401,19 +460,19 @@ public class Campus extends javax.swing.JFrame {
         txtContactNotes.setRows(5);
         jScrollPane2.setViewportView(txtContactNotes);
 
-        txtAddressNotes1.setColumns(20);
-        txtAddressNotes1.setRows(5);
-        jScrollPane4.setViewportView(txtAddressNotes1);
+        txtAddressNotes.setColumns(20);
+        txtAddressNotes.setRows(5);
+        jScrollPane4.setViewportView(txtAddressNotes);
 
         jSeparator5.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
-        btnAdd.setBackground(new java.awt.Color(0, 115, 56));
-        btnAdd.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        btnAdd.setText("Insert Record");
-        btnAdd.setName("btnInsertRecord"); // NOI18N
-        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+        btnInsert.setBackground(new java.awt.Color(0, 115, 56));
+        btnInsert.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        btnInsert.setText("Insert Record");
+        btnInsert.setName("btnInsertRecord"); // NOI18N
+        btnInsert.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddActionPerformed(evt);
+                btnInsertActionPerformed(evt);
             }
         });
 
@@ -502,7 +561,7 @@ public class Campus extends javax.swing.JFrame {
                         .addGap(35, 35, 35))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnInsert, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnUpdate)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -598,33 +657,71 @@ public class Campus extends javax.swing.JFrame {
                         .addComponent(jSeparator5)))
                 .addGap(42, 42, 42)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnInsert, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(57, 57, 57))
         );
+
+        tblCampuses.setBackground(new java.awt.Color(204, 204, 204));
+        tblCampuses.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createEtchedBorder(java.awt.Color.black, null), javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED, new java.awt.Color(102, 102, 102), new java.awt.Color(204, 204, 204), null, null)));
+        tblCampuses.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tblCampuses.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblCampusesMouseClicked(evt);
+            }
+        });
+        jScrollPane5.setViewportView(tblCampuses);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(74, 74, 74)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(208, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(161, 161, 161))
+                .addGap(86, 86, 86)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 4, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(149, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(66, 66, 66)
+                .addComponent(jScrollPane5)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(58, 58, 58)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
@@ -672,21 +769,13 @@ public class Campus extends javax.swing.JFrame {
 
     private void txtCampusIDFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCampusIDFocusGained
         // TODO add your handling code here:
-<<<<<<< HEAD
         Common.focusGain("ID number", txtCampusID);
-=======
-        Common.focusGain("Campus ID", txtCampusID);
->>>>>>> origin/master
     }//GEN-LAST:event_txtCampusIDFocusGained
 
     private void txtCampusIDFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCampusIDFocusLost
         // TODO add your handling code here:
-<<<<<<< HEAD
 
         Common.focusLost("ID number", txtCampusID);
-=======
-        Common.focusLost("Campus ID", txtCampusID);
->>>>>>> origin/master
     }//GEN-LAST:event_txtCampusIDFocusLost
 
     private void txtCampusNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCampusNameFocusGained
@@ -803,10 +892,10 @@ public class Campus extends javax.swing.JFrame {
       public void disableAllFields() {
         txtCampusID.setEnabled(false);
         txtCampusName.setEnabled(false);
-        txtLastName.setEnabled(false);
-        cmbTitle.setEnabled(false);
-        dobPicker.setEnabled(false);
-        cmbGender.setEnabled(false);
+        txtCampusNotes.setEnabled(false);
+        txtAddressNotes.setEnabled(false);
+        txtContactNotes.setEnabled(false);
+       
 
         txtCountry.setEnabled(false);
         txtProvince.setEnabled(false);
@@ -819,18 +908,16 @@ public class Campus extends javax.swing.JFrame {
         txtCell.setEnabled(false);
         txtTel.setEnabled(false);
 
-        txtUsername.setEnabled(false);
-        txtPassword.setEnabled(false);
-        cmbAccountType.setEnabled(false);
+ 
     }
 
     public void prepareInsert() {
-        txtCampusID.setEnabled(true);
+         txtCampusID.setEnabled(true);
         txtCampusName.setEnabled(true);
-        txtLastName.setEnabled(true);
-        cmbTitle.setEnabled(true);
-        dobPicker.setEnabled(true);
-        cmbGender.setEnabled(true);
+        txtCampusNotes.setEnabled(true);
+        txtAddressNotes.setEnabled(true);
+        txtContactNotes.setEnabled(true);
+       
 
         txtCountry.setEnabled(true);
         txtProvince.setEnabled(true);
@@ -842,19 +929,15 @@ public class Campus extends javax.swing.JFrame {
         txtEmail.setEnabled(true);
         txtCell.setEnabled(true);
         txtTel.setEnabled(true);
-
-        txtUsername.setEnabled(true);
-        txtPassword.setEnabled(true);
-        cmbAccountType.setEnabled(true);
     }
 
     public void prepareUpdate() {
         txtCampusID.setEnabled(false);
         txtCampusName.setEnabled(true);
-        txtLastName.setEnabled(true);
-        cmbTitle.setEnabled(true);
-        dobPicker.setEnabled(false);
-        cmbGender.setEnabled(true);
+        txtCampusNotes.setEnabled(true);
+        txtAddressNotes.setEnabled(true);
+        txtContactNotes.setEnabled(true);
+       
 
         txtCountry.setEnabled(true);
         txtProvince.setEnabled(true);
@@ -866,10 +949,6 @@ public class Campus extends javax.swing.JFrame {
         txtEmail.setEnabled(true);
         txtCell.setEnabled(true);
         txtTel.setEnabled(true);
-
-        txtUsername.setEnabled(false);
-        txtPassword.setEnabled(true);
-        cmbAccountType.setEnabled(true);
     }
 
     private void clearAllFields() {
@@ -877,12 +956,6 @@ public class Campus extends javax.swing.JFrame {
         txtCampusID.setToolTipText(null);
         txtCampusName.setText("");
         txtCampusName.setToolTipText(null);
-        txtLastName.setText("");
-        txtLastName.setToolTipText(null);
-        cmbTitle.setSelectedIndex(0);
-        cmbTitle.setToolTipText(null);
-        cmbGender.setSelectedIndex(0);
-        cmbGender.setToolTipText(null);
         txtCountry.setText("");
         txtCountry.setToolTipText(null);
         txtProvince.setText("");
@@ -901,22 +974,21 @@ public class Campus extends javax.swing.JFrame {
         txtCell.setToolTipText(null);
         txtTel.setText("");
         txtTel.setToolTipText(null);
-        dobPicker.setDate(new Date());
-        dobPicker.setToolTipText(null);
-        txtUsername.setText("");
-        txtUsername.setToolTipText(null);
-        txtPassword.setText("");
-        txtPassword.setToolTipText(null);
-        cmbAccountType.setSelectedIndex(0);
-        cmbAccountType.setToolTipText(null);
+        txtAddressNotes.setText("");
+        txtAddressNotes.setToolTipText(null);
+        txtContactNotes.setText("");
+        txtContactNotes.setToolTipText(null);
+        txtCampusNotes.setText("");
+        txtCampusNotes.setToolTipText(null);
+
     }
 
     public void resetColor() {
         txtCampusID.setBackground(Color.white);
         txtCampusName.setBackground(Color.white);
-        txtLastName.setBackground(Color.white);
-        cmbTitle.setBackground(Color.white);
-        cmbGender.setBackground(Color.white);
+        txtAddressNotes.setBackground(Color.white);
+        txtCampusNotes.setBackground(Color.white);
+        txtContactNotes.setBackground(Color.white);
         txtCountry.setBackground(Color.white);
         txtProvince.setBackground(Color.white);
         txtCity.setBackground(Color.white);
@@ -926,73 +998,139 @@ public class Campus extends javax.swing.JFrame {
         txtEmail.setBackground(Color.white);
         txtCell.setBackground(Color.white);
         txtTel.setBackground(Color.white);
-        dobPicker.setBackground(Color.white);
-        txtUsername.setBackground(Color.white);
-        txtPassword.setBackground(Color.white);
-        cmbAccountType.setBackground(Color.white);
+
     }
     
+        public void setUIAccess(boolean value) {
+        
+        setCRUDOperations(value);
+       
+    }
+   
+
+    public void setCRUDOperations(boolean value) {
+        btnInsert.setEnabled(value);
+        btnUpdate.setEnabled(value);
+        btnDelete.setEnabled(value);
+    }
     
-    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        /*if (insertClick == 0) {
+    private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
+        if (insertClick == 0) {
             insertClick++;
             setUIAccess(false);
-            btnAdd.setEnabled(true);
+            btnInsert.setEnabled(true);
             clearAllFields();
             prepareInsert();
         } else {
             resetColor();
-            String category = null;
-            String itemName = null;
-            int stockCount = 0;
-            String status = null;
-            double price = 0.0;
-            String model = null;
+            
+            String campusName = null;
+            String campusNotes = null;
+            String addressNotes = null;
+            String contactNotes = null;
+            String country;
+            String province;
+            String city;
+            String street;
+            String postalCode;
+            String addressLine;
+            String email;
+            String cellNumber;
+            String telNumber;
+            
 
-            category = (cmbCategory.getItemCount() > 0) ? cmbCategory.getSelectedItem().toString() : "";
-            itemName = txtItemName.getText();
-            stockCount = (int) spStockCount.getValue();
-            status = txtStatus.getText();
-            price = Double.valueOf(txtPrice.getText());
-            model = txtModel.getText();
+          
+            campusName = txtCampusName.getText();
+            campusNotes = txtCampusNotes.getText();
+            country = txtCountry.getText();
+            province = (txtProvince.getText() != null) ? txtProvince.getText() : "";
+            city = (txtCity.getText() != null) ? txtCity.getText() : "";
+            street = (txtStreet.getText() != null) ? txtStreet.getText() : "";
+            postalCode = (txtPostalCode.getText() != null) ? txtPostalCode.getText() : "";
+            addressLine = (txtAddressLine.getText() != null) ? txtAddressLine.getText() : "";
+            email = (txtEmail.getText() != null) ? txtEmail.getText() : "";
+            cellNumber = (txtCell.getText() != null) ? txtCell.getText() : "";
+            telNumber = (txtTel.getText() != null) ? txtTel.getText() : "";
+            addressNotes = txtAddressNotes.getText();
+            contactNotes = txtContactNotes.getText();
+            
 
             boolean check = true;
-            if (Common.checkInput(category) != 1 || category.length() > 50) {
+       
+            if (Common.checkInput(campusName) != 1 || campusName.length() > 20) {
                 check = false;
-                cmbCategory.setBackground(Color.red);
-                cmbCategory.setToolTipText("Only alphabetical characters. Max 50 characters");
+                txtCampusName.setBackground(Color.red);
+                txtCampusName.setToolTipText("Only alphabetical characters. Max 50 characters");
             }
-            if (Common.checkInput(itemName) != 1 || itemName.length() > 50) {
+             if ( campusNotes.length() > 100) {
                 check = false;
-                txtItemName.setBackground(Color.red);
-                txtItemName.setToolTipText("Only alphabetical characters. Max 50 characters");
+                txtCampusNotes.setBackground(Color.orange);
+                txtCampusNotes.setToolTipText("(Optional Field)Max 100 characters");
             }
-            if (Common.checkInput(String.valueOf(stockCount)) != 2 || stockCount == 0 || stockCount > 10000) {
+             if ( contactNotes.length() > 100) {
                 check = false;
-                spStockCount.setBackground(Color.red);
-                spStockCount.setToolTipText("Only numerical value between 1 and 10000");
+                txtContactNotes.setBackground(Color.orange);
+                txtContactNotes.setToolTipText("(Optional Field)  Max 100 characters");
             }
-            if (Common.checkInput(status) != 1 || status.length() > 20) {
+            
+            //DATE OF BIRTH CHECK NOT INCLUDED
+            if (addressNotes.length() > 100) {
                 check = false;
-                txtStatus.setBackground(Color.red);
-                txtStatus.setToolTipText("Only alphabetical characters. Max 20 characters");
+                txtAddressNotes.setBackground(Color.orange);
+                txtAddressNotes.setToolTipText("(Optional Field)  Max 100 characters");
             }
-            if (Common.checkInput(String.valueOf(price)) != 2 || price == 0) {
+            if (Common.checkInput(country) != 1 || country.length() > 20) {
                 check = false;
-                txtPrice.setBackground(Color.red);
-                txtPrice.setToolTipText("Only numerical value");
+                txtCountry.setBackground(Color.red);
+                txtCountry.setToolTipText(" Only alphabetical characters. Max 20 characters");
             }
-            if (Common.checkInput(model) != 1 || model.length() > 20) {
+            if (!(Common.checkInput(province) == 0 || Common.checkInput(province) == 1 || Common.checkInput(province) == 5) || province.length() > 20) {
                 check = false;
-                txtModel.setBackground(Color.red);
-                txtModel.setToolTipText("Only alphabetical characters. Max 20 characters");
+                txtProvince.setBackground(Color.orange);
+                txtProvince.setToolTipText("(Optional Field) Only alphabetical characters and optional special characters. Max 20 characters");
             }
+            if (!(Common.checkInput(city) == 0 || Common.checkInput(city) == 1) || city.length() > 30) {
+                check = false;
+                txtCity.setBackground(Color.orange);
+                txtCity.setToolTipText("(Optional Field) Only alphabetical characters. Max 30 characters");
+            }
+            if (!(Common.checkInput(street) == 0 || Common.checkInput(street) == 1 || Common.checkInput(street) == 4) || street.length() > 30) {
+                check = false;
+                txtStreet.setBackground(Color.orange);
+                txtStreet.setToolTipText("(Optional Field) Only alphabetical characters and optional numerical values. Max 30 characters");
+            }
+            if (!(Common.checkInput(postalCode) == 0 || Common.checkInput(postalCode) == 2) || postalCode.length() > 10) {
+                check = false;
+                txtPostalCode.setBackground(Color.orange);
+                txtPostalCode.setToolTipText("(Optional Field) Only numerical values. Max 10 characters");
+            }
+            if (addressLine.length() > 50) {
+                check = false;
+                txtAddressLine.setBackground(Color.orange);
+                txtAddressLine.setToolTipText("(Optional Field) Any characters. Max 50 characters");
+            }
+            if (!(Common.checkInput(email) == 0 || Common.checkInput(email) == 9) || email.length() > 30) {
+                check = false;
+                txtEmail.setBackground(Color.orange);
+                txtEmail.setToolTipText("(Optional Field) Only valid email address. Max 30 characters");
+            }
+            if (!(Common.checkInput(cellNumber) == 0 || (Common.checkInput(cellNumber) == 2 && cellNumber.length() == 10))) {
+                check = false;
+                txtCell.setBackground(Color.orange);
+                txtCell.setToolTipText("(Optional Field) Only numerical values. Must be 10 characters");
+            }
+            if (!(Common.checkInput(telNumber) == 0 || (Common.checkInput(telNumber) == 2 && telNumber.length() == 10))) {
+                check = false;
+                txtTel.setBackground(Color.orange);
+                txtTel.setToolTipText("(Optional Field) Only numerical values. Must be 10 characters");
+            }
+          
 
             if (check == true) {
                 int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to add this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 0) {
-                    Stock.create(new Stock(0, Category.read(category),model,price,itemName,new Date(), stockCount, status));
-                    stocks = Stock.read();
+                    Campus.create(new Campus(0, campusName, new Address(0, country, province, city, street, postalCode, addressLine, addressNotes), new Contact(0, email, cellNumber, telNumber, contactNotes),campusNotes));
+                    campusList = Campus.read();
                     setModel();
                 }
                 clearAllFields();
@@ -1010,76 +1148,129 @@ public class Campus extends javax.swing.JFrame {
                     setUIAccess(true);
                 }
             }
-        }*/
-    }//GEN-LAST:event_btnAddActionPerformed
+        }
+    }//GEN-LAST:event_btnInsertActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         //Update record
-        /*if (updateClick == 0) {
+        if (updateClick == 0) {
             updateClick++;
             setUIAccess(false);
             btnUpdate.setEnabled(true);
             prepareUpdate();
-        } else {
+        } 
+         else {
             resetColor();
-            String stockID = null;
-            String category = null;
-            String itemName = null;
-            int stockCount = 0;
-            String status = null;
-            double price = 0.0;
-            String model = null;
+            
+            int campusID =0;
+            String campusName = null;
+            String campusNotes = null;
+            String addressNotes = null;
+            String contactNotes = null;
+            String country;
+            String province;
+            String city;
+            String street;
+            String postalCode;
+            String addressLine;
+            String email;
+            String cellNumber;
+            String telNumber;
+            
 
-            stockID = txtStockID.getText();
-            category = (cmbCategory.getItemCount() > 0) ? cmbCategory.getSelectedItem().toString() : "";
-            itemName = txtItemName.getText();
-            stockCount = (int) spStockCount.getValue();
-            status = txtStatus.getText();
-            price = Double.valueOf(txtPrice.getText());
-            model = txtModel.getText();
+            
+            campusID= Integer.valueOf(txtCampusID.getText());
+            campusName = txtCampusName.getText();
+            campusNotes = txtCampusNotes.getText();
+            country = txtCountry.getText();
+            province = (txtProvince.getText() != null) ? txtProvince.getText() : "";
+            city = (txtCity.getText() != null) ? txtCity.getText() : "";
+            street = (txtStreet.getText() != null) ? txtStreet.getText() : "";
+            postalCode = (txtPostalCode.getText() != null) ? txtPostalCode.getText() : "";
+            addressLine = (txtAddressLine.getText() != null) ? txtAddressLine.getText() : "";
+            email = (txtEmail.getText() != null) ? txtEmail.getText() : "";
+            cellNumber = (txtCell.getText() != null) ? txtCell.getText() : "";
+            telNumber = (txtTel.getText() != null) ? txtTel.getText() : "";
+            addressNotes = txtAddressNotes.getText();
+            contactNotes = txtContactNotes.getText();
+            
 
             boolean check = true;
-            if (Common.checkInput(stockID) != 2 || Stock.read(Integer.parseInt(stockID)) == null) {
+       
+            if (Common.checkInput(campusName) != 1 || campusName.length() > 20) {
                 check = false;
-                txtStockID.setBackground(Color.red);
-                txtStockID.setToolTipText("Invalid Stock ID");
+                txtCampusName.setBackground(Color.red);
+                txtCampusName.setToolTipText("Only alphabetical characters. Max 50 characters");
             }
-            if (Common.checkInput(category) != 1 || category.length() > 50) {
+             if ( campusNotes.length() > 100) {
                 check = false;
-                cmbCategory.setBackground(Color.red);
-                cmbCategory.setToolTipText("Only alphabetical characters. Max 50 characters");
+                txtCampusNotes.setBackground(Color.orange);
+                txtCampusNotes.setToolTipText("(Optional Field)Max 100 characters");
             }
-            if (Common.checkInput(itemName) != 1 || itemName.length() > 50) {
+             if ( contactNotes.length() > 100) {
                 check = false;
-                txtItemName.setBackground(Color.red);
-                txtItemName.setToolTipText("Only alphabetical characters. Max 50 characters");
+                txtContactNotes.setBackground(Color.orange);
+                txtContactNotes.setToolTipText("(Optional Field)  Max 100 characters");
             }
-            if (Common.checkInput(String.valueOf(stockCount)) != 2 || stockCount == 0 || stockCount > 10000) {
+            
+            //DATE OF BIRTH CHECK NOT INCLUDED
+            if (addressNotes.length() > 100) {
                 check = false;
-                spStockCount.setBackground(Color.red);
-                spStockCount.setToolTipText("Only numerical value between 1 and 10000");
+                txtAddressNotes.setBackground(Color.orange);
+                txtAddressNotes.setToolTipText("(Optional Field)  Max 100 characters");
             }
-            if (Common.checkInput(status) != 1 || status.length() > 20) {
+            if (Common.checkInput(country) != 1 || country.length() > 20) {
                 check = false;
-                txtStatus.setBackground(Color.red);
-                txtStatus.setToolTipText("Only alphabetical characters. Max 20 characters");
+                txtCountry.setBackground(Color.red);
+                txtCountry.setToolTipText(" Only alphabetical characters. Max 20 characters");
             }
-            if (Common.checkInput(String.valueOf(price)) != 2 || price == 0) {
+            if (!(Common.checkInput(province) == 0 || Common.checkInput(province) == 1 || Common.checkInput(province) == 5) || province.length() > 20) {
                 check = false;
-                txtPrice.setBackground(Color.red);
-                txtPrice.setToolTipText("Only numerical value");
+                txtProvince.setBackground(Color.orange);
+                txtProvince.setToolTipText("(Optional Field) Only alphabetical characters and optional special characters. Max 20 characters");
             }
-            if (Common.checkInput(model) != 1 || model.length() > 20) {
+            if (!(Common.checkInput(city) == 0 || Common.checkInput(city) == 1) || city.length() > 30) {
                 check = false;
-                txtModel.setBackground(Color.red);
-                txtModel.setToolTipText("Only alphabetical characters. Max 20 characters");
+                txtCity.setBackground(Color.orange);
+                txtCity.setToolTipText("(Optional Field) Only alphabetical characters. Max 30 characters");
             }
+            if (!(Common.checkInput(street) == 0 || Common.checkInput(street) == 1 || Common.checkInput(street) == 4) || street.length() > 30) {
+                check = false;
+                txtStreet.setBackground(Color.orange);
+                txtStreet.setToolTipText("(Optional Field) Only alphabetical characters and optional numerical values. Max 30 characters");
+            }
+            if (!(Common.checkInput(postalCode) == 0 || Common.checkInput(postalCode) == 2) || postalCode.length() > 10) {
+                check = false;
+                txtPostalCode.setBackground(Color.orange);
+                txtPostalCode.setToolTipText("(Optional Field) Only numerical values. Max 10 characters");
+            }
+            if (addressLine.length() > 50) {
+                check = false;
+                txtAddressLine.setBackground(Color.orange);
+                txtAddressLine.setToolTipText("(Optional Field) Any characters. Max 50 characters");
+            }
+            if (!(Common.checkInput(email) == 0 || Common.checkInput(email) == 9) || email.length() > 30) {
+                check = false;
+                txtEmail.setBackground(Color.orange);
+                txtEmail.setToolTipText("(Optional Field) Only valid email address. Max 30 characters");
+            }
+            if (!(Common.checkInput(cellNumber) == 0 || (Common.checkInput(cellNumber) == 2 && cellNumber.length() == 10))) {
+                check = false;
+                txtCell.setBackground(Color.orange);
+                txtCell.setToolTipText("(Optional Field) Only numerical values. Must be 10 characters");
+            }
+            if (!(Common.checkInput(telNumber) == 0 || (Common.checkInput(telNumber) == 2 && telNumber.length() == 10))) {
+                check = false;
+                txtTel.setBackground(Color.orange);
+                txtTel.setToolTipText("(Optional Field) Only numerical values. Must be 10 characters");
+            }
+          
 
             if (check == true) {
-                int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to update this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
+                int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to Update this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 0) {
-                    Stock.update(new Stock(Integer.valueOf(stockID), Category.read(category),model, price ,itemName,  new Date(), stockCount, status));
-                    stocks = Stock.read();
+                    Campus.update(new Campus(campusID, campusName, new Address(0, country, province, city, street, postalCode, addressLine, addressNotes), new Contact(0, email, cellNumber, telNumber, contactNotes),campusNotes));
+                    campusList = Campus.read();
                     setModel();
                 }
                 clearAllFields();
@@ -1090,34 +1281,68 @@ public class Campus extends javax.swing.JFrame {
             } else {
                 int option = JOptionPane.showConfirmDialog(this, "There were some errors, would you like to fix them?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 1) {
-                    clearAllFields();
+                   clearAllFields();
                     disableAllFields();
                     resetColor();
                     updateClick = 0;
                     setUIAccess(true);
                 }
             }
-        }*/
+        }
+
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // Delete Record
-        /*if (Common.checkInput(txtStockID.getText()) == 2 && Stock.read(Integer.parseInt(txtStockID.getText())) != null) {
+        if (Common.checkInput(txtCampusID.getText()) == 2 && Campus.read(Integer.parseInt(txtCampusID.getText())) != null) {
             int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to Delete this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
             if (option == 0) {
-                String category = (cmbCategory.getItemCount() > 0) ? cmbCategory.getSelectedItem().toString() : "";
-                //enum tableColum {StockID, CategoryName, Model, Price, ItemName, DateAdded, StockCount, Status};
+                
+                int campusID =0;
+            String campusName = null;
+            String campusNotes = null;
+            String addressNotes = null;
+            String contactNotes = null;
+            String country;
+            String province;
+            String city;
+            String street;
+            String postalCode;
+            String addressLine;
+            String email;
+            String cellNumber;
+            String telNumber;
+            
 
-                Stock.delete(new Stock(Integer.valueOf(txtStockID.getText()), Category.read(category),txtModel.getText(),Double.parseDouble(txtPrice.getText()),txtItemName.getText(),
-                    (Date) dobPicker.getDate(),(int) spStockCount.getValue(), txtStatus.getText()));
+            
+            campusID= Integer.valueOf(txtCampusID.getText());
+            campusName = txtCampusName.getText();
+            campusNotes = txtCampusNotes.getText();
+            country = txtCountry.getText();
+            province = (txtProvince.getText() != null) ? txtProvince.getText() : "";
+            city = (txtCity.getText() != null) ? txtCity.getText() : "";
+            street = (txtStreet.getText() != null) ? txtStreet.getText() : "";
+            postalCode = (txtPostalCode.getText() != null) ? txtPostalCode.getText() : "";
+            addressLine = (txtAddressLine.getText() != null) ? txtAddressLine.getText() : "";
+            email = (txtEmail.getText() != null) ? txtEmail.getText() : "";
+            cellNumber = (txtCell.getText() != null) ? txtCell.getText() : "";
+            telNumber = (txtTel.getText() != null) ? txtTel.getText() : "";
+            addressNotes = txtAddressNotes.getText();
+            contactNotes = txtContactNotes.getText();
+                
+                Campus.delete(new Campus(campusID, campusName, new Address(0, country, province, city, street, postalCode, addressLine, addressNotes), new Contact(0, email, cellNumber, telNumber, contactNotes),campusNotes));
             clearAllFields();
-            stocks = Stock.read();
+            campusList = Campus.read();
             setModel();
         }
         } else {
             JOptionPane.showMessageDialog(null, "No valid stock item selected");
-        }*/
+        }
     }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void tblCampusesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCampusesMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblCampusesMouseClicked
 
     /**
      * @param args the command line arguments
@@ -1136,27 +1361,28 @@ public class Campus extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Campus.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CampusForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Campus.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CampusForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Campus.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CampusForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Campus.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CampusForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Campus().setVisible(true);
+                new CampusForm().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnInsert;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
@@ -1181,6 +1407,7 @@ public class Campus extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator10;
     private javax.swing.JSeparator jSeparator11;
@@ -1195,11 +1422,12 @@ public class Campus extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator7;
     private javax.swing.JSeparator jSeparator8;
     private javax.swing.JSeparator jSeparator9;
+    private javax.swing.JTable tblCampuses;
     private javax.swing.JTextField txtAddressLine;
     private javax.swing.JTextArea txtAddressNotes;
-    private javax.swing.JTextArea txtAddressNotes1;
     private javax.swing.JTextField txtCampusID;
     private javax.swing.JTextField txtCampusName;
+    private javax.swing.JTextArea txtCampusNotes;
     private javax.swing.JTextField txtCell;
     private javax.swing.JTextField txtCity;
     private javax.swing.JTextArea txtContactNotes;

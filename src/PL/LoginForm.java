@@ -83,6 +83,7 @@ public class LoginForm extends javax.swing.JFrame {
         txtUsername.setBorder(null);
         txtUsername.setCaretColor(new java.awt.Color(255, 255, 255));
         txtUsername.setDisabledTextColor(new java.awt.Color(255, 255, 255));
+        txtUsername.setMargin(new java.awt.Insets(8, 8, 8, 8));
         txtUsername.setName("txtUserName"); // NOI18N
         txtUsername.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -108,6 +109,7 @@ public class LoginForm extends javax.swing.JFrame {
         txtPassword.setBorder(null);
         txtPassword.setCaretColor(new java.awt.Color(255, 255, 255));
         txtPassword.setDisabledTextColor(new java.awt.Color(255, 255, 255));
+        txtPassword.setMargin(new java.awt.Insets(8, 8, 8, 8));
 
         jLabel6.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
