@@ -349,7 +349,7 @@ public class Campus implements DatabaseOperations {
             this.setName(campus.getName());
             this.setLocation(campus.getLocation());
             this.setContactDetails(campus.getContactDetails());
-            if (!campus.getNotes().isEmpty()) {
+            if (campus.getNotes() != null) {
                 this.setNotes(campus.getNotes());
             }
         }

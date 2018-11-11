@@ -5,6 +5,9 @@
  */
 package PL;
 
+import BLL.User;
+import BLL.Common;
+
 /**
  *
  * @author Stephan
@@ -15,6 +18,9 @@ public class DepartmentForm extends javax.swing.JFrame {
      * Creates new form DepartmentForm
      */
     public DepartmentForm() {
+        initComponents();
+    }
+    public DepartmentForm(User u) {
         initComponents();
     }
 
@@ -226,65 +232,7 @@ public class DepartmentForm extends javax.swing.JFrame {
     }//GEN-LAST:event_txtDepartmentNameFocusLost
 
     private void btnCampusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCampusActionPerformed
-        String parameter = cmbSearchBy.getSelectedItem().toString();
-        String searchKeyword = txtSearch.getText();
-        switch (parameter) {
-            case "ID number":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("IDNumber", searchKeyword) : User.getNonAdminUsersByParameter("IDNumber", searchKeyword));
-            break;
-            case "First name":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("FirstName", searchKeyword) : User.getNonAdminUsersByParameter("FirstName", searchKeyword));
-            break;
-            case "Last name":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("LastName", searchKeyword) : User.getNonAdminUsersByParameter("LastName", searchKeyword));
-            break;
-            case "Full name":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("CONCAT(FirstName, ' ', LastName)", searchKeyword) : User.getNonAdminUsersByParameter("CONCAT(FirstName, ' ', LastName)", searchKeyword));
-            break;
-            case "Title":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("Title", searchKeyword) : User.getNonAdminUsersByParameter("Title", searchKeyword));
-            break;
-            case "Gender":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("Gender", searchKeyword) : User.getNonAdminUsersByParameter("Gender", searchKeyword));
-            break;
-            case "Country":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("Country", searchKeyword) : User.getNonAdminUsersByParameter("Country", searchKeyword));
-            break;
-            case "Province":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("Province", searchKeyword) : User.getNonAdminUsersByParameter("Province", searchKeyword));
-            break;
-            case "City":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("City", searchKeyword) : User.getNonAdminUsersByParameter("City", searchKeyword));
-            break;
-            case "Street":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("Street", searchKeyword) : User.getNonAdminUsersByParameter("Street", searchKeyword));
-            break;
-            case "Postal code":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("PostalCode", searchKeyword) : User.getNonAdminUsersByParameter("PostalCode", searchKeyword));
-            break;
-            case "Address line":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("AddressLine", searchKeyword) : User.getNonAdminUsersByParameter("AddressLine", searchKeyword));
-            break;
-            case "Email":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("Email", searchKeyword) : User.getNonAdminUsersByParameter("Email", searchKeyword));
-            break;
-            case "Cell number":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("CellNumber", searchKeyword) : User.getNonAdminUsersByParameter("CellNumber", searchKeyword));
-            break;
-            case "Tel number":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("TelNumber", searchKeyword) : User.getNonAdminUsersByParameter("TelNumber", searchKeyword));
-            break;
-            case "User ID":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("UserID", searchKeyword) : User.getNonAdminUsersByParameter("UserID", searchKeyword));
-            break;
-            case "Username":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("Username", searchKeyword) : User.getNonAdminUsersByParameter("Username", searchKeyword));
-            break;
-            case "Account type":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("AccountType", searchKeyword) : User.getNonAdminUsersByParameter("AccountType", searchKeyword));
-            break;
-        }
-        setModel();
+
     }//GEN-LAST:event_btnCampusActionPerformed
 
     /**

@@ -52,9 +52,11 @@ public class Address implements DatabaseOperations {
         this.street = street;
         this.postalCode = postalCode;
         this.addressLine = addressLine;
+        this.notes = "";
     }
     
     public Address(String country, String province, String city, String street, String postalCode, String addressLine, String notes) {
+        this.addressID = 0;
         this.country = country;
         this.province = province;
         this.city = city;
@@ -65,17 +67,25 @@ public class Address implements DatabaseOperations {
     }
     
     public Address(String country, String province, String city, String street, String postalCode, String addressLine) {
+        this.addressID = 0;
         this.country = country;
         this.province = province;
         this.city = city;
         this.street = street;
         this.postalCode = postalCode;
         this.addressLine = addressLine;
+        this.notes = "";
     }
 
     public Address(int addressID, String country) {
         this.addressID = addressID;
         this.country = country;
+        this.province = "";
+        this.city = "";
+        this.street = "";
+        this.postalCode = "";
+        this.addressLine = "";
+        this.notes = "";
     }
     //</editor-fold>
 
@@ -97,7 +107,7 @@ public class Address implements DatabaseOperations {
     }
 
     public String getProvince() {
-        return province;
+        return ((province != null) ? province : "");
     }
 
     public void setProvince(String province) {
@@ -105,7 +115,7 @@ public class Address implements DatabaseOperations {
     }
 
     public String getCity() {
-        return city;
+        return ((city != null) ? city : "");
     }
 
     public void setCity(String city) {
@@ -113,7 +123,7 @@ public class Address implements DatabaseOperations {
     }
 
     public String getStreet() {
-        return street;
+        return ((street != null) ? street : "");
     }
 
     public void setStreet(String street) {
@@ -121,7 +131,7 @@ public class Address implements DatabaseOperations {
     }
 
     public String getPostalCode() {
-        return postalCode;
+        return ((postalCode != null) ? postalCode : "");
     }
 
     public void setPostalCode(String postalCode) {
@@ -129,7 +139,7 @@ public class Address implements DatabaseOperations {
     }
 
     public String getAddressLine() {
-        return addressLine;
+        return ((addressLine != null) ? addressLine : "");
     }
 
     public void setAddressLine(String addressLine) {
@@ -137,7 +147,7 @@ public class Address implements DatabaseOperations {
     }
 
     public String getNotes() {
-        return notes;
+        return ((notes != null) ? notes : "");
     }
 
     public void setNotes(String notes) {
@@ -564,22 +574,22 @@ public class Address implements DatabaseOperations {
 
             this.setAddressID(address.getAddressID());
             this.setCountry(address.getCountry());
-            if (!address.getProvince().isEmpty()) {
+            if (address.getProvince() != null) {
                 this.setProvince(address.getProvince());
             }
-            if (!address.getCity().isEmpty()) {
+            if (address.getCity() != null) {
                 this.setCity(address.getCity());
             }
-            if (!address.getStreet().isEmpty()) {
+            if (address.getStreet() != null) {
                 this.setStreet(address.getStreet());
             }
-            if (!address.getPostalCode().isEmpty()) {
+            if (address.getPostalCode() != null) {
                 this.setPostalCode(address.getPostalCode());
             }
-            if (!address.getAddressLine().isEmpty()) {
+            if (address.getAddressLine() != null) {
                 this.setAddressLine(address.getAddressLine());
             }
-            if (!address.getNotes().isEmpty()) {
+            if (address.getNotes() != null) {
                 this.setNotes(address.getNotes());
             }
         }

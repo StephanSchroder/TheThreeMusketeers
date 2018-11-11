@@ -17,7 +17,6 @@ import BLL.Common;
 import BLL.Contact;
 import BLL.Department;
 import BLL.Exceptions.UserDoesNotExistException;
-import BLL.Factories.UserFactory;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.ParseException;
@@ -29,6 +28,7 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import BLL.Sorting.User.*;
 import BLL.Interfaces.FormSetUp;
+import BLL.Person;
 import javax.swing.DefaultComboBoxModel;
 
 /**
@@ -88,6 +88,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
 
     private void initModel() {
         disableAllFields();
+        populateDepartmentCMB();
         setModel();
         clearAllFields();
         setUIAccess(true);
@@ -117,9 +118,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
             setViewingOptions();
             DefaultTableModel model = (DefaultTableModel) tblData.getModel();
             model.setNumRows(0);
-            populateDepartmentCMB();
-            Object rowData[] = new Object[19];
-            Object columnData[] = new Object[19];
+            Object columnData[] = new Object[23];
             columnData[0] = "Date added";
             columnData[1] = "ID number";
             columnData[2] = "Title";
@@ -143,10 +142,10 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
             columnData[20] = "Cell number";
             columnData[21] = "Tel number";
             columnData[22] = "Contact notes";
-            //Password missing
             model.setColumnCount(23);
             model.setColumnIdentifiers(columnData);
             for (int i = 0; i < users.size(); i++) {
+                Object rowData[] = new Object[23];
                 rowData[0] = users.get(i).getDateAddedString();
                 rowData[1] = users.get(i).getIdNumber();
                 rowData[2] = users.get(i).getTitle();
@@ -391,27 +390,27 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
     }
 
     public void resetColor() {
-        txtIDNumber.setBackground(Color.white);
-        txtFirstName.setBackground(Color.white);
-        txtLastName.setBackground(Color.white);
-        cmbTitle.setBackground(Color.white);
-        cmbGender.setBackground(Color.white);
-        cmbDepartment.setBackground(Color.white);
-        txtCountry.setBackground(Color.white);
-        txtProvince.setBackground(Color.white);
-        txtCity.setBackground(Color.white);
-        txtStreet.setBackground(Color.white);
-        txtPostalCode.setBackground(Color.white);
-        txtAddressLine.setBackground(Color.white);
-        txtAddressNotes.setBackground(Color.white);
-        txtEmail.setBackground(Color.white);
-        txtCell.setBackground(Color.white);
-        txtTel.setBackground(Color.white);
-        txtContactNotes.setBackground(Color.white);
-        dobPicker.setBackground(Color.white);
-        txtUsername.setBackground(Color.white);
-        txtPassword.setBackground(Color.white);
-        cmbAccountType.setBackground(Color.white);
+        txtIDNumber.setBackground(new Color(19,54,57));
+        txtFirstName.setBackground(new Color(19,54,57));
+        txtLastName.setBackground(new Color(19,54,57));
+        cmbTitle.setBackground(new Color(19,54,57));
+        cmbGender.setBackground(new Color(19,54,57));
+        cmbDepartment.setBackground(new Color(19,54,57));
+        txtCountry.setBackground(new Color(19,54,57));
+        txtProvince.setBackground(new Color(19,54,57));
+        txtCity.setBackground(new Color(19,54,57));
+        txtStreet.setBackground(new Color(19,54,57));
+        txtPostalCode.setBackground(new Color(19,54,57));
+        txtAddressLine.setBackground(new Color(19,54,57));
+        txtAddressNotes.setBackground(new Color(19,54,57));
+        txtEmail.setBackground(new Color(19,54,57));
+        txtCell.setBackground(new Color(19,54,57));
+        txtTel.setBackground(new Color(19,54,57));
+        txtContactNotes.setBackground(new Color(19,54,57));
+        dobPicker.setBackground(new Color(19,54,57));
+        txtUsername.setBackground(new Color(19,54,57));
+        txtPassword.setBackground(new Color(19,54,57));
+        cmbAccountType.setBackground(new Color(19,54,57));
     }
     
     public void setViewingOptions() {
@@ -579,13 +578,6 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         jLabel25 = new javax.swing.JLabel();
         txtTel = new javax.swing.JTextField();
         jSeparator21 = new javax.swing.JSeparator();
-        jSeparator24 = new javax.swing.JSeparator();
-        jLabel28 = new javax.swing.JLabel();
-        jLabel29 = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        txtContactNotes = new javax.swing.JTextArea();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        txtAddressNotes = new javax.swing.JTextArea();
         jPanel3 = new javax.swing.JPanel();
         txtIDNumber = new javax.swing.JTextField();
         txtLastName = new javax.swing.JTextField();
@@ -605,20 +597,25 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         jLabel10 = new javax.swing.JLabel();
         cmbDepartment = new javax.swing.JComboBox<>();
         jSeparator6 = new javax.swing.JSeparator();
-        jLabel19 = new javax.swing.JLabel();
-        jLabel26 = new javax.swing.JLabel();
-        jLabel27 = new javax.swing.JLabel();
-        cmbAccountType = new javax.swing.JComboBox<>();
-        jSeparator13 = new javax.swing.JSeparator();
-        txtPassword = new javax.swing.JTextField();
-        jSeparator15 = new javax.swing.JSeparator();
-        txtUsername = new javax.swing.JTextField();
-        jSeparator14 = new javax.swing.JSeparator();
-        jSeparator22 = new javax.swing.JSeparator();
         cmbGender = new javax.swing.JComboBox<>();
         jLabel14 = new javax.swing.JLabel();
         jSeparator23 = new javax.swing.JSeparator();
         btnDepartments = new javax.swing.JButton();
+        jLabel28 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        txtAddressNotes = new javax.swing.JTextArea();
+        jLabel29 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtContactNotes = new javax.swing.JTextArea();
+        jSeparator14 = new javax.swing.JSeparator();
+        jLabel19 = new javax.swing.JLabel();
+        txtUsername = new javax.swing.JTextField();
+        jSeparator22 = new javax.swing.JSeparator();
+        jSeparator13 = new javax.swing.JSeparator();
+        cmbAccountType = new javax.swing.JComboBox<>();
+        txtPassword = new javax.swing.JTextField();
+        jLabel26 = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -1000,31 +997,12 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
             }
         });
 
-        jSeparator24.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-
-        jLabel28.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        jLabel28.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel28.setText("Address Notes:");
-
-        jLabel29.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        jLabel29.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel29.setText("Contact Notes:");
-
-        txtContactNotes.setColumns(20);
-        txtContactNotes.setRows(5);
-        jScrollPane2.setViewportView(txtContactNotes);
-
-        txtAddressNotes.setColumns(20);
-        txtAddressNotes.setRows(5);
-        jScrollPane3.setViewportView(txtAddressNotes);
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator24)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(14, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel11)
@@ -1064,19 +1042,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                         .addComponent(jSeparator11, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(txtPostalCode, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jSeparator7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(85, 85, 85))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel29)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel28)
-                        .addGap(32, 32, 32)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addGap(13, 13, 13))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1148,17 +1114,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                     .addComponent(jLabel25))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator21, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jSeparator24, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel28)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel29))
-                .addGap(42, 42, 42))
+                .addContainerGap())
         );
 
         jPanel3.setBackground(new java.awt.Color(19, 54, 57));
@@ -1240,50 +1196,6 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         cmbDepartment.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         cmbDepartment.setBorder(null);
 
-        jLabel19.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        jLabel19.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel19.setText("Username:");
-
-        jLabel26.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        jLabel26.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel26.setText("Password:");
-
-        jLabel27.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        jLabel27.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel27.setText("Account Type:");
-
-        cmbAccountType.setBackground(new java.awt.Color(19, 54, 57));
-        cmbAccountType.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        cmbAccountType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NORMAL", "ADMIN", "BANNED", "RESTRICTED" }));
-
-        txtPassword.setBackground(new java.awt.Color(19, 54, 57));
-        txtPassword.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        txtPassword.setForeground(new java.awt.Color(255, 255, 255));
-        txtPassword.setBorder(null);
-        txtPassword.setName("txtUserName"); // NOI18N
-        txtPassword.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtPasswordFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtPasswordFocusLost(evt);
-            }
-        });
-
-        txtUsername.setBackground(new java.awt.Color(19, 54, 57));
-        txtUsername.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        txtUsername.setForeground(new java.awt.Color(255, 255, 255));
-        txtUsername.setBorder(null);
-        txtUsername.setName("txtUserName"); // NOI18N
-        txtUsername.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtUsernameFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtUsernameFocusLost(evt);
-            }
-        });
-
         cmbGender.setBackground(new java.awt.Color(19, 54, 57));
         cmbGender.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         cmbGender.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Male", "Female" }));
@@ -1309,65 +1221,49 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator15)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(jPanel3Layout.createSequentialGroup()
-                            .addGap(68, 68, 68)
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(jPanel3Layout.createSequentialGroup()
-                                    .addComponent(jLabel9)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(dobPicker, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(jPanel3Layout.createSequentialGroup()
-                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jLabel5)
-                                        .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING))
-                                    .addGap(25, 25, 25)
-                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jSeparator3)
-                                        .addComponent(txtFirstName)
-                                        .addComponent(txtLastName)
-                                        .addComponent(txtIDNumber)
-                                        .addComponent(jSeparator1)
-                                        .addComponent(jSeparator4)
-                                        .addComponent(cmbTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGroup(jPanel3Layout.createSequentialGroup()
-                                    .addComponent(jLabel10)
-                                    .addGap(48, 48, 48)
-                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(cmbGender, 0, 214, Short.MAX_VALUE)
-                                        .addComponent(jSeparator5)))
-                                .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(jPanel3Layout.createSequentialGroup()
-                            .addGap(69, 69, 69)
-                            .addComponent(jLabel14)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(btnDepartments, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(jPanel3Layout.createSequentialGroup()
-                                    .addComponent(jSeparator23, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(0, 0, Short.MAX_VALUE))
-                                .addComponent(cmbDepartment, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(51, 51, 51)
+                        .addGap(14, 14, 14)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addGap(18, 18, 18)
+                                .addComponent(dobPicker, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING))
+                                .addGap(25, 25, 25)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jSeparator3)
+                                    .addComponent(txtFirstName)
+                                    .addComponent(txtLastName)
+                                    .addComponent(txtIDNumber)
+                                    .addComponent(jSeparator1)
+                                    .addComponent(jSeparator4)
+                                    .addComponent(cmbTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel10)
+                                .addGap(48, 48, 48)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(cmbGender, 0, 214, Short.MAX_VALUE)
+                                    .addComponent(jSeparator5)))
+                            .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addComponent(jLabel14)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel27)
-                            .addComponent(jLabel26)
-                            .addComponent(jLabel19))
-                        .addGap(21, 21, 21)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jSeparator13)
-                            .addComponent(cmbAccountType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jSeparator14)
-                            .addComponent(txtUsername)
-                            .addComponent(txtPassword)
-                            .addComponent(jSeparator22, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(102, Short.MAX_VALUE))
+                            .addComponent(btnDepartments, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jSeparator23, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(cmbDepartment, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1416,54 +1312,77 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                 .addComponent(jSeparator23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnDepartments, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, Short.MAX_VALUE)
-                .addComponent(jSeparator15, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel19))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator14, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(3, 3, 3)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel26)
-                    .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(3, 3, 3)
-                .addComponent(jSeparator22, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel27)
-                    .addComponent(cmbAccountType, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator13, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
+
+        jLabel28.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        jLabel28.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel28.setText("Address Notes:");
+
+        txtAddressNotes.setColumns(20);
+        txtAddressNotes.setRows(5);
+        jScrollPane3.setViewportView(txtAddressNotes);
+
+        jLabel29.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        jLabel29.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel29.setText("Contact Notes:");
+
+        txtContactNotes.setColumns(20);
+        txtContactNotes.setRows(5);
+        jScrollPane2.setViewportView(txtContactNotes);
+
+        jLabel19.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        jLabel19.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel19.setText("Username:");
+
+        txtUsername.setBackground(new java.awt.Color(19, 54, 57));
+        txtUsername.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        txtUsername.setForeground(new java.awt.Color(255, 255, 255));
+        txtUsername.setBorder(null);
+        txtUsername.setName("txtUserName"); // NOI18N
+        txtUsername.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtUsernameFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtUsernameFocusLost(evt);
+            }
+        });
+
+        cmbAccountType.setBackground(new java.awt.Color(19, 54, 57));
+        cmbAccountType.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        cmbAccountType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NORMAL", "ADMIN", "BANNED", "RESTRICTED" }));
+
+        txtPassword.setBackground(new java.awt.Color(19, 54, 57));
+        txtPassword.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        txtPassword.setForeground(new java.awt.Color(255, 255, 255));
+        txtPassword.setBorder(null);
+        txtPassword.setName("txtUserName"); // NOI18N
+        txtPassword.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtPasswordFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtPasswordFocusLost(evt);
+            }
+        });
+
+        jLabel26.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        jLabel26.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel26.setText("Password:");
+
+        jLabel27.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        jLabel27.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel27.setText("Account Type:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(49, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(btnReject, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(btnBan, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(btnApprove, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(btnUpdate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(btnInsert, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(28, 28, 28)
-                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 741, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1390, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1490,7 +1409,50 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                                     .addComponent(cmbSearchBy, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(lbLabel3))))))
+                                .addComponent(lbLabel3))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnReject, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnBan, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(btnApprove, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnUpdate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnInsert, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel28)
+                                        .addGap(32, 32, 32)
+                                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(8, 8, 8)
+                                        .addComponent(jLabel29)
+                                        .addGap(23, 23, 23)
+                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(25, 25, 25)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel27)
+                                    .addComponent(jLabel26)
+                                    .addComponent(jLabel19))
+                                .addGap(21, 21, 21)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jSeparator13)
+                                    .addComponent(cmbAccountType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jSeparator14)
+                                    .addComponent(txtUsername)
+                                    .addComponent(txtPassword)
+                                    .addComponent(jSeparator22, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1517,28 +1479,55 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator12, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(47, 47, 47)
-                                .addComponent(btnInsert, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(11, 11, 11)
-                                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnApprove, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnReject, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnBan, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(41, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(47, 47, 47)
+                        .addComponent(btnInsert, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(11, 11, 11)
+                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnApprove, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnReject, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnBan, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(70, 70, 70)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel28)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel29))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel19))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSeparator14, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(3, 3, 3)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel26)
+                            .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(3, 3, 3)
+                        .addComponent(jSeparator22, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel27)
+                            .addComponent(cmbAccountType, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSeparator13, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jLabel2.setFont(new java.awt.Font("Century Gothic", 1, 44)); // NOI18N
@@ -1559,8 +1548,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(64, 64, 64))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1572,7 +1560,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 2, Short.MAX_VALUE))
         );
 
         miStaffMenu.setText("Staff");
@@ -1621,13 +1609,11 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 1608, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 1118, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -1874,7 +1860,6 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
             clearAllFields();
             prepareInsert();
         } else {
-            UserFactory userFactory = new UserFactory();
             resetColor();
             String idNumber;
             String firstName;
@@ -1888,33 +1873,39 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
             String street;
             String postalCode;
             String addressLine;
+            String addressNotes;
             String email;
             String cellNumber;
             String telNumber;
+            String contactNotes;
             String username;
             String password;
             String accountType;
+            String campus;
             String department;
 
-            idNumber = txtIDNumber.getText();
-            firstName = txtFirstName.getText();
-            lastName = txtLastName.getText();
-            title = cmbTitle.getSelectedItem().toString();
-            dateOfBirth = dobPicker.getDate();
-            gender = cmbGender.getSelectedItem().toString();
-            country = txtCountry.getText();
+            idNumber = (txtIDNumber.getText() != null) ? txtIDNumber.getText() : "";
+            firstName = (txtFirstName.getText() != null) ? txtFirstName.getText() : "";
+            lastName = (txtLastName.getText() != null) ? txtLastName.getText() : "";
+            title = (cmbTitle.getSelectedItem().toString() != null) ? cmbTitle.getSelectedItem().toString() : "";
+            dateOfBirth = (dobPicker.getDate() != null) ? dobPicker.getDate() : new Date(1800, 01, 01);
+            gender = (cmbGender.getSelectedItem().toString() != null) ? cmbGender.getSelectedItem().toString() : "";
+            country = (txtCountry.getText() != null) ? txtCountry.getText() : "";
             province = (txtProvince.getText() != null) ? txtProvince.getText() : "";
             city = (txtCity.getText() != null) ? txtCity.getText() : "";
             street = (txtStreet.getText() != null) ? txtStreet.getText() : "";
             postalCode = (txtPostalCode.getText() != null) ? txtPostalCode.getText() : "";
             addressLine = (txtAddressLine.getText() != null) ? txtAddressLine.getText() : "";
+            addressNotes = (txtAddressNotes.getText() != null) ? txtAddressNotes.getText() : "";
             email = (txtEmail.getText() != null) ? txtEmail.getText() : "";
             cellNumber = (txtCell.getText() != null) ? txtCell.getText() : "";
             telNumber = (txtTel.getText() != null) ? txtTel.getText() : "";
-            username = txtUsername.getText();
-            password = txtPassword.getText();
-            accountType = cmbAccountType.getSelectedItem().toString();
-            department = cmbDepartment.getSelectedItem().toString().split(" - ")[1];
+            contactNotes = (txtContactNotes.getText() != null) ? txtContactNotes.getText() : "";
+            username = (txtUsername.getText() != null) ? txtUsername.getText() : "";
+            password = (txtPassword.getText() != null) ? txtPassword.getText() : "";
+            accountType = (cmbAccountType.getSelectedItem().toString() != null) ? cmbAccountType.getSelectedItem().toString() : "";
+            campus = (cmbDepartment.getSelectedItem().toString().split(" - ")[0] != null) ? cmbDepartment.getSelectedItem().toString().split(" - ")[0] : "";
+            department = (cmbDepartment.getSelectedItem().toString().split(" - ")[1] != null) ? cmbDepartment.getSelectedItem().toString().split(" - ")[1] : "";
 
             boolean check = true;
             if (Common.checkInput(idNumber) != 10 || idNumber.length() != 13) {
@@ -1973,20 +1964,30 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                 txtAddressLine.setBackground(Color.orange);
                 txtAddressLine.setToolTipText("(Optional Field) Any characters. Max 50 characters");
             }
-            if (!(Common.checkInput(email) == 0 || Common.checkInput(email) == 9) || email.length() > 30) {
+            if (addressNotes.length() > 100) {
                 check = false;
-                txtEmail.setBackground(Color.orange);
-                txtEmail.setToolTipText("(Optional Field) Only valid email address. Max 30 characters");
+                txtAddressNotes.setBackground(Color.orange);
+                txtAddressNotes.setToolTipText("(Optional Field) Any characters. Max 100 characters");
             }
-            if (!(Common.checkInput(cellNumber) == 0 || (Common.checkInput(cellNumber) == 2 && cellNumber.length() == 10))) {
+            if (Common.checkInput(email) != 9  || email.length() > 30) {
                 check = false;
-                txtCell.setBackground(Color.orange);
-                txtCell.setToolTipText("(Optional Field) Only numerical values. Must be 10 characters");
+                txtEmail.setBackground(Color.red);
+                txtEmail.setToolTipText("Only valid email address allowed. Max 30 characters");
+            }
+            if (Common.checkInput(cellNumber) != 2 || cellNumber.length() != 10) {
+                check = false;
+                txtCell.setBackground(Color.red);
+                txtCell.setToolTipText("Only numerical values. Must be 10 characters");
             }
             if (!(Common.checkInput(telNumber) == 0 || (Common.checkInput(telNumber) == 2 && telNumber.length() == 10))) {
                 check = false;
                 txtTel.setBackground(Color.orange);
                 txtTel.setToolTipText("(Optional Field) Only numerical values. Must be 10 characters");
+            }
+            if (contactNotes.length() > 100) {
+                check = false;
+                txtContactNotes.setBackground(Color.orange);
+                txtContactNotes.setToolTipText("(Optional Field) Any characters. Max 100 characters");
             }
             if (Common.checkInput(username) != 1 || username.length() > 20) {
                 check = false;
@@ -2004,10 +2005,10 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                 cmbAccountType.setToolTipText("Only alphabetical characters. Max 50 characters");
             }
 
-            if (check == true) {
+            if (check) {
                 int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to add this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 0) {
-                    new User(firstName, lastName, title, dateOfBirth, gender, country, province, city, street, postalCode, addressLine, email, cellNumber, telNumber, new Date(), 0, username, password, accountType, idNumber).registerUser();
+                    User.create(new User(Department.read(department, campus), username, password, accountType, idNumber, firstName, lastName, title, dateOfBirth, gender, new Address(country, province, city, street, postalCode, addressLine, addressNotes), new Contact(email, cellNumber, telNumber, contactNotes)));
                     resetBaseUsers();
                     setModel();
                 }
@@ -2184,31 +2185,39 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
             String street;
             String postalCode;
             String addressLine;
+            String addressNotes;
             String email;
             String cellNumber;
             String telNumber;
+            String contactNotes;
             String username;
             String password;
             String accountType;
+            String campus;
+            String department;
 
-            idNumber = txtIDNumber.getText();
-            firstName = txtFirstName.getText();
-            lastName = txtLastName.getText();
-            title = cmbTitle.getSelectedItem().toString();
-            dateOfBirth = dobPicker.getDate();
-            gender = cmbGender.getSelectedItem().toString();
-            country = txtCountry.getText();
+            idNumber = (txtIDNumber.getText() != null) ? txtIDNumber.getText() : "";
+            firstName = (txtFirstName.getText() != null) ? txtFirstName.getText() : "";
+            lastName = (txtLastName.getText() != null) ? txtLastName.getText() : "";
+            title = (cmbTitle.getSelectedItem().toString() != null) ? cmbTitle.getSelectedItem().toString() : "";
+            dateOfBirth = (dobPicker.getDate() != null) ? dobPicker.getDate() : new Date(1800, 01, 01);
+            gender = (cmbGender.getSelectedItem().toString() != null) ? cmbGender.getSelectedItem().toString() : "";
+            country = (txtCountry.getText() != null) ? txtCountry.getText() : "";
             province = (txtProvince.getText() != null) ? txtProvince.getText() : "";
             city = (txtCity.getText() != null) ? txtCity.getText() : "";
             street = (txtStreet.getText() != null) ? txtStreet.getText() : "";
             postalCode = (txtPostalCode.getText() != null) ? txtPostalCode.getText() : "";
             addressLine = (txtAddressLine.getText() != null) ? txtAddressLine.getText() : "";
+            addressNotes = (txtAddressNotes.getText() != null) ? txtAddressNotes.getText() : "";
             email = (txtEmail.getText() != null) ? txtEmail.getText() : "";
             cellNumber = (txtCell.getText() != null) ? txtCell.getText() : "";
             telNumber = (txtTel.getText() != null) ? txtTel.getText() : "";
-            username = txtUsername.getText();
-            password = txtPassword.getText();
-            accountType = cmbAccountType.getSelectedItem().toString();
+            contactNotes = (txtContactNotes.getText() != null) ? txtContactNotes.getText() : "";
+            username = (txtUsername.getText() != null) ? txtUsername.getText() : "";
+            password = (txtPassword.getText() != null) ? txtPassword.getText() : "";
+            accountType = (cmbAccountType.getSelectedItem().toString() != null) ? cmbAccountType.getSelectedItem().toString() : "";
+            campus = (cmbDepartment.getSelectedItem().toString().split(" - ")[0] != null) ? cmbDepartment.getSelectedItem().toString().split(" - ")[0] : "";
+            department = (cmbDepartment.getSelectedItem().toString().split(" - ")[1] != null) ? cmbDepartment.getSelectedItem().toString().split(" - ")[1] : "";
 
             boolean check = true;
             if (Common.checkInput(idNumber) != 10 || idNumber.length() != 13) {
@@ -2267,27 +2276,37 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                 txtAddressLine.setBackground(Color.orange);
                 txtAddressLine.setToolTipText("(Optional Field) Any characters. Max 50 characters");
             }
-            if (!(Common.checkInput(email) == 0 || Common.checkInput(email) == 9) || email.length() > 30) {
+            if (addressNotes.length() > 100) {
                 check = false;
-                txtEmail.setBackground(Color.orange);
-                txtEmail.setToolTipText("(Optional Field) Only valid email address. Max 30 characters");
+                txtAddressNotes.setBackground(Color.orange);
+                txtAddressNotes.setToolTipText("(Optional Field) Any characters. Max 100 characters");
             }
-            if (!(Common.checkInput(cellNumber) == 0 || (Common.checkInput(cellNumber) == 2 && cellNumber.length() == 10))) {
+            if (Common.checkInput(email) != 9  || email.length() > 30) {
                 check = false;
-                txtCell.setBackground(Color.orange);
-                txtCell.setToolTipText("(Optional Field) Only numerical values. Must be 10 characters");
+                txtEmail.setBackground(Color.red);
+                txtEmail.setToolTipText("Only valid email address allowed. Max 30 characters");
+            }
+            if (Common.checkInput(cellNumber) != 2 || cellNumber.length() != 10) {
+                check = false;
+                txtCell.setBackground(Color.red);
+                txtCell.setToolTipText("Only numerical values. Must be 10 characters");
             }
             if (!(Common.checkInput(telNumber) == 0 || (Common.checkInput(telNumber) == 2 && telNumber.length() == 10))) {
                 check = false;
                 txtTel.setBackground(Color.orange);
                 txtTel.setToolTipText("(Optional Field) Only numerical values. Must be 10 characters");
             }
+            if (contactNotes.length() > 100) {
+                check = false;
+                txtContactNotes.setBackground(Color.orange);
+                txtContactNotes.setToolTipText("(Optional Field) Any characters. Max 100 characters");
+            }
             if (Common.checkInput(username) != 1 || username.length() > 20) {
                 check = false;
                 txtUsername.setBackground(Color.red);
                 txtUsername.setToolTipText("Only alphabetical characters. Max 20 characters");
             }
-            if (password.length() > 0 && (Common.checkInput(password) != 7 || password.length() < 4 || password.length() > 20)) {
+            if (Common.checkInput(password) != 7 || password.length() < 4 || password.length() > 20) {
                 check = false;
                 txtPassword.setBackground(Color.red);
                 txtPassword.setToolTipText("Must contain alphabetical characters and at least one numerical value and at least one special character. Min 4 characters. Max 20 characters");
@@ -2298,10 +2317,11 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                 cmbAccountType.setToolTipText("Only alphabetical characters. Max 50 characters");
             }
 
-            if (check == true) {
+            if (check) {
                 int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to update this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 0) {
-                    new User(firstName, lastName, title, dateOfBirth, gender, country, province, city, street, postalCode, addressLine, email, cellNumber, telNumber, new Date(), User.GetUserByIdNumber(idNumber).getUserID(), username, password, accountType, idNumber).updateUser();
+                    //User.create(new User(Department.read(department, campus), username, password, accountType, idNumber, firstName, lastName, title, dateOfBirth, gender, new Address(country, province, city, street, postalCode, addressLine, addressNotes), new Contact(email, cellNumber, telNumber, contactNotes)));
+                    User.update(new User(User.readByIdNumber(idNumber).getUserID(), Department.read(department, campus), username, password, accountType, idNumber, firstName, lastName, title, dateOfBirth, gender, new Address(User.readByIdNumber(idNumber).getAddress().getAddressID(), country, province, city, street, postalCode, addressLine, addressNotes), new Contact(User.readByIdNumber(idNumber).getContact().getContactID(), email, cellNumber, telNumber, contactNotes), User.readByIdNumber(idNumber).getDateAdded()));
                     resetBaseUsers();
                     setModel();
                 }
@@ -2524,7 +2544,8 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
     }//GEN-LAST:event_txtFirstNameFocusGained
 
     private void btnDepartmentsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDepartmentsActionPerformed
-        // TODO add your handling code here:
+        new DepartmentForm(currentUser).setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnDepartmentsActionPerformed
 
     /**
@@ -2623,7 +2644,6 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
     private javax.swing.JSeparator jSeparator12;
     private javax.swing.JSeparator jSeparator13;
     private javax.swing.JSeparator jSeparator14;
-    private javax.swing.JSeparator jSeparator15;
     private javax.swing.JSeparator jSeparator16;
     private javax.swing.JSeparator jSeparator17;
     private javax.swing.JSeparator jSeparator18;
@@ -2633,7 +2653,6 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
     private javax.swing.JSeparator jSeparator21;
     private javax.swing.JSeparator jSeparator22;
     private javax.swing.JSeparator jSeparator23;
-    private javax.swing.JSeparator jSeparator24;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSeparator jSeparator5;

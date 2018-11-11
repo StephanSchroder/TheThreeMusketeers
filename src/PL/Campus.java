@@ -5,6 +5,9 @@
  */
 package PL;
 
+import BLL.User;
+import BLL.Common;
+
 /**
  *
  * @author Stephan
@@ -15,6 +18,10 @@ public class Campus extends javax.swing.JFrame {
      * Creates new form Campus
      */
     public Campus() {
+        initComponents();
+    }
+    
+    public Campus(User u) {
         initComponents();
     }
 
@@ -657,13 +664,12 @@ public class Campus extends javax.swing.JFrame {
 
     private void txtCampusIDFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCampusIDFocusGained
         // TODO add your handling code here:
-        Common.focusGain("ID number", txtDepartmentID);
+        Common.focusGain("Campus ID", txtCampusID);
     }//GEN-LAST:event_txtCampusIDFocusGained
 
     private void txtCampusIDFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCampusIDFocusLost
         // TODO add your handling code here:
-
-        Common.focusLost("ID number", txtDepartmentID);
+        Common.focusLost("Campus ID", txtCampusID);
     }//GEN-LAST:event_txtCampusIDFocusLost
 
     private void txtCampusNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCampusNameFocusGained
@@ -778,7 +784,7 @@ public class Campus extends javax.swing.JFrame {
     }//GEN-LAST:event_txtTelFocusLost
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        if (insertClick == 0) {
+        /*if (insertClick == 0) {
             insertClick++;
             setUIAccess(false);
             btnAdd.setEnabled(true);
@@ -854,12 +860,12 @@ public class Campus extends javax.swing.JFrame {
                     setUIAccess(true);
                 }
             }
-        }
+        }*/
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         //Update record
-        if (updateClick == 0) {
+        /*if (updateClick == 0) {
             updateClick++;
             setUIAccess(false);
             btnUpdate.setEnabled(true);
@@ -941,12 +947,12 @@ public class Campus extends javax.swing.JFrame {
                     setUIAccess(true);
                 }
             }
-        }
+        }*/
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // Delete Record
-        if (Common.checkInput(txtStockID.getText()) == 2 && Stock.read(Integer.parseInt(txtStockID.getText())) != null) {
+        /*if (Common.checkInput(txtStockID.getText()) == 2 && Stock.read(Integer.parseInt(txtStockID.getText())) != null) {
             int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to Delete this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
             if (option == 0) {
                 String category = (cmbCategory.getItemCount() > 0) ? cmbCategory.getSelectedItem().toString() : "";
@@ -960,7 +966,7 @@ public class Campus extends javax.swing.JFrame {
         }
         } else {
             JOptionPane.showMessageDialog(null, "No valid stock item selected");
-        }
+        }*/
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     /**
