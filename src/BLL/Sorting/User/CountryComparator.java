@@ -5,7 +5,7 @@
  */
 package BLL.Sorting.User;
 
-import BLL.Address;
+import BLL.User;
 import java.util.Comparator;
 
 /**
@@ -15,8 +15,8 @@ import java.util.Comparator;
 public class CountryComparator implements Comparator {
     @Override
     public int compare(Object o1, Object o2) {
-        Address address1 = (Address) o1;
-        Address address2 = (Address) o2;
-        return address1.getCountry().toLowerCase().compareTo(address2.getCountry().toLowerCase());
+        User user1 = (User) o1;
+        User user2 = (User) o2;
+        return user1.getAddress().getCountry().toLowerCase().compareTo(user2.getAddress().getCountry().toLowerCase());
     }
 }

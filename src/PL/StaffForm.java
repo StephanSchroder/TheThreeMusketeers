@@ -6,7 +6,6 @@
 package PL;
 
 import BLL.Address;
-import BLL.Campus;
 import BLL.User;
 import java.awt.Color;
 import java.text.SimpleDateFormat;
@@ -21,14 +20,12 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import BLL.Sorting.User.*;
 import BLL.Interfaces.FormSetUp;
-import BLL.Person;
 import javax.swing.DefaultComboBoxModel;
 
 /**
@@ -116,6 +113,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                 cmbAccountType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NORMAL", "BANNED", "RESTRICTED" }));
             }
             setViewingOptions();
+            setSortingOptions();
             DefaultTableModel model = (DefaultTableModel) tblData.getModel();
             model.setNumRows(0);
             Object columnData[] = new Object[23];
@@ -205,57 +203,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
             Object item = e.getItem();
 
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                String txt = cmbSortBy.getSelectedItem().toString();
-                switch (txt) {
-                    case "ID number":
-                        users.sort(new IDNumberComparator());
-                        break;
-                    case "First name":
-                        users.sort(new FirstNameComparator());
-                        break;
-                    case "Last name":
-                        users.sort(new LastNameComparator());
-                        break;
-                    case "Title":
-                        users.sort(new TitleComparator());
-                        break;
-                    case "Gender":
-                        users.sort(new GenderComparator());
-                        break;
-                    case "Country":
-                        users.sort(new CountryComparator());
-                        break;
-                    case "Province":
-                        users.sort(new ProvinceComparator());
-                        break;
-                    case "City":
-                        users.sort(new CityComparator());
-                        break;
-                    case "Street":
-                        users.sort(new StreetComparator());
-                        break;
-                    case "Postal code":
-                        users.sort(new PostalCodeComparator());
-                        break;
-                    case "Address line":
-                        users.sort(new AddressLineComparator());
-                        break;
-                    case "User ID":
-                        users.sort(new UserIDComparator());
-                        break;
-                    case "Username":
-                        users.sort(new UsernameComparator());
-                        break;
-                    case "Account type":
-                        users.sort(new AccountTypeComparator());
-                        break;
-                    case "Campus":
-                        users.sort(new CampusComparator());
-                        break;
-                    case "Department":
-                        users.sort(new DepartmentComparator());
-                        break;
-                }
+                setModel();
             }
         }
     }
@@ -268,7 +216,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         dobPicker.setEnabled(false);
         cmbGender.setEnabled(false);
         cmbDepartment.setEnabled(false);
-        btnDepartments.setEnabled(true);
+        btnDepartments.setEnabled(((currentUser != null) ? true : false));
 
         txtCountry.setEnabled(false);
         txtProvince.setEnabled(false);
@@ -467,14 +415,68 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         }
     }
     
+    public void setSortingOptions() {
+        String txt = cmbSortBy.getSelectedItem().toString();
+        switch (txt) {
+            case "ID number":
+                users.sort(new IDNumberComparator());
+                break;
+            case "First name":
+                users.sort(new FirstNameComparator());
+                break;
+            case "Last name":
+                users.sort(new LastNameComparator());
+                break;
+            case "Title":
+                users.sort(new TitleComparator());
+                break;
+            case "Gender":
+                users.sort(new GenderComparator());
+                break;
+            case "Country":
+                users.sort(new CountryComparator());
+                break;
+            case "Province":
+                users.sort(new ProvinceComparator());
+                break;
+            case "City":
+                users.sort(new CityComparator());
+                break;
+            case "Street":
+                users.sort(new StreetComparator());
+                break;
+            case "Postal code":
+                users.sort(new PostalCodeComparator());
+                break;
+            case "Address line":
+                users.sort(new AddressLineComparator());
+                break;
+            case "User ID":
+                users.sort(new UserIDComparator());
+                break;
+            case "Username":
+                users.sort(new UsernameComparator());
+                break;
+            case "Account type":
+                users.sort(new AccountTypeComparator());
+                break;
+            case "Campus":
+                users.sort(new CampusComparator());
+                break;
+            case "Department":
+                users.sort(new DepartmentComparator());
+                break;
+        }
+    }
+    
     public void resetBaseUsers() {
         baseUsers = (currentUser != null && currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.read() : User.readNonAdminUsers();
-        setViewingOptions();
+        setModel();
     }
     
     public void resetBaseUsers(List<User> newBase) {
         baseUsers = newBase;
-        setViewingOptions();
+        setModel();
     }
 
     public void setViewingOptions(boolean value) {
@@ -720,7 +722,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         });
 
         cmbSearchBy.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        cmbSearchBy.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID number", "First name", "Last name", "Full name", "Title", "Date of birth", "Gender", "Country", "Province", "City", "Street", "Postal code", "Address line", "Email", "Cell number", "Tel number", "Date added", "User ID", "Username", "Account type" }));
+        cmbSearchBy.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID number", "First name", "Last name", "Full name", "Title", "Gender", "Country", "Province", "City", "Street", "Postal code", "Address line", "Email", "Cell number", "Tel number", "User ID", "Username", "Account type" }));
 
         txtSearch.setBackground(new java.awt.Color(19, 54, 57));
         txtSearch.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
@@ -1825,7 +1827,6 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
 
     private void cmbViewOptionsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbViewOptionsItemStateChanged
         if (evt.getStateChange() == ItemEvent.SELECTED) {
-            setViewingOptions();
             setModel();
         }
     }//GEN-LAST:event_cmbViewOptionsItemStateChanged
