@@ -9,6 +9,7 @@ import BLL.*;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,6 +32,14 @@ public class OrderBuilder {
 
     public void setOrder(Order order) {
         this.order = order;
+    }
+    
+    public void read(int orderID) {
+        order = Order.read(orderID);
+        List<StockOrder> stockorders = StockOrder.read(orderID);
+        for (StockOrder stockorder : stockorders) {
+            stocks.put(stockorder.getStock(), stockorder.getQuantity());
+        }
     }
     
     public void addStock(Stock stock, int quantity) {
