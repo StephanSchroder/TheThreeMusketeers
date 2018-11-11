@@ -5,12 +5,18 @@
  */
 package PL;
 
+import BLL.Common;
+import java.awt.Color;
+import java.util.Date;
+
 /**
  *
  * @author Stephan
  */
 public class Campus extends javax.swing.JFrame {
 
+    private int insertClick = 0;
+    private int updateClick = 0;
     /**
      * Creates new form Campus
      */
@@ -503,9 +509,9 @@ public class Campus extends javax.swing.JFrame {
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel11)
                             .addComponent(txtCountry, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
-                        .addComponent(jSeparator7, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSeparator7, javax.swing.GroupLayout.DEFAULT_SIZE, 17, Short.MAX_VALUE)
+                        .addGap(27, 27, 27)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(txtProvince, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel12))
@@ -657,13 +663,13 @@ public class Campus extends javax.swing.JFrame {
 
     private void txtCampusIDFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCampusIDFocusGained
         // TODO add your handling code here:
-        Common.focusGain("ID number", txtDepartmentID);
+        Common.focusGain("ID number", txtCampusID);
     }//GEN-LAST:event_txtCampusIDFocusGained
 
     private void txtCampusIDFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCampusIDFocusLost
         // TODO add your handling code here:
 
-        Common.focusLost("ID number", txtDepartmentID);
+        Common.focusLost("ID number", txtCampusID);
     }//GEN-LAST:event_txtCampusIDFocusLost
 
     private void txtCampusNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCampusNameFocusGained
@@ -777,6 +783,139 @@ public class Campus extends javax.swing.JFrame {
         Common.focusLost("Tel number", txtTel);
     }//GEN-LAST:event_txtTelFocusLost
 
+      public void disableAllFields() {
+        txtCampusID.setEnabled(false);
+        txtCampusName.setEnabled(false);
+        txtLastName.setEnabled(false);
+        cmbTitle.setEnabled(false);
+        dobPicker.setEnabled(false);
+        cmbGender.setEnabled(false);
+
+        txtCountry.setEnabled(false);
+        txtProvince.setEnabled(false);
+        txtCity.setEnabled(false);
+        txtStreet.setEnabled(false);
+        txtPostalCode.setEnabled(false);
+        txtAddressLine.setEnabled(false);
+
+        txtEmail.setEnabled(false);
+        txtCell.setEnabled(false);
+        txtTel.setEnabled(false);
+
+        txtUsername.setEnabled(false);
+        txtPassword.setEnabled(false);
+        cmbAccountType.setEnabled(false);
+    }
+
+    public void prepareInsert() {
+        txtCampusID.setEnabled(true);
+        txtCampusName.setEnabled(true);
+        txtLastName.setEnabled(true);
+        cmbTitle.setEnabled(true);
+        dobPicker.setEnabled(true);
+        cmbGender.setEnabled(true);
+
+        txtCountry.setEnabled(true);
+        txtProvince.setEnabled(true);
+        txtCity.setEnabled(true);
+        txtStreet.setEnabled(true);
+        txtPostalCode.setEnabled(true);
+        txtAddressLine.setEnabled(true);
+
+        txtEmail.setEnabled(true);
+        txtCell.setEnabled(true);
+        txtTel.setEnabled(true);
+
+        txtUsername.setEnabled(true);
+        txtPassword.setEnabled(true);
+        cmbAccountType.setEnabled(true);
+    }
+
+    public void prepareUpdate() {
+        txtCampusID.setEnabled(false);
+        txtCampusName.setEnabled(true);
+        txtLastName.setEnabled(true);
+        cmbTitle.setEnabled(true);
+        dobPicker.setEnabled(false);
+        cmbGender.setEnabled(true);
+
+        txtCountry.setEnabled(true);
+        txtProvince.setEnabled(true);
+        txtCity.setEnabled(true);
+        txtStreet.setEnabled(true);
+        txtPostalCode.setEnabled(true);
+        txtAddressLine.setEnabled(true);
+
+        txtEmail.setEnabled(true);
+        txtCell.setEnabled(true);
+        txtTel.setEnabled(true);
+
+        txtUsername.setEnabled(false);
+        txtPassword.setEnabled(true);
+        cmbAccountType.setEnabled(true);
+    }
+
+    private void clearAllFields() {
+        txtCampusID.setText("");
+        txtCampusID.setToolTipText(null);
+        txtCampusName.setText("");
+        txtCampusName.setToolTipText(null);
+        txtLastName.setText("");
+        txtLastName.setToolTipText(null);
+        cmbTitle.setSelectedIndex(0);
+        cmbTitle.setToolTipText(null);
+        cmbGender.setSelectedIndex(0);
+        cmbGender.setToolTipText(null);
+        txtCountry.setText("");
+        txtCountry.setToolTipText(null);
+        txtProvince.setText("");
+        txtProvince.setToolTipText(null);
+        txtCity.setText("");
+        txtCity.setToolTipText(null);
+        txtStreet.setText("");
+        txtStreet.setToolTipText(null);
+        txtPostalCode.setText("");
+        txtPostalCode.setToolTipText(null);
+        txtAddressLine.setText("");
+        txtAddressLine.setToolTipText(null);
+        txtEmail.setText("");
+        txtEmail.setToolTipText(null);
+        txtCell.setText("");
+        txtCell.setToolTipText(null);
+        txtTel.setText("");
+        txtTel.setToolTipText(null);
+        dobPicker.setDate(new Date());
+        dobPicker.setToolTipText(null);
+        txtUsername.setText("");
+        txtUsername.setToolTipText(null);
+        txtPassword.setText("");
+        txtPassword.setToolTipText(null);
+        cmbAccountType.setSelectedIndex(0);
+        cmbAccountType.setToolTipText(null);
+    }
+
+    public void resetColor() {
+        txtCampusID.setBackground(Color.white);
+        txtCampusName.setBackground(Color.white);
+        txtLastName.setBackground(Color.white);
+        cmbTitle.setBackground(Color.white);
+        cmbGender.setBackground(Color.white);
+        txtCountry.setBackground(Color.white);
+        txtProvince.setBackground(Color.white);
+        txtCity.setBackground(Color.white);
+        txtStreet.setBackground(Color.white);
+        txtPostalCode.setBackground(Color.white);
+        txtAddressLine.setBackground(Color.white);
+        txtEmail.setBackground(Color.white);
+        txtCell.setBackground(Color.white);
+        txtTel.setBackground(Color.white);
+        dobPicker.setBackground(Color.white);
+        txtUsername.setBackground(Color.white);
+        txtPassword.setBackground(Color.white);
+        cmbAccountType.setBackground(Color.white);
+    }
+    
+    
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         if (insertClick == 0) {
             insertClick++;

@@ -415,9 +415,9 @@
                                       <Component id="jLabel11" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="txtCountry" alignment="3" min="-2" pref="29" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace pref="24" max="32767" attributes="0"/>
-                                  <Component id="jSeparator7" min="-2" pref="11" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="jSeparator7" pref="17" max="32767" attributes="0"/>
+                                  <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="1" attributes="0">
                                       <Component id="txtProvince" alignment="1" min="-2" pref="29" max="-2" attributes="0"/>
                                       <Component id="jLabel12" alignment="1" min="-2" max="-2" attributes="0"/>
