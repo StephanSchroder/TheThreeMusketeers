@@ -6,6 +6,7 @@
 package PL;
 
 import BLL.Address;
+import BLL.Campus;
 import BLL.User;
 import java.awt.Color;
 import java.text.SimpleDateFormat;
@@ -124,21 +125,25 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
             columnData[5] = "User ID";
             columnData[6] = "Username";
             columnData[7] = "Account type";
-            columnData[8] = "Date of birth";
-            columnData[9] = "Gender";
-            columnData[10] = "Country";
-            columnData[11] = "Province";
-            columnData[12] = "City";
-            columnData[13] = "Street";
-            columnData[14] = "Postal code";
-            columnData[15] = "Address line";
-            columnData[16] = "Email";
-            columnData[17] = "Cell number";
-            columnData[18] = "Tel number";
-            model.setColumnCount(19);
+            columnData[8] = "Campus";
+            columnData[9] = "Department";
+            columnData[10] = "Date of birth";
+            columnData[11] = "Gender";
+            columnData[12] = "Country";
+            columnData[13] = "Province";
+            columnData[14] = "City";
+            columnData[15] = "Street";
+            columnData[16] = "Postal code";
+            columnData[17] = "Address line";
+            columnData[18] = "Address notes";
+            columnData[19] = "Email";
+            columnData[20] = "Cell number";
+            columnData[21] = "Tel number";
+            columnData[22] = "Contact notes";
+            model.setColumnCount(23);
             model.setColumnIdentifiers(columnData);
             for (int i = 0; i < users.size(); i++) {
-                rowData[0] = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").format(users.get(i).getDateAdded());
+                rowData[0] = users.get(i).getDateAdded();
                 rowData[1] = users.get(i).getIdNumber();
                 rowData[2] = users.get(i).getTitle();
                 rowData[3] = users.get(i).getFirstName();
@@ -146,20 +151,22 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                 rowData[5] = users.get(i).getUserID();
                 rowData[6] = users.get(i).getUsername();
                 rowData[7] = users.get(i).getAccountType();
-                rowData[8] = new SimpleDateFormat("yyyy-MM-dd").format(users.get(i).getDateOfBirth());
-                rowData[9] = users.get(i).getGender();
-                rowData[10] = users.get(i).getAddress().getCountry();
-                rowData[11] = users.get(i).getAddress().getProvince();
-                rowData[12] = users.get(i).getAddress().getCity();
-                rowData[13] = users.get(i).getAddress().getStreet();
-                rowData[14] = users.get(i).getAddress().getPostalCode();
-                rowData[15] = users.get(i).getAddress().getAddressLine();
-                rowData[16] = users.get(i).getContact().getEmail();
-                rowData[17] = users.get(i).getContact().getCellNumber();
-                rowData[18] = users.get(i).getContact().getTelNumber();
+                rowData[8] = users.get(i).getDepartment().getCampus().getName();
+                rowData[9] = users.get(i).getDepartment().getName();
+                rowData[10] = users.get(i).getDateOfBirth();
+                rowData[11] = users.get(i).getGender();
+                rowData[12] = users.get(i).getAddress().getCountry();
+                rowData[13] = users.get(i).getAddress().getProvince();
+                rowData[14] = users.get(i).getAddress().getCity();
+                rowData[15] = users.get(i).getAddress().getStreet();
+                rowData[16] = users.get(i).getAddress().getPostalCode();
+                rowData[17] = users.get(i).getAddress().getAddressLine();
+                rowData[18] = users.get(i).getAddress().getNotes();
+                rowData[19] = users.get(i).getContact().getEmail();
+                rowData[20] = users.get(i).getContact().getCellNumber();
+                rowData[21] = users.get(i).getContact().getTelNumber();
+                rowData[22] = users.get(i).getContact().getNotes();
                 model.addRow(rowData);
-                
-                
             }
         }
         else {
@@ -422,7 +429,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
     }
     
     public void resetBaseUsers() {
-        baseUsers = (currentUser != null && currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.getUsers() : User.getNonAdminUsers();
+        baseUsers = (currentUser != null && currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.read() : User.readNonAdminUsers();
         setViewingOptions();
     }
     
@@ -1522,6 +1529,57 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                 "",
                 tblData.getValueAt(i, 7).toString(),
                 tblData.getValueAt(i, 1).toString());
+            
+            //User user = new User(userID, Department, Username, Password, AccountType, IDNumber, FirstName, LastName, Title, DateOfBirth, Gender, Address, Contact, DateAdded);
+                //Department userDepartment = new Department(DepartmentID, Name, Campus);
+                    //Campus userDepartmentCampus = new Campus(CampusID, Name, Address, Contact);
+                        //Address userDepartmentCampusAddress = new Address(AddressID, Country, Province, City, Street, PostalCode, AddressLine, Notes);
+                        //Contact userDepartmentCampusContact = new Contact(ContactID, Email, CellNumber, TelNumber, Notes);
+                //Address userAddress = new Address(AddressID, Country, Province, City, Street, PostalCode, AddressLine, Notes);
+                //Contact userContact = new Contact(ContactID, Email, CellNumber, TelNumber, Notes);
+                
+            //ALL FIELDS NEEDED:
+            //UserID
+            //DepartmentID
+            //DepartmentName
+            //DepartmentCampusID
+            //DepartmentCampusName
+            //DepartmentCampusAddressID
+            //DepartmentCampusAddressCountry
+            //DepartmentCampusAddressProvince
+            //DepartmentCampusAddressCity
+            //DepartmentCampusAddressStreet
+            //DepartmentCampusAddressPostalCode
+            //DepartmentCampusAddressAddressLine
+            //DepartmentCampusAddressNotes
+            //DepartmentCampusContactID
+            //DepartmentCampusContactEmail
+            //DepartmentCampusContactCellNumber
+            //DepartmentCampusContactTelNumber
+            //DepartmentCampusContactNotes
+            //Username
+            //Password
+            //AccountType
+            //IDNumber
+            //FirstName
+            //LastName
+            //Title
+            //DateOfBirth
+            //Gender
+            //AddressID
+            //AddressCountry
+            //AddressProvince
+            //AddressCity
+            //AddressStreet
+            //AddressPostalCode
+            //AddressAddressLine
+            //AddressNotes
+            //ContactID
+            //ContactEmail
+            //ContactCellNumber
+            //ContactTelNumber
+            //ContactNotes
+            //DateAdded
 
             switch (selectedUser.getAccountType()) {
                 case ADMIN:

@@ -44,7 +44,27 @@ public class Address implements DatabaseOperations {
         this.notes = notes;
     }
     
-    public Address( String country, String province, String city, String street, String postalCode, String addressLine) {
+    public Address(int addressID, String country, String province, String city, String street, String postalCode, String addressLine) {
+        this.addressID = addressID;
+        this.country = country;
+        this.province = province;
+        this.city = city;
+        this.street = street;
+        this.postalCode = postalCode;
+        this.addressLine = addressLine;
+    }
+    
+    public Address(String country, String province, String city, String street, String postalCode, String addressLine, String notes) {
+        this.country = country;
+        this.province = province;
+        this.city = city;
+        this.street = street;
+        this.postalCode = postalCode;
+        this.addressLine = addressLine;
+        this.notes = notes;
+    }
+    
+    public Address(String country, String province, String city, String street, String postalCode, String addressLine) {
         this.country = country;
         this.province = province;
         this.city = city;
