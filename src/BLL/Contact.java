@@ -156,6 +156,19 @@ public class Contact implements DatabaseOperations {
     public static Contact read(int contactID) {
         return DataHandler.<Contact>readRecords(Contact.class, Arrays.asList("ContactID", "Email", "CellNumber", "TelNumber", "Notes"), Arrays.asList(new DataTablesCollection("Contact")), Arrays.asList("ContactID=" + contactID)).get(0);
     }
+
+    public static Contact read(String email, String cellNumber, String telNumber, String notes) {
+        ArrayList<String> conditions = new ArrayList<>();
+        conditions.add("Email='" + email + "'");
+        conditions.add("CellNumber='" + cellNumber + "'");
+        if (!telNumber.isEmpty()) {
+            conditions.add("TelNumber='" + telNumber + "'");
+        }
+        if (!notes.isEmpty()) {
+            conditions.add("Notes='" + notes + "'");
+        }
+        return DataHandler.<Contact>readRecords(Contact.class, Arrays.asList("ContactID", "Email", "CellNumber", "TelNumber", "Notes"), Arrays.asList(new DataTablesCollection("Contact")), conditions).get(0);
+    }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="create Methods">

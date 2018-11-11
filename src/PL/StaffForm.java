@@ -17,6 +17,7 @@ import BLL.Common;
 import BLL.Contact;
 import BLL.Department;
 import BLL.Exceptions.UserDoesNotExistException;
+import BLL.Factories.UserFactory;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.ParseException;
@@ -28,6 +29,7 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import BLL.Sorting.User.*;
 import BLL.Interfaces.FormSetUp;
+import javax.swing.DefaultComboBoxModel;
 
 /**
  *
@@ -115,6 +117,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
             setViewingOptions();
             DefaultTableModel model = (DefaultTableModel) tblData.getModel();
             model.setNumRows(0);
+            populateDepartmentCMB();
             Object rowData[] = new Object[19];
             Object columnData[] = new Object[19];
             columnData[0] = "Date added";
@@ -140,10 +143,11 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
             columnData[20] = "Cell number";
             columnData[21] = "Tel number";
             columnData[22] = "Contact notes";
+            //Password missing
             model.setColumnCount(23);
             model.setColumnIdentifiers(columnData);
             for (int i = 0; i < users.size(); i++) {
-                rowData[0] = users.get(i).getDateAdded();
+                rowData[0] = users.get(i).getDateAddedString();
                 rowData[1] = users.get(i).getIdNumber();
                 rowData[2] = users.get(i).getTitle();
                 rowData[3] = users.get(i).getFirstName();
@@ -153,7 +157,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                 rowData[7] = users.get(i).getAccountType();
                 rowData[8] = users.get(i).getDepartment().getCampus().getName();
                 rowData[9] = users.get(i).getDepartment().getName();
-                rowData[10] = users.get(i).getDateOfBirth();
+                rowData[10] = users.get(i).getDateOfBirthString();
                 rowData[11] = users.get(i).getGender();
                 rowData[12] = users.get(i).getAddress().getCountry();
                 rowData[13] = users.get(i).getAddress().getProvince();
@@ -182,6 +186,15 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
             rowData[0] = "NOT LOGGED IN";
             model.addRow(rowData);
         }
+    }
+
+    public void populateDepartmentCMB() {
+        List<Department> listDepartments = Department.read();
+        List<String> cmbData = new ArrayList<String>();
+        for (Department item : listDepartments) {
+            cmbData.add(item.getCampus().getName() + " - " + item.getName());
+        }
+        cmbDepartment.setModel(new DefaultComboBoxModel(cmbData.toArray()));
     }
 
     private class cmbSortingChangeListener implements ItemListener {
@@ -237,6 +250,12 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                     case "Account type":
                         users.sort(new AccountTypeComparator());
                         break;
+                    case "Campus":
+                        users.sort(new CampusComparator());
+                        break;
+                    case "Department":
+                        users.sort(new DepartmentComparator());
+                        break;
                 }
             }
         }
@@ -249,6 +268,8 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         cmbTitle.setEnabled(false);
         dobPicker.setEnabled(false);
         cmbGender.setEnabled(false);
+        cmbDepartment.setEnabled(false);
+        btnDepartments.setEnabled(true);
 
         txtCountry.setEnabled(false);
         txtProvince.setEnabled(false);
@@ -256,10 +277,12 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         txtStreet.setEnabled(false);
         txtPostalCode.setEnabled(false);
         txtAddressLine.setEnabled(false);
+        txtAddressNotes.setEnabled(false);
 
         txtEmail.setEnabled(false);
         txtCell.setEnabled(false);
         txtTel.setEnabled(false);
+        txtContactNotes.setEnabled(false);
 
         txtUsername.setEnabled(false);
         txtPassword.setEnabled(false);
@@ -273,6 +296,8 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         cmbTitle.setEnabled(true);
         dobPicker.setEnabled(true);
         cmbGender.setEnabled(true);
+        cmbDepartment.setEnabled(true);
+        btnDepartments.setEnabled(false);
 
         txtCountry.setEnabled(true);
         txtProvince.setEnabled(true);
@@ -280,10 +305,12 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         txtStreet.setEnabled(true);
         txtPostalCode.setEnabled(true);
         txtAddressLine.setEnabled(true);
+        txtAddressNotes.setEnabled(true);
 
         txtEmail.setEnabled(true);
         txtCell.setEnabled(true);
         txtTel.setEnabled(true);
+        txtContactNotes.setEnabled(true);
 
         txtUsername.setEnabled(true);
         txtPassword.setEnabled(true);
@@ -297,6 +324,8 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         cmbTitle.setEnabled(true);
         dobPicker.setEnabled(false);
         cmbGender.setEnabled(true);
+        cmbDepartment.setEnabled(true);
+        btnDepartments.setEnabled(false);
 
         txtCountry.setEnabled(true);
         txtProvince.setEnabled(true);
@@ -304,10 +333,12 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         txtStreet.setEnabled(true);
         txtPostalCode.setEnabled(true);
         txtAddressLine.setEnabled(true);
+        txtAddressNotes.setEnabled(true);
 
         txtEmail.setEnabled(true);
         txtCell.setEnabled(true);
         txtTel.setEnabled(true);
+        txtContactNotes.setEnabled(true);
 
         txtUsername.setEnabled(false);
         txtPassword.setEnabled(true);
@@ -325,6 +356,8 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         cmbTitle.setToolTipText(null);
         cmbGender.setSelectedIndex(0);
         cmbGender.setToolTipText(null);
+        cmbDepartment.setSelectedIndex(0);
+        cmbDepartment.setToolTipText(null);
         txtCountry.setText("");
         txtCountry.setToolTipText(null);
         txtProvince.setText("");
@@ -337,12 +370,16 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         txtPostalCode.setToolTipText(null);
         txtAddressLine.setText("");
         txtAddressLine.setToolTipText(null);
+        txtAddressNotes.setText("");
+        txtAddressNotes.setToolTipText(null);
         txtEmail.setText("");
         txtEmail.setToolTipText(null);
         txtCell.setText("");
         txtCell.setToolTipText(null);
         txtTel.setText("");
         txtTel.setToolTipText(null);
+        txtContactNotes.setText("");
+        txtContactNotes.setToolTipText(null);
         dobPicker.setDate(new Date());
         dobPicker.setToolTipText(null);
         txtUsername.setText("");
@@ -359,15 +396,18 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         txtLastName.setBackground(Color.white);
         cmbTitle.setBackground(Color.white);
         cmbGender.setBackground(Color.white);
+        cmbDepartment.setBackground(Color.white);
         txtCountry.setBackground(Color.white);
         txtProvince.setBackground(Color.white);
         txtCity.setBackground(Color.white);
         txtStreet.setBackground(Color.white);
         txtPostalCode.setBackground(Color.white);
         txtAddressLine.setBackground(Color.white);
+        txtAddressNotes.setBackground(Color.white);
         txtEmail.setBackground(Color.white);
         txtCell.setBackground(Color.white);
         txtTel.setBackground(Color.white);
+        txtContactNotes.setBackground(Color.white);
         dobPicker.setBackground(Color.white);
         txtUsername.setBackground(Color.white);
         txtPassword.setBackground(Color.white);
@@ -563,7 +603,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         jSeparator5 = new javax.swing.JSeparator();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        cmbGender = new javax.swing.JComboBox<>();
+        cmbDepartment = new javax.swing.JComboBox<>();
         jSeparator6 = new javax.swing.JSeparator();
         jLabel19 = new javax.swing.JLabel();
         jLabel26 = new javax.swing.JLabel();
@@ -575,7 +615,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         txtUsername = new javax.swing.JTextField();
         jSeparator14 = new javax.swing.JSeparator();
         jSeparator22 = new javax.swing.JSeparator();
-        cmbGender1 = new javax.swing.JComboBox<>();
+        cmbGender = new javax.swing.JComboBox<>();
         jLabel14 = new javax.swing.JLabel();
         jSeparator23 = new javax.swing.JSeparator();
         btnDepartments = new javax.swing.JButton();
@@ -715,7 +755,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         lblLoggedInUser.setText("Logged In User");
 
         cmbSortBy.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        cmbSortBy.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID number", "First name", "Last name", "Title", "Date of birth", "Gender", "Country", "Province", "City", "Street", "Postal code", "Address line", "Email", "Cell number", "Tel number", "Date added", "User ID", "Username", "Account type" }));
+        cmbSortBy.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID number", "First name", "Last name", "Title", "Gender", "Country", "Province", "City", "Street", "Postal code", "Address line", "User ID", "Username", "Account type", "Campus", "Department" }));
 
         lblTitle.setFont(new java.awt.Font("Century Gothic", 1, 36)); // NOI18N
         lblTitle.setForeground(new java.awt.Color(255, 255, 255));
@@ -1045,7 +1085,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
                     .addComponent(txtCountry, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jSeparator7, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -1196,10 +1236,9 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
         jLabel10.setText("Gender:");
 
-        cmbGender.setBackground(new java.awt.Color(19, 54, 57));
-        cmbGender.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        cmbGender.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Male", "Female" }));
-        cmbGender.setBorder(null);
+        cmbDepartment.setBackground(new java.awt.Color(19, 54, 57));
+        cmbDepartment.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        cmbDepartment.setBorder(null);
 
         jLabel19.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jLabel19.setForeground(new java.awt.Color(255, 255, 255));
@@ -1245,14 +1284,14 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
             }
         });
 
-        cmbGender1.setBackground(new java.awt.Color(19, 54, 57));
-        cmbGender1.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        cmbGender1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Male", "Female" }));
-        cmbGender1.setBorder(null);
+        cmbGender.setBackground(new java.awt.Color(19, 54, 57));
+        cmbGender.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        cmbGender.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Male", "Female" }));
+        cmbGender.setBorder(null);
 
         jLabel14.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel14.setText("Departments:");
+        jLabel14.setText("Department:");
 
         btnDepartments.setBackground(new java.awt.Color(0, 115, 56));
         btnDepartments.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
@@ -1301,7 +1340,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                                     .addComponent(jLabel10)
                                     .addGap(48, 48, 48)
                                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(cmbGender1, 0, 214, Short.MAX_VALUE)
+                                        .addComponent(cmbGender, 0, 214, Short.MAX_VALUE)
                                         .addComponent(jSeparator5)))
                                 .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGroup(jPanel3Layout.createSequentialGroup()
@@ -1313,7 +1352,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                                 .addGroup(jPanel3Layout.createSequentialGroup()
                                     .addComponent(jSeparator23, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGap(0, 0, Short.MAX_VALUE))
-                                .addComponent(cmbGender, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addComponent(cmbDepartment, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(51, 51, 51)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1366,12 +1405,12 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                 .addGap(17, 17, 17)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel10)
-                    .addComponent(cmbGender1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cmbGender, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cmbGender, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbDepartment, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel14))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1614,99 +1653,20 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
 
         User selectedUser = null;
         try {
-            //new Address(rowData[10],11,12,13,14,15)
-            Address address = new Address(
-            (tblData.getValueAt(i, 10) != null) ? tblData.getValueAt(i, 10).toString() : "",
-            (tblData.getValueAt(i, 11) != null) ? tblData.getValueAt(i, 11).toString() : "",
-            (tblData.getValueAt(i, 12) != null) ? tblData.getValueAt(i, 12).toString() : "",
-            (tblData.getValueAt(i, 13) != null) ? tblData.getValueAt(i, 13).toString() : "",
-            (tblData.getValueAt(i, 14) != null) ? tblData.getValueAt(i, 14).toString() : "",
-            (tblData.getValueAt(i, 15) != null) ? tblData.getValueAt(i, 15).toString() : "");
-            
-            Contact contact = new Contact(
-                    (tblData.getValueAt(i, 16) != null) ? tblData.getValueAt(i, 16).toString() : "",
-                    (tblData.getValueAt(i, 17) != null) ? tblData.getValueAt(i, 17).toString() : "",
-                    (tblData.getValueAt(i, 18) != null) ? tblData.getValueAt(i, 18).toString() : ""
-            );
-            
-            Department department = new Department(0, "IT", 1);
-            
-            /* public User(int userID, Department department, String username, String password, 
-            String accountType, String idNumber, String firstName, String lastName, String title, 
-            Date dateOfBirth, String gender, Address address, Contact contact, Date dateAdded) */
-    
-            selectedUser = new User(tblData.getValueAt(i, 3).toString(),
-                    department,
-                tblData.getValueAt(i, 6).toString(),
-                tblData.getValueAt(i, 2).toString(),
-                new SimpleDateFormat("yyyy-MM-dd").parse(tblData.getValueAt(i, 8).toString()),
-                tblData.getValueAt(i, 9).toString(),
-                tblData.getValueAt(i, 10).toString(),
-                (tblData.getValueAt(i, 11) != null) ? tblData.getValueAt(i, 7).toString() : "",
-                (tblData.getValueAt(i, 12) != null) ? tblData.getValueAt(i, 8).toString() : "",
-                (tblData.getValueAt(i, 13) != null) ? tblData.getValueAt(i, 9).toString() : "",
-                (tblData.getValueAt(i, 14) != null) ? tblData.getValueAt(i, 10).toString() : "",
-                (tblData.getValueAt(i, 15) != null) ? tblData.getValueAt(i, 11).toString() : "",
-                (tblData.getValueAt(i, 16) != null) ? tblData.getValueAt(i, 12).toString() : "",
-                (tblData.getValueAt(i, 17) != null) ? tblData.getValueAt(i, 13).toString() : "",
-                (tblData.getValueAt(i, 18) != null) ? tblData.getValueAt(i, 14).toString() : "",
-                new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(tblData.getValueAt(i, 0).toString()),
-                Integer.valueOf(tblData.getValueAt(i, 5).toString()),
+            selectedUser = new User(Integer.valueOf(tblData.getValueAt(i, 5).toString()),
+                Department.read(tblData.getValueAt(i, 9).toString(), tblData.getValueAt(i, 8).toString()),
                 tblData.getValueAt(i, 6).toString(),
                 "",
                 tblData.getValueAt(i, 7).toString(),
-                tblData.getValueAt(i, 1).toString());
-            
-            //User user = new User(userID, Department, Username, Password, AccountType, IDNumber, FirstName, LastName, Title, DateOfBirth, Gender, Address, Contact, DateAdded);
-                //Department userDepartment = new Department(DepartmentID, Name, Campus);
-                    //Campus userDepartmentCampus = new Campus(CampusID, Name, Address, Contact);
-                        //Address userDepartmentCampusAddress = new Address(AddressID, Country, Province, City, Street, PostalCode, AddressLine, Notes);
-                        //Contact userDepartmentCampusContact = new Contact(ContactID, Email, CellNumber, TelNumber, Notes);
-                //Address userAddress = new Address(AddressID, Country, Province, City, Street, PostalCode, AddressLine, Notes);
-                //Contact userContact = new Contact(ContactID, Email, CellNumber, TelNumber, Notes);
-                
-            //ALL FIELDS NEEDED:
-            //UserID
-            //DepartmentID
-            //DepartmentName
-            //DepartmentCampusID
-            //DepartmentCampusName
-            //DepartmentCampusAddressID
-            //DepartmentCampusAddressCountry
-            //DepartmentCampusAddressProvince
-            //DepartmentCampusAddressCity
-            //DepartmentCampusAddressStreet
-            //DepartmentCampusAddressPostalCode
-            //DepartmentCampusAddressAddressLine
-            //DepartmentCampusAddressNotes
-            //DepartmentCampusContactID
-            //DepartmentCampusContactEmail
-            //DepartmentCampusContactCellNumber
-            //DepartmentCampusContactTelNumber
-            //DepartmentCampusContactNotes
-            //Username
-            //Password
-            //AccountType
-            //IDNumber
-            //FirstName
-            //LastName
-            //Title
-            //DateOfBirth
-            //Gender
-            //AddressID
-            //AddressCountry
-            //AddressProvince
-            //AddressCity
-            //AddressStreet
-            //AddressPostalCode
-            //AddressAddressLine
-            //AddressNotes
-            //ContactID
-            //ContactEmail
-            //ContactCellNumber
-            //ContactTelNumber
-            //ContactNotes
-            //DateAdded
+                tblData.getValueAt(i, 1).toString(),
+                tblData.getValueAt(i, 3).toString(),
+                tblData.getValueAt(i, 4).toString(),
+                tblData.getValueAt(i, 2).toString(),
+                new SimpleDateFormat("yyyy-MM-dd").parse(tblData.getValueAt(i, 10).toString()),
+                tblData.getValueAt(i, 11).toString(),
+                Address.read(tblData.getValueAt(i, 12).toString(), ((tblData.getValueAt(i, 13) != null) ? tblData.getValueAt(i, 13).toString() : ""), ((tblData.getValueAt(i, 14) != null) ? tblData.getValueAt(i, 14).toString() : ""), ((tblData.getValueAt(i, 15) != null) ? tblData.getValueAt(i, 15).toString() : ""), ((tblData.getValueAt(i, 16) != null) ? tblData.getValueAt(i, 16).toString() : ""), ((tblData.getValueAt(i, 17) != null) ? tblData.getValueAt(i, 17).toString() : ""), ((tblData.getValueAt(i, 18) != null) ? tblData.getValueAt(i, 18).toString() : "")),
+                Contact.read(tblData.getValueAt(i, 19).toString(), tblData.getValueAt(i, 20).toString(), ((tblData.getValueAt(i, 21) != null) ? tblData.getValueAt(i, 21).toString() : ""), ((tblData.getValueAt(i, 22) != null) ? tblData.getValueAt(i, 22).toString() : "")),
+                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(tblData.getValueAt(i, 0).toString()));
 
             switch (selectedUser.getAccountType()) {
                 case ADMIN:
@@ -1759,26 +1719,20 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
 
         User selectedUser = null;
         try {
-            selectedUser = new User(tblData.getValueAt(i, 3).toString(),
-                tblData.getValueAt(i, 4).toString(),
-                tblData.getValueAt(i, 2).toString(),
-                new SimpleDateFormat("yyyy-MM-dd").parse(tblData.getValueAt(i, 8).toString()),
-                tblData.getValueAt(i, 9).toString(),
-                tblData.getValueAt(i, 10).toString(),
-                (tblData.getValueAt(i, 11) != null) ? tblData.getValueAt(i, 7).toString() : "",
-                (tblData.getValueAt(i, 12) != null) ? tblData.getValueAt(i, 8).toString() : "",
-                (tblData.getValueAt(i, 13) != null) ? tblData.getValueAt(i, 9).toString() : "",
-                (tblData.getValueAt(i, 14) != null) ? tblData.getValueAt(i, 10).toString() : "",
-                (tblData.getValueAt(i, 15) != null) ? tblData.getValueAt(i, 11).toString() : "",
-                (tblData.getValueAt(i, 16) != null) ? tblData.getValueAt(i, 12).toString() : "",
-                (tblData.getValueAt(i, 17) != null) ? tblData.getValueAt(i, 13).toString() : "",
-                (tblData.getValueAt(i, 18) != null) ? tblData.getValueAt(i, 14).toString() : "",
-                new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(tblData.getValueAt(i, 0).toString()),
-                Integer.valueOf(tblData.getValueAt(i, 5).toString()),
+            selectedUser = new User(Integer.valueOf(tblData.getValueAt(i, 5).toString()),
+                Department.read(tblData.getValueAt(i, 9).toString(), tblData.getValueAt(i, 8).toString()),
                 tblData.getValueAt(i, 6).toString(),
                 "",
                 tblData.getValueAt(i, 7).toString(),
-                tblData.getValueAt(i, 1).toString());
+                tblData.getValueAt(i, 1).toString(),
+                tblData.getValueAt(i, 3).toString(),
+                tblData.getValueAt(i, 4).toString(),
+                tblData.getValueAt(i, 2).toString(),
+                new SimpleDateFormat("yyyy-MM-dd").parse(tblData.getValueAt(i, 10).toString()),
+                tblData.getValueAt(i, 11).toString(),
+                Address.read(tblData.getValueAt(i, 12).toString(), ((tblData.getValueAt(i, 13) != null) ? tblData.getValueAt(i, 13).toString() : ""), ((tblData.getValueAt(i, 14) != null) ? tblData.getValueAt(i, 14).toString() : ""), ((tblData.getValueAt(i, 15) != null) ? tblData.getValueAt(i, 15).toString() : ""), ((tblData.getValueAt(i, 16) != null) ? tblData.getValueAt(i, 16).toString() : ""), ((tblData.getValueAt(i, 17) != null) ? tblData.getValueAt(i, 17).toString() : ""), ((tblData.getValueAt(i, 18) != null) ? tblData.getValueAt(i, 18).toString() : "")),
+                Contact.read(tblData.getValueAt(i, 19).toString(), tblData.getValueAt(i, 20).toString(), ((tblData.getValueAt(i, 21) != null) ? tblData.getValueAt(i, 21).toString() : ""), ((tblData.getValueAt(i, 22) != null) ? tblData.getValueAt(i, 22).toString() : "")),
+                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(tblData.getValueAt(i, 0).toString()));
 
             switch (selectedUser.getAccountType()) {
                 case ADMIN:
@@ -1822,26 +1776,20 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         if (i > -1) {
             User selectedUser = null;
             try {
-                selectedUser = new User(tblData.getValueAt(i, 3).toString(),
-                    tblData.getValueAt(i, 4).toString(),
-                    tblData.getValueAt(i, 2).toString(),
-                    new SimpleDateFormat("yyyy-MM-dd").parse(tblData.getValueAt(i, 8).toString()),
-                    tblData.getValueAt(i, 9).toString(),
-                    tblData.getValueAt(i, 10).toString(),
-                    (tblData.getValueAt(i, 11) != null) ? tblData.getValueAt(i, 7).toString() : "",
-                    (tblData.getValueAt(i, 12) != null) ? tblData.getValueAt(i, 8).toString() : "",
-                    (tblData.getValueAt(i, 13) != null) ? tblData.getValueAt(i, 9).toString() : "",
-                    (tblData.getValueAt(i, 14) != null) ? tblData.getValueAt(i, 10).toString() : "",
-                    (tblData.getValueAt(i, 15) != null) ? tblData.getValueAt(i, 11).toString() : "",
-                    (tblData.getValueAt(i, 16) != null) ? tblData.getValueAt(i, 12).toString() : "",
-                    (tblData.getValueAt(i, 17) != null) ? tblData.getValueAt(i, 13).toString() : "",
-                    (tblData.getValueAt(i, 18) != null) ? tblData.getValueAt(i, 14).toString() : "",
-                    new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(tblData.getValueAt(i, 0).toString()),
-                    Integer.valueOf(tblData.getValueAt(i, 5).toString()),
+                selectedUser = new User(Integer.valueOf(tblData.getValueAt(i, 5).toString()),
+                    Department.read(tblData.getValueAt(i, 9).toString(), tblData.getValueAt(i, 8).toString()),
                     tblData.getValueAt(i, 6).toString(),
                     "",
                     tblData.getValueAt(i, 7).toString(),
-                    tblData.getValueAt(i, 1).toString());
+                    tblData.getValueAt(i, 1).toString(),
+                    tblData.getValueAt(i, 3).toString(),
+                    tblData.getValueAt(i, 4).toString(),
+                    tblData.getValueAt(i, 2).toString(),
+                    new SimpleDateFormat("yyyy-MM-dd").parse(tblData.getValueAt(i, 10).toString()),
+                    tblData.getValueAt(i, 11).toString(),
+                    Address.read(tblData.getValueAt(i, 12).toString(), ((tblData.getValueAt(i, 13) != null) ? tblData.getValueAt(i, 13).toString() : ""), ((tblData.getValueAt(i, 14) != null) ? tblData.getValueAt(i, 14).toString() : ""), ((tblData.getValueAt(i, 15) != null) ? tblData.getValueAt(i, 15).toString() : ""), ((tblData.getValueAt(i, 16) != null) ? tblData.getValueAt(i, 16).toString() : ""), ((tblData.getValueAt(i, 17) != null) ? tblData.getValueAt(i, 17).toString() : ""), ((tblData.getValueAt(i, 18) != null) ? tblData.getValueAt(i, 18).toString() : "")),
+                    Contact.read(tblData.getValueAt(i, 19).toString(), tblData.getValueAt(i, 20).toString(), ((tblData.getValueAt(i, 21) != null) ? tblData.getValueAt(i, 21).toString() : ""), ((tblData.getValueAt(i, 22) != null) ? tblData.getValueAt(i, 22).toString() : "")),
+                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(tblData.getValueAt(i, 0).toString()));
 
                 switch (selectedUser.getAccountType()) {
                     case ADMIN_REQUESTED:
@@ -1926,6 +1874,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
             clearAllFields();
             prepareInsert();
         } else {
+            UserFactory userFactory = new UserFactory();
             resetColor();
             String idNumber;
             String firstName;
@@ -1945,6 +1894,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
             String username;
             String password;
             String accountType;
+            String department;
 
             idNumber = txtIDNumber.getText();
             firstName = txtFirstName.getText();
@@ -1964,6 +1914,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
             username = txtUsername.getText();
             password = txtPassword.getText();
             accountType = cmbAccountType.getSelectedItem().toString();
+            department = cmbDepartment.getSelectedItem().toString().split(" - ")[1];
 
             boolean check = true;
             if (Common.checkInput(idNumber) != 10 || idNumber.length() != 13) {
@@ -2104,26 +2055,20 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
 
             User selectedUser = null;
             try {
-                selectedUser = new User(tblData.getValueAt(i, 3).toString(),
-                    tblData.getValueAt(i, 4).toString(),
-                    tblData.getValueAt(i, 2).toString(),
-                    new SimpleDateFormat("yyyy-MM-dd").parse(tblData.getValueAt(i, 8).toString()),
-                    tblData.getValueAt(i, 9).toString(),
-                    tblData.getValueAt(i, 10).toString(),
-                    (tblData.getValueAt(i, 11) != null) ? tblData.getValueAt(i, 7).toString() : "",
-                    (tblData.getValueAt(i, 12) != null) ? tblData.getValueAt(i, 8).toString() : "",
-                    (tblData.getValueAt(i, 13) != null) ? tblData.getValueAt(i, 9).toString() : "",
-                    (tblData.getValueAt(i, 14) != null) ? tblData.getValueAt(i, 10).toString() : "",
-                    (tblData.getValueAt(i, 15) != null) ? tblData.getValueAt(i, 11).toString() : "",
-                    (tblData.getValueAt(i, 16) != null) ? tblData.getValueAt(i, 12).toString() : "",
-                    (tblData.getValueAt(i, 17) != null) ? tblData.getValueAt(i, 13).toString() : "",
-                    (tblData.getValueAt(i, 18) != null) ? tblData.getValueAt(i, 14).toString() : "",
-                    new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").parse(tblData.getValueAt(i, 0).toString()),
-                    Integer.valueOf(tblData.getValueAt(i, 5).toString()),
+                selectedUser = new User(Integer.valueOf(tblData.getValueAt(i, 5).toString()),
+                    Department.read(tblData.getValueAt(i, 9).toString(), tblData.getValueAt(i, 8).toString()),
                     tblData.getValueAt(i, 6).toString(),
                     "",
                     tblData.getValueAt(i, 7).toString(),
-                    tblData.getValueAt(i, 1).toString());
+                    tblData.getValueAt(i, 1).toString(),
+                    tblData.getValueAt(i, 3).toString(),
+                    tblData.getValueAt(i, 4).toString(),
+                    tblData.getValueAt(i, 2).toString(),
+                    new SimpleDateFormat("yyyy-MM-dd").parse(tblData.getValueAt(i, 10).toString()),
+                    tblData.getValueAt(i, 11).toString(),
+                    Address.read(tblData.getValueAt(i, 12).toString(), ((tblData.getValueAt(i, 13) != null) ? tblData.getValueAt(i, 13).toString() : ""), ((tblData.getValueAt(i, 14) != null) ? tblData.getValueAt(i, 14).toString() : ""), ((tblData.getValueAt(i, 15) != null) ? tblData.getValueAt(i, 15).toString() : ""), ((tblData.getValueAt(i, 16) != null) ? tblData.getValueAt(i, 16).toString() : ""), ((tblData.getValueAt(i, 17) != null) ? tblData.getValueAt(i, 17).toString() : ""), ((tblData.getValueAt(i, 18) != null) ? tblData.getValueAt(i, 18).toString() : "")),
+                    Contact.read(tblData.getValueAt(i, 19).toString(), tblData.getValueAt(i, 20).toString(), ((tblData.getValueAt(i, 21) != null) ? tblData.getValueAt(i, 21).toString() : ""), ((tblData.getValueAt(i, 22) != null) ? tblData.getValueAt(i, 22).toString() : "")),
+                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(tblData.getValueAt(i, 0).toString()));
 
                 txtIDNumber.setText(selectedUser.getIdNumber());
                 txtFirstName.setText(selectedUser.getFirstName());
@@ -2131,15 +2076,18 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                 cmbTitle.setSelectedItem(selectedUser.getTitle());
                 dobPicker.setDate(selectedUser.getDateOfBirth());
                 cmbGender.setSelectedItem(selectedUser.getGender());
+                cmbDepartment.setSelectedItem(selectedUser.getDepartment().getCampus().getName() + " - " + selectedUser.getDepartment().getName());
                 txtCountry.setText(selectedUser.getAddress().getCountry());
                 txtProvince.setText(selectedUser.getAddress().getProvince());
                 txtCity.setText(selectedUser.getAddress().getCity());
                 txtStreet.setText(selectedUser.getAddress().getStreet());
                 txtPostalCode.setText(selectedUser.getAddress().getPostalCode());
                 txtAddressLine.setText(selectedUser.getAddress().getAddressLine());
+                txtAddressNotes.setText(selectedUser.getAddress().getNotes());
                 txtEmail.setText(selectedUser.getContact().getEmail());
                 txtCell.setText(selectedUser.getContact().getCellNumber());
                 txtTel.setText(selectedUser.getContact().getTelNumber());
+                txtContactNotes.setText(selectedUser.getContact().getNotes());
                 txtUsername.setText(selectedUser.getUsername());
                 txtPassword.setText(selectedUser.getPassword());
                 cmbAccountType.setSelectedItem(selectedUser.getAccountType().toString());
@@ -2625,8 +2573,8 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox<String> cmbAccountType;
+    private javax.swing.JComboBox<String> cmbDepartment;
     private javax.swing.JComboBox<String> cmbGender;
-    private javax.swing.JComboBox<String> cmbGender1;
     private javax.swing.JComboBox<String> cmbSearchBy;
     private javax.swing.JComboBox<String> cmbSortBy;
     private javax.swing.JComboBox<String> cmbTitle;

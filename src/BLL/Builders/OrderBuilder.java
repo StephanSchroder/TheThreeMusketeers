@@ -25,6 +25,14 @@ public class OrderBuilder {
         order = new Order(placedByEmployee);
         stocks = new HashMap<>();
     }
+    
+    public OrderBuilder(Order order) {
+        this.order = order;
+        List<StockOrder> stockorders = StockOrder.read(order.getOrderID());
+        stocks = new HashMap<>();
+        
+        stockorders.forEach((stockorder) -> { stocks.put(stockorder.getStock(), stockorder.getQuantity()); });
+    }
 
     public Order getOrder() {
         return order;

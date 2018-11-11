@@ -213,6 +213,30 @@ public class Address implements DatabaseOperations {
     public static Address read(int addressID) {
         return DataHandler.<Address>readRecords(Address.class, Arrays.asList("AddressID", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Notes"), Arrays.asList(new DataTablesCollection("Address")), Arrays.asList("AddressID=" + addressID)).get(0);
     }
+
+    public static Address read(String country, String province, String city, String street, String postalCode, String addressLine, String notes) {
+        ArrayList<String> conditions = new ArrayList<>();
+        conditions.add("Country='" + country + "'");
+        if (!province.isEmpty()) {
+            conditions.add("Province='" + province + "'");
+        }
+        if (!city.isEmpty()) {
+            conditions.add("City='" + city + "'");
+        }
+        if (!street.isEmpty()) {
+            conditions.add("Street='" + street + "'");
+        }
+        if (!postalCode.isEmpty()) {
+            conditions.add("PostalCode='" + postalCode + "'");
+        }
+        if (!addressLine.isEmpty()) {
+            conditions.add("AddressLine='" + addressLine + "'");
+        }
+        if (!notes.isEmpty()) {
+            conditions.add("Notes='" + notes + "'");
+        }
+        return DataHandler.<Address>readRecords(Address.class, Arrays.asList("AddressID", "Country", "Province", "City", "Street", "PostalCode", "AddressLine", "Notes"), Arrays.asList(new DataTablesCollection("Address")), conditions).get(0);
+    }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="create Methods">

@@ -41,6 +41,10 @@ public class UserFactory implements DatabaseOperations {
 
     @Override
     public void create() {
+        person.getAddress().create();
+        person.getAddress().synchronise();
+        person.getContact().create();
+        person.getContact().synchronise();
         person.create();
         person.synchronise();
         user.create();
@@ -49,6 +53,10 @@ public class UserFactory implements DatabaseOperations {
 
     @Override
     public void update() {
+        person.getAddress().update();
+        person.getAddress().synchronise();
+        person.getContact().update();
+        person.getContact().synchronise();
         person.update();
         person.synchronise();
         user.update();
@@ -57,13 +65,15 @@ public class UserFactory implements DatabaseOperations {
 
     @Override
     public void delete() {
+        person.getAddress().delete();
+        person.getContact().delete();
         person.delete();
         user.delete();
     }
 
     @Override
     public boolean synchronise() {
-        return ((person.synchronise() && user.synchronise())?true:false);
+        return ((person.getAddress().synchronise() && person.getContact().synchronise() && person.synchronise() && user.synchronise())?true:false);
     }
     
 }
