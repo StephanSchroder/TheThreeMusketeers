@@ -9,11 +9,15 @@ package BLL;
 import BLL.Interfaces.DatabaseOperations;
 import DAL.*;
 import java.io.Serializable;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 //</editor-fold>
 
 /**
@@ -37,22 +41,34 @@ public class User extends Person implements Serializable, DatabaseOperations {
     //<editor-fold defaultstate="collapsed" desc="Constructors">
     public User(int userID, Department department, String username, String password, String accountType, String idNumber, String firstName, String lastName, String title, Date dateOfBirth, String gender, Address address, Contact contact, Date dateAdded) {
         super(idNumber, firstName, lastName, title, dateOfBirth, gender, address, contact, dateAdded);
-        this.userID = userID;
-        this.department = department;
-        this.username = username;
-        this.password = password;
-        this.accountType = accountTypeState.NOT_SET;
-        this.accountType = accountTypeState.valueOf(accountType.toUpperCase());
+        try {
+            this.userID = userID;
+            this.department = department;
+            this.username = username;
+            this.password = Common.encryptPassword(password);
+            this.accountType = accountTypeState.NOT_SET;
+            this.accountType = accountTypeState.valueOf(accountType.toUpperCase());
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidKeySpecException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public User(int userID, int department, String username, String password, String accountType, String idNumber, String firstName, String lastName, String title, Date dateOfBirth, String gender, int address, int contact, Date dateAdded) {
         super(idNumber, firstName, lastName, title, dateOfBirth, gender, address, contact, dateAdded);
-        this.userID = userID;
-        this.department = Department.read(department);
-        this.username = username;
-        this.password = password;
-        this.accountType = accountTypeState.NOT_SET;
-        this.accountType = accountTypeState.valueOf(accountType.toUpperCase());
+        try {
+            this.userID = userID;
+            this.department = Department.read(department);
+            this.username = username;
+            this.password = Common.encryptPassword(password);
+            this.accountType = accountTypeState.NOT_SET;
+            this.accountType = accountTypeState.valueOf(accountType.toUpperCase());
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidKeySpecException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     //</editor-fold>
 
@@ -86,7 +102,13 @@ public class User extends Person implements Serializable, DatabaseOperations {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        try {
+            this.password = Common.encryptPassword(password);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidKeySpecException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public accountTypeState getAccountType() {
@@ -436,8 +458,23 @@ public class User extends Person implements Serializable, DatabaseOperations {
     public static int AuthenticateLogin(String username, String password) {
         int userAuthed = 0;
         int usernameInputCode = Common.checkInput(username);
-        int passwordInputCode = Common.checkInput(password);
-        if ((usernameInputCode == 1) && ((passwordInputCode == 1) || (passwordInputCode == 4) || (passwordInputCode == 5) || (passwordInputCode == 7))) {
+        //int passwordInputCode = Common.checkInput(password);
+        boolean proceed = false;
+        if ((usernameInputCode == 1)){
+            try {
+                String[][] pass = DataHandler.readRecords(Arrays.asList("Password"), Arrays.<DataTablesCollection>asList(new DataTablesCollection("User")), Arrays.asList("Username='" + username + "'", "Password='" + password + "'"));
+                proceed = Common.validatePassword(password, pass[0][1]);
+                
+            } catch (NoSuchAlgorithmException ex) {
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InvalidKeySpecException ex) {
+                Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }else {
+            userAuthed = 1;
+        }
+            
+        if ((usernameInputCode == 1) && proceed) {
             userAuthed = 2;
             String[][] dbData = DataHandler.readRecords(Arrays.asList("UserID", "AccountType"), Arrays.<DataTablesCollection>asList(new DataTablesCollection("User")), Arrays.asList("Username='" + username + "'", "Password='" + password + "'"));
             if (dbData.length == 1) {
