@@ -76,6 +76,10 @@ public class Order implements DatabaseOperations {
         this.status = status;
         this.placedByEmployee = User.read(placedByEmployee);
     }
+    
+    public Order(User placedByEmployee) {
+        this.placedByEmployee = placedByEmployee;
+    }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Properties">
