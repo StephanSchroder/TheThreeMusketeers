@@ -19,7 +19,8 @@ public class LoginForm extends javax.swing.JFrame {
     /**
      * Creates new form LoginForm
      */
-    public static boolean enableEasterEggs = true;
+    //MOENIE DIE KAK AANSIT NIE !!! FFS
+    public static boolean enableEasterEggs = false;
     
     public LoginForm() {
         initComponents();
