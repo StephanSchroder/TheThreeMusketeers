@@ -27,8 +27,8 @@ public class LoginForm extends javax.swing.JFrame {
         
        initComponents();
        
-       txtPassword.setText("P@ssword1");
-       txtUsername.setText("sarel");
+      // txtPassword.setText("P@ssword1");
+      // txtUsername.setText("sarel");
        cbAdminCheck.setSelected(true);
         
         this.setLocationRelativeTo(null);
