@@ -214,16 +214,6 @@ public class Category implements DatabaseOperations {
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
         conditions.add("CategoryID=" + category.getCategoryID());
-
-        for (String column : columns) {
-            System.out.println(column);
-        }
-        for (String value : values) {
-            System.out.println(value);
-        }
-        for (String condition : conditions) {
-            System.out.println(condition);
-        }
         
         //Execute
         DataHandler.updateRecords("Category", columns, values, conditions);
