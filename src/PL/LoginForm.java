@@ -8,6 +8,7 @@ package PL;
 import BLL.Common;
 import BLL.User;
 import java.awt.Color;
+import java.awt.Font;
 import javax.swing.JOptionPane;
 
 /**
@@ -23,7 +24,9 @@ public class LoginForm extends javax.swing.JFrame {
     public static boolean enableEasterEggs = false;
     
     public LoginForm() {
-        initComponents();
+        
+       initComponents();
+        
         this.setLocationRelativeTo(null);
         txtUsername.setForeground(Color.WHITE);
         txtPassword.setForeground(Color.WHITE);

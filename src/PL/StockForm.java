@@ -25,6 +25,7 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import BLL.Interfaces.FormSetUp;
+import java.awt.Font;
 
 /**
  *
@@ -67,6 +68,7 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
 
             currentUser = u;
             lbLoginedInUser.setText("Logged in as: " + u.getFullName() + ((u.getAccountType().equals(User.accountTypeState.ADMIN)) ? " with Admin privileges" : ""));
+            
 
             cmbChangeListener changeListener = new cmbChangeListener();
             cmbSorting.addItemListener(changeListener);
@@ -82,11 +84,11 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
     
     @Override
     public void setNavigation(boolean flag){
-        mnOpenOrderForm.setEnabled(flag);
+/*        mnOpenOrderForm.setEnabled(flag);
         mnOpenStaffForm.setEnabled(flag);
         
         mnOpenOrderForm.setVisible(flag);
-        mnOpenStaffForm.setVisible(flag);
+        mnOpenStaffForm.setVisible(flag);*/
     }
 
     private void initModel() {
@@ -807,11 +809,13 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
 
         staffMenu2.setText("Staff");
         staffMenu2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        staffMenu2.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
+        staffMenu2.setFont(Common.setFont(0,0)
+        );
         staffMenu2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         staffMenu2.setIconTextGap(20);
 
-        mnOpenStaff2.setFont(mnOpenStaff2.getFont());
+        mnOpenStaff2.setFont(Common.setFont(0, 1)
+        );
         mnOpenStaff2.setText("Open Staff Form");
         mnOpenStaff2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -823,14 +827,15 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
         jMenuBar1.add(staffMenu2);
 
         stockMenu2.setText("Stock");
-        stockMenu2.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        stockMenu2.setFont(Common.setFont(1,0));
         stockMenu2.setIconTextGap(10);
         jMenuBar1.add(stockMenu2);
 
         orderStockMenu3.setText("Order Stock");
-        orderStockMenu3.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        orderStockMenu3.setFont(Common.setFont(0,0));
         orderStockMenu3.setIconTextGap(10);
 
+        mnOpenOrderForm1.setFont(Common.setFont(0,1));
         mnOpenOrderForm1.setText("Open Order Form");
         mnOpenOrderForm1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -842,9 +847,10 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
         jMenuBar1.add(orderStockMenu3);
 
         orderStockMenu4.setText("Category");
-        orderStockMenu4.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        orderStockMenu4.setFont(Common.setFont(0,0));
         orderStockMenu4.setIconTextGap(10);
 
+        mnOpenCategoryForm.setFont(Common.setFont(0,1));
         mnOpenCategoryForm.setText("Open Category Form");
         mnOpenCategoryForm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -856,8 +862,9 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
         jMenuBar1.add(orderStockMenu4);
 
         jMenu4.setText("Department");
-        jMenu4.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jMenu4.setFont(Common.setFont(0,0));
 
+        mnOpenDepartmentForm.setFont(Common.setFont(0,1));
         mnOpenDepartmentForm.setText("Open Department Form");
         mnOpenDepartmentForm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -869,8 +876,9 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
         jMenuBar1.add(jMenu4);
 
         jMenu5.setText("Campus");
-        jMenu5.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jMenu5.setFont(Common.setFont(0,0));
 
+        mnOpenCampusForm.setFont(Common.setFont(0,1));
         mnOpenCampusForm.setText("Open Campus Form");
         mnOpenCampusForm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -882,8 +890,9 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
         jMenuBar1.add(jMenu5);
 
         jMenu6.setText("My Profile");
-        jMenu6.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jMenu6.setFont(Common.setFont(0,0));
 
+        mnOpenMyProfileForm.setFont(Common.setFont(0,1));
         mnOpenMyProfileForm.setText("Open My Profile Form");
         mnOpenMyProfileForm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

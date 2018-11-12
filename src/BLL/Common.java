@@ -7,6 +7,7 @@ package BLL;
 
 import PL.LoginForm;
 import java.awt.Color;
+import java.awt.Font;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -295,5 +296,14 @@ public class Common {
     }
 //</editor-fold>
     
-    
+    //<editor-fold defaultstate="collapsed" desc="Dynamic Font Setting">
+    /*
+    @params bit 0 for plain 1 for bold
+    bit2 0 for menubar 1 for menu item
+    */
+    public static Font setFont(int bit, int bit2){
+        
+        return bit2==0 ? new Font("Century Gothic",bit,18) : bit2==1 ? new Font("Century Gothic",bit,12):new Font("Century Gothic",bit,36) ;
+    }
+//</editor-fold>
 }

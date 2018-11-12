@@ -66,19 +66,19 @@ public class DepartmentForm extends javax.swing.JFrame {
         lblLoggedInUser = new javax.swing.JLabel();
         btnLogOff = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
-        miStaffMenu1 = new javax.swing.JMenu();
-        mnOpenStaffForm1 = new javax.swing.JMenuItem();
-        miStockMenu1 = new javax.swing.JMenu();
-        mnOpenStockForm1 = new javax.swing.JMenuItem();
-        miOrderMenu1 = new javax.swing.JMenu();
-        mnOpenOrderForm1 = new javax.swing.JMenuItem();
-        orderStockMenu3 = new javax.swing.JMenu();
-        mnOpenCategoryForm = new javax.swing.JMenuItem();
-        jMenu4 = new javax.swing.JMenu();
-        jMenu3 = new javax.swing.JMenu();
-        mnOpenCampusForm = new javax.swing.JMenuItem();
-        jMenu5 = new javax.swing.JMenu();
-        mnOpenMyProfileForm = new javax.swing.JMenuItem();
+        staffMenu2 = new javax.swing.JMenu();
+        mnOpenStaff2 = new javax.swing.JMenuItem();
+        stockMenu2 = new javax.swing.JMenu();
+        mnOpenStockForm2 = new javax.swing.JMenuItem();
+        orderStockMenu4 = new javax.swing.JMenu();
+        mnOpenOrderForm2 = new javax.swing.JMenuItem();
+        orderStockMenu5 = new javax.swing.JMenu();
+        mnOpenCategoryForm1 = new javax.swing.JMenuItem();
+        jMenu6 = new javax.swing.JMenu();
+        jMenu7 = new javax.swing.JMenu();
+        mnOpenCampusForm1 = new javax.swing.JMenuItem();
+        jMenu8 = new javax.swing.JMenu();
+        mnOpenMyProfileForm1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -257,94 +257,101 @@ public class DepartmentForm extends javax.swing.JFrame {
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        miStaffMenu1.setText("Staff");
-        miStaffMenu1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        miStaffMenu1.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        miStaffMenu1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        miStaffMenu1.setIconTextGap(20);
+        staffMenu2.setText("Staff");
+        staffMenu2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        staffMenu2.setFont(Common.setFont(0,0)
+        );
+        staffMenu2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        staffMenu2.setIconTextGap(20);
 
-        mnOpenStaffForm1.setText("Open Staff Form");
-        mnOpenStaffForm1.addActionListener(new java.awt.event.ActionListener() {
+        mnOpenStaff2.setFont(Common.setFont(0, 1)
+        );
+        mnOpenStaff2.setText("Open Staff Form");
+        mnOpenStaff2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnOpenStaffForm1ActionPerformed(evt);
+                mnOpenStaff2ActionPerformed(evt);
             }
         });
-        miStaffMenu1.add(mnOpenStaffForm1);
+        staffMenu2.add(mnOpenStaff2);
 
-        jMenuBar1.add(miStaffMenu1);
+        jMenuBar1.add(staffMenu2);
 
-        miStockMenu1.setText("Stock");
-        miStockMenu1.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        miStockMenu1.setIconTextGap(10);
+        stockMenu2.setText("Stock");
+        stockMenu2.setFont(Common.setFont(0,0));
+        stockMenu2.setIconTextGap(10);
 
-        mnOpenStockForm1.setText("Open Stock Form");
-        mnOpenStockForm1.addActionListener(new java.awt.event.ActionListener() {
+        mnOpenStockForm2.setFont(Common.setFont(0,1));
+        mnOpenStockForm2.setText("Open Stock Form");
+        mnOpenStockForm2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnOpenStockForm1ActionPerformed(evt);
+                mnOpenStockForm2ActionPerformed(evt);
             }
         });
-        miStockMenu1.add(mnOpenStockForm1);
+        stockMenu2.add(mnOpenStockForm2);
 
-        jMenuBar1.add(miStockMenu1);
+        jMenuBar1.add(stockMenu2);
 
-        miOrderMenu1.setText("Order Stock");
-        miOrderMenu1.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        miOrderMenu1.setIconTextGap(10);
+        orderStockMenu4.setText("Order Stock");
+        orderStockMenu4.setFont(Common.setFont(0,0));
+        orderStockMenu4.setIconTextGap(10);
 
-        mnOpenOrderForm1.setText("Open Order Form");
-        mnOpenOrderForm1.addActionListener(new java.awt.event.ActionListener() {
+        mnOpenOrderForm2.setFont(Common.setFont(0,1));
+        mnOpenOrderForm2.setText("Open Order Form");
+        mnOpenOrderForm2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnOpenOrderForm1ActionPerformed(evt);
+                mnOpenOrderForm2ActionPerformed(evt);
             }
         });
-        miOrderMenu1.add(mnOpenOrderForm1);
+        orderStockMenu4.add(mnOpenOrderForm2);
 
-        jMenuBar1.add(miOrderMenu1);
+        jMenuBar1.add(orderStockMenu4);
 
-        orderStockMenu3.setText("Category");
-        orderStockMenu3.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        orderStockMenu3.setIconTextGap(10);
+        orderStockMenu5.setText("Category");
+        orderStockMenu5.setFont(Common.setFont(0,0));
+        orderStockMenu5.setIconTextGap(10);
 
-        mnOpenCategoryForm.setText("Open Category Form");
-        mnOpenCategoryForm.addActionListener(new java.awt.event.ActionListener() {
+        mnOpenCategoryForm1.setFont(Common.setFont(0,1));
+        mnOpenCategoryForm1.setText("Open Category Form");
+        mnOpenCategoryForm1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnOpenCategoryFormActionPerformed(evt);
+                mnOpenCategoryForm1ActionPerformed(evt);
             }
         });
-        orderStockMenu3.add(mnOpenCategoryForm);
+        orderStockMenu5.add(mnOpenCategoryForm1);
 
-        jMenuBar1.add(orderStockMenu3);
+        jMenuBar1.add(orderStockMenu5);
 
-        jMenu4.setText("Department");
-        jMenu4.setFocusable(false);
-        jMenu4.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        jMenuBar1.add(jMenu4);
+        jMenu6.setText("Department");
+        jMenu6.setFont(Common.setFont(0,0));
+        jMenuBar1.add(jMenu6);
 
-        jMenu3.setText("Campus");
-        jMenu3.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jMenu7.setText("Campus");
+        jMenu7.setFont(Common.setFont(0,0));
 
-        mnOpenCampusForm.setText("Open Campus Form");
-        mnOpenCampusForm.addActionListener(new java.awt.event.ActionListener() {
+        mnOpenCampusForm1.setFont(Common.setFont(0,1));
+        mnOpenCampusForm1.setText("Open Campus Form");
+        mnOpenCampusForm1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnOpenCampusFormActionPerformed(evt);
+                mnOpenCampusForm1ActionPerformed(evt);
             }
         });
-        jMenu3.add(mnOpenCampusForm);
+        jMenu7.add(mnOpenCampusForm1);
 
-        jMenuBar1.add(jMenu3);
+        jMenuBar1.add(jMenu7);
 
-        jMenu5.setText("My Profile");
-        jMenu5.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jMenu8.setText("My Profile");
+        jMenu8.setFont(Common.setFont(0,0));
 
-        mnOpenMyProfileForm.setText("Open My Profile Form");
-        mnOpenMyProfileForm.addActionListener(new java.awt.event.ActionListener() {
+        mnOpenMyProfileForm1.setFont(Common.setFont(0,1));
+        mnOpenMyProfileForm1.setText("Open My Profile Form");
+        mnOpenMyProfileForm1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnOpenMyProfileFormActionPerformed(evt);
+                mnOpenMyProfileForm1ActionPerformed(evt);
             }
         });
-        jMenu5.add(mnOpenMyProfileForm);
+        jMenu8.add(mnOpenMyProfileForm1);
 
-        jMenuBar1.add(jMenu5);
+        jMenuBar1.add(jMenu8);
 
         setJMenuBar(jMenuBar1);
 
@@ -384,32 +391,6 @@ public class DepartmentForm extends javax.swing.JFrame {
             
     }//GEN-LAST:event_btnCampusActionPerformed
 
-    private void mnOpenStaffForm1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenStaffForm1ActionPerformed
-        
-        new StaffForm(currentUser).setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_mnOpenStaffForm1ActionPerformed
-
-    private void mnOpenStockForm1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenStockForm1ActionPerformed
-        
-        StockForm stockForm = new StockForm(currentUser);
-        stockForm.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_mnOpenStockForm1ActionPerformed
-
-    private void mnOpenOrderForm1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenOrderForm1ActionPerformed
-        
-        OrderForm orderForm = new OrderForm(currentUser);
-        orderForm.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_mnOpenOrderForm1ActionPerformed
-
-    private void mnOpenMyProfileFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenMyProfileFormActionPerformed
-        
-        new MyProfileForm(currentUser).setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_mnOpenMyProfileFormActionPerformed
-
     private void btnLogOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOffActionPerformed
         
         if (currentUser != null) {
@@ -420,17 +401,43 @@ public class DepartmentForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnLogOffActionPerformed
 
-    private void mnOpenCategoryFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenCategoryFormActionPerformed
-        
+    private void mnOpenStaff2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenStaff2ActionPerformed
+
+        StaffForm staff = new StaffForm(currentUser);
+        staff.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_mnOpenStaff2ActionPerformed
+
+    private void mnOpenStockForm2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenStockForm2ActionPerformed
+
+        new StockForm(currentUser).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_mnOpenStockForm2ActionPerformed
+
+    private void mnOpenOrderForm2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenOrderForm2ActionPerformed
+
+        OrderForm orderForm = new OrderForm(currentUser);
+        orderForm.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_mnOpenOrderForm2ActionPerformed
+
+    private void mnOpenCategoryForm1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenCategoryForm1ActionPerformed
+
         new CategoryForm(currentUser).setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_mnOpenCategoryFormActionPerformed
+    }//GEN-LAST:event_mnOpenCategoryForm1ActionPerformed
 
-    private void mnOpenCampusFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenCampusFormActionPerformed
-        // TODO add your handling code here:
+    private void mnOpenCampusForm1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenCampusForm1ActionPerformed
+
         new CampusForm(currentUser).setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_mnOpenCampusFormActionPerformed
+    }//GEN-LAST:event_mnOpenCampusForm1ActionPerformed
+
+    private void mnOpenMyProfileForm1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenMyProfileForm1ActionPerformed
+
+        new MyProfileForm(currentUser).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_mnOpenMyProfileForm1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -476,9 +483,9 @@ public class DepartmentForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
-    private javax.swing.JMenu jMenu5;
+    private javax.swing.JMenu jMenu6;
+    private javax.swing.JMenu jMenu7;
+    private javax.swing.JMenu jMenu8;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel5;
@@ -487,16 +494,16 @@ public class DepartmentForm extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator6;
     private javax.swing.JLabel lblLoggedInUser;
     private javax.swing.JLabel lblTitle;
-    private javax.swing.JMenu miOrderMenu1;
-    private javax.swing.JMenu miStaffMenu1;
-    private javax.swing.JMenu miStockMenu1;
-    private javax.swing.JMenuItem mnOpenCampusForm;
-    private javax.swing.JMenuItem mnOpenCategoryForm;
-    private javax.swing.JMenuItem mnOpenMyProfileForm;
-    private javax.swing.JMenuItem mnOpenOrderForm1;
-    private javax.swing.JMenuItem mnOpenStaffForm1;
-    private javax.swing.JMenuItem mnOpenStockForm1;
-    private javax.swing.JMenu orderStockMenu3;
+    private javax.swing.JMenuItem mnOpenCampusForm1;
+    private javax.swing.JMenuItem mnOpenCategoryForm1;
+    private javax.swing.JMenuItem mnOpenMyProfileForm1;
+    private javax.swing.JMenuItem mnOpenOrderForm2;
+    private javax.swing.JMenuItem mnOpenStaff2;
+    private javax.swing.JMenuItem mnOpenStockForm2;
+    private javax.swing.JMenu orderStockMenu4;
+    private javax.swing.JMenu orderStockMenu5;
+    private javax.swing.JMenu staffMenu2;
+    private javax.swing.JMenu stockMenu2;
     private javax.swing.JTextField txtDepartmentID;
     private javax.swing.JTextField txtDepartmentName;
     // End of variables declaration//GEN-END:variables
