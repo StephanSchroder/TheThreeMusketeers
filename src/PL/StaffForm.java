@@ -224,7 +224,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         dobPicker.setEnabled(false);
         cmbGender.setEnabled(false);
         cmbDepartment.setEnabled(false);
-        btnDepartments.setEnabled(((currentUser != null) ? true : false));
+        btnDepartments.setEnabled(((currentUser != null)));
 
         txtCountry.setEnabled(false);
         txtProvince.setEnabled(false);
@@ -307,11 +307,11 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         txtFirstName.setToolTipText(null);
         txtLastName.setText("");
         txtLastName.setToolTipText(null);
-        cmbTitle.setSelectedIndex(0);
+        cmbTitle.setSelectedIndex(((cmbTitle.getItemCount() > 0) ? 0 : -1));
         cmbTitle.setToolTipText(null);
-        cmbGender.setSelectedIndex(0);
+        cmbGender.setSelectedIndex(((cmbGender.getItemCount() > 0) ? 0 : -1));
         cmbGender.setToolTipText(null);
-        cmbDepartment.setSelectedIndex(0);
+        cmbDepartment.setSelectedIndex(((cmbDepartment.getItemCount() > 0) ? 0 : -1));
         cmbDepartment.setToolTipText(null);
         txtCountry.setText("");
         txtCountry.setToolTipText(null);
@@ -341,7 +341,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         txtUsername.setToolTipText(null);
         txtPassword.setText("");
         txtPassword.setToolTipText(null);
-        cmbAccountType.setSelectedIndex(0);
+        cmbAccountType.setSelectedIndex(((cmbAccountType.getItemCount() > 0) ? 0 : -1));
         cmbAccountType.setToolTipText(null);
     }
 
