@@ -581,7 +581,7 @@ public class DepartmentForm extends javax.swing.JFrame implements FormSetUp{
     }//GEN-LAST:event_txtDepartmentNameFocusLost
 
     private void btnCampusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCampusActionPerformed
-            
+        
     }//GEN-LAST:event_btnCampusActionPerformed
 
     private void btnLogOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOffActionPerformed
@@ -772,7 +772,7 @@ public class DepartmentForm extends javax.swing.JFrame implements FormSetUp{
             (Campus.read(tblData.getValueAt(i, 2).toString())));
         txtDepartmentID.setText(String.valueOf(selectedDepartment.getDepartmentID()));
         txtDepartmentName.setText(selectedDepartment.getName());
-        cmbCampus.setSelectedItem(selectedDepartment.getCampus().getName());
+        cmbCampus.setSelectedItem(selectedDepartment.getCampus().getName() + " - " + selectedDepartment.getCampus().getName());
     }//GEN-LAST:event_tblDataMouseClicked
 
     /**
