@@ -26,6 +26,10 @@ public class LoginForm extends javax.swing.JFrame {
     public LoginForm() {
         
        initComponents();
+       
+       txtPassword.setText("P@ssword1");
+       txtUsername.setText("sarel");
+       cbAdminCheck.setSelected(true);
         
         this.setLocationRelativeTo(null);
         txtUsername.setForeground(Color.WHITE);
