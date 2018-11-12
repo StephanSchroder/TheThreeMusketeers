@@ -5,10 +5,18 @@
  */
 package PL;
 
-import BLL.User;
+
+import BLL.Campus;
 import BLL.Common;
+import BLL.Department;
 import BLL.Exceptions.UserDoesNotExistException;
 import BLL.Interfaces.FormSetUp;
+import BLL.User;
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -19,26 +27,116 @@ public class DepartmentForm extends javax.swing.JFrame implements FormSetUp{
     /**
      * Creates new form DepartmentForm
      */
-    private User currentUser;
+        private User currentUser;
+    private List<Department> departmentList = new ArrayList<>();
+    private int insertClick = 0;
+    private int updateClick = 0;
     
     public DepartmentForm() {
         initComponents();
-        lblLoggedInUser.setText("New user registration");
+       
+        departmentList=Department.read();
+        initModel();
+
+        currentUser = null;
+       
+        this.setLocationRelativeTo(null);
+        if (LoginForm.enableEasterEggs) {
+            Common.playMusic(2);
+        } 
     }
-    public DepartmentForm(User user) {
+    
+      public DepartmentForm(User u) {
         initComponents();
-        if (user == null) {
-            try {
+        try {
+            if (u == null) {
                 currentUser = null;
                 throw new UserDoesNotExistException(this);
-            } catch (UserDoesNotExistException ex) {
-                ex.showMessage();
             }
-        } else {
-            this.currentUser = user;
-            lblLoggedInUser.setText("Logged in as: " + user.getFullName() + ((user.getAccountType().equals(User.accountTypeState.ADMIN)) ? " with Admin privileges" : ""));
+            departmentList = Department.read();
+            initModel();
+
+            currentUser = u;
+            lblLoggedInUser.setText("Logged in as: " + u.getFullName() + ((u.getAccountType().equals(User.accountTypeState.ADMIN)) ? " with Admin privileges" : ""));
+        } catch (UserDoesNotExistException ex) {
+            ex.showMessage();
+        }
+
+        this.setLocationRelativeTo(null);
+        if (LoginForm.enableEasterEggs) {
+            Common.playMusic(2);
         }
     }
+      
+        private void initModel() {
+        disableAllFields();
+        setModel();
+        clearAllFields();
+    }
+
+    public void setModel() {
+        DefaultTableModel model = (DefaultTableModel) tblData.getModel();
+        model.setNumRows(0);
+        Object columnData[] = new Object[3];
+        columnData[0] = "Department ID";
+        columnData[1] = "Department Name";
+        columnData[2] = "Campus Name";
+        model.setColumnCount(3);
+        model.setColumnIdentifiers(columnData);
+
+        for (int i = 0; i < departmentList.size(); i++) {
+            Object rowData[] = new Object[3];
+            rowData[0] = departmentList.get(i).getDepartmentID();
+            rowData[1] = departmentList.get(i).getName();
+            rowData[2] = departmentList.get(i).getCampus().getName();
+            model.addRow(rowData);
+        }
+    }
+
+    public void disableAllFields() {
+        txtDepartmentID.setEnabled(false);
+        txtDepartmentName.setEnabled(false);
+        cmbCampus.setEnabled(false);
+    }
+
+    public void prepareInsert() {
+        txtDepartmentID.setEnabled(false);
+        txtDepartmentName.setEnabled(true);
+        cmbCampus.setEnabled(true);
+
+    }
+
+    public void prepareUpdate() {
+        txtDepartmentID.setEnabled(true);
+        txtDepartmentName.setEnabled(true);
+        cmbCampus.setEnabled(true);
+    }
+
+    private void clearAllFields() {
+        txtDepartmentID.setText("");
+        txtDepartmentID.setToolTipText(null);
+        txtDepartmentName.setText("");
+        txtDepartmentName.setToolTipText(null);
+        cmbCampus.setSelectedIndex((cmbCampus.getItemCount() > 0) ? 0 : -1);
+        cmbCampus.setToolTipText(null);
+    }
+
+    public void resetColor() {
+        txtDepartmentID.setBackground(new Color(19, 54, 57));
+        txtDepartmentName.setBackground(new Color(19, 54, 57));
+        cmbCampus.setBackground(new Color(19, 54, 57));
+    }
+
+    public void setUIAccess(boolean value) {
+      setCRUDOperations(value);
+    }
+
+    public void setCRUDOperations(boolean value) {
+        btnAdd.setEnabled(value);
+        btnUpdate.setEnabled(value);
+        btnDelete.setEnabled(value);
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -66,6 +164,11 @@ public class DepartmentForm extends javax.swing.JFrame implements FormSetUp{
         lblTitle = new javax.swing.JLabel();
         lblLoggedInUser = new javax.swing.JLabel();
         btnLogOff = new javax.swing.JButton();
+        btnAdd = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblData = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
         staffMenu2 = new javax.swing.JMenu();
         mnOpenStaff2 = new javax.swing.JMenuItem();
@@ -168,50 +271,135 @@ public class DepartmentForm extends javax.swing.JFrame implements FormSetUp{
             }
         });
 
+        btnAdd.setBackground(new java.awt.Color(0, 115, 56));
+        btnAdd.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
+        btnAdd.setForeground(new java.awt.Color(255, 255, 255));
+        btnAdd.setText("Insert Record");
+        btnAdd.setName("btnInsertRecord"); // NOI18N
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
+
+        btnUpdate.setBackground(new java.awt.Color(0, 115, 56));
+        btnUpdate.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
+        btnUpdate.setForeground(new java.awt.Color(255, 255, 255));
+        btnUpdate.setText("Update Record");
+        btnUpdate.setName("btnUpdateRecord"); // NOI18N
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+
+        btnDelete.setBackground(new java.awt.Color(0, 115, 56));
+        btnDelete.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
+        btnDelete.setForeground(new java.awt.Color(255, 255, 255));
+        btnDelete.setText("Delete Record");
+        btnDelete.setToolTipText("");
+        btnDelete.setName("btnDeleteRecord"); // NOI18N
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
+        tblData.setBackground(new java.awt.Color(204, 204, 204));
+        tblData.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createEtchedBorder(java.awt.Color.black, null), javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED, new java.awt.Color(102, 102, 102), new java.awt.Color(204, 204, 204), null, null)));
+        tblData.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tblData.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblDataMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblData);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(76, 76, 76)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblLoggedInUser)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(lblTitle)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnLogOff, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jLabel6)
-                            .addGap(25, 25, 25)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(txtDepartmentName)
-                                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jLabel5)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(txtDepartmentID)
-                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jLabel10)
-                            .addGap(88, 88, 88)
-                            .addComponent(cmbCampus, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(btnCampus, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(76, 76, 76)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblLoggedInUser)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(lblTitle)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnLogOff, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(46, 46, 46)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGap(0, 69, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(52, 52, 52)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                                    .addComponent(jLabel6)
+                                                    .addGap(25, 25, 25)
+                                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                        .addComponent(txtDepartmentName)
+                                                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                                    .addComponent(jLabel5)
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                        .addComponent(txtDepartmentID, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                                    .addComponent(jLabel10)
+                                                    .addGap(88, 88, 88)
+                                                    .addComponent(cmbCampus, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(btnCampus, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(28, 28, 28)
+                                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(29, 29, 29)
+                                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(37, 37, 37)))))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblTitle)
                     .addComponent(btnLogOff, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblLoggedInUser)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(40, 40, 40)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtDepartmentID, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING))
@@ -231,7 +419,12 @@ public class DepartmentForm extends javax.swing.JFrame implements FormSetUp{
                 .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnCampus, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(190, Short.MAX_VALUE))
+                .addGap(38, 38, 38)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(72, 72, 72))
         );
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
@@ -239,23 +432,22 @@ public class DepartmentForm extends javax.swing.JFrame implements FormSetUp{
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(25, 25, 25)
+                .addContainerGap(41, Short.MAX_VALUE)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(133, 133, 133))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(144, 144, 144)
+                .addGap(263, 263, 263)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         staffMenu2.setText("Staff");
@@ -360,11 +552,11 @@ public class DepartmentForm extends javax.swing.JFrame implements FormSetUp{
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 821, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -440,6 +632,149 @@ public class DepartmentForm extends javax.swing.JFrame implements FormSetUp{
         this.dispose();
     }//GEN-LAST:event_mnOpenMyProfileForm1ActionPerformed
 
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        if (insertClick == 0) {
+            insertClick++;
+            setUIAccess(false);
+            btnAdd.setEnabled(true);
+            clearAllFields();
+            prepareInsert();
+        } else {
+            resetColor();
+
+            String departmentName = null;
+            String campusName = null;
+
+            departmentName = txtDepartmentName.getText();
+            campusName =  (cmbCampus.getItemCount() > 0) ? cmbCampus.getSelectedItem().toString() : "";
+
+            boolean check = true;
+
+            if (Common.checkInput(departmentName) != 1 || departmentName.length() > 50) {
+                check = false;
+                txtDepartmentName.setBackground(Color.red);
+                txtDepartmentName.setToolTipText("Only alphabetical characters. Max 50 characters");
+            }
+            if (Common.checkInput(campusName) != 1 || departmentName.length() > 50) {
+                check = false;
+                cmbCampus.setBackground(Color.red);
+                cmbCampus.setToolTipText("Only alphabetical characters. Max 50 characters");
+            }
+
+            if (check) {
+                int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to add this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
+                if (option == 0) {
+                    Department.create(new Department(0, departmentName,Campus.read(campusName)));
+                    departmentList = Department.read();
+                    setModel();
+                }
+                clearAllFields();
+                disableAllFields();
+                resetColor();
+                insertClick = 0;
+                setUIAccess(true);
+            } else {
+                int option = JOptionPane.showConfirmDialog(this, "There were some errors, would you like to fix them?", "Confirmation.", JOptionPane.YES_NO_OPTION);
+                if (option == 1) {
+                    clearAllFields();
+                    disableAllFields();
+                    resetColor();
+                    insertClick = 0;
+                    setUIAccess(true);
+                }
+            }
+        }
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        if (updateClick == 0) {
+            updateClick++;
+            setUIAccess(false);
+            btnUpdate.setEnabled(true);
+            prepareUpdate();
+        } else {
+            resetColor();
+
+            String departmetID =null;
+            String departmentName = null;
+            String campusName = null;
+            
+            departmetID=txtDepartmentID.getText();
+            departmentName = txtDepartmentName.getText();
+            campusName =  (cmbCampus.getItemCount() > 0) ? cmbCampus.getSelectedItem().toString() : "";
+
+
+            boolean check = true;
+
+            if (Common.checkInput(departmetID) != 2) {
+                check = false;
+                txtDepartmentID.setBackground(Color.red);
+                txtDepartmentID.setToolTipText("Only numerical characters");
+            }
+           if (Common.checkInput(departmentName) != 1 || departmentName.length() > 50) {
+                check = false;
+                txtDepartmentName.setBackground(Color.red);
+                txtDepartmentName.setToolTipText("Only alphabetical characters. Max 50 characters");
+            }
+            if (Common.checkInput(campusName) != 1 || departmentName.length() > 50) {
+                check = false;
+                cmbCampus.setBackground(Color.red);
+                cmbCampus.setToolTipText("Only alphabetical characters. Max 50 characters");
+            }
+
+
+            if (check) {
+                int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to update this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
+                if (option == 0) {
+                    Department.update(new Department(Integer.valueOf(departmetID), departmentName,Campus.read(campusName)));
+                    departmentList = Department.read();
+                    setModel();
+                }
+                clearAllFields();
+                disableAllFields();
+                resetColor();
+                updateClick = 0;
+                setUIAccess(true);
+            } else {
+                int option = JOptionPane.showConfirmDialog(this, "There were some errors, would you like to fix them?", "Confirmation.", JOptionPane.YES_NO_OPTION);
+                if (option == 1) {
+                    clearAllFields();
+                    disableAllFields();
+                    resetColor();
+                    updateClick = 0;
+                    setUIAccess(true);
+                }
+            }
+        }
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // Delete Record
+        if (Common.checkInput(txtDepartmentID.getText()) == 2 && Department.read(Integer.parseInt(txtDepartmentID.getText())) != null) {
+            int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
+            if (option == 0) {
+                Department.delete( Integer.valueOf(txtDepartmentID.getText()));
+                clearAllFields();
+                departmentList = Department.read();
+                setModel();
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No valid stock item selected");
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void tblDataMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDataMouseClicked
+        int i = tblData.getSelectedRow();
+
+        Department selectedDepartment;
+        selectedDepartment = new Department(Integer.valueOf(tblData.getValueAt(i, 0).toString()),
+            tblData.getValueAt(i, 1).toString(),
+            (Campus.read(tblData.getValueAt(i, 2).toString())));
+        txtDepartmentID.setText(String.valueOf(selectedDepartment.getDepartmentID()));
+        txtDepartmentName.setText(selectedDepartment.getName());
+        cmbCampus.setSelectedItem(selectedDepartment.getCampus().getName());
+    }//GEN-LAST:event_tblDataMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -476,8 +811,11 @@ public class DepartmentForm extends javax.swing.JFrame implements FormSetUp{
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnCampus;
+    private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnLogOff;
+    private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox<String> cmbCampus;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -490,6 +828,7 @@ public class DepartmentForm extends javax.swing.JFrame implements FormSetUp{
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator6;
@@ -505,6 +844,7 @@ public class DepartmentForm extends javax.swing.JFrame implements FormSetUp{
     private javax.swing.JMenu orderStockMenu5;
     private javax.swing.JMenu staffMenu2;
     private javax.swing.JMenu stockMenu2;
+    private javax.swing.JTable tblData;
     private javax.swing.JTextField txtDepartmentID;
     private javax.swing.JTextField txtDepartmentName;
     // End of variables declaration//GEN-END:variables

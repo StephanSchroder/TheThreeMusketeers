@@ -13,6 +13,7 @@ import BLL.Exceptions.UserDoesNotExistException;
 import BLL.Interfaces.FormSetUp;
 import BLL.User;
 import java.awt.Color;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -64,8 +65,8 @@ public class CampusForm extends javax.swing.JFrame implements FormSetUp{
        
             DefaultTableModel model = (DefaultTableModel) tblCampuses.getModel();
             model.setNumRows(0);
-            Object rowData[] = new Object[19];
-            Object columnData[] = new Object[19];
+            Object rowData[] = new Object[13];
+            Object columnData[] = new Object[13];
             columnData[0] = "CampusID";
             columnData[1] = "Name";
             columnData[2] = "Notes";
@@ -1441,7 +1442,7 @@ public class CampusForm extends javax.swing.JFrame implements FormSetUp{
             if (check == true) {
                 int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to Update this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 0) {
-                    Campus.update(new Campus(campusID, campusName, new Address(0, country, province, city, street, postalCode, addressLine, addressNotes), new Contact(0, email, cellNumber, telNumber, contactNotes),campusNotes));
+                    Campus.update(new Campus(campusID, campusName, new Address(selectedCampus.getLocation().getAddressID(), country, province, city, street, postalCode, addressLine, addressNotes), new Contact(selectedCampus.getContactDetails().getContactID(), email, cellNumber, telNumber, contactNotes),campusNotes));
                     campusList = Campus.read();
                     setModel();
                 }
@@ -1502,7 +1503,7 @@ public class CampusForm extends javax.swing.JFrame implements FormSetUp{
             addressNotes = txtAddressNotes.getText();
             contactNotes = txtContactNotes.getText();
                 
-                Campus.delete(new Campus(campusID, campusName, new Address(0, country, province, city, street, postalCode, addressLine, addressNotes), new Contact(0, email, cellNumber, telNumber, contactNotes),campusNotes));
+                Campus.delete(new Campus(campusID, campusName, new Address(selectedCampus.getLocation().getAddressID(), country, province, city, street, postalCode, addressLine, addressNotes), new Contact(selectedCampus.getContactDetails().getContactID(), email, cellNumber, telNumber, contactNotes),campusNotes));
             clearAllFields();
             campusList = Campus.read();
             setModel();
@@ -1511,9 +1512,26 @@ public class CampusForm extends javax.swing.JFrame implements FormSetUp{
             JOptionPane.showMessageDialog(null, "No valid stock item selected");
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
-
+Campus selectedCampus;
     private void tblCampusesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCampusesMouseClicked
-        // TODO add your handling code here:
+        int i = tblCampuses.getSelectedRow();
+
+        
+        selectedCampus = Campus.read(Integer.valueOf(tblCampuses.getValueAt(i, 0).toString()));
+        txtCampusID.setText(String.valueOf(selectedCampus.getCampusID()));
+        txtCampusName.setText(selectedCampus.getName());
+        txtCampusNotes.setText(selectedCampus.getNotes());
+        txtCountry.setText(selectedCampus.getLocation().getCountry());
+        txtProvince.setText(selectedCampus.getLocation().getProvince());
+        txtCity.setText(selectedCampus.getLocation().getCity());
+        txtStreet.setText(selectedCampus.getLocation().getStreet());
+        txtPostalCode.setText(selectedCampus.getLocation().getPostalCode());
+        txtAddressLine.setText(selectedCampus.getLocation().getAddressLine());
+        txtAddressNotes.setText(selectedCampus.getLocation().getNotes());
+        txtEmail.setText(selectedCampus.getContactDetails().getEmail());
+        txtCell.setText(selectedCampus.getContactDetails().getCellNumber());
+        txtTel.setText(selectedCampus.getContactDetails().getTelNumber());
+        txtContactNotes.setText(selectedCampus.getContactDetails().getNotes());
     }//GEN-LAST:event_tblCampusesMouseClicked
 
     private void btnLogOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOffActionPerformed
