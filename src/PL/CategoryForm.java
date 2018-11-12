@@ -8,6 +8,7 @@ package PL;
 import BLL.Category;
 import BLL.Common;
 import BLL.Exceptions.UserDoesNotExistException;
+import BLL.Interfaces.FormSetUp;
 import BLL.User;
 import java.awt.Color;
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Stephan
  */
-public class CategoryForm extends javax.swing.JFrame {
+public class CategoryForm extends javax.swing.JFrame implements FormSetUp{
 
     private User currentUser;
     private List<Category> categories = new ArrayList<>();
@@ -951,4 +952,21 @@ public class CategoryForm extends javax.swing.JFrame {
     private javax.swing.JTextArea txtDescription;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void setNavigation(boolean flag) {
+        mnOpenDepartmentForm1.setEnabled(flag);
+        mnOpenStockForm3.setEnabled(flag);
+        mnOpenCampusForm1.setEnabled(flag);
+        mnOpenMyProfileForm1.setEnabled(flag);
+        mnOpenStaff3.setEnabled(flag);
+        mnOpenOrderForm1.setEnabled(flag);
+        
+        mnOpenDepartmentForm1.setVisible(flag);
+        mnOpenStockForm3.setVisible(flag);
+        mnOpenCampusForm1.setVisible(flag);
+        mnOpenStaff3.setVisible(flag);
+        mnOpenOrderForm1.setVisible(flag);
+        mnOpenMyProfileForm1.setVisible(flag);
+    }
 }

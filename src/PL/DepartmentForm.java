@@ -8,12 +8,13 @@ package PL;
 import BLL.User;
 import BLL.Common;
 import BLL.Exceptions.UserDoesNotExistException;
+import BLL.Interfaces.FormSetUp;
 
 /**
  *
  * @author Stephan
  */
-public class DepartmentForm extends javax.swing.JFrame {
+public class DepartmentForm extends javax.swing.JFrame implements FormSetUp{
 
     /**
      * Creates new form DepartmentForm
@@ -507,4 +508,9 @@ public class DepartmentForm extends javax.swing.JFrame {
     private javax.swing.JTextField txtDepartmentID;
     private javax.swing.JTextField txtDepartmentName;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void setNavigation(boolean flag) {
+        
+    }
 }

@@ -92,11 +92,19 @@ public class MyProfileForm extends javax.swing.JFrame implements FormSetUp{
     
     @Override
     public void setNavigation(boolean flag){
-        mnOpenOrderForm.setEnabled(flag);
-        mnOpenStockForm.setEnabled(flag);
+        mnOpenOrderForm1.setEnabled(flag);
+        mnOpenStockForm2.setEnabled(flag);
+        mnOpenCampusForm1.setEnabled(flag);
+        mnOpenCategoryForm1.setEnabled(flag);
+        mnOpenDepartmentForm1.setEnabled(flag);
+        mnOpenStaff2.setEnabled(flag);
         
-        mnOpenOrderForm.setVisible(flag);
-        mnOpenStockForm.setVisible(flag);
+        mnOpenOrderForm1.setVisible(flag);
+        mnOpenStockForm2.setVisible(flag);
+        mnOpenCampusForm1.setVisible(flag);
+        mnOpenCategoryForm1.setVisible(flag);
+        mnOpenDepartmentForm1.setVisible(flag);
+        mnOpenStaff2.setVisible(flag);
     }
 
     /**

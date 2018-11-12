@@ -84,11 +84,19 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
     
     @Override
     public void setNavigation(boolean flag){
-/*        mnOpenOrderForm.setEnabled(flag);
-        mnOpenStaffForm.setEnabled(flag);
+        mnOpenDepartmentForm.setEnabled(flag);
+        mnOpenCampusForm.setEnabled(flag);
+        mnOpenCategoryForm.setEnabled(flag);
+        mnOpenMyProfileForm.setEnabled(flag);
+        mnOpenStaff2.setEnabled(flag);
+        mnOpenOrderForm1.setEnabled(flag);
         
-        mnOpenOrderForm.setVisible(flag);
-        mnOpenStaffForm.setVisible(flag);*/
+        mnOpenCampusForm.setVisible(flag);
+        mnOpenCategoryForm.setVisible(flag);
+        mnOpenDepartmentForm.setVisible(flag);
+        mnOpenMyProfileForm.setVisible(flag);
+        mnOpenStaff2.setVisible(flag);
+        mnOpenOrderForm1.setVisible(flag);
     }
 
     private void initModel() {

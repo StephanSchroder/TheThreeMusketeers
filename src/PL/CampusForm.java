@@ -10,6 +10,7 @@ import BLL.Campus;
 import BLL.Common;
 import BLL.Contact;
 import BLL.Exceptions.UserDoesNotExistException;
+import BLL.Interfaces.FormSetUp;
 import BLL.User;
 import java.awt.Color;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Stephan
  */
-public class CampusForm extends javax.swing.JFrame {
+public class CampusForm extends javax.swing.JFrame implements FormSetUp{
 
     private int insertClick = 0;
     private int updateClick = 0;
@@ -1668,4 +1669,21 @@ public class CampusForm extends javax.swing.JFrame {
     private javax.swing.JTextField txtStreet;
     private javax.swing.JTextField txtTel;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void setNavigation(boolean flag) {
+        mnOpenDepartmentForm1.setEnabled(flag);
+        mnOpenStockForm2.setEnabled(flag);
+        mnOpenCategoryForm1.setEnabled(flag);
+        mnOpenMyProfileForm1.setEnabled(flag);
+        mnOpenStaff2.setEnabled(flag);
+        mnOpenOrderForm1.setEnabled(flag);
+        
+        mnOpenDepartmentForm1.setVisible(flag);
+        mnOpenStockForm2.setVisible(flag);
+        mnOpenCategoryForm1.setVisible(flag);
+        mnOpenStaff2.setVisible(flag);
+        mnOpenOrderForm1.setVisible(flag);
+        mnOpenMyProfileForm1.setVisible(flag);
+    }
 }
