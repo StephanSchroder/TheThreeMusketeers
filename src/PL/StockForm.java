@@ -26,6 +26,8 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import BLL.Interfaces.FormSetUp;
 import java.awt.Font;
+import javax.swing.UIManager;
+import javax.swing.plaf.ColorUIResource;
 
 /**
  *
@@ -100,10 +102,10 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
     }
 
     private void initModel() {
-        disableAllFields();
+        
         setModel();
         clearAllFields();
-        
+        disableAllFields();
     }
     public void setModel() {
         DefaultTableModel model = (DefaultTableModel) tblData.getModel();
@@ -223,14 +225,14 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
     }
 
     public void resetColor() {
-        txtStockID.setBackground(Color.white);
-        cmbCategory.setBackground(Color.white);
-        txtItemName.setBackground(Color.white);
-        spStockCount.setBackground(Color.white);
-        txtStatus.setBackground(Color.white);
-        dobPicker.setBackground(Color.white);
-        txtModel.setBackground(Color.white);
-        txtPrice.setBackground(Color.white);
+        txtStockID.setBackground(new Color(19,54,57));
+        cmbCategory.setBackground(new Color(19,54,57));
+        txtItemName.setBackground(new Color(19,54,57));
+        spStockCount.setBackground(new Color(19,54,57));
+        txtStatus.setBackground(new Color(19,54,57));
+        dobPicker.setBackground(new Color(19,54,57));
+        txtModel.setBackground(new Color(19,54,57));
+        txtPrice.setBackground(new Color(19,54,57));
     }
     
     public void setSorting(boolean value) {
@@ -506,6 +508,7 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
         txtPrice.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         txtPrice.setForeground(new java.awt.Color(255, 255, 255));
         txtPrice.setBorder(null);
+        txtPrice.setDisabledTextColor(new java.awt.Color(255, 255, 255));
         txtPrice.setName("txtUserName"); // NOI18N
         txtPrice.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -532,6 +535,7 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
         txtModel.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         txtModel.setForeground(new java.awt.Color(255, 255, 255));
         txtModel.setBorder(null);
+        txtModel.setDisabledTextColor(new java.awt.Color(255, 255, 255));
         txtModel.setName("txtUserName"); // NOI18N
         txtModel.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -932,9 +936,9 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
     private void tblDataMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblDataMouseClicked
         int i = tblData.getSelectedRow();
 
-        Stock selectedStock;
+        
         try {
-            selectedStock = new Stock(Integer.valueOf(tblData.getValueAt(i, 0).toString()),
+            Stock selectedStock = new Stock(Integer.valueOf(tblData.getValueAt(i, 0).toString()),
                     Category.read(tblData.getValueAt(i, 1).toString()),
                     tblData.getValueAt(i, 2).toString(),
                     Double.valueOf(tblData.getValueAt(i, 3).toString()),
@@ -1296,6 +1300,8 @@ public class StockForm extends javax.swing.JFrame implements FormSetUp {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    UIManager.put("TextField.inactiveBackground", new ColorUIResource(new Color(19,54,57)));
+
                     break;
                 }
             }
