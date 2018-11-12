@@ -115,6 +115,10 @@ public class Department implements DatabaseOperations {
     public static Department read(int departmentID) {
         return DataHandler.<Department>readRecords(Department.class, Arrays.asList("DepartmentID", "Name", "CampusID"), Arrays.asList(new DataTablesCollection("Department")), Arrays.asList("DepartmentID=" + departmentID)).get(0);
     }
+
+    public static Department read(String departmentName, String campusName) {
+        return DataHandler.<Department>readRecords(Department.class, Arrays.asList("DepartmentID", "Name", "CampusID"), Arrays.asList(new DataTablesCollection("Department")), Arrays.asList("Name='" + departmentName + "'", "CampusID=" + Campus.read(campusName).getCampusID())).get(0);
+    }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="create Methods">

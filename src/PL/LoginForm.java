@@ -327,14 +327,14 @@ public class LoginForm extends javax.swing.JFrame {
                 case 4:
                     JOptionPane.showMessageDialog(this, "User Login", "Successfull Login", 1);
                     //User Login
-                    new StockForm(User.readByLoginDetails(username, password)).setVisible(true);
+                    new OrderForm(User.readByUsername(username)).setVisible(true);
                     this.dispose();
                     break;
                 case 5:
                     if (!cbAdminCheck.isSelected()) {
                         JOptionPane.showMessageDialog(this, "User Login", "Successfull Login", 1);
                         //User Login
-                        User u = User.readByLoginDetails(username, password);
+                        User u = User.readByUsername(username);
                         u.setAccountType(User.accountTypeState.ADMIN_NORMAL);
                         new OrderForm(u).setVisible(true);
                         this.dispose();
@@ -344,12 +344,18 @@ public class LoginForm extends javax.swing.JFrame {
                         //Admin Login
                         String options[] = {"Staff Page", "Stocks Page", "Order Page"};
                         int option = JOptionPane.showOptionDialog(this, "Welcome " + username + " ! Please select an option to open", "Succesfull Login.", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-                        if (option == 0) {
-                            new StaffForm(User.readByLoginDetails(username, password)).setVisible(true);
-                        } else if (option == 1) {
-                            new StockForm(User.readByLoginDetails(username, password)).setVisible(true);
-                        } else if (option == 2) {
-                            new OrderForm(User.readByLoginDetails(username, password)).setVisible(true);
+                        switch (option) {
+                            case 0:
+                                new StaffForm(User.readByUsername(username)).setVisible(true);
+                                break;
+                            case 1:
+                                new StockForm(User.readByUsername(username)).setVisible(true);
+                                break;
+                            case 2:
+                                new OrderForm(User.readByUsername(username)).setVisible(true);
+                                break;
+                            default:
+                                break;
                         }
                     }
                     this.dispose();
@@ -370,6 +376,7 @@ public class LoginForm extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here
         Common.killSpam();
+        enableEasterEggs = false;
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

@@ -41,34 +41,78 @@ public class User extends Person implements Serializable, DatabaseOperations {
     //<editor-fold defaultstate="collapsed" desc="Constructors">
     public User(int userID, Department department, String username, String password, String accountType, String idNumber, String firstName, String lastName, String title, Date dateOfBirth, String gender, Address address, Contact contact, Date dateAdded) {
         super(idNumber, firstName, lastName, title, dateOfBirth, gender, address, contact, dateAdded);
-        try {
-            this.userID = userID;
-            this.department = department;
-            this.username = username;
-            this.password = Common.encryptPassword(password);
-            this.accountType = accountTypeState.NOT_SET;
-            this.accountType = accountTypeState.valueOf(accountType.toUpperCase());
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidKeySpecException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        this.userID = userID;
+        this.department = department;
+        this.username = username;
+        this.password = password;
+        this.accountType = accountTypeState.NOT_SET;
+        this.accountType = accountTypeState.valueOf(accountType.toUpperCase());
     }
 
     public User(int userID, int department, String username, String password, String accountType, String idNumber, String firstName, String lastName, String title, Date dateOfBirth, String gender, int address, int contact, Date dateAdded) {
         super(idNumber, firstName, lastName, title, dateOfBirth, gender, address, contact, dateAdded);
-        try {
-            this.userID = userID;
-            this.department = Department.read(department);
-            this.username = username;
-            this.password = Common.encryptPassword(password);
-            this.accountType = accountTypeState.NOT_SET;
-            this.accountType = accountTypeState.valueOf(accountType.toUpperCase());
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidKeySpecException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        this.userID = userID;
+        this.department = Department.read(department);
+        this.username = username;
+        this.password = password;
+        this.accountType = accountTypeState.NOT_SET;
+        this.accountType = accountTypeState.valueOf(accountType.toUpperCase());
+    }
+    
+    public User(Department department, String username, String password, String accountType, String idNumber, String firstName, String lastName, String title, Date dateOfBirth, String gender, Address address, Contact contact, Date dateAdded) {
+        super(idNumber, firstName, lastName, title, dateOfBirth, gender, address, contact, dateAdded);
+        this.department = department;
+        this.username = username;
+        this.password = password;
+        this.accountType = accountTypeState.NOT_SET;
+        this.accountType = accountTypeState.valueOf(accountType.toUpperCase());
+    }
+
+    public User(int department, String username, String password, String accountType, String idNumber, String firstName, String lastName, String title, Date dateOfBirth, String gender, int address, int contact, Date dateAdded) {
+        super(idNumber, firstName, lastName, title, dateOfBirth, gender, address, contact, dateAdded);
+        this.department = Department.read(department);
+        this.username = username;
+        this.password = password;
+        this.accountType = accountTypeState.NOT_SET;
+        this.accountType = accountTypeState.valueOf(accountType.toUpperCase());
+    }
+    
+    public User(int userID, Department department, String username, String password, String accountType, String idNumber, String firstName, String lastName, String title, Date dateOfBirth, String gender, Address address, Contact contact) {
+        super(idNumber, firstName, lastName, title, dateOfBirth, gender, address, contact);
+        this.userID = userID;
+        this.department = department;
+        this.username = username;
+        this.password = password;
+        this.accountType = accountTypeState.NOT_SET;
+        this.accountType = accountTypeState.valueOf(accountType.toUpperCase());
+    }
+
+    public User(int userID, int department, String username, String password, String accountType, String idNumber, String firstName, String lastName, String title, Date dateOfBirth, String gender, int address, int contact) {
+        super(idNumber, firstName, lastName, title, dateOfBirth, gender, address, contact);
+        this.userID = userID;
+        this.department = Department.read(department);
+        this.username = username;
+        this.password = password;
+        this.accountType = accountTypeState.NOT_SET;
+        this.accountType = accountTypeState.valueOf(accountType.toUpperCase());
+    }
+    
+    public User(Department department, String username, String password, String accountType, String idNumber, String firstName, String lastName, String title, Date dateOfBirth, String gender, Address address, Contact contact) {
+        super(idNumber, firstName, lastName, title, dateOfBirth, gender, address, contact);
+        this.department = department;
+        this.username = username;
+        this.password = password;
+        this.accountType = accountTypeState.NOT_SET;
+        this.accountType = accountTypeState.valueOf(accountType.toUpperCase());
+    }
+
+    public User(int department, String username, String password, String accountType, String idNumber, String firstName, String lastName, String title, Date dateOfBirth, String gender, int address, int contact) {
+        super(idNumber, firstName, lastName, title, dateOfBirth, gender, address, contact);
+        this.department = Department.read(department);
+        this.username = username;
+        this.password = password;
+        this.accountType = accountTypeState.NOT_SET;
+        this.accountType = accountTypeState.valueOf(accountType.toUpperCase());
     }
     //</editor-fold>
 
@@ -102,13 +146,7 @@ public class User extends Person implements Serializable, DatabaseOperations {
     }
 
     public void setPassword(String password) {
-        try {
-            this.password = Common.encryptPassword(password);
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvalidKeySpecException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        this.password = password;
     }
 
     public accountTypeState getAccountType() {
@@ -195,10 +233,6 @@ public class User extends Person implements Serializable, DatabaseOperations {
         return DataHandler.<User>readRecords(User.class, Arrays.asList("UserID", "Department", "Username", "Password", "AccountType", "IDNumber", "FirstName", "LastName", "Title", "DateOfBirth", "Gender", "AddressID", "ContactID", "DateAdded"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("PersonID='" + idNumber + "'")).get(0);
     }
 
-    public static User readByLoginDetails(String username, String password) {
-        return DataHandler.<User>readRecords(User.class, Arrays.asList("UserID", "Department", "Username", "Password", "AccountType", "IDNumber", "FirstName", "LastName", "Title", "DateOfBirth", "Gender", "AddressID", "ContactID", "DateAdded"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList("Username= '" + username + "'", "Password= '" + password + "'")).get(0);
-    }
-
     public static List<User> readByParameterExplicit(String columnToSearch, String parameter) {
         return DataHandler.<User>readRecords(User.class, Arrays.asList("UserID", "Department", "Username", "Password", "AccountType", "IDNumber", "FirstName", "LastName", "Title", "DateOfBirth", "Gender", "AddressID", "ContactID", "DateAdded"), Arrays.asList(new DataTablesCollection("Person"), new DataTablesCollection("User", "Person", "PersonID", "IDNumber", "INNER JOIN")), Arrays.asList(columnToSearch + " = '" + parameter + "'"));
     }
@@ -265,123 +299,161 @@ public class User extends Person implements Serializable, DatabaseOperations {
     //<editor-fold defaultstate="collapsed" desc="create Methods">
     @Override
     public void create() {
-        //User
-        //Columns
-        ArrayList<String> columns = new ArrayList<>();
-        columns.add("PersonID");
-        columns.add("Department");
-        columns.add("Username");
-        columns.add("Password");
-        if (this.getAccountType() != accountTypeState.NOT_SET) {
-            columns.add("AccountType");
+        try {
+            //Person Base
+            super.create();
+            
+            //User
+            //Columns
+            ArrayList<String> columns = new ArrayList<>();
+            columns.add("PersonID");
+            columns.add("Department");
+            columns.add("Username");
+            columns.add("Password");
+            if (this.getAccountType() != accountTypeState.NOT_SET) {
+                columns.add("AccountType");
+            }
+            
+            //Values
+            String values = "";
+            values += "string#" + this.getIdNumber();
+            values += ";int#" + this.getDepartment().getDepartmentID();
+            values += ";string#" + this.getUsername();
+            values += ";string#" + Common.encryptPassword(this.getPassword());
+            if (this.getAccountType() != accountTypeState.NOT_SET) {
+                values += ";string#" + this.getAccountType();
+            }
+            
+            //Execute
+            DataHandler.createRecords(columns, "User", Arrays.asList(values));
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidKeySpecException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        //Values
-        String values = "";
-        values += "string#" + this.getIdNumber();
-        values += ";int#" + this.getDepartment().getDepartmentID();
-        values += ";string#" + this.getUsername();
-        values += ";string#" + this.getPassword();
-        if (this.getAccountType() != accountTypeState.NOT_SET) {
-            values += ";string#" + this.getAccountType();
-        }
-
-        //Execute
-        DataHandler.createRecords(columns, "User", Arrays.asList(values));
     }
 
     public static void create(User user) {
-        //User
-        //Columns
-        ArrayList<String> columns = new ArrayList<>();
-        columns.add("PersonID");
-        columns.add("Department");
-        columns.add("Username");
-        columns.add("Password");
-        if (user.getAccountType() != accountTypeState.NOT_SET) {
-            columns.add("AccountType");
+        try {
+            //Person Base
+            Person.create(user);
+            
+            //User
+            //Columns
+            ArrayList<String> columns = new ArrayList<>();
+            columns.add("PersonID");
+            columns.add("Department");
+            columns.add("Username");
+            columns.add("Password");
+            if (user.getAccountType() != accountTypeState.NOT_SET) {
+                columns.add("AccountType");
+            }
+            
+            //Values
+            String values = "";
+            values += "string#" + user.getIdNumber();
+            values += ";int#" + user.getDepartment().getDepartmentID();
+            values += ";string#" + user.getUsername();
+            values += ";string#" + Common.encryptPassword(user.getPassword());
+            if (user.getAccountType() != accountTypeState.NOT_SET) {
+                values += ";string#" + user.getAccountType();
+            }
+            
+            //Execute
+            DataHandler.createRecords(columns, "User", Arrays.asList(values));
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidKeySpecException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        //Values
-        String values = "";
-        values += "string#" + user.getIdNumber();
-        values += ";int#" + user.getDepartment().getDepartmentID();
-        values += ";string#" + user.getUsername();
-        values += ";string#" + user.getPassword();
-        if (user.getAccountType() != accountTypeState.NOT_SET) {
-            values += ";string#" + user.getAccountType();
-        }
-
-        //Execute
-        DataHandler.createRecords(columns, "User", Arrays.asList(values));
     }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="update Methods">
     @Override
     public void update() {
-        //User
-        //Columns
-        ArrayList<String> columns = new ArrayList<>();
-        columns.add("Department");
-        if (this.getPassword().length() > 0) {
-            columns.add("Password");
+        try {
+            //Person Base
+            super.update();
+            
+            //User
+            //Columns
+            ArrayList<String> columns = new ArrayList<>();
+            columns.add("Department");
+            if (this.getPassword().length() > 0) {
+                columns.add("Password");
+            }
+            columns.add("AccountType");
+
+            //Values
+            ArrayList<String> values = new ArrayList<>();
+            values.add("int;" + this.getDepartment().getDepartmentID());
+            if (this.getPassword().length() > 0) {
+                    values.add("string;" + Common.encryptPassword(this.getPassword()));
+            }
+            values.add("string;" + this.getAccountType());
+
+            //Conditions
+            ArrayList<String> conditions = new ArrayList<>();
+            conditions.add("UserID=" + this.getUserID());
+
+            //Execute
+            DataHandler.updateRecords("User", columns, values, conditions);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidKeySpecException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
         }
-        columns.add("AccountType");
-
-        //Values
-        ArrayList<String> values = new ArrayList<>();
-        values.add("int;" + this.getDepartment().getDepartmentID());
-        if (this.getPassword().length() > 0) {
-            values.add("string;" + this.getPassword());
-        }
-        values.add("string;" + this.getAccountType());
-
-        //Conditions
-        ArrayList<String> conditions = new ArrayList<>();
-        conditions.add("UserID=" + this.getUserID());
-
-        //Execute
-        DataHandler.updateRecords("User", columns, values, conditions);
     }
 
     public static void update(User user) {
-        //User
-        //Columns
-        ArrayList<String> columns = new ArrayList<>();
-        columns.add("Department");
-        if (user.getPassword().length() > 0) {
-            columns.add("Password");
+        try {
+            //Person Base
+            Person.update(user);
+            
+            //User
+            //Columns
+            ArrayList<String> columns = new ArrayList<>();
+            columns.add("Department");
+            if (user.getPassword().length() > 0) {
+                columns.add("Password");
+            }
+            columns.add("AccountType");
+
+            //Values
+            ArrayList<String> values = new ArrayList<>();
+            values.add("int;" + user.getDepartment().getDepartmentID());
+            if (user.getPassword().length() > 0) {
+                values.add("string;" + Common.encryptPassword(user.getPassword()));
+            }
+            values.add("string;" + user.getAccountType());
+
+            //Conditions
+            ArrayList<String> conditions = new ArrayList<>();
+            conditions.add("UserID=" + user.getUserID());
+
+            //Execute
+            DataHandler.updateRecords("User", columns, values, conditions);
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidKeySpecException ex) {
+            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
         }
-        columns.add("AccountType");
-
-        //Values
-        ArrayList<String> values = new ArrayList<>();
-        values.add("int;" + user.getDepartment().getDepartmentID());
-        if (user.getPassword().length() > 0) {
-            values.add("string;" + user.getPassword());
-        }
-        values.add("string;" + user.getAccountType());
-
-        //Conditions
-        ArrayList<String> conditions = new ArrayList<>();
-        conditions.add("UserID=" + user.getUserID());
-
-        //Execute
-        DataHandler.updateRecords("User", columns, values, conditions);
     }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="delete Methods">
     @Override
     public void delete() {
+        //Person Base
+        super.delete();
+
         //User        
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
         conditions.add("PersonID='" + this.getIdNumber() + "'");
         conditions.add("Department=" + this.getDepartment().getDepartmentID());
         conditions.add("Username='" + this.getUsername() + "'");
-        conditions.add("Password='" + this.getPassword() + "'");
         conditions.add("AccountType='" + this.getAccountType() + "'");
 
         //Execute
@@ -389,13 +461,15 @@ public class User extends Person implements Serializable, DatabaseOperations {
     }
 
     public static void delete(User user) {
+        //Person Base
+        Person.delete(user);
+
         //User        
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
         conditions.add("PersonID='" + user.getIdNumber() + "'");
         conditions.add("Department=" + user.getDepartment().getDepartmentID());
         conditions.add("Username='" + user.getUsername() + "'");
-        conditions.add("Password='" + user.getPassword() + "'");
         conditions.add("AccountType='" + user.getAccountType() + "'");
 
         //Execute
@@ -403,6 +477,9 @@ public class User extends Person implements Serializable, DatabaseOperations {
     }
 
     public static void delete(int userID) {
+        //Person Base
+        Person.delete(User.read(userID));
+        
         //User        
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
@@ -426,7 +503,6 @@ public class User extends Person implements Serializable, DatabaseOperations {
         } else {
             conditions.add("Department='" + this.getDepartment().getDepartmentID() + "'");
             conditions.add("Username='" + this.getUsername() + "'");
-            conditions.add("Password='" + this.getPassword() + "'");
             conditions.add("AccountType='" + this.getAccountType().name() + "'");
         }
 
@@ -462,9 +538,10 @@ public class User extends Person implements Serializable, DatabaseOperations {
         boolean proceed = false;
         if ((usernameInputCode == 1)){
             try {
-                String[][] pass = DataHandler.readRecords(Arrays.asList("Password"), Arrays.<DataTablesCollection>asList(new DataTablesCollection("User")), Arrays.asList("Username='" + username + "'", "Password='" + password + "'"));
-                proceed = Common.validatePassword(password, pass[0][1]);
-                
+                String[][] pass = DataHandler.readRecords(Arrays.asList("Password"), Arrays.<DataTablesCollection>asList(new DataTablesCollection("User")), Arrays.asList("Username='" + username + "'"));
+                if (pass.length > 0) {
+                    proceed = Common.validatePassword(password, pass[0][0]);
+                }
             } catch (NoSuchAlgorithmException ex) {
                 Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
             } catch (InvalidKeySpecException ex) {
@@ -476,7 +553,7 @@ public class User extends Person implements Serializable, DatabaseOperations {
             
         if ((usernameInputCode == 1) && proceed) {
             userAuthed = 2;
-            String[][] dbData = DataHandler.readRecords(Arrays.asList("UserID", "AccountType"), Arrays.<DataTablesCollection>asList(new DataTablesCollection("User")), Arrays.asList("Username='" + username + "'", "Password='" + password + "'"));
+            String[][] dbData = DataHandler.readRecords(Arrays.asList("UserID", "AccountType"), Arrays.<DataTablesCollection>asList(new DataTablesCollection("User")), Arrays.asList("Username='" + username + "'"));
             if (dbData.length == 1) {
                 userAuthed = 3;
                 String AccountType = dbData[0][1].toUpperCase();

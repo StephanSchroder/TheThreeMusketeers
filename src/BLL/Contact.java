@@ -39,6 +39,7 @@ public class Contact implements DatabaseOperations {
     }
     
     public Contact(String email, String cellNumber, String telNumber, String notes) {
+        this.contactID = 0;
         this.email = email;
         this.cellNumber = cellNumber;
         this.telNumber = telNumber;
@@ -46,15 +47,19 @@ public class Contact implements DatabaseOperations {
     }
     
     public Contact(String email, String cellNumber, String telNumber) {
+        this.contactID = 0;
         this.email = email;
         this.cellNumber = cellNumber;
         this.telNumber = telNumber;
+        this.notes = "";
     }
 
     public Contact(int contactID, String email, String cellNumber) {
         this.contactID = contactID;
         this.email = email;
         this.cellNumber = cellNumber;
+        this.telNumber = "";
+        this.notes = "";
     }
     //</editor-fold>
 
@@ -84,7 +89,7 @@ public class Contact implements DatabaseOperations {
     }
 
     public String getTelNumber() {
-        return telNumber;
+        return ((telNumber != null) ? telNumber : "");
     }
 
     public void setTelNumber(String telNumber) {
@@ -92,7 +97,7 @@ public class Contact implements DatabaseOperations {
     }
 
     public String getNotes() {
-        return notes;
+        return ((notes != null) ? notes : "");
     }
 
     public void setNotes(String notes) {
@@ -155,6 +160,19 @@ public class Contact implements DatabaseOperations {
 
     public static Contact read(int contactID) {
         return DataHandler.<Contact>readRecords(Contact.class, Arrays.asList("ContactID", "Email", "CellNumber", "TelNumber", "Notes"), Arrays.asList(new DataTablesCollection("Contact")), Arrays.asList("ContactID=" + contactID)).get(0);
+    }
+
+    public static Contact read(String email, String cellNumber, String telNumber, String notes) {
+        ArrayList<String> conditions = new ArrayList<>();
+        conditions.add("Email='" + email + "'");
+        conditions.add("CellNumber='" + cellNumber + "'");
+        if (!telNumber.isEmpty()) {
+            conditions.add("TelNumber='" + telNumber + "'");
+        }
+        if (!notes.isEmpty()) {
+            conditions.add("Notes='" + notes + "'");
+        }
+        return DataHandler.<Contact>readRecords(Contact.class, Arrays.asList("ContactID", "Email", "CellNumber", "TelNumber", "Notes"), Arrays.asList(new DataTablesCollection("Contact")), conditions).get(0);
     }
     //</editor-fold>
 
@@ -363,10 +381,10 @@ public class Contact implements DatabaseOperations {
             this.setContactID(contact.getContactID());
             this.setEmail(contact.getEmail());
             this.setCellNumber(contact.getCellNumber());
-            if (!contact.getTelNumber().isEmpty()) {
+            if (contact.getTelNumber() != null) {
                 this.setTelNumber(contact.getTelNumber());
             }
-            if (!contact.getNotes().isEmpty()) {
+            if (contact.getNotes() != null) {
                 this.setNotes(contact.getNotes());
             }
         }

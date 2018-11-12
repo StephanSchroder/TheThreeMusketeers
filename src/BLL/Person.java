@@ -59,6 +59,28 @@ public abstract class Person implements DatabaseOperations {
         this.contact = Contact.read(contact);
         this.dateAdded = dateAdded;
     }
+    
+    public Person(String idNumber, String firstName, String lastName, String title, Date dateOfBirth, String gender, Address address, Contact contact) {
+        this.idNumber = idNumber;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.title = title;
+        this.dateOfBirth = dateOfBirth;
+        this.gender = gender;
+        this.address = address;
+        this.contact = contact;
+    }
+
+    public Person(String idNumber, String firstName, String lastName, String title, Date dateOfBirth, String gender, int address, int contact) {
+        this.idNumber = idNumber;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.title = title;
+        this.dateOfBirth = dateOfBirth;
+        this.gender = gender;
+        this.address = Address.read(address);
+        this.contact = Contact.read(contact);
+    }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Properties">
@@ -211,9 +233,24 @@ public abstract class Person implements DatabaseOperations {
     }
     //</editor-fold>
     
+    //<editor-fold defaultstate="collapsed" desc="read Methods">
+    public static List<Person> readPerson() {
+        return DataHandler.<Person>readRecords(Person.class, Arrays.asList("IDNumber", "FirstName", "LastName", "Title", "DateOfBirth", "Gender", "AddressID", "ContactID", "DateAdded"), Arrays.asList(new DataTablesCollection("Person")), Arrays.asList());
+    }
+    
+    public static Person readPerson(String idNumber) {
+        return DataHandler.<Person>readRecords(Person.class, Arrays.asList("IDNumber", "FirstName", "LastName", "Title", "DateOfBirth", "Gender", "AddressID", "ContactID", "DateAdded"), Arrays.asList(new DataTablesCollection("Person")), Arrays.asList("IDNumber='" + idNumber + "'")).get(0);
+    }
+    //</editor-fold>
+    
     //<editor-fold defaultstate="collapsed" desc="create Methods">
     @Override
     public void create() {
+        this.getAddress().create();
+        this.getAddress().synchronise();
+        this.getContact().create();
+        this.getContact().synchronise();
+        
         //Person
         //Columns
         ArrayList<String> columns = new ArrayList<>();
@@ -242,6 +279,11 @@ public abstract class Person implements DatabaseOperations {
     }
 
     public static void create(Person person) {
+        person.getAddress().create();
+        person.getAddress().synchronise();
+        person.getContact().create();
+        person.getContact().synchronise();
+        
         //Person
         //Columns
         ArrayList<String> columns = new ArrayList<>();
@@ -273,6 +315,11 @@ public abstract class Person implements DatabaseOperations {
     //<editor-fold defaultstate="collapsed" desc="update Methods">
     @Override
     public void update() {
+        this.getAddress().update();
+        this.getAddress().synchronise();
+        this.getContact().update();
+        this.getContact().synchronise();
+        
         //Person
         //Columns
         ArrayList<String> columns = new ArrayList<>();
@@ -301,6 +348,11 @@ public abstract class Person implements DatabaseOperations {
     }
 
     public static void update(Person person) {
+        person.getAddress().update();
+        person.getAddress().synchronise();
+        person.getContact().update();
+        person.getContact().synchronise();
+        
         //Person
         //Columns
         ArrayList<String> columns = new ArrayList<>();
@@ -332,6 +384,9 @@ public abstract class Person implements DatabaseOperations {
     //<editor-fold defaultstate="collapsed" desc="delete Methods">
     @Override
     public void delete() {
+        this.getAddress().delete();
+        this.getContact().delete();
+        
         //Person
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
@@ -348,6 +403,9 @@ public abstract class Person implements DatabaseOperations {
     }
 
     public static void delete(Person person) {
+        person.getAddress().delete();
+        person.getContact().delete();
+        
         //Person       
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
@@ -364,6 +422,10 @@ public abstract class Person implements DatabaseOperations {
     }
 
     public static void delete(String idNumber) {
+        Person person = readPerson(idNumber);
+        person.getAddress().delete();
+        person.getContact().delete();
+        
         //Person       
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();

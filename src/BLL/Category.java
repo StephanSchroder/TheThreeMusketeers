@@ -285,7 +285,7 @@ public class Category implements DatabaseOperations {
 
             this.setCategoryID(category.getCategoryID());
             this.setName(category.getName());
-            if (!category.getDescription().isEmpty()) {
+            if (category.getDescription() != null) {
                 this.setDescription(category.getDescription());
             }
         }

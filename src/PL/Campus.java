@@ -5,14 +5,22 @@
  */
 package PL;
 
-<<<<<<< HEAD
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package PL;
+
+
 import BLL.Common;
 import java.awt.Color;
 import java.util.Date;
 =======
 import BLL.User;
 import BLL.Common;
->>>>>>> origin/master
+import BLL.User;
+import BLL.Common;
 
 /**
  *
@@ -672,26 +680,11 @@ public class Campus extends javax.swing.JFrame {
 
     private void txtCampusIDFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCampusIDFocusGained
         // TODO add your handling code here:
-<<<<<<< HEAD
         Common.focusGain("ID number", txtCampusID);
 =======
         Common.focusGain("Campus ID", txtCampusID);
->>>>>>> origin/master
-    }//GEN-LAST:event_txtCampusIDFocusGained
-
-    private void txtCampusIDFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCampusIDFocusLost
-        // TODO add your handling code here:
-<<<<<<< HEAD
-
-        Common.focusLost("ID number", txtCampusID);
-=======
-        Common.focusLost("Campus ID", txtCampusID);
->>>>>>> origin/master
-    }//GEN-LAST:event_txtCampusIDFocusLost
-
-    private void txtCampusNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCampusNameFocusGained
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtCampusNameFocusGained
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
 
     private void txtCampusNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCampusNameFocusLost
         // TODO add your handling code here:

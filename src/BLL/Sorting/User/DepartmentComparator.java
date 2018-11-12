@@ -12,11 +12,11 @@ import java.util.Comparator;
  *
  * @author Stephan
  */
-public class ProvinceComparator implements Comparator {
+public class DepartmentComparator implements Comparator {
     @Override
     public int compare(Object o1, Object o2) {
         User user1 = (User) o1;
         User user2 = (User) o2;
-        return user1.getAddress().getProvince().toLowerCase().compareTo(user2.getAddress().getProvince().toLowerCase());
+        return user1.getDepartment().getName().toLowerCase().compareTo(user2.getDepartment().getName().toLowerCase());
     }
 }

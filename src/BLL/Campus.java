@@ -159,6 +159,10 @@ public class Campus implements DatabaseOperations {
     public static Campus read(int campusID) {
         return DataHandler.<Campus>readRecords(Campus.class, Arrays.asList("CampusID", "Name", "Location", "ContactDetails", "Notes"), Arrays.asList(new DataTablesCollection("Campus")), Arrays.asList("CampusID=" + campusID)).get(0);
     }
+
+    public static Campus read(String campusName) {
+        return DataHandler.<Campus>readRecords(Campus.class, Arrays.asList("CampusID", "Name", "Location", "ContactDetails", "Notes"), Arrays.asList(new DataTablesCollection("Campus")), Arrays.asList("Name='" + campusName + "'")).get(0);
+    }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="create Methods">
@@ -345,7 +349,7 @@ public class Campus implements DatabaseOperations {
             this.setName(campus.getName());
             this.setLocation(campus.getLocation());
             this.setContactDetails(campus.getContactDetails());
-            if (!campus.getNotes().isEmpty()) {
+            if (campus.getNotes() != null) {
                 this.setNotes(campus.getNotes());
             }
         }
