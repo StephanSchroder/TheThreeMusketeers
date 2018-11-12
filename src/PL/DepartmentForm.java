@@ -581,7 +581,9 @@ public class DepartmentForm extends javax.swing.JFrame implements FormSetUp{
     }//GEN-LAST:event_txtDepartmentNameFocusLost
 
     private void btnCampusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCampusActionPerformed
-        
+            CampusForm frm = new CampusForm(currentUser);
+            frm.setVisible(true);
+            this.dispose();
     }//GEN-LAST:event_btnCampusActionPerformed
 
     private void btnLogOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOffActionPerformed
@@ -851,6 +853,18 @@ public class DepartmentForm extends javax.swing.JFrame implements FormSetUp{
 
     @Override
     public void setNavigation(boolean flag) {
-        
+            mnOpenOrderForm2.setEnabled(flag);
+        mnOpenStockForm2.setEnabled(flag);
+        mnOpenCampusForm1.setEnabled(flag);
+        mnOpenCategoryForm1.setEnabled(flag);
+        mnOpenMyProfileForm1.setEnabled(flag);
+        mnOpenStaff2.setEnabled(flag);
+
+        mnOpenOrderForm2.setVisible(flag);
+        mnOpenStockForm2.setVisible(flag);
+        mnOpenCampusForm1.setVisible(flag);
+        mnOpenCategoryForm1.setVisible(flag);
+        mnOpenMyProfileForm1.setVisible(flag);
+        mnOpenStaff2.setVisible(flag);
     }
 }
