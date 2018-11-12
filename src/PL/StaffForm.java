@@ -627,6 +627,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         miOrderMenu = new javax.swing.JMenu();
         mnOpenOrderForm = new javax.swing.JMenuItem();
         orderStockMenu2 = new javax.swing.JMenu();
+        mnOpenCategoryForm = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         mnOpenDepartmentForm1 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
@@ -1611,6 +1612,15 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         orderStockMenu2.setText("Category");
         orderStockMenu2.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         orderStockMenu2.setIconTextGap(10);
+
+        mnOpenCategoryForm.setText("Open Category Form");
+        mnOpenCategoryForm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnOpenCategoryFormActionPerformed(evt);
+            }
+        });
+        orderStockMenu2.add(mnOpenCategoryForm);
+
         jMenuBar1.add(orderStockMenu2);
 
         jMenu4.setText("Department");
@@ -2614,6 +2624,12 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         this.dispose();
     }//GEN-LAST:event_mnOpenCampusFormActionPerformed
 
+    private void mnOpenCategoryFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenCategoryFormActionPerformed
+
+        new CategoryForm(currentUser).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_mnOpenCategoryFormActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -2739,6 +2755,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
     private javax.swing.JMenu miStaffMenu;
     private javax.swing.JMenu miStockMenu;
     private javax.swing.JMenuItem mnOpenCampusForm;
+    private javax.swing.JMenuItem mnOpenCategoryForm;
     private javax.swing.JMenuItem mnOpenDepartmentForm1;
     private javax.swing.JMenuItem mnOpenMyProfileForm;
     private javax.swing.JMenuItem mnOpenOrderForm;

@@ -9,6 +9,8 @@ import BLL.Address;
 import BLL.Campus;
 import BLL.Common;
 import BLL.Contact;
+import BLL.Exceptions.UserDoesNotExistException;
+import BLL.User;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,6 +27,8 @@ public class CampusForm extends javax.swing.JFrame {
     private int insertClick = 0;
     private int updateClick = 0;
     private List<Campus> campusList= new ArrayList<>();
+    private User currentUser; 
+    
     /**
      * Creates new form Campus
      */
@@ -32,6 +36,27 @@ public class CampusForm extends javax.swing.JFrame {
         initComponents();
         
         campusList=Campus.read();
+    }
+    
+    public CampusForm(User u){
+        try {
+            if (u == null) {
+                currentUser = null;
+                throw new UserDoesNotExistException(this);
+            }
+
+            currentUser = u;
+            lbLoginedInUser.setText("Logged in as: " + u.getFullName() + ((u.getAccountType().equals(User.accountTypeState.ADMIN)) ? " with Admin privileges" : ""));
+            
+         
+        } catch (UserDoesNotExistException ex) {
+            ex.showMessage();
+
+        }
+        this.setLocationRelativeTo(null);
+        if (LoginForm.enableEasterEggs) {
+            Common.playMusic(2);
+        }
     }
     
      public void setModel() {
@@ -144,6 +169,23 @@ public class CampusForm extends javax.swing.JFrame {
         btnDelete = new javax.swing.JButton();
         jScrollPane5 = new javax.swing.JScrollPane();
         tblCampuses = new javax.swing.JTable();
+        jLabel14 = new javax.swing.JLabel();
+        lbLoginedInUser = new javax.swing.JLabel();
+        btnLogOff = new javax.swing.JButton();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        staffMenu = new javax.swing.JMenu();
+        mnOpenStaff = new javax.swing.JMenuItem();
+        stockMenu = new javax.swing.JMenu();
+        mnOpenStockForm = new javax.swing.JMenuItem();
+        orderStockMenu = new javax.swing.JMenu();
+        mnOpenOrderForm = new javax.swing.JMenuItem();
+        orderStockMenu2 = new javax.swing.JMenu();
+        mnOpenCategoryForm = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        mnOpenDepartmentForm = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenu5 = new javax.swing.JMenu();
+        mnOpenMyProfileForm = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -693,6 +735,25 @@ public class CampusForm extends javax.swing.JFrame {
         });
         jScrollPane5.setViewportView(tblCampuses);
 
+        jLabel14.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
+        jLabel14.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel14.setText("Campus Form:");
+
+        lbLoginedInUser.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        lbLoginedInUser.setForeground(new java.awt.Color(255, 255, 255));
+        lbLoginedInUser.setText("Logged In As: ");
+
+        btnLogOff.setBackground(new java.awt.Color(0, 115, 56));
+        btnLogOff.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
+        btnLogOff.setForeground(new java.awt.Color(255, 255, 255));
+        btnLogOff.setText("Log Off");
+        btnLogOff.setName("btnInsertRecord"); // NOI18N
+        btnLogOff.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogOffActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -709,13 +770,27 @@ public class CampusForm extends javax.swing.JFrame {
                 .addContainerGap(149, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(66, 66, 66)
-                .addComponent(jScrollPane5)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lbLoginedInUser)
+                        .addGap(211, 211, 211))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel14)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnLogOff, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane5))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(51, 51, 51)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel14)
+                    .addComponent(btnLogOff, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbLoginedInUser)
+                .addGap(30, 30, 30)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -748,6 +823,96 @@ public class CampusForm extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
+
+        staffMenu.setText("Staff");
+        staffMenu.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        staffMenu.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        staffMenu.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        staffMenu.setIconTextGap(20);
+
+        mnOpenStaff.setText("Open Staff Form");
+        mnOpenStaff.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnOpenStaffActionPerformed(evt);
+            }
+        });
+        staffMenu.add(mnOpenStaff);
+
+        jMenuBar1.add(staffMenu);
+
+        stockMenu.setText("Stock");
+        stockMenu.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        stockMenu.setIconTextGap(10);
+
+        mnOpenStockForm.setText("Open Stock Form");
+        mnOpenStockForm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnOpenStockFormActionPerformed(evt);
+            }
+        });
+        stockMenu.add(mnOpenStockForm);
+
+        jMenuBar1.add(stockMenu);
+
+        orderStockMenu.setText("Order Stock");
+        orderStockMenu.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        orderStockMenu.setIconTextGap(10);
+
+        mnOpenOrderForm.setText("Open Order Form");
+        mnOpenOrderForm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnOpenOrderFormActionPerformed(evt);
+            }
+        });
+        orderStockMenu.add(mnOpenOrderForm);
+
+        jMenuBar1.add(orderStockMenu);
+
+        orderStockMenu2.setText("Category");
+        orderStockMenu2.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        orderStockMenu2.setIconTextGap(10);
+
+        mnOpenCategoryForm.setText("Open Category Form");
+        mnOpenCategoryForm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnOpenCategoryFormActionPerformed(evt);
+            }
+        });
+        orderStockMenu2.add(mnOpenCategoryForm);
+
+        jMenuBar1.add(orderStockMenu2);
+
+        jMenu4.setText("Department");
+        jMenu4.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+
+        mnOpenDepartmentForm.setText("Open Department Form");
+        mnOpenDepartmentForm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnOpenDepartmentFormActionPerformed(evt);
+            }
+        });
+        jMenu4.add(mnOpenDepartmentForm);
+
+        jMenuBar1.add(jMenu4);
+
+        jMenu3.setText("Campus");
+        jMenu3.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jMenuBar1.add(jMenu3);
+
+        jMenu5.setText("My Profile");
+        jMenu5.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+
+        mnOpenMyProfileForm.setText("Open My Profile Form");
+        mnOpenMyProfileForm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnOpenMyProfileFormActionPerformed(evt);
+            }
+        });
+        jMenu5.add(mnOpenMyProfileForm);
+
+        jMenuBar1.add(jMenu5);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -1342,6 +1507,48 @@ public class CampusForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_tblCampusesMouseClicked
 
+    private void btnLogOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOffActionPerformed
+        // TODO add your handling code here:
+        Common.logOff(this);
+    }//GEN-LAST:event_btnLogOffActionPerformed
+
+    private void mnOpenStaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenStaffActionPerformed
+
+        StaffForm staff = new StaffForm(currentUser);
+        staff.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_mnOpenStaffActionPerformed
+
+    private void mnOpenStockFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenStockFormActionPerformed
+
+        new StockForm(currentUser).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_mnOpenStockFormActionPerformed
+
+    private void mnOpenDepartmentFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenDepartmentFormActionPerformed
+        new DepartmentForm(currentUser).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_mnOpenDepartmentFormActionPerformed
+
+    private void mnOpenMyProfileFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenMyProfileFormActionPerformed
+
+        new MyProfileForm(currentUser).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_mnOpenMyProfileFormActionPerformed
+
+    private void mnOpenOrderFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenOrderFormActionPerformed
+
+        OrderForm orderForm = new OrderForm(currentUser);
+        orderForm.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_mnOpenOrderFormActionPerformed
+
+    private void mnOpenCategoryFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenCategoryFormActionPerformed
+
+        new CategoryForm(currentUser).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_mnOpenCategoryFormActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1381,11 +1588,13 @@ public class CampusForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnInsert;
+    private javax.swing.JButton btnLogOff;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
@@ -1398,6 +1607,10 @@ public class CampusForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -1420,6 +1633,17 @@ public class CampusForm extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator7;
     private javax.swing.JSeparator jSeparator8;
     private javax.swing.JSeparator jSeparator9;
+    private javax.swing.JLabel lbLoginedInUser;
+    private javax.swing.JMenuItem mnOpenCategoryForm;
+    private javax.swing.JMenuItem mnOpenDepartmentForm;
+    private javax.swing.JMenuItem mnOpenMyProfileForm;
+    private javax.swing.JMenuItem mnOpenOrderForm;
+    private javax.swing.JMenuItem mnOpenStaff;
+    private javax.swing.JMenuItem mnOpenStockForm;
+    private javax.swing.JMenu orderStockMenu;
+    private javax.swing.JMenu orderStockMenu2;
+    private javax.swing.JMenu staffMenu;
+    private javax.swing.JMenu stockMenu;
     private javax.swing.JTable tblCampuses;
     private javax.swing.JTextField txtAddressLine;
     private javax.swing.JTextArea txtAddressNotes;

@@ -124,6 +124,13 @@ public class OrderForm extends javax.swing.JFrame implements FormSetUp{
         mnOpenStockForm = new javax.swing.JMenuItem();
         orderStockMenu = new javax.swing.JMenu();
         orderStockMenu2 = new javax.swing.JMenu();
+        mnOpenCategoryForm = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        mnOpenDepartmentForm = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        mnOpenCampusForm = new javax.swing.JMenuItem();
+        jMenu5 = new javax.swing.JMenu();
+        mnOpenMyProfileForm = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -545,7 +552,6 @@ public class OrderForm extends javax.swing.JFrame implements FormSetUp{
                 .addComponent(lbLoginedInUser)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel14)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -701,7 +707,55 @@ public class OrderForm extends javax.swing.JFrame implements FormSetUp{
         orderStockMenu2.setText("Category");
         orderStockMenu2.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         orderStockMenu2.setIconTextGap(10);
+
+        mnOpenCategoryForm.setText("Open Category Form");
+        mnOpenCategoryForm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnOpenCategoryFormActionPerformed(evt);
+            }
+        });
+        orderStockMenu2.add(mnOpenCategoryForm);
+
         jMenuBar1.add(orderStockMenu2);
+
+        jMenu4.setText("Department");
+        jMenu4.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+
+        mnOpenDepartmentForm.setText("Open Department Form");
+        mnOpenDepartmentForm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnOpenDepartmentFormActionPerformed(evt);
+            }
+        });
+        jMenu4.add(mnOpenDepartmentForm);
+
+        jMenuBar1.add(jMenu4);
+
+        jMenu3.setText("Campus");
+        jMenu3.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+
+        mnOpenCampusForm.setText("Open Campus Form");
+        mnOpenCampusForm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnOpenCampusFormActionPerformed(evt);
+            }
+        });
+        jMenu3.add(mnOpenCampusForm);
+
+        jMenuBar1.add(jMenu3);
+
+        jMenu5.setText("My Profile");
+        jMenu5.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+
+        mnOpenMyProfileForm.setText("Open My Profile Form");
+        mnOpenMyProfileForm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnOpenMyProfileFormActionPerformed(evt);
+            }
+        });
+        jMenu5.add(mnOpenMyProfileForm);
+
+        jMenuBar1.add(jMenu5);
 
         setJMenuBar(jMenuBar1);
 
@@ -745,12 +799,12 @@ public class OrderForm extends javax.swing.JFrame implements FormSetUp{
     }//GEN-LAST:event_tblSellItemsMouseClicked
 
     private void txtSearchOrdersFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchOrdersFocusGained
-        // TODO add your handling code here:
+        
         Common.focusGain("Serach data", txtSearchOrders);
     }//GEN-LAST:event_txtSearchOrdersFocusGained
 
     private void txtSearchOrdersFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchOrdersFocusLost
-        // TODO add your handling code here:
+        
         Common.focusLost("Serach data", txtSearchOrders);
     }//GEN-LAST:event_txtSearchOrdersFocusLost
 
@@ -919,72 +973,72 @@ public class OrderForm extends javax.swing.JFrame implements FormSetUp{
     }//GEN-LAST:event_btnSearchOrderActionPerformed
 
     private void btnLogOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOffActionPerformed
-        // TODO add your handling code here:
+        
         Common.logOff(this);
     }//GEN-LAST:event_btnLogOffActionPerformed
 
     private void jPanel1formHierarchyChanged(java.awt.event.HierarchyEvent evt) {//GEN-FIRST:event_jPanel1formHierarchyChanged
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_jPanel1formHierarchyChanged
 
     private void tblOrdersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblOrdersMouseClicked
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_tblOrdersMouseClicked
 
     private void txtSearchStockFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchStockFocusGained
-        // TODO add your handling code here:
+        
         Common.focusGain("Serach orders", txtSearchStock);
     }//GEN-LAST:event_txtSearchStockFocusGained
 
     private void txtSearchStockFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchStockFocusLost
-        // TODO add your handling code here:
+        
         Common.focusGain("Serach orders", txtSearchOrders);
     }//GEN-LAST:event_txtSearchStockFocusLost
 
     private void btnSearchStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchStockActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_btnSearchStockActionPerformed
 
     private void tblNewOrderItemsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblNewOrderItemsMouseClicked
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_tblNewOrderItemsMouseClicked
 
     private void txtItemNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtItemNameFocusGained
-        // TODO add your handling code here:
+        
         Common.focusGain("Item Name", txtItemName);
     }//GEN-LAST:event_txtItemNameFocusGained
 
     private void txtItemNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtItemNameFocusLost
-        // TODO add your handling code here:
+        
         Common.focusLost("Item Name", txtItemName);
     }//GEN-LAST:event_txtItemNameFocusLost
 
     private void btnAdjustOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdjustOrderActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_btnAdjustOrderActionPerformed
 
     private void btnApproveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApproveActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_btnApproveActionPerformed
 
     private void btnDeclineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeclineActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_btnDeclineActionPerformed
 
     private void mnOpenStaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenStaffActionPerformed
-        // TODO add your handling code here:
+        
         StaffForm staff = new StaffForm(currentUser);
         staff.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_mnOpenStaffActionPerformed
 
     private void txtOrderIDFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtOrderIDFocusLost
-        // TODO add your handling code here:
+        
         Common.focusGain("Order ID", txtOrderID);
     }//GEN-LAST:event_txtOrderIDFocusLost
 
     private void txtOrderIDFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtOrderIDFocusGained
-        // TODO add your handling code here:
+        
         Common.focusLost("Order ID", txtOrderID);
     }//GEN-LAST:event_txtOrderIDFocusGained
 
@@ -1146,10 +1200,33 @@ public class OrderForm extends javax.swing.JFrame implements FormSetUp{
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void mnOpenStockFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenStockFormActionPerformed
-        // TODO add your handling code here:
+        
         new StockForm(currentUser).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_mnOpenStockFormActionPerformed
+
+    private void mnOpenMyProfileFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenMyProfileFormActionPerformed
+
+        new MyProfileForm(currentUser).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_mnOpenMyProfileFormActionPerformed
+
+    private void mnOpenCampusFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenCampusFormActionPerformed
+        
+        new CampusForm(currentUser).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_mnOpenCampusFormActionPerformed
+
+    private void mnOpenDepartmentFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenDepartmentFormActionPerformed
+        new DepartmentForm(currentUser).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_mnOpenDepartmentFormActionPerformed
+
+    private void mnOpenCategoryFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenCategoryFormActionPerformed
+
+        new CategoryForm(currentUser).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_mnOpenCategoryFormActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1211,6 +1288,9 @@ public class OrderForm extends javax.swing.JFrame implements FormSetUp{
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel4;
@@ -1227,6 +1307,10 @@ public class OrderForm extends javax.swing.JFrame implements FormSetUp{
     private javax.swing.JSeparator jSeparator8;
     private javax.swing.JSeparator jSeparator9;
     private javax.swing.JLabel lbLoginedInUser;
+    private javax.swing.JMenuItem mnOpenCampusForm;
+    private javax.swing.JMenuItem mnOpenCategoryForm;
+    private javax.swing.JMenuItem mnOpenDepartmentForm;
+    private javax.swing.JMenuItem mnOpenMyProfileForm;
     private javax.swing.JMenuItem mnOpenStaff;
     private javax.swing.JMenuItem mnOpenStockForm;
     private javax.swing.JMenu orderStockMenu;

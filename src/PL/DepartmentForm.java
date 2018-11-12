@@ -75,6 +75,8 @@ public class DepartmentForm extends javax.swing.JFrame {
         orderStockMenu3 = new javax.swing.JMenu();
         mnOpenCategoryForm = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
+        jMenu3 = new javax.swing.JMenu();
+        mnOpenCampusForm = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         mnOpenMyProfileForm = new javax.swing.JMenuItem();
 
@@ -195,12 +197,9 @@ public class DepartmentForm extends javax.swing.JFrame {
                             .addComponent(jLabel10)
                             .addGap(88, 88, 88)
                             .addComponent(cmbCampus, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(btnCampus, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(155, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(189, 189, 189))
+                        .addComponent(btnCampus, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -227,8 +226,8 @@ public class DepartmentForm extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel10)
                     .addComponent(cmbCampus, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(1, 1, 1)
-                .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnCampus, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(190, Short.MAX_VALUE))
@@ -321,6 +320,19 @@ public class DepartmentForm extends javax.swing.JFrame {
         jMenu4.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jMenuBar1.add(jMenu4);
 
+        jMenu3.setText("Campus");
+        jMenu3.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+
+        mnOpenCampusForm.setText("Open Campus Form");
+        mnOpenCampusForm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnOpenCampusFormActionPerformed(evt);
+            }
+        });
+        jMenu3.add(mnOpenCampusForm);
+
+        jMenuBar1.add(jMenu3);
+
         jMenu5.setText("My Profile");
         jMenu5.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
 
@@ -351,56 +363,55 @@ public class DepartmentForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtDepartmentIDFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDepartmentIDFocusGained
-        // TODO add your handling code here:
+        
         Common.focusGain("ID number", txtDepartmentID);
     }//GEN-LAST:event_txtDepartmentIDFocusGained
 
     private void txtDepartmentIDFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDepartmentIDFocusLost
-        // TODO add your handling code here:
 
         Common.focusLost("ID number", txtDepartmentID);
     }//GEN-LAST:event_txtDepartmentIDFocusLost
 
     private void txtDepartmentNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDepartmentNameFocusGained
-        // TODO add your handling code here:
+        Common.focusGain("Department Name", txtDepartmentName);
     }//GEN-LAST:event_txtDepartmentNameFocusGained
 
     private void txtDepartmentNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDepartmentNameFocusLost
-        // TODO add your handling code here:
+        Common.focusLost("Department Name", txtDepartmentName);
     }//GEN-LAST:event_txtDepartmentNameFocusLost
 
     private void btnCampusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCampusActionPerformed
-
+            
     }//GEN-LAST:event_btnCampusActionPerformed
 
     private void mnOpenStaffForm1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenStaffForm1ActionPerformed
-        // TODO add your handling code here:
+        
         new StaffForm(currentUser).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_mnOpenStaffForm1ActionPerformed
 
     private void mnOpenStockForm1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenStockForm1ActionPerformed
-        // TODO add your handling code here:
+        
         StockForm stockForm = new StockForm(currentUser);
         stockForm.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_mnOpenStockForm1ActionPerformed
 
     private void mnOpenOrderForm1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenOrderForm1ActionPerformed
-        // TODO add your handling code here:
+        
         OrderForm orderForm = new OrderForm(currentUser);
         orderForm.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_mnOpenOrderForm1ActionPerformed
 
     private void mnOpenMyProfileFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenMyProfileFormActionPerformed
-        // TODO add your handling code here:
+        
         new MyProfileForm(currentUser).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_mnOpenMyProfileFormActionPerformed
 
     private void btnLogOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOffActionPerformed
-        // TODO add your handling code here:
+        
         if (currentUser != null) {
             Common.logOff(this);
         } else {
@@ -410,10 +421,16 @@ public class DepartmentForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLogOffActionPerformed
 
     private void mnOpenCategoryFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenCategoryFormActionPerformed
-        // TODO add your handling code here:
+        
         new CategoryForm(currentUser).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_mnOpenCategoryFormActionPerformed
+
+    private void mnOpenCampusFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenCampusFormActionPerformed
+        // TODO add your handling code here:
+        new CampusForm(currentUser).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_mnOpenCampusFormActionPerformed
 
     /**
      * @param args the command line arguments
@@ -459,6 +476,7 @@ public class DepartmentForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
@@ -472,6 +490,7 @@ public class DepartmentForm extends javax.swing.JFrame {
     private javax.swing.JMenu miOrderMenu1;
     private javax.swing.JMenu miStaffMenu1;
     private javax.swing.JMenu miStockMenu1;
+    private javax.swing.JMenuItem mnOpenCampusForm;
     private javax.swing.JMenuItem mnOpenCategoryForm;
     private javax.swing.JMenuItem mnOpenMyProfileForm;
     private javax.swing.JMenuItem mnOpenOrderForm1;

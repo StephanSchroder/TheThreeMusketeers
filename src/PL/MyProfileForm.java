@@ -402,6 +402,7 @@ public class MyProfileForm extends javax.swing.JFrame implements FormSetUp{
         jProgressBar1 = new javax.swing.JProgressBar();
         jSeparator19 = new javax.swing.JSeparator();
         jSeparator20 = new javax.swing.JSeparator();
+        jMenu3 = new javax.swing.JMenu();
         jPanel5 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         btnUpdate = new javax.swing.JButton();
@@ -497,6 +498,8 @@ public class MyProfileForm extends javax.swing.JFrame implements FormSetUp{
         mnOpenCategoryForm = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         mnOpenDepartmentForm = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        mnOpenCampusForm = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
 
         jMenuItem1.setText("jMenuItem1");
@@ -508,6 +511,8 @@ public class MyProfileForm extends javax.swing.JFrame implements FormSetUp{
         jMenuItem4.setText("jMenuItem4");
 
         jMenuItem5.setText("jMenuItem5");
+
+        jMenu3.setText("jMenu3");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -1448,6 +1453,19 @@ public class MyProfileForm extends javax.swing.JFrame implements FormSetUp{
 
         jMenuBar1.add(jMenu2);
 
+        jMenu4.setText("Campus");
+        jMenu4.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+
+        mnOpenCampusForm.setText("Open Campus Form");
+        mnOpenCampusForm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnOpenCampusFormActionPerformed(evt);
+            }
+        });
+        jMenu4.add(mnOpenCampusForm);
+
+        jMenuBar1.add(jMenu4);
+
         jMenu1.setText("My Profile");
         jMenu1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jMenuBar1.add(jMenu1);
@@ -1470,14 +1488,14 @@ public class MyProfileForm extends javax.swing.JFrame implements FormSetUp{
 
 
     private void mnOpenOrderFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenOrderFormActionPerformed
-        // TODO add your handling code here:
+        
         OrderForm orderForm = new OrderForm(currentUser);
         orderForm.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_mnOpenOrderFormActionPerformed
 
     private void mnOpenStockFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenStockFormActionPerformed
-        // TODO add your handling code here:
+        
         StockForm stockForm = new StockForm(currentUser);
         stockForm.setVisible(true);
         this.dispose();
@@ -1670,7 +1688,7 @@ public class MyProfileForm extends javax.swing.JFrame implements FormSetUp{
     }//GEN-LAST:event_btnApproveActionPerformed
 
     private void btnLogOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOffActionPerformed
-        // TODO add your handling code here:
+        
         if (currentUser != null) {
             Common.logOff(this);
         }
@@ -1681,7 +1699,7 @@ public class MyProfileForm extends javax.swing.JFrame implements FormSetUp{
     }//GEN-LAST:event_btnLogOffActionPerformed
 
     private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
-        // TODO add your handling code here:
+        
         if (insertClick == 0) {
             insertClick++;
             setUIAccess(false);
@@ -1859,22 +1877,22 @@ public class MyProfileForm extends javax.swing.JFrame implements FormSetUp{
     }//GEN-LAST:event_btnInsertActionPerformed
 
     private void txtPasswordFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPasswordFocusLost
-        // TODO add your handling code here:
+        
         Common.focusLost("Password", txtPassword);
     }//GEN-LAST:event_txtPasswordFocusLost
 
     private void txtPasswordFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPasswordFocusGained
-        // TODO add your handling code here:
+        
         Common.focusGain("Password", txtPassword);
     }//GEN-LAST:event_txtPasswordFocusGained
 
     private void txtUsernameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUsernameFocusLost
-        // TODO add your handling code here:
+        
         Common.focusLost("Username", txtUsername);
     }//GEN-LAST:event_txtUsernameFocusLost
 
     private void txtUsernameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUsernameFocusGained
-        // TODO add your handling code here:
+        
         Common.focusGain("Username", txtUsername);
     }//GEN-LAST:event_txtUsernameFocusGained
 
@@ -2170,140 +2188,140 @@ public class MyProfileForm extends javax.swing.JFrame implements FormSetUp{
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void txtTelFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTelFocusLost
-        // TODO add your handling code here:
+        
         Common.focusLost("Tel number", txtTel);
     }//GEN-LAST:event_txtTelFocusLost
 
     private void txtTelFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTelFocusGained
-        // TODO add your handling code here:
+        
         Common.focusGain("Tel number", txtTel);
     }//GEN-LAST:event_txtTelFocusGained
 
     private void txtCellFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCellFocusLost
-        // TODO add your handling code here:
+        
         Common.focusLost("Cell number", txtCell);
     }//GEN-LAST:event_txtCellFocusLost
 
     private void txtCellFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCellFocusGained
-        // TODO add your handling code here:
+        
         Common.focusGain("Cell number", txtCell);
     }//GEN-LAST:event_txtCellFocusGained
 
     private void txtEmailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtEmailFocusLost
-        // TODO add your handling code here:
+        
         Common.focusLost("Email", txtEmail);
     }//GEN-LAST:event_txtEmailFocusLost
 
     private void txtEmailFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtEmailFocusGained
-        // TODO add your handling code here:
+        
         Common.focusGain("Email", txtEmail);
     }//GEN-LAST:event_txtEmailFocusGained
 
     private void txtAddressLineFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAddressLineFocusLost
-        // TODO add your handling code here:
+        
         Common.focusLost("Address line", txtAddressLine);
     }//GEN-LAST:event_txtAddressLineFocusLost
 
     private void txtAddressLineFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAddressLineFocusGained
-        // TODO add your handling code here:
+        
         Common.focusGain("Address line", txtAddressLine);
     }//GEN-LAST:event_txtAddressLineFocusGained
 
     private void txtStreetFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStreetFocusLost
-        // TODO add your handling code here:
+        
         Common.focusLost("Street", txtStreet);
     }//GEN-LAST:event_txtStreetFocusLost
 
     private void txtStreetFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStreetFocusGained
-        // TODO add your handling code here:
+        
         Common.focusGain("Street", txtStreet);
     }//GEN-LAST:event_txtStreetFocusGained
 
     private void txtPostalCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPostalCodeActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_txtPostalCodeActionPerformed
 
     private void txtPostalCodeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPostalCodeFocusLost
-        // TODO add your handling code here:
+        
         Common.focusLost("Postal code", txtPostalCode);
     }//GEN-LAST:event_txtPostalCodeFocusLost
 
     private void txtPostalCodeFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPostalCodeFocusGained
-        // TODO add your handling code here:
+        
         Common.focusGain("Postal code", txtPostalCode);
     }//GEN-LAST:event_txtPostalCodeFocusGained
 
     private void txtCityFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCityFocusLost
-        // TODO add your handling code here:
+        
         Common.focusLost("City", txtCity);
     }//GEN-LAST:event_txtCityFocusLost
 
     private void txtCityFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCityFocusGained
-        // TODO add your handling code here:
+        
         Common.focusGain("City", txtCity);
     }//GEN-LAST:event_txtCityFocusGained
 
     private void txtProvinceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtProvinceActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_txtProvinceActionPerformed
 
     private void txtProvinceFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtProvinceFocusLost
-        // TODO add your handling code here:
+        
         Common.focusLost("Province", txtProvince);
     }//GEN-LAST:event_txtProvinceFocusLost
 
     private void txtProvinceFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtProvinceFocusGained
-        // TODO add your handling code here:
+        
 
         Common.focusGain("Province", txtProvince);
     }//GEN-LAST:event_txtProvinceFocusGained
 
     private void txtCountryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCountryActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_txtCountryActionPerformed
 
     private void txtCountryFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCountryFocusLost
-        // TODO add your handling code here:
+        
         Common.focusLost("Country", txtCountry);
     }//GEN-LAST:event_txtCountryFocusLost
 
     private void txtCountryFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCountryFocusGained
-        // TODO add your handling code here:
+        
         Common.focusGain("Country", txtCountry);
     }//GEN-LAST:event_txtCountryFocusGained
 
     private void txtLastNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLastNameActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_txtLastNameActionPerformed
 
     private void txtLastNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLastNameFocusLost
-        // TODO add your handling code here:
+        
         Common.focusLost("Last name", txtLastName);
     }//GEN-LAST:event_txtLastNameFocusLost
 
     private void txtLastNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLastNameFocusGained
-        // TODO add your handling code here:
+        
         Common.focusGain("Last name", txtLastName);
     }//GEN-LAST:event_txtLastNameFocusGained
 
     private void txtIDNumberFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIDNumberFocusLost
-        // TODO add your handling code here:
+        
 
         Common.focusLost("ID number", txtIDNumber);
     }//GEN-LAST:event_txtIDNumberFocusLost
 
     private void txtIDNumberFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIDNumberFocusGained
-        // TODO add your handling code here:
+        
         Common.focusGain("ID number", txtIDNumber);
     }//GEN-LAST:event_txtIDNumberFocusGained
 
     private void txtFirstNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtFirstNameFocusLost
-        // TODO add your handling code here:
+        
         Common.focusLost("First name", txtFirstName);
     }//GEN-LAST:event_txtFirstNameFocusLost
 
     private void txtFirstNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtFirstNameFocusGained
-        // TODO add your handling code here:
+        
         Common.focusGain("First name", txtFirstName);
     }//GEN-LAST:event_txtFirstNameFocusGained
 
@@ -2313,28 +2331,34 @@ public class MyProfileForm extends javax.swing.JFrame implements FormSetUp{
     }//GEN-LAST:event_btnDepartmentsActionPerformed
 
     private void btnCampusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCampusActionPerformed
-        // TODO add your handling code here:
+        
         new CampusForm(currentUser).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnCampusActionPerformed
 
     private void mnOpenStaffFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenStaffFormActionPerformed
-        // TODO add your handling code here:
+        
         new StaffForm(currentUser).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_mnOpenStaffFormActionPerformed
 
     private void mnOpenCategoryFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenCategoryFormActionPerformed
-        // TODO add your handling code here:
+        
         new CategoryForm(currentUser).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_mnOpenCategoryFormActionPerformed
 
     private void mnOpenDepartmentFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenDepartmentFormActionPerformed
-        // TODO add your handling code here:
+        
         new DepartmentForm(currentUser).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_mnOpenDepartmentFormActionPerformed
+
+    private void mnOpenCampusFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenCampusFormActionPerformed
+        
+        new CampusForm(currentUser).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_mnOpenCampusFormActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2414,6 +2438,8 @@ public class MyProfileForm extends javax.swing.JFrame implements FormSetUp{
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
@@ -2454,6 +2480,7 @@ public class MyProfileForm extends javax.swing.JFrame implements FormSetUp{
     private javax.swing.JMenu miOrderMenu;
     private javax.swing.JMenu miStaffMenu;
     private javax.swing.JMenu miStockMenu;
+    private javax.swing.JMenuItem mnOpenCampusForm;
     private javax.swing.JMenuItem mnOpenCategoryForm;
     private javax.swing.JMenuItem mnOpenDepartmentForm;
     private javax.swing.JMenuItem mnOpenOrderForm;
