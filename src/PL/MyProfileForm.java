@@ -6,6 +6,7 @@
 package PL;
 
 import BLL.Address;
+import BLL.Campus;
 import BLL.User;
 import java.awt.Color;
 import java.text.SimpleDateFormat;
@@ -32,10 +33,9 @@ import javax.swing.DefaultComboBoxModel;
  *
  * @author Stephan
  */
-public class StaffForm extends javax.swing.JFrame implements FormSetUp{
+public class MyProfileForm extends javax.swing.JFrame implements FormSetUp{
 
     private User currentUser = null;
-    private List<User> baseUsers = new ArrayList<>();
     private List<User> users = new ArrayList<>();
     private int insertClick = 0;
     private int updateClick = 0;
@@ -43,22 +43,21 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
     /**
      * Creates new form StaffForm
      */
-    public StaffForm() {
+    public MyProfileForm() {
         initComponents();
+        
         currentUser = null;
         
-        resetBaseUsers();
         initModel();
         lblLoggedInUser.setText("New user registration");
         cmbSortingChangeListener changeListener = new cmbSortingChangeListener();
-        cmbSortBy.addItemListener(changeListener);
         this.setLocationRelativeTo(null);
         if (LoginForm.enableEasterEggs) {
             Common.playMusic(2);
         }
     }
 
-    public StaffForm(User u) {
+    public MyProfileForm(User u) {
         initComponents();
         try {
             if (u == null) {
@@ -69,10 +68,8 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
             currentUser = u;
             lblLoggedInUser.setText("Logged in as: " + u.getFullName() + ((u.getAccountType().equals(User.accountTypeState.ADMIN)) ? " with Admin privileges" : ""));
             
-            resetBaseUsers();
             initModel();
             cmbSortingChangeListener changeListener = new cmbSortingChangeListener();
-            cmbSortBy.addItemListener(changeListener);
         } catch (UserDoesNotExistException ex) {
             ex.showMessage();
 
@@ -86,9 +83,11 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
     private void initModel() {
         disableAllFields();
         populateDepartmentCMB();
+        populateCampusCMB();
         setModel();
         clearAllFields();
         setUIAccess(true);
+        tblData.setVisible(false);
     }
     
     @Override
@@ -112,8 +111,6 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
             if (currentUser.getAccountType() != User.accountTypeState.ADMIN) {
                 cmbAccountType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NORMAL", "BANNED", "RESTRICTED" }));
             }
-            setViewingOptions();
-            setSortingOptions();
             DefaultTableModel model = (DefaultTableModel) tblData.getModel();
             model.setNumRows(0);
             Object columnData[] = new Object[23];
@@ -187,11 +184,20 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
 
     public void populateDepartmentCMB() {
         List<Department> listDepartments = Department.read();
-        List<String> cmbData = new ArrayList<String>();
+        List<String> cmbData = new ArrayList<>();
         for (Department item : listDepartments) {
             cmbData.add(item.getCampus().getName() + " - " + item.getName());
         }
         cmbDepartment.setModel(new DefaultComboBoxModel(cmbData.toArray()));
+    }
+    
+    public void populateCampusCMB() {
+        List<Campus> listCampuses = Campus.read();
+        List<String> cmbData = new ArrayList<>();
+        for (Campus item : listCampuses) {
+            cmbData.add(item.getName());
+        }
+        cmbCampus.setModel(new DefaultComboBoxModel(cmbData.toArray()));
     }
 
     private class cmbSortingChangeListener implements ItemListener {
@@ -361,137 +367,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         cmbAccountType.setBackground(new Color(19,54,57));
     }
     
-    public void setViewingOptions() {
-        users = new ArrayList<>();
-        switch (cmbViewOptions.getSelectedItem().toString()) {
-            case "All":
-                users = baseUsers;
-                break;
-            case "Normal accounts":
-                for (User user : baseUsers) {
-                    if (user.getAccountType() == User.accountTypeState.NORMAL) {
-                        users.add(user);
-                    }
-                }
-                break;
-            case "Admin accounts":
-                for (User user : baseUsers) {
-                    if (user.getAccountType() == User.accountTypeState.ADMIN || user.getAccountType() == User.accountTypeState.ADMIN_NORMAL) {
-                        users.add(user);
-                    }
-                }
-                break;
-            case "Admin access requested":
-                for (User user : baseUsers) {
-                    if (user.getAccountType() == User.accountTypeState.ADMIN_REQUESTED) {
-                        users.add(user);
-                    }
-                }
-                break;
-            case "Admin rejected accounts":
-                for (User user : baseUsers) {
-                    if (user.getAccountType() == User.accountTypeState.ADMIN_REJECTED) {
-                        users.add(user);
-                    }
-                }
-                break;
-            case "Banned users":
-                for (User user : baseUsers) {
-                    if (user.getAccountType() == User.accountTypeState.BANNED) {
-                        users.add(user);
-                    }
-                }
-                break;
-            case "Restricted users":
-                for (User user : baseUsers) {
-                    if (user.getAccountType() == User.accountTypeState.RESTRICTED) {
-                        users.add(user);
-                    }
-                }
-                break;
-            default:
-                users = baseUsers;
-                break;
-        }
-    }
     
-    public void setSortingOptions() {
-        String txt = cmbSortBy.getSelectedItem().toString();
-        switch (txt) {
-            case "ID number":
-                users.sort(new IDNumberComparator());
-                break;
-            case "First name":
-                users.sort(new FirstNameComparator());
-                break;
-            case "Last name":
-                users.sort(new LastNameComparator());
-                break;
-            case "Title":
-                users.sort(new TitleComparator());
-                break;
-            case "Gender":
-                users.sort(new GenderComparator());
-                break;
-            case "Country":
-                users.sort(new CountryComparator());
-                break;
-            case "Province":
-                users.sort(new ProvinceComparator());
-                break;
-            case "City":
-                users.sort(new CityComparator());
-                break;
-            case "Street":
-                users.sort(new StreetComparator());
-                break;
-            case "Postal code":
-                users.sort(new PostalCodeComparator());
-                break;
-            case "Address line":
-                users.sort(new AddressLineComparator());
-                break;
-            case "User ID":
-                users.sort(new UserIDComparator());
-                break;
-            case "Username":
-                users.sort(new UsernameComparator());
-                break;
-            case "Account type":
-                users.sort(new AccountTypeComparator());
-                break;
-            case "Campus":
-                users.sort(new CampusComparator());
-                break;
-            case "Department":
-                users.sort(new DepartmentComparator());
-                break;
-        }
-    }
-    
-    public void resetBaseUsers() {
-        baseUsers = (currentUser != null && currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.read() : User.readNonAdminUsers();
-        setModel();
-    }
-    
-    public void resetBaseUsers(List<User> newBase) {
-        baseUsers = newBase;
-        setModel();
-    }
-
-    public void setViewingOptions(boolean value) {
-        cmbViewOptions.setEnabled(((currentUser != null) ? value : false));
-    }
-
-    public void setSorting(boolean value) {
-        cmbSortBy.setEnabled(((currentUser != null) ? value : false));
-    }
-
-    public void setSearching(boolean value) {
-        cmbSearchBy.setEnabled(((currentUser != null) ? value : false));
-        txtSearch.setEnabled(((currentUser != null) ? value : false));
-        btnSearch.setEnabled(((currentUser != null) ? value : false));
-    }
 
     public void setUserButtons(boolean value) {
         btnApprove.setEnabled(((currentUser != null) ? value : false));
@@ -510,9 +386,6 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
     }
 
     public void setUIAccess(boolean value) {
-        setViewingOptions(value);
-        setSorting(value);
-        setSearching(value);
         setUserButtons(false);
         setCRUDOperations(value);
         setNavigation(((currentUser != null) ? value : false));
@@ -531,27 +404,17 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         jSeparator20 = new javax.swing.JSeparator();
         jPanel5 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        btnSearch = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblData = new javax.swing.JTable();
         btnInsert = new javax.swing.JButton();
-        cmbSearchBy = new javax.swing.JComboBox<>();
-        txtSearch = new javax.swing.JTextField();
         btnLogOff = new javax.swing.JButton();
         lblLoggedInUser = new javax.swing.JLabel();
-        cmbSortBy = new javax.swing.JComboBox<>();
         lblTitle = new javax.swing.JLabel();
-        lbLabel1 = new javax.swing.JLabel();
-        cmbViewOptions = new javax.swing.JComboBox<>();
-        lbLabel2 = new javax.swing.JLabel();
-        lbLabel3 = new javax.swing.JLabel();
-        lbLabel4 = new javax.swing.JLabel();
         btnApprove = new javax.swing.JButton();
         btnReject = new javax.swing.JButton();
         btnBan = new javax.swing.JButton();
-        jSeparator12 = new javax.swing.JSeparator();
         jPanel2 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         txtCountry = new javax.swing.JTextField();
@@ -603,6 +466,9 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         jLabel14 = new javax.swing.JLabel();
         jSeparator23 = new javax.swing.JSeparator();
         btnDepartments = new javax.swing.JButton();
+        jLabel20 = new javax.swing.JLabel();
+        cmbCampus = new javax.swing.JComboBox<>();
+        btnCampus = new javax.swing.JButton();
         jLabel28 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         txtAddressNotes = new javax.swing.JTextArea();
@@ -622,17 +488,16 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         miStaffMenu = new javax.swing.JMenu();
+        mnOpenStaffForm = new javax.swing.JMenuItem();
         miStockMenu = new javax.swing.JMenu();
         mnOpenStockForm = new javax.swing.JMenuItem();
         miOrderMenu = new javax.swing.JMenu();
         mnOpenOrderForm = new javax.swing.JMenuItem();
         orderStockMenu2 = new javax.swing.JMenu();
-        jMenu4 = new javax.swing.JMenu();
-        mnOpenDepartmentForm1 = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
-        mnOpenCampusForm = new javax.swing.JMenuItem();
-        jMenu5 = new javax.swing.JMenu();
-        mnOpenMyProfileForm = new javax.swing.JMenuItem();
+        mnOpenCategoryForm = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        mnOpenDepartmentForm = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -650,18 +515,6 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
 
         jPanel1.setBackground(new java.awt.Color(19, 54, 57));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        btnSearch.setBackground(new java.awt.Color(0, 115, 56));
-        btnSearch.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
-        btnSearch.setForeground(new java.awt.Color(255, 255, 255));
-        btnSearch.setText("Search");
-        btnSearch.setActionCommand("Log Off");
-        btnSearch.setName("btnInsertRecord"); // NOI18N
-        btnSearch.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSearchActionPerformed(evt);
-            }
-        });
 
         btnUpdate.setBackground(new java.awt.Color(0, 115, 56));
         btnUpdate.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
@@ -727,23 +580,6 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
             }
         });
 
-        cmbSearchBy.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        cmbSearchBy.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID number", "First name", "Last name", "Full name", "Title", "Gender", "Country", "Province", "City", "Street", "Postal code", "Address line", "Email", "Cell number", "Tel number", "User ID", "Username", "Account type" }));
-
-        txtSearch.setBackground(new java.awt.Color(19, 54, 57));
-        txtSearch.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        txtSearch.setForeground(new java.awt.Color(255, 255, 255));
-        txtSearch.setBorder(null);
-        txtSearch.setName("txtUserName"); // NOI18N
-        txtSearch.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtSearchFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtSearchFocusLost(evt);
-            }
-        });
-
         btnLogOff.setBackground(new java.awt.Color(0, 115, 56));
         btnLogOff.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
         btnLogOff.setForeground(new java.awt.Color(255, 255, 255));
@@ -759,36 +595,9 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         lblLoggedInUser.setForeground(new java.awt.Color(255, 255, 255));
         lblLoggedInUser.setText("Logged In User");
 
-        cmbSortBy.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        cmbSortBy.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ID number", "First name", "Last name", "Title", "Gender", "Country", "Province", "City", "Street", "Postal code", "Address line", "User ID", "Username", "Account type", "Campus", "Department" }));
-
         lblTitle.setFont(new java.awt.Font("Century Gothic", 1, 36)); // NOI18N
         lblTitle.setForeground(new java.awt.Color(255, 255, 255));
-        lblTitle.setText("Staff Form:");
-
-        lbLabel1.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        lbLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        lbLabel1.setText("View Options");
-
-        cmbViewOptions.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        cmbViewOptions.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All", "Normal accounts", "Admin accounts", "Admin access requested", "Admin rejected accounts", "Banned users", "Restricted users" }));
-        cmbViewOptions.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cmbViewOptionsItemStateChanged(evt);
-            }
-        });
-
-        lbLabel2.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        lbLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        lbLabel2.setText("Sort By");
-
-        lbLabel3.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        lbLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        lbLabel3.setText("Search By");
-
-        lbLabel4.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        lbLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        lbLabel4.setText("Search");
+        lblTitle.setText("My Profile Form:");
 
         btnApprove.setBackground(new java.awt.Color(0, 115, 56));
         btnApprove.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
@@ -1227,6 +1036,26 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
             }
         });
 
+        jLabel20.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
+        jLabel20.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel20.setText("Campus:");
+
+        cmbCampus.setBackground(new java.awt.Color(19, 54, 57));
+        cmbCampus.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        cmbCampus.setBorder(null);
+
+        btnCampus.setBackground(new java.awt.Color(0, 115, 56));
+        btnCampus.setFont(new java.awt.Font("Century Gothic", 1, 18)); // NOI18N
+        btnCampus.setForeground(new java.awt.Color(255, 255, 255));
+        btnCampus.setText("Campuses");
+        btnCampus.setActionCommand("Log Off");
+        btnCampus.setName("btnInsertRecord"); // NOI18N
+        btnCampus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCampusActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -1265,15 +1094,17 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                             .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(15, 15, 15)
-                        .addComponent(jLabel14)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel14)
+                            .addComponent(jLabel20))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnCampus, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cmbCampus, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnDepartments, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jSeparator23, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(cmbDepartment, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(30, Short.MAX_VALUE))
+                            .addComponent(cmbDepartment, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jSeparator23))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1319,10 +1150,16 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                     .addComponent(cmbDepartment, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel14))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jSeparator23, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnDepartments, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbCampus, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel20))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                .addComponent(btnCampus, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jLabel28.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
@@ -1393,33 +1230,12 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1390, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(lblLoggedInUser)
-                                .addComponent(lblTitle))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnLogOff, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(cmbViewOptions, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(lbLabel1))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(cmbSortBy, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(lbLabel2))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(lbLabel4)
-                                .addComponent(txtSearch, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
-                                .addComponent(jSeparator12))
-                            .addGap(18, 18, 18)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(cmbSearchBy, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(lbLabel3))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblLoggedInUser)
+                            .addComponent(lblTitle))
+                        .addGap(740, 740, 740)
+                        .addComponent(btnLogOff, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -1433,7 +1249,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                                 .addComponent(btnInsert, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -1473,71 +1289,59 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                     .addComponent(btnLogOff, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblLoggedInUser)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbLabel1)
-                    .addComponent(lbLabel2)
-                    .addComponent(lbLabel3)
-                    .addComponent(lbLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbSortBy, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbViewOptions, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbSearchBy, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator12, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(47, 47, 47)
-                        .addComponent(btnInsert, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(11, 11, 11)
-                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnApprove, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnReject, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnBan, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(40, 40, 40)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(70, 70, 70)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel28)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel29))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel19))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSeparator14, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(3, 3, 3)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel26)
-                            .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(3, 3, 3)
-                        .addComponent(jSeparator22, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel27)
-                            .addComponent(cmbAccountType, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSeparator13, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(47, 47, 47)
+                                .addComponent(btnInsert, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(11, 11, 11)
+                                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnApprove, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnReject, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnBan, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(40, 40, 40)
+                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(70, 70, 70)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel28)
+                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel29))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel19))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jSeparator14, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(3, 3, 3)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel26)
+                                    .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(3, 3, 3)
+                                .addComponent(jSeparator22, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel27)
+                                    .addComponent(cmbAccountType, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jSeparator13, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 95, Short.MAX_VALUE))))
         );
 
         jLabel2.setFont(new java.awt.Font("Century Gothic", 1, 44)); // NOI18N
@@ -1575,9 +1379,18 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
 
         miStaffMenu.setText("Staff");
         miStaffMenu.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        miStaffMenu.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        miStaffMenu.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         miStaffMenu.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         miStaffMenu.setIconTextGap(20);
+
+        mnOpenStaffForm.setText("Open Staff Form");
+        mnOpenStaffForm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnOpenStaffFormActionPerformed(evt);
+            }
+        });
+        miStaffMenu.add(mnOpenStaffForm);
+
         jMenuBar1.add(miStaffMenu);
 
         miStockMenu.setText("Stock");
@@ -1611,46 +1424,33 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         orderStockMenu2.setText("Category");
         orderStockMenu2.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         orderStockMenu2.setIconTextGap(10);
+
+        mnOpenCategoryForm.setText("Open Category Form");
+        mnOpenCategoryForm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnOpenCategoryFormActionPerformed(evt);
+            }
+        });
+        orderStockMenu2.add(mnOpenCategoryForm);
+
         jMenuBar1.add(orderStockMenu2);
 
-        jMenu4.setText("Department");
-        jMenu4.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jMenu2.setText("Department");
+        jMenu2.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
 
-        mnOpenDepartmentForm1.setText("Open Department Form");
-        mnOpenDepartmentForm1.addActionListener(new java.awt.event.ActionListener() {
+        mnOpenDepartmentForm.setText("Open Department Form");
+        mnOpenDepartmentForm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnOpenDepartmentForm1ActionPerformed(evt);
+                mnOpenDepartmentFormActionPerformed(evt);
             }
         });
-        jMenu4.add(mnOpenDepartmentForm1);
+        jMenu2.add(mnOpenDepartmentForm);
 
-        jMenuBar1.add(jMenu4);
+        jMenuBar1.add(jMenu2);
 
-        jMenu3.setText("Campus");
-        jMenu3.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-
-        mnOpenCampusForm.setText("Open Campus Form");
-        mnOpenCampusForm.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnOpenCampusFormActionPerformed(evt);
-            }
-        });
-        jMenu3.add(mnOpenCampusForm);
-
-        jMenuBar1.add(jMenu3);
-
-        jMenu5.setText("My Profile");
-        jMenu5.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-
-        mnOpenMyProfileForm.setText("Open My Profile Form");
-        mnOpenMyProfileForm.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnOpenMyProfileFormActionPerformed(evt);
-            }
-        });
-        jMenu5.add(mnOpenMyProfileForm);
-
-        jMenuBar1.add(jMenu5);
+        jMenu1.setText("My Profile");
+        jMenu1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jMenuBar1.add(jMenu1);
 
         setJMenuBar(jMenuBar1);
 
@@ -1741,11 +1541,10 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                 btnBan.setText("Ban");
                 break;
             }
-            resetBaseUsers();
             setModel();
             setUserButtons(false);
         } catch (ParseException ex) {
-            Logger.getLogger(StaffForm.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MyProfileForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnBanActionPerformed
 
@@ -1797,11 +1596,10 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                 btnBan.setText("Ban");
                 break;
             }
-            resetBaseUsers();
             setModel();
             setUserButtons(false);
         } catch (ParseException ex) {
-            Logger.getLogger(StaffForm.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MyProfileForm.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnRejectActionPerformed
 
@@ -1859,11 +1657,10 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                     btnBan.setText("Ban");
                     break;
                 }
-                resetBaseUsers();
                 setModel();
                 setUserButtons(false);
             } catch (ParseException ex) {
-                Logger.getLogger(StaffForm.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(MyProfileForm.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         else {
@@ -1871,12 +1668,6 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
             JOptionPane.showMessageDialog(null, "No valid user selected");
         }
     }//GEN-LAST:event_btnApproveActionPerformed
-
-    private void cmbViewOptionsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbViewOptionsItemStateChanged
-        if (evt.getStateChange() == ItemEvent.SELECTED) {
-            setModel();
-        }
-    }//GEN-LAST:event_cmbViewOptionsItemStateChanged
 
     private void btnLogOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOffActionPerformed
         // TODO add your handling code here:
@@ -1888,16 +1679,6 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
             this.dispose();
         }
     }//GEN-LAST:event_btnLogOffActionPerformed
-
-    private void txtSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusLost
-        // TODO add your handling code here:
-        Common.focusGain("Search data", txtSearch);
-    }//GEN-LAST:event_txtSearchFocusLost
-
-    private void txtSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusGained
-        // TODO add your handling code here:
-        Common.focusGain("Search data", txtSearch);
-    }//GEN-LAST:event_txtSearchFocusGained
 
     private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
         // TODO add your handling code here:
@@ -2057,7 +1838,6 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                 int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to add this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 0) {
                     User.create(new User(Department.read(department, campus), username, password, accountType, idNumber, firstName, lastName, title, dateOfBirth, gender, new Address(country, province, city, street, postalCode, addressLine, addressNotes), new Contact(email, cellNumber, telNumber, contactNotes)));
-                    resetBaseUsers();
                     setModel();
                 }
                 clearAllFields();
@@ -2141,7 +1921,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                 txtPassword.setText(selectedUser.getPassword());
                 cmbAccountType.setSelectedItem(selectedUser.getAccountType().toString());
             } catch (ParseException ex) {
-                Logger.getLogger(StaffForm.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(MyProfileForm.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             setUserButtons(true);
@@ -2204,7 +1984,6 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
             if (option == 0) {
                 User.delete( User.read(Integer.parseInt(txtIDNumber.getText())).getUserID());
                 clearAllFields();
-                resetBaseUsers();
                 setModel();
             }
         } else {
@@ -2370,7 +2149,6 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                 if (option == 0) {
                     //User.create(new User(Department.read(department, campus), username, password, accountType, idNumber, firstName, lastName, title, dateOfBirth, gender, new Address(country, province, city, street, postalCode, addressLine, addressNotes), new Contact(email, cellNumber, telNumber, contactNotes)));
                     User.update(new User(User.readByIdNumber(idNumber).getUserID(), Department.read(department, campus), username, password, accountType, idNumber, firstName, lastName, title, dateOfBirth, gender, new Address(User.readByIdNumber(idNumber).getAddress().getAddressID(), country, province, city, street, postalCode, addressLine, addressNotes), new Contact(User.readByIdNumber(idNumber).getContact().getContactID(), email, cellNumber, telNumber, contactNotes), User.readByIdNumber(idNumber).getDateAdded()));
-                    resetBaseUsers();
                     setModel();
                 }
                 clearAllFields();
@@ -2390,68 +2168,6 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
             }
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
-
-    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        String parameter = cmbSearchBy.getSelectedItem().toString();
-        String searchKeyword = txtSearch.getText();
-        switch (parameter) {
-            case "ID number":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("IDNumber", searchKeyword) : User.getNonAdminUsersByParameter("IDNumber", searchKeyword));
-            break;
-            case "First name":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("FirstName", searchKeyword) : User.getNonAdminUsersByParameter("FirstName", searchKeyword));
-            break;
-            case "Last name":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("LastName", searchKeyword) : User.getNonAdminUsersByParameter("LastName", searchKeyword));
-            break;
-            case "Full name":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("CONCAT(FirstName, ' ', LastName)", searchKeyword) : User.getNonAdminUsersByParameter("CONCAT(FirstName, ' ', LastName)", searchKeyword));
-            break;
-            case "Title":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("Title", searchKeyword) : User.getNonAdminUsersByParameter("Title", searchKeyword));
-            break;
-            case "Gender":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("Gender", searchKeyword) : User.getNonAdminUsersByParameter("Gender", searchKeyword));
-            break;
-            case "Country":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("Country", searchKeyword) : User.getNonAdminUsersByParameter("Country", searchKeyword));
-            break;
-            case "Province":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("Province", searchKeyword) : User.getNonAdminUsersByParameter("Province", searchKeyword));
-            break;
-            case "City":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("City", searchKeyword) : User.getNonAdminUsersByParameter("City", searchKeyword));
-            break;
-            case "Street":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("Street", searchKeyword) : User.getNonAdminUsersByParameter("Street", searchKeyword));
-            break;
-            case "Postal code":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("PostalCode", searchKeyword) : User.getNonAdminUsersByParameter("PostalCode", searchKeyword));
-            break;
-            case "Address line":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("AddressLine", searchKeyword) : User.getNonAdminUsersByParameter("AddressLine", searchKeyword));
-            break;
-            case "Email":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("Email", searchKeyword) : User.getNonAdminUsersByParameter("Email", searchKeyword));
-            break;
-            case "Cell number":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("CellNumber", searchKeyword) : User.getNonAdminUsersByParameter("CellNumber", searchKeyword));
-            break;
-            case "Tel number":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("TelNumber", searchKeyword) : User.getNonAdminUsersByParameter("TelNumber", searchKeyword));
-            break;
-            case "User ID":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("UserID", searchKeyword) : User.getNonAdminUsersByParameter("UserID", searchKeyword));
-            break;
-            case "Username":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("Username", searchKeyword) : User.getNonAdminUsersByParameter("Username", searchKeyword));
-            break;
-            case "Account type":
-            resetBaseUsers((currentUser.getAccountType() == User.accountTypeState.ADMIN) ? User.searchByParameter("AccountType", searchKeyword) : User.getNonAdminUsersByParameter("AccountType", searchKeyword));
-            break;
-        }
-        setModel();
-    }//GEN-LAST:event_btnSearchActionPerformed
 
     private void txtTelFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTelFocusLost
         // TODO add your handling code here:
@@ -2596,23 +2312,29 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
         this.dispose();
     }//GEN-LAST:event_btnDepartmentsActionPerformed
 
-    private void mnOpenDepartmentForm1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenDepartmentForm1ActionPerformed
-        // TODO add your handling code here:
-        new DepartmentForm(currentUser).setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_mnOpenDepartmentForm1ActionPerformed
-
-    private void mnOpenMyProfileFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenMyProfileFormActionPerformed
-        // TODO add your handling code here:
-        new MyProfileForm(currentUser).setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_mnOpenMyProfileFormActionPerformed
-
-    private void mnOpenCampusFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenCampusFormActionPerformed
+    private void btnCampusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCampusActionPerformed
         // TODO add your handling code here:
         new CampusForm(currentUser).setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_mnOpenCampusFormActionPerformed
+    }//GEN-LAST:event_btnCampusActionPerformed
+
+    private void mnOpenStaffFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenStaffFormActionPerformed
+        // TODO add your handling code here:
+        new StaffForm(currentUser).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_mnOpenStaffFormActionPerformed
+
+    private void mnOpenCategoryFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenCategoryFormActionPerformed
+        // TODO add your handling code here:
+        new CategoryForm(currentUser).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_mnOpenCategoryFormActionPerformed
+
+    private void mnOpenDepartmentFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenDepartmentFormActionPerformed
+        // TODO add your handling code here:
+        new DepartmentForm(currentUser).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_mnOpenDepartmentFormActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2631,20 +2353,21 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(StaffForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MyProfileForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(StaffForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MyProfileForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(StaffForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MyProfileForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(StaffForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MyProfileForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new StaffForm().setVisible(true);
+                new MyProfileForm().setVisible(true);
             }
         });
     }
@@ -2652,20 +2375,18 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnApprove;
     private javax.swing.JButton btnBan;
+    private javax.swing.JButton btnCampus;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnDepartments;
     private javax.swing.JButton btnInsert;
     private javax.swing.JButton btnLogOff;
     private javax.swing.JButton btnReject;
-    private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox<String> cmbAccountType;
+    private javax.swing.JComboBox<String> cmbCampus;
     private javax.swing.JComboBox<String> cmbDepartment;
     private javax.swing.JComboBox<String> cmbGender;
-    private javax.swing.JComboBox<String> cmbSearchBy;
-    private javax.swing.JComboBox<String> cmbSortBy;
     private javax.swing.JComboBox<String> cmbTitle;
-    private javax.swing.JComboBox<String> cmbViewOptions;
     private org.jdesktop.swingx.JXDatePicker dobPicker;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -2679,6 +2400,7 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
@@ -2690,9 +2412,8 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
-    private javax.swing.JMenu jMenu5;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
@@ -2710,7 +2431,6 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator10;
     private javax.swing.JSeparator jSeparator11;
-    private javax.swing.JSeparator jSeparator12;
     private javax.swing.JSeparator jSeparator13;
     private javax.swing.JSeparator jSeparator14;
     private javax.swing.JSeparator jSeparator16;
@@ -2729,19 +2449,15 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
     private javax.swing.JSeparator jSeparator7;
     private javax.swing.JSeparator jSeparator8;
     private javax.swing.JSeparator jSeparator9;
-    private javax.swing.JLabel lbLabel1;
-    private javax.swing.JLabel lbLabel2;
-    private javax.swing.JLabel lbLabel3;
-    private javax.swing.JLabel lbLabel4;
     private javax.swing.JLabel lblLoggedInUser;
     private javax.swing.JLabel lblTitle;
     private javax.swing.JMenu miOrderMenu;
     private javax.swing.JMenu miStaffMenu;
     private javax.swing.JMenu miStockMenu;
-    private javax.swing.JMenuItem mnOpenCampusForm;
-    private javax.swing.JMenuItem mnOpenDepartmentForm1;
-    private javax.swing.JMenuItem mnOpenMyProfileForm;
+    private javax.swing.JMenuItem mnOpenCategoryForm;
+    private javax.swing.JMenuItem mnOpenDepartmentForm;
     private javax.swing.JMenuItem mnOpenOrderForm;
+    private javax.swing.JMenuItem mnOpenStaffForm;
     private javax.swing.JMenuItem mnOpenStockForm;
     private javax.swing.JMenu orderStockMenu2;
     private javax.swing.JTable tblData;
@@ -2758,7 +2474,6 @@ public class StaffForm extends javax.swing.JFrame implements FormSetUp{
     private javax.swing.JTextField txtPassword;
     private javax.swing.JTextField txtPostalCode;
     private javax.swing.JTextField txtProvince;
-    private javax.swing.JTextField txtSearch;
     private javax.swing.JTextField txtStreet;
     private javax.swing.JTextField txtTel;
     private javax.swing.JTextField txtUsername;
