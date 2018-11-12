@@ -199,9 +199,7 @@ public class Category implements DatabaseOperations {
         //Columns
         ArrayList<String> columns = new ArrayList<>();
         columns.add("CategoryName");
-        if (!category.getDescription().isEmpty()) {
-            columns.add("Description");
-        }
+        columns.add("Description");
 
         //Values
         ArrayList<String> values = new ArrayList<>();
@@ -209,11 +207,24 @@ public class Category implements DatabaseOperations {
         if (!category.getDescription().isEmpty()) {
             values.add("string;" + category.getDescription());
         }
+        else {
+            values.add("int;NULL");
+        }
 
         //Conditions
         ArrayList<String> conditions = new ArrayList<>();
         conditions.add("CategoryID=" + category.getCategoryID());
 
+        for (String column : columns) {
+            System.out.println(column);
+        }
+        for (String value : values) {
+            System.out.println(value);
+        }
+        for (String condition : conditions) {
+            System.out.println(condition);
+        }
+        
         //Execute
         DataHandler.updateRecords("Category", columns, values, conditions);
     }

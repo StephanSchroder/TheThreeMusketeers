@@ -170,11 +170,8 @@ public class StationeryManagement {
 //        }
 
         try {
-            String max = "12345678901234567890";
-            String maxEncrypted = Common.encryptPassword(max);
-            String realPassword = "He%5";
+            String realPassword = "Admin";
             String realPasswordEncrypted = Common.encryptPassword(realPassword);
-            System.out.println(max.length() + " : " + maxEncrypted.length() + " : " + maxEncrypted);
             System.out.println(realPassword.length() + " : " + realPasswordEncrypted.length() + " : " + realPasswordEncrypted);
         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(StationeryManagement.class.getName()).log(Level.SEVERE, null, ex);

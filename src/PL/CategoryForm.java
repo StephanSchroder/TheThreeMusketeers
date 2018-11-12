@@ -21,27 +21,28 @@ import javax.swing.table.DefaultTableModel;
  */
 public class CategoryForm extends javax.swing.JFrame {
 
-        private User currentUser;
+    private User currentUser;
     private List<Category> categories = new ArrayList<>();
     private int insertClick = 0;
     private int updateClick = 0;
 
-    
     /**
      * Creates new form CategoryForm
      */
     public CategoryForm() {
         initComponents();
-        categories =Category.read();
+        categories = Category.read();
         initModel();
 
         currentUser = null;
         lbLoginedInUser.setText("No User Logged In");
         this.setLocationRelativeTo(null);
-        Common.playMusic(2);
+        if (LoginForm.enableEasterEggs) {
+            Common.playMusic(2);
+        }
     }
-    
-     public CategoryForm(User u) {
+
+    public CategoryForm(User u) {
         initComponents();
         try {
             if (u == null) {
@@ -53,61 +54,58 @@ public class CategoryForm extends javax.swing.JFrame {
 
             currentUser = u;
             lbLoginedInUser.setText("Logged in as: " + u.getFullName() + ((u.getAccountType().equals(User.accountTypeState.ADMIN)) ? " with Admin privileges" : ""));
-
-            
         } catch (UserDoesNotExistException ex) {
             ex.showMessage();
-            
         }
+
         this.setLocationRelativeTo(null);
-        Common.playMusic(2);
+        if (LoginForm.enableEasterEggs) {
+            Common.playMusic(2);
+        }
     }
 
-     
-        private void initModel() {
+    private void initModel() {
         disableAllFields();
         setModel();
         clearAllFields();
-        
     }
 
     public void setModel() {
         DefaultTableModel model = (DefaultTableModel) tblData.getModel();
         model.setNumRows(0);
-        Object rowData[] = new Object[6];
-        Object columnData[] = new Object[6];
+        Object columnData[] = new Object[3];
         columnData[0] = "CategoryID";
         columnData[1] = "CategoryName";
         columnData[2] = "Description";
-
-        model.setColumnCount(6);
+        model.setColumnCount(3);
         model.setColumnIdentifiers(columnData);
+
         for (int i = 0; i < categories.size(); i++) {
+            Object rowData[] = new Object[3];
             rowData[0] = categories.get(i).getCategoryID();
             rowData[1] = categories.get(i).getName();
             rowData[2] = categories.get(i).getDescription();
             model.addRow(rowData);
         }
     }
-    
-        public void disableAllFields() {
+
+    public void disableAllFields() {
         txtCategoryID.setEnabled(false);
         txtDescription.setEnabled(false);
         txtCategoryName.setEnabled(false);
     }
-    
-    
-        public void prepareInsert() {
+
+    public void prepareInsert() {
         txtCategoryID.setEnabled(false);
-        txtDescription.setEnabled(true);
         txtCategoryName.setEnabled(true);
+        txtDescription.setEnabled(true);
 
     }
 
     public void prepareUpdate() {
         txtCategoryID.setEnabled(true);
-        txtDescription.setEnabled(true);
         txtCategoryName.setEnabled(true);
+        txtDescription.setEnabled(true);
     }
 
     private void clearAllFields() {
@@ -117,17 +115,30 @@ public class CategoryForm extends javax.swing.JFrame {
         txtCategoryName.setToolTipText(null);
         txtDescription.setText("");
         txtDescription.setToolTipText(null);
-        
     }
 
-      public void resetColor() {
-        txtCategoryID.setBackground(Color.white);
-        txtDescription.setBackground(Color.white);
-        txtCategoryName.setBackground(Color.white);
-
+    public void resetColor() {
+        txtCategoryID.setBackground(new Color(19, 54, 57));
+        txtCategoryName.setBackground(new Color(19, 54, 57));
+        txtDescription.setBackground(new Color(19, 54, 57));
     }
-    
-     
+
+    public void setSearch(boolean value) {
+        txtSearch.setEnabled(value);
+        btnSearch.setEnabled(value);
+    }
+
+    public void setUIAccess(boolean value) {
+        setSearch(value);
+        setCRUDOperations(value);
+    }
+
+    public void setCRUDOperations(boolean value) {
+        btnAdd.setEnabled(value);
+        btnUpdate.setEnabled(value);
+        btnDelete.setEnabled(value);
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -602,20 +613,18 @@ public class CategoryForm extends javax.swing.JFrame {
         Category selectedCategory;
         selectedCategory = new Category(Integer.valueOf(tblData.getValueAt(i, 0).toString()),
                 tblData.getValueAt(i, 1).toString(),
-                tblData.getValueAt(i, 2).toString());
+                ((tblData.getValueAt(i, 2) != null) ? tblData.getValueAt(i, 2).toString() : ""));
         txtCategoryID.setText(String.valueOf(selectedCategory.getCategoryID()));
         txtCategoryName.setText(selectedCategory.getName());
         txtDescription.setText(selectedCategory.getDescription());
     }//GEN-LAST:event_tblDataMouseClicked
 
     private void txtSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusGained
-        // TODO add your handling code here:
-        Common.focusGain("Serach data", txtSearch);
+
     }//GEN-LAST:event_txtSearchFocusGained
 
     private void txtSearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusLost
-        // TODO add your handling code here:
-        Common.focusLost("Serach data", txtSearch);
+
     }//GEN-LAST:event_txtSearchFocusLost
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
@@ -628,22 +637,6 @@ public class CategoryForm extends javax.swing.JFrame {
         Common.logOff(this);
     }//GEN-LAST:event_btnLogOffActionPerformed
 
-      public void setUIAccess(boolean value) {
-        setSearching(value);
-        setCRUDOperations(value);
-    }
-      
-          public void setSearching(boolean value) {
-        txtSearch.setEnabled(value);
-        btnSearch.setEnabled(value);
-    }
-    
-    public void setCRUDOperations(boolean value) {
-        btnAdd.setEnabled(value);
-        btnUpdate.setEnabled(value);
-        btnDelete.setEnabled(value);
-    }
-    
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         if (insertClick == 0) {
             insertClick++;
@@ -653,27 +646,30 @@ public class CategoryForm extends javax.swing.JFrame {
             prepareInsert();
         } else {
             resetColor();
-            
-            String itemName = null;
-            String description = null;
-            
 
-           
-            itemName = txtCategoryName.getText();
-             description = txtDescription.getText();
+            String categoryName = null;
+            String description = null;
+
+            categoryName = txtCategoryName.getText();
+            description = txtDescription.getText();
 
             boolean check = true;
 
-            if (Common.checkInput(itemName) != 1 || itemName.length() > 50) {
+            if (Common.checkInput(categoryName) != 1 || categoryName.length() > 50) {
                 check = false;
                 txtCategoryName.setBackground(Color.red);
                 txtCategoryName.setToolTipText("Only alphabetical characters. Max 50 characters");
             }
+            if (description.length() > 150) {
+                check = false;
+                txtDescription.setBackground(Color.orange);
+                txtDescription.setToolTipText("(Optional) Max 150 characters");
+            }
 
-            if (check == true) {
+            if (check) {
                 int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to add this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 0) {
-                    Category.create(new Category(0, itemName,description));
+                    Category.create(new Category(0, categoryName, description));
                     categories = Category.read();
                     setModel();
                 }
@@ -696,7 +692,6 @@ public class CategoryForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        //Update record
         if (updateClick == 0) {
             updateClick++;
             setUIAccess(false);
@@ -704,33 +699,37 @@ public class CategoryForm extends javax.swing.JFrame {
             prepareUpdate();
         } else {
             resetColor();
-            String catID = null;
-            String description = null;
-            String itemName = null;
-            int stockCount = 0;
-            String status = null;
 
-            catID = txtCategoryID.getText();
-            itemName = txtCategoryName.getText();
-            itemName = txtDescription.getText();
+            String categoryID = null;
+            String categoryName = null;
+            String description = null;
+
+            categoryID = txtCategoryID.getText();
+            categoryName = txtCategoryName.getText();
+            description = txtDescription.getText();
 
             boolean check = true;
-            if (Common.checkInput(catID) != 2 || Category.read(Integer.parseInt(catID)) == null) {
+
+            if (Common.checkInput(categoryID) != 2) {
                 check = false;
                 txtCategoryID.setBackground(Color.red);
-                txtCategoryID.setToolTipText("Invalid Stock ID");
+                txtCategoryID.setToolTipText("Only numerical characters");
             }
-          
-            if (Common.checkInput(itemName) != 1 || itemName.length() > 50) {
+            if (Common.checkInput(categoryName) != 1 || categoryName.length() > 50) {
                 check = false;
                 txtCategoryName.setBackground(Color.red);
                 txtCategoryName.setToolTipText("Only alphabetical characters. Max 50 characters");
             }
-         
-            if (check == true) {
+            if (description.length() > 150) {
+                check = false;
+                txtDescription.setBackground(Color.orange);
+                txtDescription.setToolTipText("(Optional) Max 150 characters");
+            }
+
+            if (check) {
                 int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to update this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 0) {
-                    Category.update(new Category(Integer.valueOf(catID), itemName,description));
+                    Category.update(new Category(Integer.valueOf(categoryID), categoryName, description));
                     categories = Category.read();
                     setModel();
                 }
@@ -755,9 +754,9 @@ public class CategoryForm extends javax.swing.JFrame {
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // Delete Record
         if (Common.checkInput(txtCategoryID.getText()) == 2 && Category.read(Integer.parseInt(txtCategoryID.getText())) != null) {
-            int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to Delete this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
+            int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
             if (option == 0) {
-                Category.delete(new Category(Integer.valueOf(txtCategoryID.getText()),txtCategoryName.getText(),txtDescription.getText() ));
+                Category.delete(new Category(Integer.valueOf(txtCategoryID.getText()), txtCategoryName.getText(), txtDescription.getText()));
                 clearAllFields();
                 categories = Category.read();
                 setModel();
@@ -768,23 +767,19 @@ public class CategoryForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void txtCategoryIDFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCategoryIDFocusGained
-        // TODO add your handling code here:
-        Common.focusGain("Stock ID", txtCategoryID);
+
     }//GEN-LAST:event_txtCategoryIDFocusGained
 
     private void txtCategoryIDFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCategoryIDFocusLost
-        // TODO add your handling code here:
-        Common.focusLost("Stock ID", txtCategoryID);
+
     }//GEN-LAST:event_txtCategoryIDFocusLost
 
     private void txtCategoryNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCategoryNameFocusGained
-        // TODO add your handling code here:
-        Common.focusGain("Item Name", txtCategoryName);
+
     }//GEN-LAST:event_txtCategoryNameFocusGained
 
     private void txtCategoryNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCategoryNameFocusLost
-        // TODO add your handling code here:
-        Common.focusLost("Item Name", txtCategoryName);
+
     }//GEN-LAST:event_txtCategoryNameFocusLost
 
     /**
