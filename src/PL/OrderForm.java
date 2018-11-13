@@ -5,34 +5,75 @@
  */
 package PL;
 
+import BLL.Builders.OrderBuilder;
+import BLL.Category;
 import BLL.Common;
 import BLL.User;
 import BLL.Exceptions.UserDoesNotExistException;
 import BLL.Interfaces.FormSetUp;
+import BLL.Order;
+import BLL.Reports;
+import BLL.Stock;
+import BLL.StockOrder;
+import com.itextpdf.text.Anchor;
+import com.itextpdf.text.Chapter;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.ListItem;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.CMYKColor;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Stephan
  */
-public class OrderForm extends javax.swing.JFrame implements FormSetUp{
+public class OrderForm extends javax.swing.JFrame implements FormSetUp {
 
     private User currentUser;
+    private List<Order> orderList = new ArrayList<>();
+    private List<Stock> stocks = new ArrayList<>();
+    private int insertClick = 0;
+    private int updateClick = 0;
 
     /**
      * Creates new form OrderForm
      */
     public OrderForm() {
-        initComponents();
+        initComponents();        
+        
         currentUser = null;
-        lbLoginedInUser.setText(lbLoginedInUser.getText()+"No User Selected");
+        lbLoginedInUser.setText(lbLoginedInUser.getText() + "No User Selected");
         this.setLocationRelativeTo(null);
         if (LoginForm.enableEasterEggs) {
             Common.playMusic(2);
         }
+        initModel();
     }
 
     public OrderForm(User u) {
         initComponents();
+        initModel();
+        
         try {
             if (u == null) {
                 currentUser = null;
@@ -43,30 +84,167 @@ public class OrderForm extends javax.swing.JFrame implements FormSetUp{
             lbLoginedInUser.setText("Logged in as: " + u.getFullName() + ((u.getAccountType().equals(User.accountTypeState.ADMIN)) ? " with Admin privileges" : ""));
         } catch (UserDoesNotExistException ex) {
             ex.showMessage();
-            
+
         }
         this.setLocationRelativeTo(null);
         if (LoginForm.enableEasterEggs) {
             Common.playMusic(2);
         }
     }
-    
+
+    private class cmbChangeListener implements ItemListener {
+
+        @Override
+        public void itemStateChanged(ItemEvent e) {
+            JComboBox cb = (JComboBox) e.getSource();
+
+            Object item = e.getItem();
+
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                String txt = cmbSorting.getSelectedItem().toString();
+                switch (txt) {
+                    case "Category":
+                        //stocks.sort(new SortCategory());
+                        break;
+                    case "Stock Quantity":
+                        //stocks.sort(new SortStockQuantity());
+                        break;
+                    case "Name":
+                        //stocks.sort(new SortName());
+                        break;
+                    case "Surname":
+                        //stocks.sort(new SortSurname());
+                        break;
+                    case "Price":
+                        //stocks.sort(new SortSurname());
+                        break;
+                }
+                setModel();
+            }
+        }
+    }
     @Override
-    public void setNavigation(boolean flag){
-        mnOpenDepartmentForm1.setEnabled(flag);
-        mnOpenStockForm2.setEnabled(flag);
-        mnOpenCampusForm1.setEnabled(flag);
-        mnOpenCategoryForm1.setEnabled(flag);
-        mnOpenStaff2.setEnabled(flag);
-        mnOpenMyProfileForm1.setEnabled(flag);
-        
-        mnOpenDepartmentForm1.setVisible(flag);
-        mnOpenStockForm2.setVisible(flag);
-        mnOpenCampusForm1.setVisible(flag);
-        mnOpenCategoryForm1.setVisible(flag);
-        mnOpenStaff2.setVisible(flag);
-        mnOpenMyProfileForm1.setVisible(flag);
-        
+    public void setNavigation(boolean flag) {
+        mnOpenStaff.setEnabled(flag);
+        mnOpenStockForm.setEnabled(flag);
+
+        mnOpenStaff.setVisible(flag);
+        mnOpenStockForm.setVisible(flag);
+
+    }
+
+    private void initModel() {
+        disableAllFields();
+        setModel();
+        clearAllFields();
+
+    }
+
+    public void prepareInsert() {
+        txtItemName.setEnabled(true);
+        txtOrderID.setEnabled(true);
+        dpOrderDate.setEnabled(true);
+        dpReceiveDate.setEnabled(true);
+        btnAddItem.setEnabled(true);
+        btnRemoveItem.setEnabled(true);
+
+    }
+
+    public void prepareUpdate() {
+        txtItemName.setEnabled(true);
+        txtOrderID.setEnabled(true);
+        dpOrderDate.setEnabled(true);
+        dpReceiveDate.setEnabled(true);;
+    }
+
+    public void disableAllFields() {
+        txtItemName.setEnabled(false);
+        txtOrderID.setEnabled(false);
+        dpOrderDate.setEnabled(false);
+        dpReceiveDate.setEnabled(false);
+        btnAddItem.setEnabled(false);
+        btnRemoveItem.setEnabled(false);
+
+    }
+
+    public void resetColor() {
+        txtItemName.setBackground(Color.white);
+        txtOrderID.setBackground(Color.white);
+        dpOrderDate.setBackground(Color.white);
+        dpReceiveDate.setBackground(Color.white);
+    }
+
+    public void setModel() {
+        if (currentUser != null) {
+
+            cmbSorting.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Order ID", "Order Date", "Received Date", "Status", "By Employee", "Approved By"}));
+            //orderID, Date orderDate, Date receiveDate, String status, User placedByEmployee, User approvedByEmployee
+            DefaultTableModel model = (DefaultTableModel) tblOrders.getModel();
+            model.setNumRows(0);
+            Object rowData[] = new Object[8];
+            Object columnData[] = new Object[8];
+            columnData[0] = "Order ID";
+            columnData[1] = "Order Date";
+            columnData[2] = "Received Date";
+            columnData[3] = "Status";
+            columnData[4] = "By Employee";
+            columnData[5] = "Approved By";
+            orderList = Order.read();
+            model.setColumnCount(23);
+            model.setColumnIdentifiers(columnData);
+            for (int i = 0; i < orderList.size(); i++) {
+                rowData[0] = orderList.get(i).getOrderID();
+                rowData[1] = orderList.get(i).getOrderDateString();
+                rowData[2] = orderList.get(i).getReceiveDateString();
+                rowData[3] = orderList.get(i).getStatus();
+                rowData[4] = orderList.get(i).getPlacedByEmployee();
+                rowData[5] = orderList.get(i).getApprovedByEmployee();
+
+                model.addRow(rowData);
+            }
+            DefaultTableModel model1 = (DefaultTableModel) tblSellItems.getModel();
+            model.setNumRows(0);
+            Object rowData1[] = new Object[8];
+            Object columnData1[] = new Object[8];
+            columnData1[0] = "StockID";
+            columnData1[1] = "CategoryName";
+            columnData1[2] = "Model";
+            columnData1[3] = "Price";
+            columnData1[4] = "ItemName";
+            columnData1[5] = "DateAdded";
+            columnData1[6] = "StockCount";
+            columnData1[7] = "Status";
+
+            model1.setColumnCount(8);
+            model1.setColumnIdentifiers(columnData1);
+            for (int i = 0; i < stocks.size(); i++) {
+                rowData1[0] = stocks.get(i).getStockID();
+                rowData1[1] = stocks.get(i).getCategory().getName();
+                rowData1[2] = stocks.get(i).getModel();
+                rowData1[3] = stocks.get(i).getPrice();
+                rowData1[4] = stocks.get(i).getItemName();
+                rowData1[5] = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S").format(stocks.get(i).getDateAdded());
+                rowData1[6] = stocks.get(i).getStockCount();
+                rowData1[7] = stocks.get(i).getStatus();
+                model.addRow(rowData);
+            }
+
+        }
+    }
+
+    private void clearAllFields() {
+        txtItemName.setText("");
+        txtOrderID.setText("");
+        txtSearchOrders.setText("");
+        txtSearchStock.setText("");
+        btnAddItem.setEnabled(false);
+        btnRemoveItem.setEnabled(false);
+
+        txtItemName.setToolTipText(null);
+        txtOrderID.setToolTipText(null);
+        txtSearchOrders.setToolTipText(null);
+        txtSearchStock.setToolTipText(null);
+
     }
 
     /**
@@ -123,22 +301,17 @@ public class OrderForm extends javax.swing.JFrame implements FormSetUp{
         jSeparator7 = new javax.swing.JSeparator();
         jSeparator8 = new javax.swing.JSeparator();
         jSeparator9 = new javax.swing.JSeparator();
+        btnAddItem = new javax.swing.JButton();
+        btnRemoveItem = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        staffMenu2 = new javax.swing.JMenu();
-        mnOpenStaff2 = new javax.swing.JMenuItem();
-        stockMenu2 = new javax.swing.JMenu();
-        mnOpenStockForm2 = new javax.swing.JMenuItem();
-        orderStockMenu3 = new javax.swing.JMenu();
-        orderStockMenu4 = new javax.swing.JMenu();
-        mnOpenCategoryForm1 = new javax.swing.JMenuItem();
-        jMenu6 = new javax.swing.JMenu();
-        mnOpenDepartmentForm1 = new javax.swing.JMenuItem();
-        jMenu7 = new javax.swing.JMenu();
-        mnOpenCampusForm1 = new javax.swing.JMenuItem();
-        jMenu8 = new javax.swing.JMenu();
-        mnOpenMyProfileForm1 = new javax.swing.JMenuItem();
+        staffMenu = new javax.swing.JMenu();
+        mnOpenStaff = new javax.swing.JMenuItem();
+        stockMenu = new javax.swing.JMenu();
+        mnOpenStockForm = new javax.swing.JMenuItem();
+        orderStockMenu = new javax.swing.JMenu();
+        orderStockMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -456,6 +629,21 @@ public class OrderForm extends javax.swing.JFrame implements FormSetUp{
         jLabel20.setText("Quantity");
         jLabel20.setToolTipText("");
 
+        btnAddItem.setLabel("Add Item");
+        btnAddItem.setName(""); // NOI18N
+        btnAddItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddItemActionPerformed(evt);
+            }
+        });
+
+        btnRemoveItem.setLabel("Remove Item");
+        btnRemoveItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveItemActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -533,20 +721,24 @@ public class OrderForm extends javax.swing.JFrame implements FormSetUp{
                                         .addGap(4, 4, 4)))))
                         .addGap(106, 106, 106)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnDecline, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(60, 60, 60)
+                                .addComponent(btnApprove, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel13)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(jSeparator4, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtSearchStock, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnSearchStock, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnDecline, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnApprove, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(btnSearchStock, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnAddItem, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(41, 41, 41)
+                                .addComponent(btnRemoveItem, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(79, 79, 79)))
                 .addGap(42, 42, 42))
         );
         jPanel1Layout.setVerticalGroup(
@@ -573,7 +765,29 @@ public class OrderForm extends javax.swing.JFrame implements FormSetUp{
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel13)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(txtSearchStock, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(3, 3, 3)
+                                .addComponent(btnSearchStock, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(9, 9, 9)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnRemoveItem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(0, 1, Short.MAX_VALUE)
+                                .addComponent(btnAddItem, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(24, 24, 24)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -620,27 +834,12 @@ public class OrderForm extends javax.swing.JFrame implements FormSetUp{
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSeparator9, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnAdjustOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel13)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(txtSearchStock, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(3, 3, 3)
-                                .addComponent(btnSearchStock, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(9, 9, 9)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(29, 29, 29)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnAdjustOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnApprove, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnDecline, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(43, Short.MAX_VALUE))
+                .addGap(43, 43, 43))
         );
 
         jLabel2.setFont(new java.awt.Font("Century Gothic", 1, 48)); // NOI18N
@@ -677,101 +876,45 @@ public class OrderForm extends javax.swing.JFrame implements FormSetUp{
                 .addGap(409, 409, 409))
         );
 
-        staffMenu2.setText("Staff");
-        staffMenu2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        staffMenu2.setFont(Common.setFont(0,0)
-        );
-        staffMenu2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        staffMenu2.setIconTextGap(20);
+        staffMenu.setText("Staff");
+        staffMenu.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        staffMenu.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        staffMenu.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        staffMenu.setIconTextGap(20);
 
-        mnOpenStaff2.setFont(Common.setFont(0, 1)
-        );
-        mnOpenStaff2.setText("Open Staff Form");
-        mnOpenStaff2.addActionListener(new java.awt.event.ActionListener() {
+        mnOpenStaff.setText("Open Staff Form");
+        mnOpenStaff.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnOpenStaff2ActionPerformed(evt);
+                mnOpenStaffActionPerformed(evt);
             }
         });
-        staffMenu2.add(mnOpenStaff2);
+        staffMenu.add(mnOpenStaff);
 
-        jMenuBar1.add(staffMenu2);
+        jMenuBar1.add(staffMenu);
 
-        stockMenu2.setText("Stock");
-        stockMenu2.setFont(Common.setFont(0,0));
-        stockMenu2.setIconTextGap(10);
+        stockMenu.setText("Stock");
+        stockMenu.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        stockMenu.setIconTextGap(10);
 
-        mnOpenStockForm2.setFont(Common.setFont(0,1));
-        mnOpenStockForm2.setText("Open Stock Form");
-        mnOpenStockForm2.addActionListener(new java.awt.event.ActionListener() {
+        mnOpenStockForm.setText("Open Stock Form");
+        mnOpenStockForm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnOpenStockForm2ActionPerformed(evt);
+                mnOpenStockFormActionPerformed(evt);
             }
         });
-        stockMenu2.add(mnOpenStockForm2);
+        stockMenu.add(mnOpenStockForm);
 
-        jMenuBar1.add(stockMenu2);
+        jMenuBar1.add(stockMenu);
 
-        orderStockMenu3.setText("Order Stock");
-        orderStockMenu3.setFont(Common.setFont(1,0));
-        orderStockMenu3.setIconTextGap(10);
-        jMenuBar1.add(orderStockMenu3);
+        orderStockMenu.setText("Order Stock");
+        orderStockMenu.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        orderStockMenu.setIconTextGap(10);
+        jMenuBar1.add(orderStockMenu);
 
-        orderStockMenu4.setText("Category");
-        orderStockMenu4.setFont(Common.setFont(0,0));
-        orderStockMenu4.setIconTextGap(10);
-
-        mnOpenCategoryForm1.setFont(Common.setFont(0,1));
-        mnOpenCategoryForm1.setText("Open Category Form");
-        mnOpenCategoryForm1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnOpenCategoryForm1ActionPerformed(evt);
-            }
-        });
-        orderStockMenu4.add(mnOpenCategoryForm1);
-
-        jMenuBar1.add(orderStockMenu4);
-
-        jMenu6.setText("Department");
-        jMenu6.setFont(Common.setFont(0,0));
-
-        mnOpenDepartmentForm1.setFont(Common.setFont(0,1));
-        mnOpenDepartmentForm1.setText("Open Department Form");
-        mnOpenDepartmentForm1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnOpenDepartmentForm1ActionPerformed(evt);
-            }
-        });
-        jMenu6.add(mnOpenDepartmentForm1);
-
-        jMenuBar1.add(jMenu6);
-
-        jMenu7.setText("Campus");
-        jMenu7.setFont(Common.setFont(0,0));
-
-        mnOpenCampusForm1.setFont(Common.setFont(0,1));
-        mnOpenCampusForm1.setText("Open Campus Form");
-        mnOpenCampusForm1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnOpenCampusForm1ActionPerformed(evt);
-            }
-        });
-        jMenu7.add(mnOpenCampusForm1);
-
-        jMenuBar1.add(jMenu7);
-
-        jMenu8.setText("My Profile");
-        jMenu8.setFont(Common.setFont(0,0));
-
-        mnOpenMyProfileForm1.setFont(Common.setFont(0,1));
-        mnOpenMyProfileForm1.setText("Open My Profile Form");
-        mnOpenMyProfileForm1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnOpenMyProfileForm1ActionPerformed(evt);
-            }
-        });
-        jMenu8.add(mnOpenMyProfileForm1);
-
-        jMenuBar1.add(jMenu8);
+        orderStockMenu2.setText("Category");
+        orderStockMenu2.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        orderStockMenu2.setIconTextGap(10);
+        jMenuBar1.add(orderStockMenu2);
 
         setJMenuBar(jMenuBar1);
 
@@ -790,6 +933,7 @@ public class OrderForm extends javax.swing.JFrame implements FormSetUp{
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
 
     private void tblSellItemsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSellItemsMouseClicked
         /*   int i = tblData.getSelectedRow();
@@ -815,259 +959,169 @@ public class OrderForm extends javax.swing.JFrame implements FormSetUp{
     }//GEN-LAST:event_tblSellItemsMouseClicked
 
     private void txtSearchOrdersFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchOrdersFocusGained
-        
+        // TODO add your handling code here:
         Common.focusGain("Serach data", txtSearchOrders);
     }//GEN-LAST:event_txtSearchOrdersFocusGained
 
     private void txtSearchOrdersFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchOrdersFocusLost
-        
+        // TODO add your handling code here:
         Common.focusLost("Serach data", txtSearchOrders);
     }//GEN-LAST:event_txtSearchOrdersFocusLost
 
     private void btnSearchOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchOrderActionPerformed
-
-        /*  if (insertClick == 0) {
-            insertClick++;
-            btnUpdate.setEnabled(false);
-            btnDelete.setEnabled(false);
-            clearAllFields();
-            prepareInsert();
-        } else {
-            resetColor();
-            String idNumber;
-            String firstName;
-            String lastName;
-            String title;
-            Date dateOfBirth;
-            String gender;
-            String country;
-            String province;
-            String city;
-            String street;
-            String postalCode;
-            String addressLine ;
-            String email;
-            String cellNumber;
-            String telNumber;
-            String username;
-            String password;
-            String accountType;
-
-            idNumber = txtIDNumber.getText();
-            firstName = txtFirstName.getText();
-            lastName = txtLastName.getText();
-            title = cmbTitle.getSelectedItem().toString();
-            dateOfBirth = dobPicker.getDate();
-            gender = cmbGender.getSelectedItem().toString();
-            country = txtCountry.getText();
-            province = (txtProvince.getText() != null) ? txtProvince.getText() : "";
-            city = (txtCity.getText() != null) ? txtCity.getText() : "";
-            street = (txtStreet.getText() != null) ? txtStreet.getText() : "";
-            postalCode = (txtPostalCode.getText() != null) ? txtPostalCode.getText() : "";
-            addressLine = (txtAddressLine.getText() != null) ? txtAddressLine.getText() : "";
-            email = (txtEmail.getText() != null) ? txtEmail.getText() : "";
-            cellNumber = (txtCell.getText() != null) ? txtCell.getText() : "";
-            telNumber = (txtTel.getText() != null) ? txtTel.getText() : "";
-            username = txtUsername.getText();
-            password = txtPassword.getText();
-            accountType = cmbAccountType.getSelectedItem().toString();
-
-            boolean check = true;
-            if (Common.checkInput(idNumber) != 10 || idNumber.length() != 13) {
-                check = false;
-                txtIDNumber.setBackground(Color.red);
-                txtIDNumber.setToolTipText("Only numerical values. Must be 13 characters. Must be valid RSA ID Number");
-            }
-            if (Common.checkInput(firstName) != 1 || firstName.length() > 20) {
-                check = false;
-                txtFirstName.setBackground(Color.red);
-                txtFirstName.setToolTipText("Only alphabetical characters. Max 20 characters");
-            }
-            if (Common.checkInput(lastName) != 1 || lastName.length() > 20) {
-                check = false;
-                txtLastName.setBackground(Color.red);
-                txtLastName.setToolTipText("Only alphabetical characters. Max 20 characters");
-            }
-            if (!(Common.checkInput(title) == 1 || Common.checkInput(title) == 5) || title.length() > 4) {
-                check = false;
-                cmbTitle.setBackground(Color.red);
-                cmbTitle.setToolTipText("Only alphabetical characters. Max 4 characters");
-            }
-            //DATE OF BIRTH CHECK NOT INCLUDED
-            if (Common.checkInput(gender) != 1 || gender.length() > 6) {
-                check = false;
-                cmbGender.setBackground(Color.red);
-                cmbGender.setToolTipText("Only alphabetical characters. Max 6 characters");
-            }
-            if (Common.checkInput(country) != 1 || country.length() > 20) {
-                check = false;
-                txtCountry.setBackground(Color.red);
-                txtCountry.setToolTipText("Only alphabetical characters. Max 20 characters");
-            }
-            if (!(Common.checkInput(province) == 0 || Common.checkInput(province) == 1 || Common.checkInput(province) == 5) || province.length() > 20) {
-                check = false;
-                txtProvince.setBackground(Color.orange);
-                txtProvince.setToolTipText("(Optional Field) Only alphabetical characters and optional special characters. Max 20 characters");
-            }
-            if (!(Common.checkInput(city) == 0 || Common.checkInput(city) == 1) || city.length() > 30) {
-                check = false;
-                txtCity.setBackground(Color.orange);
-                txtCity.setToolTipText("(Optional Field) Only alphabetical characters. Max 30 characters");
-            }
-            if (!(Common.checkInput(street) == 0 || Common.checkInput(street) == 1 || Common.checkInput(street) == 4) || street.length() > 30) {
-                check = false;
-                txtStreet.setBackground(Color.orange);
-                txtStreet.setToolTipText("(Optional Field) Only alphabetical characters and optional numerical values. Max 30 characters");
-            }
-            if (!(Common.checkInput(postalCode) == 0 || Common.checkInput(postalCode) == 2) || postalCode.length() > 10) {
-                check = false;
-                txtPostalCode.setBackground(Color.orange);
-                txtPostalCode.setToolTipText("(Optional Field) Only numerical values. Max 10 characters");
-            }
-            if (addressLine.length() > 50) {
-                check = false;
-                txtAddressLine.setBackground(Color.orange);
-                txtAddressLine.setToolTipText("(Optional Field) Any characters. Max 50 characters");
-            }
-            if (!(Common.checkInput(email) == 0 || Common.checkInput(email) == 9) || email.length() > 30) {
-                check = false;
-                txtEmail.setBackground(Color.orange);
-                txtEmail.setToolTipText("(Optional Field) Only valid email address. Max 30 characters");
-            }
-            if (!(Common.checkInput(cellNumber) == 0 || (Common.checkInput(cellNumber) == 2 && cellNumber.length() == 10))) {
-                check = false;
-                txtCell.setBackground(Color.orange);
-                txtCell.setToolTipText("(Optional Field) Only numerical values. Must be 10 characters");
-            }
-            if (!(Common.checkInput(telNumber) == 0 || (Common.checkInput(telNumber) == 2 && telNumber.length() == 10))) {
-                check = false;
-                txtTel.setBackground(Color.orange);
-                txtTel.setToolTipText("(Optional Field) Only numerical values. Must be 10 characters");
-            }
-            if (Common.checkInput(username) != 1 || username.length() > 20) {
-                check = false;
-                txtUsername.setBackground(Color.red);
-                txtUsername.setToolTipText("Only alphabetical characters. Max 20 characters");
-            }
-            if (Common.checkInput(password) != 7 || password.length() < 4 || password.length() > 20) {
-                check = false;
-                txtPassword.setBackground(Color.red);
-                txtPassword.setToolTipText("Must contain alphabetical characters and at least one numerical value and at least one special character. Min 4 characters. Max 20 characters");
-            }
-            if (Common.checkInput(accountType) != 1 || accountType.length() > 50) {
-                check = false;
-                cmbAccountType.setBackground(Color.red);
-                cmbAccountType.setToolTipText("Only alphabetical characters. Max 50 characters");
-            }
-
-            if (check == true) {
-                int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to add this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
-                if (option == 0) {
-                    new User(firstName, lastName, title, dateOfBirth, gender, country, province, city, street, postalCode, addressLine, email, cellNumber, telNumber, new Date(), 0, username, password, accountType, idNumber).registerUser();
-                    setModel();
-                }
-                clearAllFields();
-                disableAllFields();
-                resetColor();
-                insertClick = 0;
-                btnSearch.setEnabled(true);
-                btnUpdate.setEnabled(true);
-                btnDelete.setEnabled(true);
-            } else {
-                int option = JOptionPane.showConfirmDialog(this, "There were some errors, would you like to fix them?", "Confirmation.", JOptionPane.YES_NO_OPTION);
-                if (option == 1) {
-                    clearAllFields();
-                    disableAllFields();
-                    resetColor();
-                    insertClick = 0;
-                    btnSearch.setEnabled(true);
-                    btnUpdate.setEnabled(true);
-                    btnDelete.setEnabled(true);
-                }
-            }
-        }*/
+        String parameter = cmbSorting.getSelectedItem().toString();
+        String searchKeyword = txtSearchOrders.getText();
+        switch (parameter) {
+            case "Order ID":
+                //Implement search in Order
+                break;
+            case "Order Date":
+                //Implement search in Order
+                break;
+            case "Received Date":
+               //Implement search in Order
+                break;
+            case "Status":
+                //Implement search in Order
+                break;
+            case "By Employee":
+                //Implement search in Order
+                break;
+            case "Approved By":
+                //Implement search in Order
+                break;
+            
+        }
+        setModel();
     }//GEN-LAST:event_btnSearchOrderActionPerformed
 
     private void btnLogOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOffActionPerformed
-        
+        // TODO add your handling code here:
         Common.logOff(this);
     }//GEN-LAST:event_btnLogOffActionPerformed
 
     private void jPanel1formHierarchyChanged(java.awt.event.HierarchyEvent evt) {//GEN-FIRST:event_jPanel1formHierarchyChanged
-        
+        // TODO add your handling code here:
     }//GEN-LAST:event_jPanel1formHierarchyChanged
 
     private void tblOrdersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblOrdersMouseClicked
-        
+        // TODO add your handling code here:
+
     }//GEN-LAST:event_tblOrdersMouseClicked
 
     private void txtSearchStockFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchStockFocusGained
-        
+        // TODO add your handling code here:
         Common.focusGain("Serach orders", txtSearchStock);
     }//GEN-LAST:event_txtSearchStockFocusGained
 
     private void txtSearchStockFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchStockFocusLost
-        
+        // TODO add your handling code here:
         Common.focusGain("Serach orders", txtSearchOrders);
     }//GEN-LAST:event_txtSearchStockFocusLost
 
     private void btnSearchStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchStockActionPerformed
-        
+        // TODO add your handling code here:
     }//GEN-LAST:event_btnSearchStockActionPerformed
 
     private void tblNewOrderItemsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblNewOrderItemsMouseClicked
-        
+        // TODO add your handling code here:
     }//GEN-LAST:event_tblNewOrderItemsMouseClicked
 
     private void txtItemNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtItemNameFocusGained
-        
+        // TODO add your handling code here:
         Common.focusGain("Item Name", txtItemName);
     }//GEN-LAST:event_txtItemNameFocusGained
 
     private void txtItemNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtItemNameFocusLost
-        
+        // TODO add your handling code here:
         Common.focusLost("Item Name", txtItemName);
     }//GEN-LAST:event_txtItemNameFocusLost
 
     private void btnAdjustOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdjustOrderActionPerformed
-        
+        // TODO add your handling code here:
     }//GEN-LAST:event_btnAdjustOrderActionPerformed
 
     private void btnApproveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnApproveActionPerformed
-        
+
+        DefaultTableModel model = (DefaultTableModel) tblOrders.getModel();
+        int row = tblOrders.getSelectedRow();
+        if (model.getValueAt(row, 7).toString().equals("Approved")) {
+            //TODO add message
+        } else {
+            model.setValueAt("Approved", row, 7);
+            Order order = new Order((int) tblOrders.getValueAt(row, 0),
+                    (Date) tblOrders.getValueAt(row, 1),
+                    (Date) tblOrders.getValueAt(row, 2),
+                    tblOrders.getValueAt(row, 3).toString(),
+                    sortUserList(tblOrders.getValueAt(row, 4).toString()),
+                    currentUser);
+            OrderBuilder orderBuilder = new OrderBuilder(currentUser);
+            orderBuilder.approveOrder(currentUser, order.getReceiveDate());
+        }
+
     }//GEN-LAST:event_btnApproveActionPerformed
 
     private void btnDeclineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeclineActionPerformed
-        
+
+        DefaultTableModel model = (DefaultTableModel) tblOrders.getModel();
+        int row = tblOrders.getSelectedRow();
+        if (model.getValueAt(row, 7).toString().equals("Pending")) {
+            Order order = new Order((int) tblOrders.getValueAt(row, 0),
+                    (Date) tblOrders.getValueAt(row, 1),
+                    (Date) tblOrders.getValueAt(row, 2),
+                    tblOrders.getValueAt(row, 3).toString(),
+                    sortUserList(tblOrders.getValueAt(row, 4).toString()),
+                    currentUser);
+            OrderBuilder orderBuilder = new OrderBuilder(currentUser);
+            orderBuilder.rejectOrder(currentUser);
+
+        } else if (model.getValueAt(row, 7).toString().equals("Approved")) {
+            //TODO add message
+        }
     }//GEN-LAST:event_btnDeclineActionPerformed
 
+    private void mnOpenStaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenStaffActionPerformed
+        // TODO add your handling code here:
+        StaffForm staff = new StaffForm(currentUser);
+        staff.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_mnOpenStaffActionPerformed
+
     private void txtOrderIDFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtOrderIDFocusLost
-        
+        // TODO add your handling code here:
         Common.focusGain("Order ID", txtOrderID);
     }//GEN-LAST:event_txtOrderIDFocusLost
 
     private void txtOrderIDFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtOrderIDFocusGained
-        
+        // TODO add your handling code here:
         Common.focusLost("Order ID", txtOrderID);
     }//GEN-LAST:event_txtOrderIDFocusGained
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        /*   // Delete Record
-        if (Common.checkInput(txtStockID.getText()) == 2 && Stock.getStock(Integer.parseInt(txtStockID.getText())) != null) {
-            int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to Delete this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
-            if (option == 0) {
-                new Stock(Integer.valueOf(txtStockID.getText()), Category.getCategory(cmbCategory.getSelectedItem().toString()), txtItemName.getText(), (Date) dobPicker.getDate(), (int) spStockCount.getValue(), txtStatus.getText()).deleteStock();
-                clearAllFields();
-                setModel();
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "No valid stock item selected");
-        }*/
+        // Delete Record
+
+        int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to Delete this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
+        if (option == 0) {
+            int row = tblOrders.getSelectedRow();
+            new Order((int) tblOrders.getValueAt(row, 0),
+                    (Date) tblOrders.getValueAt(row, 1),
+                    (Date) tblOrders.getValueAt(row, 2),
+                    tblOrders.getValueAt(row, 3).toString(),
+                    sortUserList(tblOrders.getValueAt(row, 4).toString()),
+                    currentUser);
+            OrderBuilder orderbuilder = new OrderBuilder(currentUser);
+            orderbuilder.removeOrder();
+            clearAllFields();
+            setModel();
+        }
+
+        JOptionPane.showMessageDialog(null, "No valid stock item selected");
+
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        /*   //Update record
-        if (updateClick == 0) {
+        //Update record INCOMPLETE
+        /* if (updateClick == 0) {
             updateClick++;
             btnAdd.setEnabled(false);
             btnDelete.setEnabled(false);
@@ -1078,43 +1132,33 @@ public class OrderForm extends javax.swing.JFrame implements FormSetUp{
             String itemName = null;
             int stockCount = 0;
             String status = null;
-
-            category = cmbCategory.getSelectedItem().toString();
-            itemName = txtItemName.getText();
-            stockCount = (int) spStockCount.getValue();
-            status = txtStatus.getText();
+            stockCount = (int) spOrderQuantity.getValue();
+            
 
             boolean check = true;
-            if (Common.checkInput(txtStockID.getText()) != 2 || Stock.getStock(Integer.parseInt(txtStockID.getText())) == null) {
-                check = false;
-                txtStockID.setBackground(Color.red);
-                txtStockID.setToolTipText("Invalid Stock ID");
-            }
-            if (Common.checkInput(category) != 1 || category.length() > 50) {
-                check = false;
-                cmbCategory.setBackground(Color.red);
-                cmbCategory.setToolTipText("Only alphabetical characters. Max 50 characters");
-            }
-            if (Common.checkInput(itemName) != 1 || itemName.length() > 50) {
-                check = false;
-                txtItemName.setBackground(Color.red);
-                txtItemName.setToolTipText("Only alphabetical characters. Max 50 characters");
-            }
-            if (Common.checkInput(String.valueOf(stockCount)) != 2 || stockCount == 0 || stockCount > 10000) {
-                check = false;
-                spStockCount.setBackground(Color.red);
-                spStockCount.setToolTipText("Only numerical value between 1 and 10000");
-            }
-            if (Common.checkInput(status) != 1 || status.length() > 20) {
-                check = false;
-                txtStatus.setBackground(Color.red);
-                txtStatus.setToolTipText("Only alphabetical characters. Max 20 characters");
-            }
+            //Add checks?
 
             if (check == true) {
-                int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to update this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
+                 int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to add this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 0) {
-                    new Stock(Integer.valueOf(txtStockID.getText()), Category.getCategory(cmbCategory.getSelectedItem().toString()), itemName, new Date(), stockCount, status).updateStock();
+                    OrderBuilder builder = new OrderBuilder(currentUser);
+                    for (int i = 0; i < tblNewOrderItems.getRowCount(); i++) {
+                        try {
+                            Stock stock = new Stock((int) tblSellItems.getValueAt(i, 0),
+                                    (Category) tblSellItems.getValueAt(i, 1),
+                                    tblSellItems.getValueAt(i, 2).toString(),
+                                    (double) tblSellItems.getValueAt(i, 3),
+                                    tblSellItems.getValueAt(i, 4).toString(),
+                                    new SimpleDateFormat("yyyy-MM-dd").parse(tblNewOrderItems.getValueAt(i, 5).toString()),
+                                    (int) tblSellItems.getValueAt(i, 6),
+                                    tblSellItems.getValueAt(i, 7).toString());
+                            builder.removeStock(stock, (int) tblSellItems.getValueAt(i, 8));
+                            
+                        } catch (ParseException ex) {
+                            Logger.getLogger(OrderForm.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    //Order.update();
                     setModel();
                 }
                 clearAllFields();
@@ -1140,7 +1184,7 @@ public class OrderForm extends javax.swing.JFrame implements FormSetUp{
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        /* if (insertClick == 0) {
+        if (insertClick == 0) {
             insertClick++;
             btnUpdate.setEnabled(false);
             btnDelete.setEnabled(false);
@@ -1152,40 +1196,34 @@ public class OrderForm extends javax.swing.JFrame implements FormSetUp{
             String itemName = null;
             int stockCount = 0;
             String status = null;
-
-            category = cmbCategory.getSelectedItem().toString();
-            itemName = txtItemName.getText();
-            stockCount = (int) spStockCount.getValue();
-            status = txtStatus.getText();
+            stockCount = (int) spOrderQuantity.getValue();
 
             boolean check = true;
-            if (Common.checkInput(category) != 1 || category.length() > 50) {
-                check = false;
-                cmbCategory.setBackground(Color.red);
-                cmbCategory.setToolTipText("Only alphabetical characters. Max 50 characters");
-            }
-            if (Common.checkInput(itemName) != 1 || itemName.length() > 50) {
-                check = false;
-                txtItemName.setBackground(Color.red);
-                txtItemName.setToolTipText("Only alphabetical characters. Max 50 characters");
-            }
-            if (Common.checkInput(String.valueOf(stockCount)) != 2 || stockCount == 0 || stockCount > 10000) {
-                check = false;
-                spStockCount.setBackground(Color.red);
-                spStockCount.setToolTipText("Only numerical value between 1 and 10000");
-            }
-            if (Common.checkInput(status) != 1 || status.length() > 20) {
-                check = false;
-                txtStatus.setBackground(Color.red);
-                txtStatus.setToolTipText("Only alphabetical characters. Max 20 characters");
-            }
-
+            //Add checks?
             if (check == true) {
                 int option = JOptionPane.showConfirmDialog(this, "Are you sure you want to add this data?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 0) {
-                    new Stock(0, Category.getCategory(cmbCategory.getSelectedItem().toString()), itemName, new Date(), stockCount, status).registerStock();
+                    OrderBuilder builder = new OrderBuilder(currentUser);
+                    for (int i = 0; i < tblNewOrderItems.getRowCount(); i++) {
+                        try {
+                            Stock stock = new Stock((int) tblSellItems.getValueAt(i, 0),
+                                    (Category) tblSellItems.getValueAt(i, 1),
+                                    tblSellItems.getValueAt(i, 2).toString(),
+                                    (double) tblSellItems.getValueAt(i, 3),
+                                    tblSellItems.getValueAt(i, 4).toString(),
+                                    new SimpleDateFormat("yyyy-MM-dd").parse(tblNewOrderItems.getValueAt(i, 5).toString()),
+                                    (int) tblSellItems.getValueAt(i, 6),
+                                    tblSellItems.getValueAt(i, 7).toString());
+                            builder.removeStock(stock, (int) tblSellItems.getValueAt(i, 8));
+
+                        } catch (ParseException ex) {
+                            Logger.getLogger(OrderForm.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    builder.publishOrder();
                     setModel();
                 }
+                //int stockID, Category category, String model, double price, String itemName, Date dateAdded, int stockCount, String status
                 clearAllFields();
                 disableAllFields();
                 resetColor();
@@ -1196,6 +1234,8 @@ public class OrderForm extends javax.swing.JFrame implements FormSetUp{
             } else {
                 int option = JOptionPane.showConfirmDialog(this, "There were some errors, would you like to fix them?", "Confirmation.", JOptionPane.YES_NO_OPTION);
                 if (option == 1) {
+                    spOrderQuantity.setBackground(Color.red);
+                    spOrderQuantity.setToolTipText("You require an amount!");
                     clearAllFields();
                     disableAllFields();
                     resetColor();
@@ -1205,44 +1245,107 @@ public class OrderForm extends javax.swing.JFrame implements FormSetUp{
                     btnDelete.setEnabled(true);
                 }
             }
-        }*/
+        }
     }//GEN-LAST:event_btnAddActionPerformed
 
-    private void mnOpenStaff2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenStaff2ActionPerformed
-
-        StaffForm staff = new StaffForm(currentUser);
-        staff.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_mnOpenStaff2ActionPerformed
-
-    private void mnOpenStockForm2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenStockForm2ActionPerformed
-
+    private void mnOpenStockFormActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenStockFormActionPerformed
+        // TODO add your handling code here:
         new StockForm(currentUser).setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_mnOpenStockForm2ActionPerformed
+    }//GEN-LAST:event_mnOpenStockFormActionPerformed
 
-    private void mnOpenCategoryForm1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenCategoryForm1ActionPerformed
+    private void btnAddItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddItemActionPerformed
+        // TODO add your handling code here:
+        resetColor();
+        if ((int) spOrderQuantity.getValue() > 0) {
+            DefaultTableModel model = (DefaultTableModel) tblNewOrderItems.getModel();
+            model.setNumRows(0);
+            Object rowData[] = new Object[8];
+            Object columnData[] = new Object[8];
+            columnData[0] = "StockID";
+            columnData[1] = "CategoryName";
+            columnData[2] = "Model";
+            columnData[3] = "Price";
+            columnData[4] = "ItemName";
+            columnData[5] = "DateAdded";
+            columnData[6] = "Current Stock";
+            columnData[7] = "Status";
+            columnData[8] = "Order Amount";
 
-        new CategoryForm(currentUser).setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_mnOpenCategoryForm1ActionPerformed
+            model.setColumnCount(8);
+            model.setColumnIdentifiers(columnData);
+            int i = tblSellItems.getSelectedRow();
+            rowData[0] = tblSellItems.getValueAt(i, 0);
+            rowData[1] = tblSellItems.getValueAt(i, 1);
+            rowData[2] = tblSellItems.getValueAt(i, 2);
+            rowData[3] = tblSellItems.getValueAt(i, 3);
+            rowData[4] = tblSellItems.getValueAt(i, 4);
+            rowData[5] = tblSellItems.getValueAt(i, 5);
+            rowData[6] = tblSellItems.getValueAt(i, 6);
+            rowData[7] = tblSellItems.getValueAt(i, 7);
+            rowData[8] = (int) spOrderQuantity.getValue();
 
-    private void mnOpenDepartmentForm1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenDepartmentForm1ActionPerformed
-        new DepartmentForm(currentUser).setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_mnOpenDepartmentForm1ActionPerformed
+            model.addRow(rowData);
+        } else {
+            spOrderQuantity.setBackground(Color.red);
+            spOrderQuantity.setToolTipText("You require an amount!");
+        }
 
-    private void mnOpenCampusForm1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenCampusForm1ActionPerformed
 
-        new CampusForm(currentUser).setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_mnOpenCampusForm1ActionPerformed
+    }//GEN-LAST:event_btnAddItemActionPerformed
 
-    private void mnOpenMyProfileForm1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnOpenMyProfileForm1ActionPerformed
+    private void btnRemoveItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveItemActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) tblNewOrderItems.getModel();
+        model.removeRow(tblNewOrderItems.getSelectedRow());
 
-        new MyProfileForm(currentUser).setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_mnOpenMyProfileForm1ActionPerformed
+    }//GEN-LAST:event_btnRemoveItemActionPerformed
+
+    public void createReport(String fileName,ArrayList<String> data)
+    {/*
+     Document doc = new Document( PageSize.A4,50,50,50,50);
+        
+        try {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd");
+        Date date = new Date();
+            PdfWriter writer= PdfWriter.getInstance(doc, new FileOutputStream(dateFormat.format(date)+" "+ fileName+".pdf"));
+            doc.open();
+            String anchorString=String .format("Created on: "+dateFormat.format(date));
+            Anchor anchor= new Anchor(anchorString);
+            Paragraph title = new Paragraph("Report "+ dateFormat.format(date)+ " on Stocks",FontFactory.getFont(FontFactory.TIMES_ROMAN,26,Font.BOLD,new CMYKColor(100,100,0,0)));
+            Chapter chapter = new Chapter(title,0);
+            chapter.setNumberDepth(0);
+            chapter.add(anchor);
+            com.itextpdf.text.List reportList = new com.itextpdf.text.List(true);
+            ListItem listItem = null;
+            
+            for(Object item : data)
+            {
+                if (item instanceof Stock) {
+                    listItem = new ListItem(((Stock) item).getReportFormat());
+                    reportList.add(listItem);
+ 
+                }
+              
+            
+            }
+            chapter.add(reportList);
+            doc.add(chapter);
+            doc.close();
+            writer.close();
+            
+        } catch (DocumentException | FileNotFoundException ex) {
+            Logger.getLogger(Reports.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    */
+}
+    
+    public User sortUserList(String name) {
+        User user = null;
+        List<User> userList = User.getUsersByFullName(name);
+        user = userList.get(0);
+        return user;
+    }
 
     /**
      * @param args the command line arguments
@@ -1281,11 +1384,13 @@ public class OrderForm extends javax.swing.JFrame implements FormSetUp{
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnAddItem;
     private javax.swing.JButton btnAdjustOrder;
     private javax.swing.JButton btnApprove;
     private javax.swing.JButton btnDecline;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnLogOff;
+    private javax.swing.JButton btnRemoveItem;
     private javax.swing.JButton btnSearchOrder;
     private javax.swing.JButton btnSearchStock;
     private javax.swing.JButton btnUpdate;
@@ -1304,9 +1409,6 @@ public class OrderForm extends javax.swing.JFrame implements FormSetUp{
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JMenu jMenu6;
-    private javax.swing.JMenu jMenu7;
-    private javax.swing.JMenu jMenu8;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel4;
@@ -1323,17 +1425,13 @@ public class OrderForm extends javax.swing.JFrame implements FormSetUp{
     private javax.swing.JSeparator jSeparator8;
     private javax.swing.JSeparator jSeparator9;
     private javax.swing.JLabel lbLoginedInUser;
-    private javax.swing.JMenuItem mnOpenCampusForm1;
-    private javax.swing.JMenuItem mnOpenCategoryForm1;
-    private javax.swing.JMenuItem mnOpenDepartmentForm1;
-    private javax.swing.JMenuItem mnOpenMyProfileForm1;
-    private javax.swing.JMenuItem mnOpenStaff2;
-    private javax.swing.JMenuItem mnOpenStockForm2;
-    private javax.swing.JMenu orderStockMenu3;
-    private javax.swing.JMenu orderStockMenu4;
+    private javax.swing.JMenuItem mnOpenStaff;
+    private javax.swing.JMenuItem mnOpenStockForm;
+    private javax.swing.JMenu orderStockMenu;
+    private javax.swing.JMenu orderStockMenu2;
     private javax.swing.JSpinner spOrderQuantity;
-    private javax.swing.JMenu staffMenu2;
-    private javax.swing.JMenu stockMenu2;
+    private javax.swing.JMenu staffMenu;
+    private javax.swing.JMenu stockMenu;
     private javax.swing.JTable tblNewOrderItems;
     private javax.swing.JTable tblOrders;
     private javax.swing.JTable tblSellItems;
